@@ -1,25 +1,29 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.16">
-	<ExternalDataProcessor uuid="43ccd6e6-3573-440f-a9e2-5844ce27844e">
+	<ExternalDataProcessor uuid="7718f65f-6247-41f7-ba6c-10bab7e1a052">
 		<InternalInfo>
 			<xr:ContainedObject>
 				<xr:ClassId>c3831ec8-d8d5-4f93-8a22-f9bfae07327f</xr:ClassId>
-				<xr:ObjectId>d413a400-8f9a-48f4-8104-4a543accad7c</xr:ObjectId>
+				<xr:ObjectId>ba9ba753-4681-4c2f-90eb-7d71c03389f1</xr:ObjectId>
 			</xr:ContainedObject>
-			<xr:GeneratedType name="ExternalDataProcessorObject.БанкПівденнийУкраина" category="Object">
-				<xr:TypeId>3f2949b3-904b-4f28-a83c-d07c467ad93c</xr:TypeId>
-				<xr:ValueId>e6e42e13-4320-41e4-9a45-5e8bf09bbb4f</xr:ValueId>
+			<xr:GeneratedType name="ExternalDataProcessorObject.СМП_ОбработкаВыпискиБанкаПивденний" category="Object">
+				<xr:TypeId>0d967fbb-6144-4245-9f1e-70c9bb43b36e</xr:TypeId>
+				<xr:ValueId>7044f8fd-3711-47f8-9ae5-7f7ba48819a0</xr:ValueId>
 			</xr:GeneratedType>
 		</InternalInfo>
 		<Properties>
-			<Name>БанкПівденнийУкраина</Name>
+			<Name>СМП_ОбработкаВыпискиБанкаПивденний</Name>
 			<Synonym>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Банк південний украина</v8:content>
+					<v8:content>Обработка выписки банка Південний</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Обробка виписки банка Південний</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment/>
+			<Comment>Выгрузить во внешние</Comment>
 			<DefaultForm/>
 			<AuxiliaryForm/>
 		</Properties>
