@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="279500ea-15b4-49d3-aad4-d8335b8c9ee5">
+  <name>ОбщиеОбъекты</name>
+  <synonym>
+    <key>ru</key>
+    <value>Общие объекты</value>
+  </synonym>
+  <includeHelpInContents>true</includeHelpInContents>
+  <content>Catalog.СМП_УчетныеЗаписиБанков</content>
+  <content>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</content>
+  <content>CommonPicture.СМП_РаботаСБанкамиПриватБанк</content>
+  <content>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</content>
+  <content>CommonModule.СМП_РаботаСБанкамиСервер</content>
+  <content>ScheduledJob.СМП_ОбменСБанкамиAPI</content>
+  <content>InformationRegister.СМП_НомерПоследнейТранзакции</content>
+  <content>CommonPicture.ИзменитьНастройки</content>
+  <content>022f99dd-e1b7-42a7-8141-a8c2e8628901</content>
+  <parentSubsystem>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</parentSubsystem>
+</mdclass:Subsystem>

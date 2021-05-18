@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="8bd543a6-ae04-4449-9e27-09ca1e1e1a02" extendedConfigurationObject="399f3705-9fee-477d-a4df-75962af8ec46">
+  <producedTypes>
+    <objectType typeId="212ef5f6-1216-4bad-a9a9-e76319fb534c" valueTypeId="9050c383-9afb-4fa5-ac8d-280e4aad114e"/>
+    <managerType typeId="9597b7b6-72ec-4683-8268-07c4b9c2d3e9" valueTypeId="b0992c9c-57d8-4a0d-b180-4b85a2d486fc"/>
+  </producedTypes>
+  <name>КлиентБанк</name>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:DataProcessorExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+    <managerModule>Extended</managerModule>
+  </extension>
+  <attributes uuid="34631069-82cf-4624-8026-8416e662c766">
+    <name>СМП_УчетнаяЗаписьБанка</name>
+    <synonym>
+      <key>uk</key>
+      <value>СМП учетная запись банка</value>
+    </synonym>
+    <extension xsi:type="mdclassExtension:BasicFeatureExtension"/>
+    <type>
+      <types>CatalogRef.СМП_УчетныеЗаписиБанков</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </attributes>
+  <attributes uuid="d1edbcec-c6be-45b9-9f79-81fc7600e958">
+    <name>СМП_РасширениеФайлаИмпорта</name>
+    <synonym>
+      <key>ru</key>
+      <value>Расширение файла импорта</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Расширение файла импорта</value>
+    </synonym>
+    <extension xsi:type="mdclassExtension:BasicFeatureExtension"/>
+    <type>
+      <types>String</types>
+      <stringQualifiers>
+        <length>5</length>
+      </stringQualifiers>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </attributes>
+  <forms uuid="613fd93e-e0d7-41d7-9fdb-898186902011" extendedConfigurationObject="d4dc0edb-8ac7-42e2-b443-7e07e7bcf284">
+    <name>Форма</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:BasicFormExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <form>Extended</form>
+    </extension>
+  </forms>
+</mdclass:DataProcessor>

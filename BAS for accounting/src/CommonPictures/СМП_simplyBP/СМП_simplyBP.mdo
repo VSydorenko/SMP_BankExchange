@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:CommonPicture xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="f3bf5fe1-c6e9-4c7c-bcf1-7ca564bedc7a">
+  <name>СМП_simplyBP</name>
+  <synonym>
+    <key>ru</key>
+    <value>simplyBP</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>simplyBP</value>
+  </synonym>
+</mdclass:CommonPicture>

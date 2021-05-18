@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="0ab58eb6-3b5f-47a5-a4fa-392cdaf802e7">
+  <name>ОбработкиОбслуживания</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработки обслуживания</value>
+  </synonym>
+  <comment>Нужно выгружать во внешние обработки и подключать как элементы справочника</comment>
+  <includeHelpInContents>true</includeHelpInContents>
+  <parentSubsystem>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</parentSubsystem>
+</mdclass:Subsystem>

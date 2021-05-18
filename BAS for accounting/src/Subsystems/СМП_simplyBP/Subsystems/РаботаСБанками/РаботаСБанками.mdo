@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="2f3eb710-c494-415e-8b4f-dcf6f73eed37">
+  <name>РаботаСБанками</name>
+  <synonym>
+    <key>ru</key>
+    <value>Работа с банками</value>
+  </synonym>
+  <includeHelpInContents>true</includeHelpInContents>
+  <includeInCommandInterface>true</includeInCommandInterface>
+  <content>Catalog.СМП_УчетныеЗаписиБанков</content>
+  <subsystems>ИзмененныеОбъекты</subsystems>
+  <subsystems>ОбщиеОбъекты</subsystems>
+  <subsystems>ПриватБанк</subsystems>
+  <subsystems>МОНОБанк</subsystems>
+  <subsystems>ОбработкиОбслуживания</subsystems>
+  <parentSubsystem>Subsystem.СМП_simplyBP</parentSubsystem>
+</mdclass:Subsystem>

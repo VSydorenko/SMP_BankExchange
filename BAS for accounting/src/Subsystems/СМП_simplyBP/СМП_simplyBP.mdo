@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="242c433d-21f7-4c4d-babd-24bfa95ca6ac">
+  <name>СМП_simplyBP</name>
+  <synonym>
+    <key>ru</key>
+    <value>simplyBP</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>simplyBP</value>
+  </synonym>
+  <includeHelpInContents>true</includeHelpInContents>
+  <includeInCommandInterface>true</includeInCommandInterface>
+  <picture xsi:type="core:PictureRef">
+    <picture>CommonPicture.СМП_simplyBP</picture>
+  </picture>
+  <subsystems>ОбщиеОбъектыСлужебный</subsystems>
+  <subsystems>РаботаСБанками</subsystems>
+</mdclass:Subsystem>
