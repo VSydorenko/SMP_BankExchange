@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="2523ef5a-c0f5-4557-bbd5-f1c27b279fae">
+  <name>РаботаСБанками</name>
+  <synonym>
+    <key>uk</key>
+    <value>Работа с банками</value>
+  </synonym>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:ConfigurationExtension">
+    <defaultRunMode>Checked</defaultRunMode>
+    <usePurposes>Checked</usePurposes>
+    <defaultLanguage>Checked</defaultLanguage>
+    <interfaceCompatibilityMode>Checked</interfaceCompatibilityMode>
+  </extension>
+  <containedObjects classId="9cd510cd-abfc-11d4-9434-004095e12fc7" objectId="cd4fa6ca-60bd-4e1e-82a0-057f5d07c347"/>
+  <containedObjects classId="9fcd25a0-4822-11d4-9414-008048da11f9" objectId="c9777744-ac7e-45d4-8c22-8597bad0bfd0"/>
+  <containedObjects classId="e3687481-0a87-462c-a166-9f34594f9bba" objectId="65f44994-4413-42ba-a3c3-4e6e51fa0591"/>
+  <containedObjects classId="9de14907-ec23-4a07-96f0-85521cb6b53b" objectId="f9ab582c-19c8-48b1-9d96-3ee91494f6c0"/>
+  <containedObjects classId="51f2d5d8-ea4d-4064-8892-82951750031e" objectId="04f58339-046e-4afa-924c-52feb9818ed9"/>
+  <containedObjects classId="e68182ea-4237-4383-967f-90c1e3370bc7" objectId="9f1ff42f-2f60-4e48-bce9-5f147d67feed"/>
+  <containedObjects classId="fb282519-d103-4dd3-bc12-cb271d631dfc" objectId="c154dfc6-541a-4ac6-89fb-e97730eda354"/>
+  <keepMappingToExtendedConfigurationObjectsByIDs>true</keepMappingToExtendedConfigurationObjectsByIDs>
+  <namePrefix>СМП_</namePrefix>
+  <configurationExtensionCompatibilityMode>8.3.12</configurationExtensionCompatibilityMode>
+  <configurationExtensionPurpose>Customization</configurationExtensionPurpose>
+  <defaultRunMode>ManagedApplication</defaultRunMode>
+  <usePurposes>PersonalComputer</usePurposes>
+  <scriptVariant>Russian</scriptVariant>
+  <version>1.0.0.1</version>
+  <defaultLanguage>Language.Украинский</defaultLanguage>
+  <compatibilityMode>8.3.22</compatibilityMode>
+  <languages uuid="27568a7a-a1a3-40fc-b98b-9f9b18ac91ca" extendedConfigurationObject="8d3c79b9-b0c9-424d-91d7-f23dd920a4f8">
+    <name>Украинский</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:LanguageExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <languageCode>Checked</languageCode>
+    </extension>
+    <languageCode>uk</languageCode>
+  </languages>
+</mdclass:Configuration>
