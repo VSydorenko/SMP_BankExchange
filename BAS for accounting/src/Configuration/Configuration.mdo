@@ -38,6 +38,15 @@
     </extension>
     <languageCode>uk</languageCode>
   </languages>
+  <languages uuid="41622829-6ab0-4279-ae25-1b23544d5487" extendedConfigurationObject="bc55f866-e0a2-4a5a-b32c-cd8ea2cfcf9a">
+    <name>Русский</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:LanguageExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <languageCode>Checked</languageCode>
+    </extension>
+    <languageCode>ru</languageCode>
+  </languages>
   <subsystems>Subsystem.СМП_simplyBP</subsystems>
   <styleItems>StyleItem.ПоясняющийПроблемуТекст</styleItems>
   <styleItems>StyleItem.НедоступныеДанныеЦвет</styleItems>
