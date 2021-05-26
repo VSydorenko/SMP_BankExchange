@@ -21,7 +21,7 @@
   <containedObjects classId="fb282519-d103-4dd3-bc12-cb271d631dfc" objectId="c154dfc6-541a-4ac6-89fb-e97730eda354"/>
   <keepMappingToExtendedConfigurationObjectsByIDs>true</keepMappingToExtendedConfigurationObjectsByIDs>
   <namePrefix>СМП_</namePrefix>
-  <configurationExtensionCompatibilityMode>8.3.18</configurationExtensionCompatibilityMode>
+  <configurationExtensionCompatibilityMode>8.3.12</configurationExtensionCompatibilityMode>
   <configurationExtensionPurpose>Customization</configurationExtensionPurpose>
   <defaultRunMode>ManagedApplication</defaultRunMode>
   <usePurposes>PersonalComputer</usePurposes>
@@ -62,7 +62,6 @@
   <roles>Role.ПолныеПрава</roles>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
-  <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>
   <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
   <catalogs>Catalog.БанковскиеСчета</catalogs>
   <catalogs>Catalog.ДополнительныеОтчетыИОбработки</catalogs>
@@ -72,5 +71,4 @@
   <enums>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</enums>
   <dataProcessors>DataProcessor.КлиентБанк</dataProcessors>
   <informationRegisters>InformationRegister.СМП_НомерПоследнейТранзакции</informationRegisters>
-  <informationRegisters>InformationRegister.НастройкиОбменаСКлиентомБанка</informationRegisters>
 </mdclass:Configuration>
