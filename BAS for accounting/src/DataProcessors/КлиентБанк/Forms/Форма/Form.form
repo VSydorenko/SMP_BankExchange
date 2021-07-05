@@ -5776,11 +5776,6 @@
     <event>OnOpen</event>
     <name>СМП_ПриОткрытииПеред</name>
   </handlers>
-  <handlers xsi:type="form:EventHandlerExtension">
-    <event>OnCreateAtServer</event>
-    <name>СМП_ПриСозданииНаСервереВместо</name>
-    <callType>Override</callType>
-  </handlers>
   <autoSaveDataInSettings>Use</autoSaveDataInSettings>
   <autoTitle>true</autoTitle>
   <autoUrl>true</autoUrl>
