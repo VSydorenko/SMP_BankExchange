@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mdclass:Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="2523ef5a-c0f5-4557-bbd5-f1c27b279fae">
-  <name>РаботаСБанками</name>
+  <name>СМП_РаботаСБанками</name>
   <synonym>
     <key>uk</key>
-    <value>Работа с банками</value>
+    <value>Робота з банками (СМП)</value>
+  </synonym>
+  <synonym>
+    <key>ru</key>
+    <value>Работа с банками (СМП)</value>
   </synonym>
   <objectBelonging>Adopted</objectBelonging>
   <extension xsi:type="mdclassExtension:ConfigurationExtension">
@@ -26,7 +30,7 @@
   <defaultRunMode>ManagedApplication</defaultRunMode>
   <usePurposes>PersonalComputer</usePurposes>
   <scriptVariant>Russian</scriptVariant>
-  <version>1.0.0.1</version>
+  <version>1.0.0.3</version>
   <defaultLanguage>Language.Украинский</defaultLanguage>
   <compatibilityMode>8.3.22</compatibilityMode>
   <languages uuid="27568a7a-a1a3-40fc-b98b-9f9b18ac91ca" extendedConfigurationObject="8d3c79b9-b0c9-424d-91d7-f23dd920a4f8">
