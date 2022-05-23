@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.16">
-	<ExternalDataProcessor uuid="c81dc033-f609-499a-b6b7-24c37a7883b5">
+	<ExternalDataProcessor uuid="599b3fa3-cd7f-49ed-9a84-79ac431feb12">
 		<InternalInfo>
 			<xr:ContainedObject>
 				<xr:ClassId>c3831ec8-d8d5-4f93-8a22-f9bfae07327f</xr:ClassId>
-				<xr:ObjectId>63b23b7c-d5f4-416d-97ff-41b886223762</xr:ObjectId>
+				<xr:ObjectId>ce5491c9-9e64-467b-9d33-c50efd7027b2</xr:ObjectId>
 			</xr:ContainedObject>
 			<xr:GeneratedType name="ExternalDataProcessorObject.СМП_ОбработкаВыпискиБанка_ПроКредитБанк" category="Object">
-				<xr:TypeId>22ef28a9-22be-411e-abb0-3f3820f70af3</xr:TypeId>
-				<xr:ValueId>36e6b42b-7a43-4197-9c58-36f9e04fb6ad</xr:ValueId>
+				<xr:TypeId>3178d5a0-2b73-452f-83bf-fd76757e3e7c</xr:TypeId>
+				<xr:ValueId>4a0729fe-1fa3-4e09-9df2-3ade0706dc26</xr:ValueId>
 			</xr:GeneratedType>
 		</InternalInfo>
 		<Properties>
@@ -23,7 +23,7 @@
 					<v8:content>Обробка виписки банка ПроКредит Банк</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment>Выгрузить во внешние</Comment>
+			<Comment>Выгрузить во внешние (csv)</Comment>
 			<DefaultForm>ExternalDataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк.Form.Форма</DefaultForm>
 			<AuxiliaryForm/>
 		</Properties>

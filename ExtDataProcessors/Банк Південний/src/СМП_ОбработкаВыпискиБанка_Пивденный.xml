@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.16">
-	<ExternalDataProcessor uuid="66a0723f-814f-4215-abcc-216d7667bb51">
+	<ExternalDataProcessor uuid="632bc51b-20c5-4c74-9a73-acf7b39cf65f">
 		<InternalInfo>
 			<xr:ContainedObject>
 				<xr:ClassId>c3831ec8-d8d5-4f93-8a22-f9bfae07327f</xr:ClassId>
-				<xr:ObjectId>dffe7ba3-e14c-4919-9ec1-fae0e148d483</xr:ObjectId>
+				<xr:ObjectId>d79f729c-1f20-4468-991a-dc581099a8f7</xr:ObjectId>
 			</xr:ContainedObject>
 			<xr:GeneratedType name="ExternalDataProcessorObject.СМП_ОбработкаВыпискиБанка_Пивденный" category="Object">
-				<xr:TypeId>7c689d60-06b8-4e26-8a75-0b22c931bf50</xr:TypeId>
-				<xr:ValueId>0a014f26-9b35-4929-aece-2d310fe66fcc</xr:ValueId>
+				<xr:TypeId>83e8d3b7-e079-49da-a93d-5a8c5c47479d</xr:TypeId>
+				<xr:ValueId>b5e64609-82c6-434a-911a-be5b73d43008</xr:ValueId>
 			</xr:GeneratedType>
 		</InternalInfo>
 		<Properties>
@@ -23,7 +23,7 @@
 					<v8:content>Обробка виписки банка Південний</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment>Выгрузить во внешние</Comment>
+			<Comment>Выгрузить во внешние (xml)</Comment>
 			<DefaultForm>ExternalDataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный.Form.Форма</DefaultForm>
 			<AuxiliaryForm/>
 		</Properties>

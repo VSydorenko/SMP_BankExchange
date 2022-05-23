@@ -1,30 +1,30 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.16">
-	<ExternalDataProcessor uuid="442e703d-db10-4cf2-8724-4253c8fc0b38">
+	<ExternalDataProcessor uuid="7e92c817-19a1-4a9d-b660-a4d4c2702cb4">
 		<InternalInfo>
 			<xr:ContainedObject>
 				<xr:ClassId>c3831ec8-d8d5-4f93-8a22-f9bfae07327f</xr:ClassId>
-				<xr:ObjectId>1aab5482-d434-4b82-ba2c-8ced127da9eb</xr:ObjectId>
+				<xr:ObjectId>d041b763-08cb-4b0d-87fe-b1f10edf5e32</xr:ObjectId>
 			</xr:ContainedObject>
-			<xr:GeneratedType name="ExternalDataProcessorObject.СМП_ОбработкаВыпискиБанка_ОТП" category="Object">
-				<xr:TypeId>b2082611-f4d6-4ec6-acf1-20859c4ae3b3</xr:TypeId>
-				<xr:ValueId>8161f52b-dd8e-4cab-94e8-4377a31f6dcb</xr:ValueId>
+			<xr:GeneratedType name="ExternalDataProcessorObject.СМП_ОбработкаВыпискиБанка_РайффайзенБанк" category="Object">
+				<xr:TypeId>e6ca1e08-a69a-4361-ad5a-a4adfabfa21e</xr:TypeId>
+				<xr:ValueId>f2c2f2ea-b4ce-48d4-b384-3222747fc37d</xr:ValueId>
 			</xr:GeneratedType>
 		</InternalInfo>
 		<Properties>
-			<Name>СМП_ОбработкаВыпискиБанка_ОТП</Name>
+			<Name>СМП_ОбработкаВыпискиБанка_РайффайзенБанк</Name>
 			<Synonym>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Обработка выписки банка ОТП</v8:content>
+					<v8:content>Обработка выписки банка Райффайзен Банк</v8:content>
 				</v8:item>
 				<v8:item>
 					<v8:lang>uk</v8:lang>
-					<v8:content>Обробка виписки банка Альфа-Банк</v8:content>
+					<v8:content>Обробка виписки банка Райффайзен Банк</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment>Выгрузить во внешние (txt)</Comment>
-			<DefaultForm>ExternalDataProcessor.СМП_ОбработкаВыпискиБанка_ОТП.Form.Форма</DefaultForm>
+			<Comment>Выгрузить во внешние (csv)</Comment>
+			<DefaultForm>ExternalDataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк.Form.Форма</DefaultForm>
 			<AuxiliaryForm/>
 		</Properties>
 		<ChildObjects>

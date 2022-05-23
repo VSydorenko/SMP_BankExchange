@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.16">
-	<ExternalDataProcessor uuid="6729a793-f10d-42bc-bdf6-ab705771cf72">
+	<ExternalDataProcessor uuid="c22840d1-480f-48da-9af7-ff81aa56258c">
 		<InternalInfo>
 			<xr:ContainedObject>
 				<xr:ClassId>c3831ec8-d8d5-4f93-8a22-f9bfae07327f</xr:ClassId>
-				<xr:ObjectId>fe1ba441-8b81-4398-a250-61f88a763c68</xr:ObjectId>
+				<xr:ObjectId>44a28782-a6cd-452e-be61-c0e034e7ebde</xr:ObjectId>
 			</xr:ContainedObject>
 			<xr:GeneratedType name="ExternalDataProcessorObject.СМП_ОбработкаВыпискиБанка_ОщадБанк" category="Object">
-				<xr:TypeId>709788cf-8276-496f-a2ec-1e409929b364</xr:TypeId>
-				<xr:ValueId>3b635b90-3ab9-4132-a1dd-b3480756ef2b</xr:ValueId>
+				<xr:TypeId>9937fde6-ec72-4edc-a467-7c934c944b9c</xr:TypeId>
+				<xr:ValueId>82189f99-e2af-4763-ba6d-3a9ec367525b</xr:ValueId>
 			</xr:GeneratedType>
 		</InternalInfo>
 		<Properties>
@@ -23,7 +23,7 @@
 					<v8:content>Обробка виписки банка ОщадБанк</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment>Выгрузить во внешние</Comment>
+			<Comment>Выгрузить во внешние (dbf)</Comment>
 			<DefaultForm>ExternalDataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк.Form.Форма</DefaultForm>
 			<AuxiliaryForm/>
 		</Properties>

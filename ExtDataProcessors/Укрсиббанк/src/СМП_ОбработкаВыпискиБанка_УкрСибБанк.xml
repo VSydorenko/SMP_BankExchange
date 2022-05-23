@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.16">
-	<ExternalDataProcessor uuid="3aa960d2-8004-4cab-a5ec-419a19074ee3">
+	<ExternalDataProcessor uuid="06a16f20-0f75-4754-8475-d41088fdb105">
 		<InternalInfo>
 			<xr:ContainedObject>
 				<xr:ClassId>c3831ec8-d8d5-4f93-8a22-f9bfae07327f</xr:ClassId>
-				<xr:ObjectId>f220840d-900b-4d09-bd20-e0b2cd4e33ed</xr:ObjectId>
+				<xr:ObjectId>2206e145-ab89-48b9-9fe9-5fe65b916d96</xr:ObjectId>
 			</xr:ContainedObject>
 			<xr:GeneratedType name="ExternalDataProcessorObject.СМП_ОбработкаВыпискиБанка_УкрСибБанк" category="Object">
-				<xr:TypeId>c7e183ce-1cb4-4143-a2ab-cad408bb99c2</xr:TypeId>
-				<xr:ValueId>fc7d7536-9e37-4b78-bcbb-7786a65ad11a</xr:ValueId>
+				<xr:TypeId>aa294850-f69f-42bf-b8ca-42497fb65f77</xr:TypeId>
+				<xr:ValueId>0ba8545d-3a76-4a25-9748-f4bc4241b674</xr:ValueId>
 			</xr:GeneratedType>
 		</InternalInfo>
 		<Properties>
@@ -23,7 +23,7 @@
 					<v8:content>Обробка виписки банка УкрСибБанк</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment>Выгрузить во внешние</Comment>
+			<Comment>Выгрузить во внешние (csv)</Comment>
 			<DefaultForm>ExternalDataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк.Form.Форма</DefaultForm>
 			<AuxiliaryForm/>
 		</Properties>
