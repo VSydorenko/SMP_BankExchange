@@ -9,12 +9,12 @@
   </producedTypes>
   <name>СМП_УчетныеЗаписиБанков</name>
   <synonym>
-    <key>ru</key>
-    <value>Учетные записи интеграций с банками</value>
+    <key>uk</key>
+    <value>Облікові записи інтеграцій з банками (СМП)</value>
   </synonym>
   <synonym>
-    <key>uk</key>
-    <value>Облікові записи інтеграцій з банками</value>
+    <key>ru</key>
+    <value>Учетные записи интеграций с банками (СМП)</value>
   </synonym>
   <useStandardCommands>true</useStandardCommands>
   <inputByString>Catalog.СМП_УчетныеЗаписиБанков.StandardAttribute.Description</inputByString>
@@ -99,6 +99,22 @@
   <createOnInput>Use</createOnInput>
   <dataLockControlMode>Managed</dataLockControlMode>
   <fullTextSearch>Use</fullTextSearch>
+  <objectPresentation>
+    <key>uk</key>
+    <value>Обліковий запис інтеграції з банком</value>
+  </objectPresentation>
+  <objectPresentation>
+    <key>ru</key>
+    <value>Учетная запись интеграции с банком</value>
+  </objectPresentation>
+  <extendedListPresentation>
+    <key>uk</key>
+    <value>Облікові записи інтеграцій з банками</value>
+  </extendedListPresentation>
+  <extendedListPresentation>
+    <key>ru</key>
+    <value>Учетные записи интеграций с банками</value>
+  </extendedListPresentation>
   <levelCount>2</levelCount>
   <foldersOnTop>true</foldersOnTop>
   <codeLength>9</codeLength>

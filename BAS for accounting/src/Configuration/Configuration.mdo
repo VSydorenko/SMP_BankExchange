@@ -30,7 +30,7 @@
   <defaultRunMode>ManagedApplication</defaultRunMode>
   <usePurposes>PersonalComputer</usePurposes>
   <scriptVariant>Russian</scriptVariant>
-  <version>1.0.0.4</version>
+  <version>1.0.0.5</version>
   <defaultLanguage>Language.Украинский</defaultLanguage>
   <compatibilityMode>8.3.22</compatibilityMode>
   <languages uuid="27568a7a-a1a3-40fc-b98b-9f9b18ac91ca" extendedConfigurationObject="8d3c79b9-b0c9-424d-91d7-f23dd920a4f8">
