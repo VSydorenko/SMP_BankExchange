@@ -1330,14 +1330,6 @@
     <items xsi:type="form:FormField">
       <name>ВедениеВзаиморасчетов</name>
       <id>115</id>
-      <title>
-        <key>uk</key>
-        <value>Ведение взаиморасчетов</value>
-      </title>
-      <title>
-        <key>ru</key>
-        <value>Ведення взаєморозрахунків</value>
-      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -1383,6 +1375,14 @@
         <chooseType>true</chooseType>
         <typeDomainEnabled>true</typeDomainEnabled>
         <textEdit>true</textEdit>
+        <inputHint>
+          <key>uk</key>
+          <value>значення по-замовчуванню</value>
+        </inputHint>
+        <inputHint>
+          <key>ru</key>
+          <value>значение по-умолчанию</value>
+        </inputHint>
       </extInfo>
     </items>
     <visible>true</visible>
