@@ -524,6 +524,21 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="92eda87b-1d73-453b-b313-cf6703f2d824">
+    <name>ВедениеВзаиморасчетов</name>
+    <synonym>
+      <key>uk</key>
+      <value>Ведение взаиморасчетов</value>
+    </synonym>
+    <type>
+      <types>EnumRef.ВедениеВзаиморасчетовПоДоговорам</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
   <forms uuid="03358490-74cd-4f0a-8fda-b37051c36685">
     <name>ФормаЭлемента</name>
     <synonym>

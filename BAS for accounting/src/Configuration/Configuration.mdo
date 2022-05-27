@@ -73,6 +73,7 @@
   <catalogs>Catalog.Контрагенты</catalogs>
   <catalogs>Catalog.СтатьиДвиженияДенежныхСредств</catalogs>
   <enums>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</enums>
+  <enums>Enum.ВедениеВзаиморасчетовПоДоговорам</enums>
   <dataProcessors>DataProcessor.КлиентБанк</dataProcessors>
   <informationRegisters>InformationRegister.СМП_НомерПоследнейТранзакции</informationRegisters>
 </mdclass:Configuration>
