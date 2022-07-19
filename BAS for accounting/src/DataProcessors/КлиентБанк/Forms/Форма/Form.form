@@ -2077,7 +2077,7 @@
                     <horizontalAlign>Left</horizontalAlign>
                   </extInfo>
                 </extendedTooltip>
-                <commandName>0</commandName>
+                <commandName>Form.Command.КомандаВыгрузить</commandName>
                 <representation>Auto</representation>
                 <width>14</width>
                 <autoMaxWidth>true</autoMaxWidth>
@@ -5786,6 +5786,40 @@
   <verticalScroll>UseIfNecessary</verticalScroll>
   <showTitle>true</showTitle>
   <showCloseButton>true</showCloseButton>
+  <formCommands>
+    <name>КомандаВыгрузить</name>
+    <title>
+      <key>ru</key>
+      <value>Выгрузить</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Вивантажити</value>
+    </title>
+    <id>1000002</id>
+    <toolTip>
+      <key>ru</key>
+      <value>Выгрузить из Бухгалтерии</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Вивантажити з Бухгалтерії</value>
+    </toolTip>
+    <use>
+      <common>true</common>
+    </use>
+    <picture xsi:type="core:PictureRef">
+      <picture>CommonPicture.КлиентБанкКомандаВыгрузить</picture>
+    </picture>
+    <action xsi:type="form:FormExtensionCommandHandlerContainer">
+      <handlers>
+        <name>СМП_КомандаВыгрузитьВместо</name>
+        <callType>Override</callType>
+      </handlers>
+    </action>
+    <representation>TextPicture</representation>
+    <currentRowUse>DontUse</currentRowUse>
+  </formCommands>
   <commandInterface>
     <navigationPanel/>
     <commandBar/>
