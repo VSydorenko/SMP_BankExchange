@@ -545,6 +545,30 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="2b5cb7b3-8acc-4e4b-b009-47960d68c7a2">
+    <name>РасширениеФайлаЭкспорта</name>
+    <synonym>
+      <key>uk</key>
+      <value>Розширення файла експорту</value>
+    </synonym>
+    <synonym>
+      <key>ru</key>
+      <value>Расширение файла экспорта</value>
+    </synonym>
+    <type>
+      <types>String</types>
+      <stringQualifiers>
+        <length>10</length>
+      </stringQualifiers>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:StringValue">
+      <value></value>
+    </fillValue>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
   <forms uuid="03358490-74cd-4f0a-8fda-b37051c36685">
     <name>ФормаЭлемента</name>
     <synonym>
