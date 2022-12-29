@@ -30,7 +30,7 @@
   <defaultRunMode>ManagedApplication</defaultRunMode>
   <usePurposes>PersonalComputer</usePurposes>
   <scriptVariant>Russian</scriptVariant>
-  <version>1.0.0.8</version>
+  <version>1.0.2.5</version>
   <defaultLanguage>Language.Украинский</defaultLanguage>
   <compatibilityMode>8.3.22</compatibilityMode>
   <languages uuid="27568a7a-a1a3-40fc-b98b-9f9b18ac91ca" extendedConfigurationObject="8d3c79b9-b0c9-424d-91d7-f23dd920a4f8">
@@ -54,6 +54,7 @@
   <subsystems>Subsystem.СМП_simplyBP</subsystems>
   <styleItems>StyleItem.ПоясняющийПроблемуТекст</styleItems>
   <styleItems>StyleItem.НедоступныеДанныеЦвет</styleItems>
+  <styleItems>StyleItem.ИтогиФонГруппы</styleItems>
   <commonPictures>CommonPicture.КлиентБанкКомандаЗагрузить</commonPictures>
   <commonPictures>CommonPicture.СостоянияДокумента</commonPictures>
   <commonPictures>CommonPicture.КлиентБанкКомандаВыгрузить</commonPictures>
@@ -62,6 +63,9 @@
   <commonPictures>CommonPicture.СМП_simplyBP</commonPictures>
   <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
   <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
+  <commonPictures>CommonPicture.Скрепка</commonPictures>
+  <commonPictures>CommonPicture.ЗаполнитьФорму</commonPictures>
+  <commonPictures>CommonPicture.Отчеты</commonPictures>
   <roles>Role.ДобавлениеИзменениеДанныхБухгалтерии</roles>
   <roles>Role.ПолныеПрава</roles>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
@@ -72,8 +76,21 @@
   <catalogs>Catalog.Организации</catalogs>
   <catalogs>Catalog.Контрагенты</catalogs>
   <catalogs>Catalog.СтатьиДвиженияДенежныхСредств</catalogs>
+  <catalogs>Catalog.СоответствияНазначенийПлатежаИРеквизитовПлатежа</catalogs>
+  <catalogs>Catalog.ДоговорыКонтрагентов</catalogs>
+  <documents>Document.ПоступлениеНаРасчетныйСчет</documents>
+  <documents>Document.ПлатежныйОрдерСписаниеДенежныхСредств</documents>
+  <documents>Document.СписаниеСРасчетногоСчета</documents>
+  <documents>Document.ПлатежныйОрдерПоступлениеДенежныхСредств</documents>
+  <documents>Document.ПлатежноеПоручение</documents>
+  <documentJournals>DocumentJournal.Деньги</documentJournals>
   <enums>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</enums>
   <enums>Enum.ВедениеВзаиморасчетовПоДоговорам</enums>
+  <enums>Enum.ВидыОперацийПоступлениеДенежныхСредств</enums>
+  <enums>Enum.ВидыОперацийСписаниеДенежныхСредств</enums>
+  <enums>Enum.СтавкиНДС</enums>
   <dataProcessors>DataProcessor.КлиентБанк</dataProcessors>
   <informationRegisters>InformationRegister.СМП_НомерПоследнейТранзакции</informationRegisters>
+  <chartsOfCharacteristicTypes>ChartOfCharacteristicTypes.ВидыСубконтоХозрасчетные</chartsOfCharacteristicTypes>
+  <chartsOfAccounts>ChartOfAccounts.Хозрасчетный</chartsOfAccounts>
 </mdclass:Configuration>

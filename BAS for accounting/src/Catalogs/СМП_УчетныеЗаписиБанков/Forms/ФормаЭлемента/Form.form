@@ -783,6 +783,7 @@
     <items xsi:type="form:FormField">
       <name>Настр_Кодировка</name>
       <id>106</id>
+      <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
         <common>true</common>

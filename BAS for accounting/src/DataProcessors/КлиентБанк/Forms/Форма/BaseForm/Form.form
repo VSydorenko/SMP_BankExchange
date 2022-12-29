@@ -3231,7 +3231,13 @@
           <userVisible>
             <common>true</common>
           </userVisible>
+          <dataPath xsi:type="form:DataPath">
+            <segments>ДокументыКИмпорту</segments>
+          </dataPath>
           <titleLocation>None</titleLocation>
+          <excludedCommands>Add</excludedCommands>
+          <excludedCommands>Copy</excludedCommands>
+          <excludedCommands>Delete</excludedCommands>
           <items xsi:type="form:FormGroup">
             <name>ДокументыКИмпортуГруппа1</name>
             <id>523</id>
@@ -3246,6 +3252,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.Загружать</segments>
+                </dataPath>
                 <titleLocation>None</titleLocation>
                 <toolTip>
                   <key>ru</key>
@@ -3294,6 +3303,9 @@
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible/>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.НомерСтроки</segments>
+                </dataPath>
                 <toolTip>
                   <key>ru</key>
                   <value>Порядковый номер документа в файле</value>
@@ -3352,6 +3364,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.ДатаПроведения</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуДатаПроведенияExtendedTooltip</name>
                   <id>719</id>
@@ -3403,6 +3418,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.НомерДок</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуНомерДокExtendedTooltip</name>
                   <id>720</id>
@@ -3456,6 +3474,9 @@
                   <userVisible>
                     <common>true</common>
                   </userVisible>
+                  <dataPath xsi:type="form:DataPath">
+                    <segments>ДокументыКИмпорту.Документ</segments>
+                  </dataPath>
                   <extendedTooltip>
                     <name>ДокументыКИмпортуДокументНеЗагруженРасширеннаяПодсказка</name>
                     <id>831</id>
@@ -3538,6 +3559,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.Документ</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуДокументExtendedTooltip</name>
                   <id>718</id>
@@ -3588,6 +3612,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.СуммаПоступило</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуСуммаПоступилоExtendedTooltip</name>
                   <id>721</id>
@@ -3639,6 +3666,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.СуммаСписано</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуСуммаСписаноExtendedTooltip</name>
                   <id>722</id>
@@ -3690,6 +3720,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.Контрагент</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуКонтрагентExtendedTooltip</name>
                   <id>723</id>
@@ -3738,6 +3771,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.СчетКонтрагента</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуСчетКонтрагентаExtendedTooltip</name>
                   <id>724</id>
@@ -3784,7 +3820,7 @@
                   <choiceParameterLinks>
                     <name>Отбор.Владелец</name>
                     <datapath xsi:type="form:DataPath">
-                      <segments>19:02023637-7868-4a5f-8576-835a76e0c9ba/17</segments>
+                      <segments>Items.ДокументыКИмпорту.CurrentData.Контрагент</segments>
                     </datapath>
                   </choiceParameterLinks>
                 </extInfo>
@@ -3797,6 +3833,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.НазначениеПлатежа</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуНазначениеПлатежаExtendedTooltip</name>
                   <id>725</id>
@@ -3846,6 +3885,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.ВидОперации</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуВидОперацииExtendedTooltip</name>
                   <id>726</id>
@@ -3894,6 +3936,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.Договор</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуДоговорExtendedTooltip</name>
                   <id>727</id>
@@ -3946,7 +3991,7 @@
                   <choiceParameterLinks>
                     <name>Отбор.Владелец</name>
                     <datapath xsi:type="form:DataPath">
-                      <segments>19:02023637-7868-4a5f-8576-835a76e0c9ba/17</segments>
+                      <segments>Items.ДокументыКИмпорту.CurrentData.Контрагент</segments>
                     </datapath>
                   </choiceParameterLinks>
                   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
@@ -3960,6 +4005,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.СтатьяДДС</segments>
+                </dataPath>
                 <toolTip>
                   <key>ru</key>
                   <value>Статья движения денежных средств</value>
@@ -4043,6 +4091,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>ДокументыКИмпорту.ОписаниеОшибок</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуОписаниеОшибокExtendedTooltip</name>
                   <id>810</id>
@@ -5782,6 +5833,1387 @@
   <verticalScroll>UseIfNecessary</verticalScroll>
   <showTitle>true</showTitle>
   <showCloseButton>true</showCloseButton>
+  <attributes>
+    <name>ДокументыКИмпорту</name>
+    <title>
+      <key>ru</key>
+      <value>Документы к импорту</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Документи до імпорту</value>
+    </title>
+    <id>1000001</id>
+    <valueType>
+      <types>ValueTable</types>
+    </valueType>
+    <view>
+      <common>true</common>
+    </view>
+    <edit>
+      <common>true</common>
+    </edit>
+    <columns>
+      <name>Проведен</name>
+      <id>3</id>
+      <valueType>
+        <types>Boolean</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Загружать</name>
+      <title>
+        <key>ru</key>
+        <value>Загружать</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Завантажувати</value>
+      </title>
+      <id>4</id>
+      <valueType>
+        <types>Boolean</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Готовность</name>
+      <title>
+        <key>ru</key>
+        <value>Готовность</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Готовність</value>
+      </title>
+      <id>5</id>
+      <valueType>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>1</precision>
+        </numberQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>НомерСтроки</name>
+      <title>
+        <key>ru</key>
+        <value>№</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>№</value>
+      </title>
+      <id>6</id>
+      <valueType>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>10</precision>
+        </numberQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>НомерДок</name>
+      <title>
+        <key>ru</key>
+        <value>Номер</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Номер</value>
+      </title>
+      <id>7</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Номер</name>
+      <title>
+        <key>ru</key>
+        <value>Номер</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Номер</value>
+      </title>
+      <id>8</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДатаДок</name>
+      <title>
+        <key>ru</key>
+        <value>Дата</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Дата</value>
+      </title>
+      <id>9</id>
+      <valueType>
+        <types>Date</types>
+        <dateQualifiers>
+          <dateFractions>Date</dateFractions>
+        </dateQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Дата</name>
+      <title>
+        <key>ru</key>
+        <value>Дата (из файла)</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Дата (з файлу)</value>
+      </title>
+      <id>10</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Операция</name>
+      <title>
+        <key>ru</key>
+        <value>Операция</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Операція</value>
+      </title>
+      <id>11</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СчетОрганизации</name>
+      <title>
+        <key>ru</key>
+        <value>Б/с организации</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Б/р організації</value>
+      </title>
+      <id>12</id>
+      <valueType>
+        <types>CatalogRef.БанковскиеСчета</types>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СуммаДокумента</name>
+      <title>
+        <key>ru</key>
+        <value>Сумма</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Сума</value>
+      </title>
+      <id>13</id>
+      <valueType>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>15</precision>
+          <scale>2</scale>
+        </numberQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СуммаСписано</name>
+      <title>
+        <key>ru</key>
+        <value>Списано</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Списано</value>
+      </title>
+      <id>14</id>
+      <valueType>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>15</precision>
+          <scale>2</scale>
+        </numberQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СуммаПоступило</name>
+      <title>
+        <key>ru</key>
+        <value>Поступило</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Надійшло</value>
+      </title>
+      <id>15</id>
+      <valueType>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>15</precision>
+          <scale>2</scale>
+        </numberQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Сумма</name>
+      <title>
+        <key>ru</key>
+        <value>Сумма (из файла)</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Сума (з файлу)</value>
+      </title>
+      <id>16</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Контрагент</name>
+      <title>
+        <key>ru</key>
+        <value>Контрагент</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Контрагент</value>
+      </title>
+      <id>17</id>
+      <valueType>
+        <types>CatalogRef.Контрагенты</types>
+        <types>CatalogRef.Организации</types>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СчетКонтрагента</name>
+      <title>
+        <key>ru</key>
+        <value>Б/с контрагента</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Б/р контрагента</value>
+      </title>
+      <id>18</id>
+      <valueType>
+        <types>CatalogRef.БанковскиеСчета</types>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Списано</name>
+      <title>
+        <key>ru</key>
+        <value>Списано</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Списано</value>
+      </title>
+      <id>22</id>
+      <valueType>
+        <types>Date</types>
+        <dateQualifiers>
+          <dateFractions>Date</dateFractions>
+        </dateQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДатаСписано</name>
+      <title>
+        <key>ru</key>
+        <value>Списано</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Списано</value>
+      </title>
+      <id>23</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Поступило</name>
+      <title>
+        <key>ru</key>
+        <value>Поступило</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Надійшло</value>
+      </title>
+      <id>24</id>
+      <valueType>
+        <types>Date</types>
+        <dateQualifiers>
+          <dateFractions>Date</dateFractions>
+        </dateQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДатаПоступило</name>
+      <title>
+        <key>ru</key>
+        <value>Поступило</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Надійшло</value>
+      </title>
+      <id>25</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДатаПроведения</name>
+      <title>
+        <key>ru</key>
+        <value>Дата</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Дата</value>
+      </title>
+      <id>26</id>
+      <valueType>
+        <types>Date</types>
+        <dateQualifiers>
+          <dateFractions>Date</dateFractions>
+        </dateQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПлательщикСчет</name>
+      <title>
+        <key>ru</key>
+        <value>Расчетный счет плательщика</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Розрахунковий рахунок платника</value>
+      </title>
+      <id>27</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>34</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Плательщик</name>
+      <title>
+        <key>ru</key>
+        <value>Плательщик</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Платник</value>
+      </title>
+      <id>28</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПолучательСчет</name>
+      <title>
+        <key>ru</key>
+        <value>Расчетный счет получателя</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Розрахунковий рахунок отримувача</value>
+      </title>
+      <id>39</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>34</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Получатель</name>
+      <title>
+        <key>ru</key>
+        <value>Получатель</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Одержувач</value>
+      </title>
+      <id>40</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>НазначениеПлатежа</name>
+      <title>
+        <key>ru</key>
+        <value>Назначение платежа</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Призначення платежу</value>
+      </title>
+      <id>68</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПлатежПоПредст</name>
+      <title>
+        <key>ru</key>
+        <value>Платеж по представлению</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Платіж за представленням</value>
+      </title>
+      <id>81</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДополнУсловия</name>
+      <title>
+        <key>ru</key>
+        <value>Дополнительные условия</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Додаткові умови</value>
+      </title>
+      <id>82</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>НомерСчетаПоставщика</name>
+      <title>
+        <key>ru</key>
+        <value>№ счета поставщика</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>№ рахунку постачальника</value>
+      </title>
+      <id>83</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДатаОтсылкиДок</name>
+      <title>
+        <key>ru</key>
+        <value>Дата отсылки документов</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Дата відправлення документів</value>
+      </title>
+      <id>84</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДатаОтсылки</name>
+      <title>
+        <key>ru</key>
+        <value>Дата отсылки</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Дата відсилання</value>
+      </title>
+      <id>85</id>
+      <valueType>
+        <types>Date</types>
+        <dateQualifiers>
+          <dateFractions>Date</dateFractions>
+        </dateQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Документ</name>
+      <title>
+        <key>ru</key>
+        <value>Документ</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Документ</value>
+      </title>
+      <id>86</id>
+      <valueType>
+        <types>DocumentRef.ПлатежноеПоручение</types>
+        <types>DocumentRef.СписаниеСРасчетногоСчета</types>
+        <types>DocumentRef.ПлатежныйОрдерПоступлениеДенежныхСредств</types>
+        <types>DocumentRef.ПоступлениеНаРасчетныйСчет</types>
+        <types>DocumentRef.ПлатежныйОрдерСписаниеДенежныхСредств</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПлатежныйОрдер</name>
+      <title>
+        <key>ru</key>
+        <value>Ордер</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Ордер</value>
+      </title>
+      <id>87</id>
+      <valueType>
+        <types>DocumentRef.СписаниеСРасчетногоСчета</types>
+        <types>DocumentRef.ПлатежныйОрдерСписаниеДенежныхСредств</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СекцияДокумент</name>
+      <title>
+        <key>ru</key>
+        <value>Выгрузка</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Вивантаження</value>
+      </title>
+      <id>88</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СтатьяДДС</name>
+      <title>
+        <key>ru</key>
+        <value>Статья ДДС</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Стаття РГК</value>
+      </title>
+      <id>89</id>
+      <valueType>
+        <types>CatalogRef.СтатьиДвиженияДенежныхСредств</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ТипДокумента</name>
+      <title>
+        <key>ru</key>
+        <value>Тип пл. документа</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Тип пл. документа</value>
+      </title>
+      <id>91</id>
+      <valueType>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>10</precision>
+        </numberQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ВидДокумента</name>
+      <title>
+        <key>ru</key>
+        <value>Вид документа</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Вид документу</value>
+      </title>
+      <id>92</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ИмяДокумента</name>
+      <title>
+        <key>ru</key>
+        <value>Имя документа</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Ім'я документа</value>
+      </title>
+      <id>93</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ВидОперации</name>
+      <title>
+        <key>ru</key>
+        <value>Вид операции</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Вид операції</value>
+      </title>
+      <id>94</id>
+      <valueType>
+        <types>EnumRef.ВидыОперацийПоступлениеДенежныхСредств</types>
+        <types>EnumRef.ВидыОперацийСписаниеДенежныхСредств</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Договор</name>
+      <title>
+        <key>ru</key>
+        <value>Договор</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Договір</value>
+      </title>
+      <id>1</id>
+      <valueType>
+        <types>CatalogRef.ДоговорыКонтрагентов</types>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СостояниеДокумента</name>
+      <title>
+        <key>ru</key>
+        <value>Состояние документа</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Стан документа</value>
+      </title>
+      <id>2</id>
+      <valueType>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>1</precision>
+        </numberQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДатаПлПоручения</name>
+      <title>
+        <key>ru</key>
+        <value>Дата пл поручения</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Дата пл доручення</value>
+      </title>
+      <id>95</id>
+      <valueType>
+        <types>Date</types>
+        <dateQualifiers>
+          <dateFractions>Date</dateFractions>
+        </dateQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СтавкаНДС</name>
+      <title>
+        <key>ru</key>
+        <value>Ставка НДС</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Ставка ПДВ</value>
+      </title>
+      <id>96</id>
+      <valueType>
+        <types>EnumRef.СтавкиНДС</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДокументОснование</name>
+      <title>
+        <key>ru</key>
+        <value>Документ основание</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Документ підстава</value>
+      </title>
+      <id>97</id>
+      <valueType>
+        <types>DocumentRef.ПлатежноеПоручение</types>
+        <types>DocumentRef.СписаниеСРасчетногоСчета</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>НомерДокументаНекорректен</name>
+      <title>
+        <key>ru</key>
+        <value>Номер документа некорректен</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Номер документа некоректний</value>
+      </title>
+      <id>98</id>
+      <valueType>
+        <types>Boolean</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ОписаниеОшибок</name>
+      <title>
+        <key>ru</key>
+        <value>Замечание</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Зауваження</value>
+      </title>
+      <id>99</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДоговорКонтрагентаНеНайден</name>
+      <title>
+        <key>ru</key>
+        <value>Договор контрагента не найден</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Договір контрагента не знайдений</value>
+      </title>
+      <id>90</id>
+      <valueType>
+        <types>Boolean</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>Код</name>
+      <title>
+        <key>ru</key>
+        <value>Код</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Код</value>
+      </title>
+      <id>100</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>25</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ЕстьОшибка</name>
+      <title>
+        <key>ru</key>
+        <value>Есть ошибка</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Є помилка</value>
+      </title>
+      <id>101</id>
+      <valueType>
+        <types>Boolean</types>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ОКТМО</name>
+      <title>
+        <key>ru</key>
+        <value>ОКТМО</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>ЗКТМУ</value>
+      </title>
+      <id>102</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>11</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ДокументИД</name>
+      <title>
+        <key>ru</key>
+        <value>Документ ИД</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Документ ІД</value>
+      </title>
+      <id>103</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>КодВалюты</name>
+      <title>
+        <key>ru</key>
+        <value>Код валюты</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Код валюти</value>
+      </title>
+      <id>104</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>3</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СтатусДокумента</name>
+      <title>
+        <key>ru</key>
+        <value>Статус документа</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Статус документу</value>
+      </title>
+      <id>105</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПлательщикОКПО</name>
+      <title>
+        <key>ru</key>
+        <value>ОКПО (ЄДРПОУ) плательщика</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>ОКПО (ЄДРПОУ) платника</value>
+      </title>
+      <id>106</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>12</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПолучательОКПО</name>
+      <title>
+        <key>ru</key>
+        <value>ОКПО (ЄДРПОУ) получателя</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>ОКПО (ЄДРПОУ) отримувача</value>
+      </title>
+      <id>107</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>12</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПлательщикМФО</name>
+      <title>
+        <key>ru</key>
+        <value>МФО банка плательщика</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>МФО банку платника</value>
+      </title>
+      <id>108</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>9</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПолучательМФО</name>
+      <title>
+        <key>ru</key>
+        <value>МФО банка получателя</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>МФО банку отримувача</value>
+      </title>
+      <id>109</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers>
+          <length>9</length>
+        </stringQualifiers>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПлательщикБанк</name>
+      <title>
+        <key>ru</key>
+        <value>Банк плательщика</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Банк платника</value>
+      </title>
+      <id>110</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>ПолучательБанк</name>
+      <title>
+        <key>ru</key>
+        <value>Банк получателя</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Банк одержувача</value>
+      </title>
+      <id>111</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+    <columns>
+      <name>СтатусСоставителя</name>
+      <title>
+        <key>ru</key>
+        <value>Статус составителя</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Статус укладача</value>
+      </title>
+      <id>19</id>
+      <valueType>
+        <types>String</types>
+        <stringQualifiers/>
+      </valueType>
+      <view>
+        <common>true</common>
+      </view>
+      <edit>
+        <common>true</common>
+      </edit>
+    </columns>
+  </attributes>
   <formCommands>
     <name>КомандаВыгрузить</name>
     <title>

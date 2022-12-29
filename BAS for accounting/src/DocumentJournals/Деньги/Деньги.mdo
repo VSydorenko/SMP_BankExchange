@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DocumentJournal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="d7371644-f71f-4273-a2fc-9cbb6a8ae64c" extendedConfigurationObject="b29c1a93-3bd7-4be3-a92f-d4f4babd6b51">
+  <producedTypes>
+    <selectionType typeId="62e12b34-4db3-47c8-9f48-29feabaf649f" valueTypeId="954a6e88-f41f-49bd-872e-7229ae33f782"/>
+    <listType typeId="250d8b86-22c5-41dd-bdca-3967fdc164cc" valueTypeId="aee2244a-780b-4630-a350-6b3b391a714a"/>
+    <managerType typeId="d57867f9-1c5d-4fae-8a69-0766d6a355c5" valueTypeId="de7fd0b1-2e37-4e32-8116-aeed7e96aca4"/>
+  </producedTypes>
+  <name>Деньги</name>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:DocumentJournalExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
+  <forms uuid="4f222555-86af-46eb-a45c-fc44d253ed70" extendedConfigurationObject="d8d67f03-a8af-48bb-8c6a-8997827eb677">
+    <name>БанковскиеВыписки</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:BasicFormExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <form>Extended</form>
+    </extension>
+  </forms>
+</mdclass:DocumentJournal>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="3544e82c-32f3-4045-b486-d41d2e55fe88" extendedConfigurationObject="f01637ba-3841-41f9-b007-06d2776e8d1b">
+  <producedTypes>
+    <objectType typeId="6a794607-4637-4527-9ddf-931b1eaeb79c" valueTypeId="17e9dfd9-7c68-449d-9330-f5a899e6f0d3"/>
+    <refType typeId="2152efc9-573e-4abe-9ab7-fa976d9bc73d" valueTypeId="b7d03001-a153-4138-9204-37e7fef67f0b"/>
+    <selectionType typeId="be420ee0-4ff5-47ef-8433-007765d95b93" valueTypeId="93fbba85-e350-4ab7-969f-da12431604ab"/>
+    <listType typeId="5e7b17c8-1ea4-4809-a864-121a042237a0" valueTypeId="2e2c7ec7-9b98-44be-9efc-c9b0b0700b99"/>
+    <managerType typeId="b3ed7732-2bfe-4c27-8135-645a0e7930c6" valueTypeId="daa71ab4-d332-4664-9bfc-0c2797ab9aae"/>
+  </producedTypes>
+  <name>ПлатежноеПоручение</name>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:DocumentExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
+</mdclass:Document>
