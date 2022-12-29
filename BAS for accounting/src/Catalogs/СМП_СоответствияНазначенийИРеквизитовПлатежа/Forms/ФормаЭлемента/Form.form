@@ -151,6 +151,14 @@
       <chooseType>true</chooseType>
       <typeDomainEnabled>true</typeDomainEnabled>
       <textEdit>true</textEdit>
+      <inputHint>
+        <key>uk</key>
+        <value>для всіх, якщо не вказано</value>
+      </inputHint>
+      <inputHint>
+        <key>ru</key>
+        <value>для всех, если не указано</value>
+      </inputHint>
     </extInfo>
   </items>
   <items xsi:type="form:FormGroup">
@@ -319,6 +327,10 @@
     <userVisible>
       <common>true</common>
     </userVisible>
+    <title>
+      <key>uk</key>
+      <value>Реквізити для підстановки в документ</value>
+    </title>
     <title>
       <key>ru</key>
       <value>Реквизиты для подстановки в документ</value>
@@ -561,14 +573,6 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <title>
-      <key>uk</key>
-      <value>Группа счет учета</value>
-    </title>
-    <toolTip>
-      <key>uk</key>
-      <value>Группа счет учета</value>
-    </toolTip>
     <extendedTooltip>
       <name>ГруппаСчетУчетаРасширеннаяПодсказка</name>
       <id>34</id>
@@ -625,7 +629,7 @@
     <name>Объект</name>
     <id>1</id>
     <valueType>
-      <types>CatalogObject.СоответствияНазначенийПлатежаИРеквизитовПлатежа</types>
+      <types>CatalogObject.СМП_СоответствияНазначенийИРеквизитовПлатежа</types>
     </valueType>
     <view>
       <common>true</common>
@@ -640,11 +644,11 @@
     <name>СубконтоДт1</name>
     <title>
       <key>uk</key>
-      <value>Субконто дт1</value>
+      <value>Субконто Дт1</value>
     </title>
     <title>
       <key>ru</key>
-      <value>Субконто дт1</value>
+      <value>Субконто Дт1</value>
     </title>
     <id>2</id>
     <valueType>
@@ -661,11 +665,11 @@
     <name>СубконтоДт2</name>
     <title>
       <key>uk</key>
-      <value>Субконто дт2</value>
+      <value>Субконто Дт2</value>
     </title>
     <title>
       <key>ru</key>
-      <value>Субконто дт2</value>
+      <value>Субконто Дт2</value>
     </title>
     <id>3</id>
     <valueType>
@@ -682,11 +686,11 @@
     <name>СубконтоДт3</name>
     <title>
       <key>uk</key>
-      <value>Субконто дт3</value>
+      <value>Субконто Дт3</value>
     </title>
     <title>
       <key>ru</key>
-      <value>Субконто дт3</value>
+      <value>Субконто Дт3</value>
     </title>
     <id>4</id>
     <valueType>
@@ -703,7 +707,11 @@
     <name>ЗаголовокСубконтоДт1</name>
     <title>
       <key>uk</key>
-      <value>Заголовок субконто дт1</value>
+      <value>Заголовок субконто Дт1</value>
+    </title>
+    <title>
+      <key>ru</key>
+      <value>Заголовок субконто Дт1</value>
     </title>
     <id>5</id>
     <valueType>
@@ -721,7 +729,11 @@
     <name>ЗаголовокСубконтоДт2</name>
     <title>
       <key>uk</key>
-      <value>Заголовок субконто дт1</value>
+      <value>Заголовок субконто Дт2</value>
+    </title>
+    <title>
+      <key>ru</key>
+      <value>Заголовок субконто Дт2</value>
     </title>
     <id>6</id>
     <valueType>
@@ -739,7 +751,11 @@
     <name>ЗаголовокСубконтоДт3</name>
     <title>
       <key>uk</key>
-      <value>Заголовок субконто дт1</value>
+      <value>Заголовок субконто Дт3</value>
+    </title>
+    <title>
+      <key>ru</key>
+      <value>Заголовок субконто Дт3</value>
     </title>
     <id>7</id>
     <valueType>

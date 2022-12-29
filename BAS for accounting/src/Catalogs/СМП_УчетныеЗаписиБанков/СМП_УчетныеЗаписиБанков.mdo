@@ -411,6 +411,30 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="2b5cb7b3-8acc-4e4b-b009-47960d68c7a2">
+    <name>РасширениеФайлаЭкспорта</name>
+    <synonym>
+      <key>uk</key>
+      <value>Розширення файла експорту</value>
+    </synonym>
+    <synonym>
+      <key>ru</key>
+      <value>Расширение файла экспорта</value>
+    </synonym>
+    <type>
+      <types>String</types>
+      <stringQualifiers>
+        <length>10</length>
+      </stringQualifiers>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:StringValue">
+      <value></value>
+    </fillValue>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
   <attributes uuid="6c7568c4-6f79-40cf-a33f-07c48332f275">
     <name>СоздаватьНенайденныеЭлементы</name>
     <synonym>
@@ -536,30 +560,6 @@
     <type>
       <types>String</types>
       <stringQualifiers/>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:StringValue">
-      <value></value>
-    </fillValue>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="2b5cb7b3-8acc-4e4b-b009-47960d68c7a2">
-    <name>РасширениеФайлаЭкспорта</name>
-    <synonym>
-      <key>uk</key>
-      <value>Розширення файла експорту</value>
-    </synonym>
-    <synonym>
-      <key>ru</key>
-      <value>Расширение файла экспорта</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers>
-        <length>10</length>
-      </stringQualifiers>
     </type>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>

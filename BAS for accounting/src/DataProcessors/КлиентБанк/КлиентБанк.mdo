@@ -30,19 +30,6 @@
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
   </attributes>
-  <attributes uuid="34631069-82cf-4624-8026-8416e662c766">
-    <name>СМП_УчетнаяЗаписьБанка</name>
-    <synonym>
-      <key>uk</key>
-      <value>СМП учетная запись банка</value>
-    </synonym>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension"/>
-    <type>
-      <types>CatalogRef.СМП_УчетныеЗаписиБанков</types>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-  </attributes>
   <attributes uuid="eec5ff0b-e851-4558-8aa5-5c8e9a608d21">
     <name>СМП_РасширениеФайлаЭкспорта</name>
     <synonym>
@@ -59,6 +46,19 @@
       <stringQualifiers>
         <length>5</length>
       </stringQualifiers>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </attributes>
+  <attributes uuid="34631069-82cf-4624-8026-8416e662c766">
+    <name>СМП_УчетнаяЗаписьБанка</name>
+    <synonym>
+      <key>uk</key>
+      <value>СМП учетная запись банка</value>
+    </synonym>
+    <extension xsi:type="mdclassExtension:BasicFeatureExtension"/>
+    <type>
+      <types>CatalogRef.СМП_УчетныеЗаписиБанков</types>
     </type>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>

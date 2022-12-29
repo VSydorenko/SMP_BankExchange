@@ -2,6 +2,10 @@
 <mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="2f3eb710-c494-415e-8b4f-dcf6f73eed37">
   <name>РаботаСБанками</name>
   <synonym>
+    <key>uk</key>
+    <value>Робота з банками</value>
+  </synonym>
+  <synonym>
     <key>ru</key>
     <value>Работа с банками</value>
   </synonym>

@@ -2,10 +2,17 @@
 <mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="fcfcb937-052b-4ddf-b715-5eddc5b71489">
   <name>ИзмененныеОбъекты</name>
   <synonym>
+    <key>uk</key>
+    <value>Змінені об'єкти</value>
+  </synonym>
+  <synonym>
     <key>ru</key>
     <value>Измененные объекты</value>
   </synonym>
   <includeHelpInContents>true</includeHelpInContents>
   <content>DataProcessor.КлиентБанк</content>
+  <content>DocumentJournal.Деньги</content>
+  <content>Role.ДобавлениеИзменениеДанныхБухгалтерии</content>
+  <content>Role.ПолныеПрава</content>
   <parentSubsystem>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

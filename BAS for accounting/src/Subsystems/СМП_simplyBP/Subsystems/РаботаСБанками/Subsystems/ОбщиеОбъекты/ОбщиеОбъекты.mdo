@@ -2,6 +2,10 @@
 <mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="279500ea-15b4-49d3-aad4-d8335b8c9ee5">
   <name>ОбщиеОбъекты</name>
   <synonym>
+    <key>uk</key>
+    <value>Загальні об'єкти</value>
+  </synonym>
+  <synonym>
     <key>ru</key>
     <value>Общие объекты</value>
   </synonym>
@@ -11,9 +15,7 @@
   <content>CommonPicture.СМП_РаботаСБанкамиПриватБанк</content>
   <content>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</content>
   <content>CommonModule.СМП_РаботаСБанкамиСервер</content>
-  <content>11357b3e-f0ea-4838-914f-5ed6c75baa43</content>
   <content>InformationRegister.СМП_НомерПоследнейТранзакции</content>
-  <content>CommonPicture.ИзменитьНастройки</content>
-  <content>022f99dd-e1b7-42a7-8141-a8c2e8628901</content>
+  <content>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</content>
   <parentSubsystem>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

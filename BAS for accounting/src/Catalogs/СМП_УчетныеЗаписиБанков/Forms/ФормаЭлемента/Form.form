@@ -310,6 +310,11 @@
             <chooseType>true</chooseType>
             <typeDomainEnabled>true</typeDomainEnabled>
             <textEdit>true</textEdit>
+            <choiceList>
+              <value xsi:type="core:ReferenceValue">
+                <value>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками.EnumValue.ПодключаемаяОбработка</value>
+              </value>
+            </choiceList>
           </extInfo>
         </items>
         <visible>true</visible>

@@ -2,8 +2,12 @@
 <mdclass:CommonModule xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="78f7a33a-2b5c-4910-9b5c-2f50cb0b1fef">
   <name>СМП_РаботаСБанкамиСервер</name>
   <synonym>
+    <key>uk</key>
+    <value>Робота з банками сервер</value>
+  </synonym>
+  <synonym>
     <key>ru</key>
-    <value>Обмен с банками</value>
+    <value>Работа с банками сервер</value>
   </synonym>
   <server>true</server>
   <serverCall>true</serverCall>

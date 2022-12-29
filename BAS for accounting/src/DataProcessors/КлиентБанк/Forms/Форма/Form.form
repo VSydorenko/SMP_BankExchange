@@ -3118,7 +3118,7 @@
               </extInfo>
             </items>
             <items xsi:type="form:Button">
-              <name>ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументов</name>
+              <name>СМП_ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументов</name>
               <id>870</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -3126,7 +3126,7 @@
                 <common>true</common>
               </userVisible>
               <extendedTooltip>
-                <name>ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументовРасширеннаяПодсказка</name>
+                <name>СМП_ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументовРасширеннаяПодсказка</name>
                 <id>871</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -3141,7 +3141,7 @@
                 </extInfo>
               </extendedTooltip>
               <type>Hyperlink</type>
-              <commandName>Form.Command.ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументов</commandName>
+              <commandName>Form.Command.СМП_ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументов</commandName>
               <representation>Auto</representation>
               <autoMaxWidth>true</autoMaxWidth>
               <autoMaxHeight>true</autoMaxHeight>
@@ -7387,7 +7387,7 @@
     <currentRowUse>DontUse</currentRowUse>
   </formCommands>
   <formCommands>
-    <name>ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументов</name>
+    <name>СМП_ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументов</name>
     <title>
       <key>uk</key>
       <value>Відкрити довідник відповідностей призначень платежів і реквизитів документів</value>

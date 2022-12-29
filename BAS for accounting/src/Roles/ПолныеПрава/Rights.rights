@@ -96,7 +96,7 @@
 		</right>
 	</object>
 	<object>
-		<name>Catalog.СоответствияНазначенийПлатежаИРеквизитовПлатежа</name>
+		<name>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</name>
 		<right>
 			<name>InteractiveDelete</name>
 			<value>false</value>

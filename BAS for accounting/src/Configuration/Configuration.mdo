@@ -30,18 +30,9 @@
   <defaultRunMode>ManagedApplication</defaultRunMode>
   <usePurposes>PersonalComputer</usePurposes>
   <scriptVariant>Russian</scriptVariant>
-  <version>1.0.2.5</version>
+  <version>1.0.2.7</version>
   <defaultLanguage>Language.Украинский</defaultLanguage>
   <compatibilityMode>8.3.22</compatibilityMode>
-  <languages uuid="27568a7a-a1a3-40fc-b98b-9f9b18ac91ca" extendedConfigurationObject="8d3c79b9-b0c9-424d-91d7-f23dd920a4f8">
-    <name>Украинский</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:LanguageExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <languageCode>Checked</languageCode>
-    </extension>
-    <languageCode>uk</languageCode>
-  </languages>
   <languages uuid="41622829-6ab0-4279-ae25-1b23544d5487" extendedConfigurationObject="bc55f866-e0a2-4a5a-b32c-cd8ea2cfcf9a">
     <name>Русский</name>
     <objectBelonging>Adopted</objectBelonging>
@@ -51,38 +42,46 @@
     </extension>
     <languageCode>ru</languageCode>
   </languages>
+  <languages uuid="27568a7a-a1a3-40fc-b98b-9f9b18ac91ca" extendedConfigurationObject="8d3c79b9-b0c9-424d-91d7-f23dd920a4f8">
+    <name>Украинский</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:LanguageExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <languageCode>Checked</languageCode>
+    </extension>
+    <languageCode>uk</languageCode>
+  </languages>
   <subsystems>Subsystem.СМП_simplyBP</subsystems>
-  <styleItems>StyleItem.ПоясняющийПроблемуТекст</styleItems>
-  <styleItems>StyleItem.НедоступныеДанныеЦвет</styleItems>
   <styleItems>StyleItem.ИтогиФонГруппы</styleItems>
-  <commonPictures>CommonPicture.КлиентБанкКомандаЗагрузить</commonPictures>
-  <commonPictures>CommonPicture.СостоянияДокумента</commonPictures>
-  <commonPictures>CommonPicture.КлиентБанкКомандаВыгрузить</commonPictures>
-  <commonPictures>CommonPicture.Шестеренка</commonPictures>
-  <commonPictures>CommonPicture.ИзменитьНастройки</commonPictures>
+  <styleItems>StyleItem.НедоступныеДанныеЦвет</styleItems>
+  <styleItems>StyleItem.ПоясняющийПроблемуТекст</styleItems>
   <commonPictures>CommonPicture.СМП_simplyBP</commonPictures>
-  <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
   <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
-  <commonPictures>CommonPicture.Скрепка</commonPictures>
+  <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
   <commonPictures>CommonPicture.ЗаполнитьФорму</commonPictures>
+  <commonPictures>CommonPicture.КлиентБанкКомандаВыгрузить</commonPictures>
+  <commonPictures>CommonPicture.КлиентБанкКомандаЗагрузить</commonPictures>
   <commonPictures>CommonPicture.Отчеты</commonPictures>
+  <commonPictures>CommonPicture.Скрепка</commonPictures>
+  <commonPictures>CommonPicture.СостоянияДокумента</commonPictures>
+  <commonPictures>CommonPicture.Шестеренка</commonPictures>
   <roles>Role.ДобавлениеИзменениеДанныхБухгалтерии</roles>
   <roles>Role.ПолныеПрава</roles>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
+  <catalogs>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</catalogs>
   <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
   <catalogs>Catalog.БанковскиеСчета</catalogs>
-  <catalogs>Catalog.ДополнительныеОтчетыИОбработки</catalogs>
-  <catalogs>Catalog.Организации</catalogs>
-  <catalogs>Catalog.Контрагенты</catalogs>
-  <catalogs>Catalog.СтатьиДвиженияДенежныхСредств</catalogs>
-  <catalogs>Catalog.СоответствияНазначенийПлатежаИРеквизитовПлатежа</catalogs>
   <catalogs>Catalog.ДоговорыКонтрагентов</catalogs>
-  <documents>Document.ПоступлениеНаРасчетныйСчет</documents>
-  <documents>Document.ПлатежныйОрдерСписаниеДенежныхСредств</documents>
-  <documents>Document.СписаниеСРасчетногоСчета</documents>
-  <documents>Document.ПлатежныйОрдерПоступлениеДенежныхСредств</documents>
+  <catalogs>Catalog.ДополнительныеОтчетыИОбработки</catalogs>
+  <catalogs>Catalog.Контрагенты</catalogs>
+  <catalogs>Catalog.Организации</catalogs>
+  <catalogs>Catalog.СтатьиДвиженияДенежныхСредств</catalogs>
   <documents>Document.ПлатежноеПоручение</documents>
+  <documents>Document.ПлатежныйОрдерПоступлениеДенежныхСредств</documents>
+  <documents>Document.ПлатежныйОрдерСписаниеДенежныхСредств</documents>
+  <documents>Document.ПоступлениеНаРасчетныйСчет</documents>
+  <documents>Document.СписаниеСРасчетногоСчета</documents>
   <documentJournals>DocumentJournal.Деньги</documentJournals>
   <enums>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</enums>
   <enums>Enum.ВедениеВзаиморасчетовПоДоговорам</enums>

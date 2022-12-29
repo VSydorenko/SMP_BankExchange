@@ -7,12 +7,16 @@
     <listType typeId="d3aef019-5be3-4e0e-8182-3d64562972a8" valueTypeId="5ad0b06d-e421-4acf-b698-94e071d540fa"/>
     <managerType typeId="bb0fb6f1-ef4e-4aa6-ba95-6225a2674689" valueTypeId="a9417291-720f-410d-a77f-8bfd8d40769c"/>
   </producedTypes>
-  <name>СоответствияНазначенийПлатежаИРеквизитовПлатежа</name>
+  <name>СМП_СоответствияНазначенийИРеквизитовПлатежа</name>
+  <synonym>
+    <key>uk</key>
+    <value>Відповідність призначень та реквізитів платежів (СМП)</value>
+  </synonym>
   <synonym>
     <key>ru</key>
-    <value>Соответствия назначений платежа и реквизитов платежа</value>
+    <value>Соответствия назначений и реквизитов платежей (СМП)</value>
   </synonym>
-  <inputByString>Catalog.СоответствияНазначенийПлатежаИРеквизитовПлатежа.StandardAttribute.Code</inputByString>
+  <inputByString>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа.StandardAttribute.Code</inputByString>
   <fullTextSearchOnInputByString>DontUse</fullTextSearchOnInputByString>
   <standardAttributes>
     <dataHistory>Use</dataHistory>
@@ -102,35 +106,13 @@
   <autonumbering>true</autonumbering>
   <editType>InDialog</editType>
   <choiceMode>BothWays</choiceMode>
-  <defaultObjectForm>Catalog.СоответствияНазначенийПлатежаИРеквизитовПлатежа.Form.ФормаЭлемента</defaultObjectForm>
-  <defaultListForm>Catalog.СоответствияНазначенийПлатежаИРеквизитовПлатежа.Form.ФормаСписка</defaultListForm>
-  <attributes uuid="8f66ff89-61f9-408a-b9ab-a5fe86c6f295">
-    <name>ФразаДляПоискаВНазначенииПлатежа</name>
-    <synonym>
-      <key>uk</key>
-      <value>Фраза для поиска в назначении платежа</value>
-    </synonym>
-    <synonym>
-      <key>ru</key>
-      <value>Фраза для поиска в назначении платежа</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers/>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:StringValue">
-      <value></value>
-    </fillValue>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
+  <defaultObjectForm>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа.Form.ФормаЭлемента</defaultObjectForm>
+  <defaultListForm>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа.Form.ФормаСписка</defaultListForm>
   <attributes uuid="b7765331-e042-4119-8152-cc566ad19224">
     <name>ВидОперацииПоступленияНаСчет</name>
     <synonym>
       <key>uk</key>
-      <value>Вид операции поступления на счет</value>
+      <value>Видо операції надходження на рахунок</value>
     </synonym>
     <synonym>
       <key>ru</key>
@@ -149,7 +131,7 @@
     <name>ВидОперацииРасходаСоСчета</name>
     <synonym>
       <key>uk</key>
-      <value>Вид операции расхода со счета</value>
+      <value>Видо операції витрати з рахунку</value>
     </synonym>
     <synonym>
       <key>ru</key>
@@ -164,11 +146,30 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="0ed3173d-19c2-44e5-9a20-9568db1800cb">
+    <name>Организация</name>
+    <synonym>
+      <key>uk</key>
+      <value>Організація</value>
+    </synonym>
+    <synonym>
+      <key>ru</key>
+      <value>Организация</value>
+    </synonym>
+    <type>
+      <types>CatalogRef.Организации</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
   <attributes uuid="4071369f-7922-4676-8cc4-b1bdc6fc5e2a">
     <name>СтатьяДДС</name>
     <synonym>
       <key>uk</key>
-      <value>Статья ДДС</value>
+      <value>Стаття РГК</value>
     </synonym>
     <synonym>
       <key>ru</key>
@@ -182,89 +183,6 @@
     <fillValue xsi:type="core:ReferenceValue">
       <value>19f53749-65f5-4dda-bd9a-11e63ade822e.00000000-0000-0000-0000-000000000000</value>
     </fillValue>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="e141d295-f335-4d94-8834-616ea23119fb">
-    <name>Корреспонденция</name>
-    <synonym>
-      <key>ru</key>
-      <value>Корреспонденция</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers>
-        <length>10</length>
-      </stringQualifiers>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="017fd056-21db-4178-aff2-378c89c60e1e">
-    <name>Проект</name>
-    <synonym>
-      <key>ru</key>
-      <value>Проект</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers>
-        <length>10</length>
-      </stringQualifiers>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="3644263d-2f01-43bf-8e10-09d15ccece91">
-    <name>Подразделение</name>
-    <synonym>
-      <key>ru</key>
-      <value>Подразделение</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers>
-        <length>10</length>
-      </stringQualifiers>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="70bceaf0-6aa7-4233-a844-f005b3a30520">
-    <name>СчетУчетаРасчетовСКонтрагентом</name>
-    <synonym>
-      <key>uk</key>
-      <value>Рахунок</value>
-    </synonym>
-    <synonym>
-      <key>ru</key>
-      <value>Счет</value>
-    </synonym>
-    <comment>(Регл)</comment>
-    <type>
-      <types>ChartOfAccountsRef.Хозрасчетный</types>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillChecking>ShowError</fillChecking>
-    <choiceParameters>
-      <name>Отбор.ЗапретитьИспользоватьВПроводках</name>
-      <value xsi:type="core:BooleanValue"/>
-    </choiceParameters>
-    <choiceParameters>
-      <name>Отбор.Забалансовый</name>
-      <value xsi:type="core:BooleanValue"/>
-    </choiceParameters>
-    <fillValue xsi:type="core:UndefinedValue"/>
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
@@ -328,22 +246,54 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
-  <attributes uuid="0ed3173d-19c2-44e5-9a20-9568db1800cb">
-    <name>Организация</name>
+  <attributes uuid="70bceaf0-6aa7-4233-a844-f005b3a30520">
+    <name>СчетУчетаРасчетовСКонтрагентом</name>
     <synonym>
       <key>uk</key>
-      <value>Організація</value>
+      <value>Рахунок</value>
     </synonym>
     <synonym>
       <key>ru</key>
-      <value>Организация</value>
+      <value>Счет</value>
     </synonym>
+    <comment>(Регл)</comment>
     <type>
-      <types>CatalogRef.Организации</types>
+      <types>ChartOfAccountsRef.Хозрасчетный</types>
     </type>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
+    <fillChecking>ShowError</fillChecking>
+    <choiceParameters>
+      <name>Отбор.ЗапретитьИспользоватьВПроводках</name>
+      <value xsi:type="core:BooleanValue"/>
+    </choiceParameters>
+    <choiceParameters>
+      <name>Отбор.Забалансовый</name>
+      <value xsi:type="core:BooleanValue"/>
+    </choiceParameters>
     <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
+  <attributes uuid="8f66ff89-61f9-408a-b9ab-a5fe86c6f295">
+    <name>ФразаДляПоискаВНазначенииПлатежа</name>
+    <synonym>
+      <key>uk</key>
+      <value>Фраза для пошуку в призначенні платежу</value>
+    </synonym>
+    <synonym>
+      <key>ru</key>
+      <value>Фраза для поиска в назначении платежа</value>
+    </synonym>
+    <type>
+      <types>String</types>
+      <stringQualifiers/>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:StringValue">
+      <value></value>
+    </fillValue>
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
