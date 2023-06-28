@@ -48,4 +48,4 @@
 pull request-и вітаються
 
 [1]: https://conto.com.ua/ua/solutions/bank-data-sonverter/
-[2]: https://t.me/simplySOFTnews
+[2]: https://t.me/simplySOFT
