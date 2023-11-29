@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:ScheduledJob xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="ab6277f2-e0e0-4c66-a1d6-d31897363855">
+  <name>СМП_ОбменСБанкамиAPI</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обмен с банками по API</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обмін з банками по API</value>
+  </synonym>
+  <methodName>CommonModule.СМП_РаботаСБанкамиСервер.ОбменСБанкамиAPI</methodName>
+  <use>true</use>
+  <restartCountOnFailure>3</restartCountOnFailure>
+  <restartIntervalOnFailure>10</restartIntervalOnFailure>
+</mdclass:ScheduledJob>

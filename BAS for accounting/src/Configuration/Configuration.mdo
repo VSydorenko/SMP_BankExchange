@@ -69,6 +69,8 @@
   <roles>Role.ПолныеПрава</roles>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
+  <commonModules>CommonModule.КоннекторHTTP</commonModules>
+  <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>
   <catalogs>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</catalogs>
   <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
   <catalogs>Catalog.БанковскиеСчета</catalogs>

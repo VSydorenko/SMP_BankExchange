@@ -20,6 +20,9 @@
             <userVisible>
               <common>true</common>
             </userVisible>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Объект.Организация</segments>
+            </dataPath>
             <extendedTooltip>
               <name>ОрганизацияВыгрузкаExtendedTooltip</name>
               <id>597</id>
@@ -67,6 +70,9 @@
             <userVisible>
               <common>true</common>
             </userVisible>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Объект.БанковскийСчет</segments>
+            </dataPath>
             <extendedTooltip>
               <name>БанковскийСчетВыгрузкаExtendedTooltip</name>
               <id>598</id>
@@ -153,6 +159,9 @@
             <userVisible>
               <common>true</common>
             </userVisible>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Объект.НачПериода</segments>
+            </dataPath>
             <extendedTooltip>
               <name>НачПериодаExtendedTooltip</name>
               <id>600</id>
@@ -200,6 +209,9 @@
             <userVisible>
               <common>true</common>
             </userVisible>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Объект.КонПериода</segments>
+            </dataPath>
             <extendedTooltip>
               <name>КонПериодаExtendedTooltip</name>
               <id>601</id>
@@ -326,7 +338,11 @@
             <userVisible>
               <common>true</common>
             </userVisible>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Объект.ПлатежныеДокументы</segments>
+            </dataPath>
             <titleLocation>None</titleLocation>
+            <excludedCommands>Add</excludedCommands>
             <items xsi:type="form:FormField">
               <name>ПлатежныеДокументыВыгружать</name>
               <id>149</id>
@@ -335,6 +351,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.Выгружать</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыВыгружатьExtendedTooltip</name>
                 <id>621</id>
@@ -382,6 +401,9 @@
               <visible>true</visible>
               <enabled>true</enabled>
               <userVisible/>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.LineNumber</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыНомерСтрокиExtendedTooltip</name>
                 <id>623</id>
@@ -428,6 +450,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.Дата</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыДатаExtendedTooltip</name>
                 <id>624</id>
@@ -478,6 +503,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.Номер</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыНомерExtendedTooltip</name>
                 <id>625</id>
@@ -538,6 +566,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.СуммаДокумента</segments>
+              </dataPath>
               <toolTip>
                 <key>ru</key>
                 <value>Сумма документа</value>
@@ -577,6 +608,9 @@
               <showInHeader>true</showInHeader>
               <headerHorizontalAlign>Left</headerHorizontalAlign>
               <showInFooter>true</showInFooter>
+              <footerDataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.TotalСуммаДокумента</segments>
+              </footerDataPath>
               <footerHorizontalAlign>Right</footerHorizontalAlign>
               <extInfo xsi:type="form:InputFieldExtInfo">
                 <width>11</width>
@@ -596,6 +630,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.Контрагент</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыКонтрагентExtendedTooltip</name>
                 <id>627</id>
@@ -645,6 +682,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.КонтрагентНомерСчета</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыКонтрагентНомерСчетаExtendedTooltip</name>
                 <id>628</id>
@@ -694,6 +734,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.НазначениеПлатежа</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыНазначениеПлатежаExtendedTooltip</name>
                 <id>629</id>
@@ -743,6 +786,9 @@
               <visible>true</visible>
               <enabled>true</enabled>
               <userVisible/>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.ВидДокумента</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыВидДокументаExtendedTooltip</name>
                 <id>632</id>
@@ -791,6 +837,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.Документ</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыДокументExtendedTooltip</name>
                 <id>633</id>
@@ -845,6 +894,9 @@
               <visible>true</visible>
               <enabled>true</enabled>
               <userVisible/>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ПлатежныеДокументы.ОписаниеОшибок</segments>
+              </dataPath>
               <extendedTooltip>
                 <name>ПлатежныеДокументыОписаниеОшибокExtendedTooltip</name>
                 <id>631</id>
@@ -1549,6 +1601,9 @@
             <searchOnInput>Auto</searchOnInput>
             <horizontalStretch>true</horizontalStretch>
             <verticalStretch>true</verticalStretch>
+            <rowPictureDataPath xsi:type="form:DataPath">
+              <segments>Объект.ПлатежныеДокументы.СостояниеДокумента</segments>
+            </rowPictureDataPath>
             <rowsPicture xsi:type="core:PictureRef">
               <picture>CommonPicture.СостоянияДокумента</picture>
             </rowsPicture>
@@ -1970,6 +2025,9 @@
               <userVisible>
                 <common>true</common>
               </userVisible>
+              <dataPath xsi:type="form:DataPath">
+                <segments>Объект.ФайлВыгрузки</segments>
+              </dataPath>
               <titleLocation>None</titleLocation>
               <extendedTooltip>
                 <name>ФайлВыгрузкиExtendedTooltip</name>
@@ -2531,6 +2589,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>Объект.Организация</segments>
+                </dataPath>
                 <titleLocation>None</titleLocation>
                 <extendedTooltip>
                   <name>ОрганизацияЗагрузкаФайлExtendedTooltip</name>
@@ -2729,6 +2790,9 @@
                     <userVisible>
                       <common>true</common>
                     </userVisible>
+                    <dataPath xsi:type="form:DataPath">
+                      <segments>Объект.ФайлЗагрузки</segments>
+                    </dataPath>
                     <titleLocation>None</titleLocation>
                     <titleHeight>2</titleHeight>
                     <extendedTooltip>
@@ -2989,6 +3053,9 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <dataPath xsi:type="form:DataPath">
+                  <segments>Объект.БанковскийСчет</segments>
+                </dataPath>
                 <extendedTooltip>
                   <name>БанковскийСчетЗагрузкаФайлExtendedTooltip</name>
                   <id>675</id>
@@ -7214,6 +7281,25 @@
       </edit>
     </columns>
   </attributes>
+  <attributes>
+    <name>Объект</name>
+    <id>1000002</id>
+    <valueType>
+      <types>DataProcessorObject.КлиентБанк</types>
+    </valueType>
+    <view>
+      <common>true</common>
+    </view>
+    <edit>
+      <common>true</common>
+    </edit>
+    <main>true</main>
+    <additionalColumns>
+      <tablePath xsi:type="form:DataPath">
+        <segments>Объект.ПлатежныеДокументы</segments>
+      </tablePath>
+    </additionalColumns>
+  </attributes>
   <formCommands>
     <name>КомандаВыгрузить</name>
     <title>
@@ -7251,4 +7337,5 @@
     <navigationPanel/>
     <commandBar/>
   </commandInterface>
+  <extInfo xsi:type="form:ObjectFormExtInfo"/>
 </form:Form>
