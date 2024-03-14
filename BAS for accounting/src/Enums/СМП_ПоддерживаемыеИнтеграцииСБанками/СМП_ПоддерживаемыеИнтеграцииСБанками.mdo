@@ -32,17 +32,6 @@
   </standardAttributes>
   <quickChoice>true</quickChoice>
   <choiceMode>BothWays</choiceMode>
-  <enumValues uuid="965d66e5-5506-4acb-8bdd-58c2a0393365">
-    <name>ПриватБанк</name>
-    <synonym>
-      <key>ru</key>
-      <value>ПриватБанк</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>ПриватБанк</value>
-    </synonym>
-  </enumValues>
   <enumValues uuid="fe323534-644a-4ead-b7a7-bec445c71e01">
     <name>МОНОБанк</name>
     <synonym>
@@ -63,6 +52,17 @@
     <synonym>
       <key>uk</key>
       <value>Зовнішня обробка</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="965d66e5-5506-4acb-8bdd-58c2a0393365">
+    <name>ПриватБанк</name>
+    <synonym>
+      <key>ru</key>
+      <value>ПриватБанк</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>ПриватБанк</value>
     </synonym>
   </enumValues>
   <enumValues uuid="aab4fc1e-2d6d-4132-8577-6cb580946a4c">

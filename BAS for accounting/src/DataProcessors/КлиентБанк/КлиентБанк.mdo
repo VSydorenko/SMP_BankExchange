@@ -63,6 +63,23 @@
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
   </attributes>
+  <attributes uuid="ea94d8ab-93b9-4723-a36d-ebc87bca7847">
+    <name>СМП_ПрямойОбмен</name>
+    <synonym>
+      <key>ru</key>
+      <value>Прямой обмен</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Прямой обмен</value>
+    </synonym>
+    <extension xsi:type="mdclassExtension:BasicFeatureExtension"/>
+    <type>
+      <types>Boolean</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </attributes>
   <attributes uuid="5affa671-58fe-4705-844b-f0294de828bd" extendedConfigurationObject="8ca1009b-f68f-42dc-b1e5-2b2d6bc203e4">
     <name>Организация</name>
     <objectBelonging>Adopted</objectBelonging>
@@ -158,23 +175,6 @@
       </typeExtension>
     </extension>
     <type/>
-  </attributes>
-  <attributes uuid="ea94d8ab-93b9-4723-a36d-ebc87bca7847">
-    <name>СМП_ПрямойОбмен</name>
-    <synonym>
-      <key>ru</key>
-      <value>Прямой обмен</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Прямой обмен</value>
-    </synonym>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension"/>
-    <type>
-      <types>Boolean</types>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
   </attributes>
   <tabularSections uuid="302bbd5e-4c08-49b9-8389-d29da27a51e3" extendedConfigurationObject="abe0bf2b-1dae-4ca0-be2c-d48cb7fae11a">
     <producedTypes>
