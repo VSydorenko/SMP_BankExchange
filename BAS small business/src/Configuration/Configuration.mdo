@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="aaee27e8-47d2-4aed-9688-e474e54de358">
+  <name>SMP_BankExchange_SMB</name>
+  <synonym>
+    <key>ru</key>
+    <value>BankExchange (SmallBusiness)</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>BankExchange (SmallBusiness)</value>
+  </synonym>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:ConfigurationExtension">
+    <defaultRunMode>Checked</defaultRunMode>
+    <usePurposes>Checked</usePurposes>
+    <defaultLanguage>Checked</defaultLanguage>
+    <interfaceCompatibilityMode>Checked</interfaceCompatibilityMode>
+  </extension>
+  <containedObjects classId="9cd510cd-abfc-11d4-9434-004095e12fc7" objectId="ff17a0c1-5e4b-455b-99fb-b1a05b799299"/>
+  <containedObjects classId="9fcd25a0-4822-11d4-9414-008048da11f9" objectId="26129288-c03a-456e-bb87-93cad40a29ae"/>
+  <containedObjects classId="e3687481-0a87-462c-a166-9f34594f9bba" objectId="c5d51a10-6dba-4907-bff1-ebde0aab0cba"/>
+  <containedObjects classId="9de14907-ec23-4a07-96f0-85521cb6b53b" objectId="11e19d11-ed4e-450f-9e78-7b214dc975ba"/>
+  <containedObjects classId="51f2d5d8-ea4d-4064-8892-82951750031e" objectId="4eabd46d-59a5-4a6f-8df2-cd2c3b2af81e"/>
+  <containedObjects classId="e68182ea-4237-4383-967f-90c1e3370bc7" objectId="ee70d5d5-363b-4df0-b5a2-fd92388b192c"/>
+  <containedObjects classId="fb282519-d103-4dd3-bc12-cb271d631dfc" objectId="73d8f40c-7d75-4756-bd83-683bd012b96c"/>
+  <keepMappingToExtendedConfigurationObjectsByIDs>true</keepMappingToExtendedConfigurationObjectsByIDs>
+  <namePrefix>СМП_</namePrefix>
+  <configurationExtensionCompatibilityMode>8.3.16</configurationExtensionCompatibilityMode>
+  <configurationExtensionPurpose>AddOn</configurationExtensionPurpose>
+  <defaultRunMode>ManagedApplication</defaultRunMode>
+  <usePurposes>PersonalComputer</usePurposes>
+  <scriptVariant>Russian</scriptVariant>
+  <version>2.0.1.1</version>
+  <defaultLanguage>Language.Украинский</defaultLanguage>
+  <interfaceCompatibilityMode>TaxiEnableVersion8_2</interfaceCompatibilityMode>
+  <compatibilityMode>8.3.22</compatibilityMode>
+  <languages uuid="144f8110-c4c6-4c8a-bb1b-df7d11dc72e2" extendedConfigurationObject="af1b61ff-d1b9-4053-ad85-8259b6626adc">
+    <name>Русский</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:LanguageExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <languageCode>Checked</languageCode>
+    </extension>
+    <languageCode>ru</languageCode>
+  </languages>
+  <languages uuid="4ff37317-5a59-4c51-936f-8abc847f216a" extendedConfigurationObject="09828569-141c-42f2-9af0-2d7b073917dd">
+    <name>Украинский</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:LanguageExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <languageCode>Checked</languageCode>
+    </extension>
+    <languageCode>uk</languageCode>
+  </languages>
+  <subsystems>Subsystem.СМП_simplyUNF</subsystems>
+  <commonPictures>CommonPicture.СМП_simplyUNF</commonPictures>
+  <commonPictures>CommonPicture.КлиентБанкЗаголовокВыгрузка</commonPictures>
+  <commonPictures>CommonPicture.КлиентБанкЗаголовокЗагрузка</commonPictures>
+  <commonPictures>CommonPicture.ИзменитьНастройки</commonPictures>
+  <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
+  <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
+  <commonPictures>CommonPicture.ОбновлениеВнешнихКомпонентССайта</commonPictures>
+  <roles>Role.ПолныеПрава</roles>
+  <commonModules>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</commonModules>
+  <commonModules>CommonModule.ОбменСБанкамиКлиентСервер</commonModules>
+  <commonModules>CommonModule.ОбменСБанками</commonModules>
+  <commonModules>CommonModule.КоннекторHTTP</commonModules>
+  <commonModules>CommonModule.ОбменСБанкамиКлиент</commonModules>
+  <commonModules>CommonModule.ПарсерСериализаторJSON</commonModules>
+  <commonModules>CommonModule.ОбменСБанкамиПереопределяемый</commonModules>
+  <commonModules>CommonModule.КлиентБанкВызовСервера</commonModules>
+  <commonModules>CommonModule.УправлениеНебольшойФирмойКлиент</commonModules>
+  <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
+  <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
+  <commonModules>CommonModule.СМП_РаботаСБанкамиМонобанкAPIСервер</commonModules>
+  <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>
+  <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
+  <catalogs>Catalog.БанковскиеСчета</catalogs>
+  <catalogs>Catalog.ГруппыДоступаКонтрагентов</catalogs>
+  <catalogs>Catalog.ДополнительныеОтчетыИОбработки</catalogs>
+  <catalogs>Catalog.Организации</catalogs>
+  <catalogs>Catalog.СтатьиДвиженияДенежныхСредств</catalogs>
+  <documents>Document.ПлатежноеПоручение</documents>
+  <enums>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</enums>
+  <enums>Enum.ВариантыДетализацииИтоговБанкИКасса</enums>
+  <enums>Enum.ВариантыОтображенияИтоговБанкИКасса</enums>
+  <enums>Enum.ВидыОперацийПлатежноеПоручение</enums>
+  <enums>Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</enums>
+  <enums>Enum.СостоянияВерсийЭД</enums>
+  <enums>Enum.СпособыЗачетаИРаспределенияПлатежей</enums>
+  <dataProcessors>DataProcessor.БанкИКасса</dataProcessors>
+  <dataProcessors>DataProcessor.КлиентБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_АльфаБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_Сбербанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УниверсалБанк</dataProcessors>
+  <informationRegisters>InformationRegister.ИсторияРаботыСКлиентомБанка</informationRegisters>
+  <informationRegisters>InformationRegister.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</informationRegisters>
+  <informationRegisters>InformationRegister.СМП_НомерПоследнейТранзакции</informationRegisters>
+</mdclass:Configuration>

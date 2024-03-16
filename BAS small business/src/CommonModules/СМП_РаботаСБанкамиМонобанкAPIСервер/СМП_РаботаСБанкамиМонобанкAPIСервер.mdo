@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:CommonModule xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="39fb56ab-f2ec-4ed5-87d5-e0f946e023bd">
+  <name>СМП_РаботаСБанкамиМонобанкAPIСервер</name>
+  <synonym>
+    <key>ru</key>
+    <value>СМП обмен Монобанк API</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>СМП обмін Монобанк API</value>
+  </synonym>
+  <server>true</server>
+</mdclass:CommonModule>

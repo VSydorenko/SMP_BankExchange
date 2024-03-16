@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="7b865cdb-ddf4-4964-96db-f73f9bafe479">
+  <producedTypes>
+    <objectType typeId="671b002c-1e17-4382-951b-484b0ef57522" valueTypeId="2e2832ee-ccc6-4c1a-9f6d-3669078b5fa7"/>
+    <managerType typeId="01be6407-a68a-4cf5-ab17-7abfa9771865" valueTypeId="1845e6a3-2e33-4536-a801-9e17f8bab143"/>
+  </producedTypes>
+  <name>СМП_ОбработкаВыпискиБанка_АкордБанк</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработка выписки банка АКОРДБАНК</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обробка виписки банка АКОРДБАНК</value>
+  </synonym>
+  <comment>Выгрузить во внешние (csv)</comment>
+  <useStandardCommands>true</useStandardCommands>
+  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк.Form.Форма</defaultForm>
+  <forms uuid="d10732b4-c5ce-4e77-bad2-113264ce0ebb">
+    <name>Форма</name>
+    <synonym>
+      <key>ru</key>
+      <value>Форма</value>
+    </synonym>
+    <usePurposes>PersonalComputer</usePurposes>
+    <usePurposes>MobileDevice</usePurposes>
+  </forms>
+</mdclass:DataProcessor>

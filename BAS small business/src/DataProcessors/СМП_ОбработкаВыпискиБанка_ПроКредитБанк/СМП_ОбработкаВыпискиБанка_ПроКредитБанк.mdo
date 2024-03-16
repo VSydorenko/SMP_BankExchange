@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="a79361ad-7a30-4324-a19e-a89c1fd5338e">
+  <producedTypes>
+    <objectType typeId="ad1ea1ea-b1fa-4d68-bf1e-cd55bb457c1e" valueTypeId="09785114-d643-4609-81c9-ae49b34e70f9"/>
+    <managerType typeId="0f83f44e-cb05-4742-b3be-4b1029d2bfdc" valueTypeId="ae07fde5-b5fe-409a-9f90-89bf45c7b86b"/>
+  </producedTypes>
+  <name>СМП_ОбработкаВыпискиБанка_ПроКредитБанк</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработка выписки банка ПроКредит Банк</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обробка виписки банка ПроКредит Банк</value>
+  </synonym>
+  <comment>Выгрузить во внешние (csv)</comment>
+  <useStandardCommands>true</useStandardCommands>
+  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк.Form.Форма</defaultForm>
+  <forms uuid="385ad97e-19e4-4f91-8fe9-c965c18d68a5">
+    <name>Форма</name>
+    <synonym>
+      <key>ru</key>
+      <value>Форма</value>
+    </synonym>
+    <usePurposes>PersonalComputer</usePurposes>
+    <usePurposes>MobileDevice</usePurposes>
+  </forms>
+</mdclass:DataProcessor>

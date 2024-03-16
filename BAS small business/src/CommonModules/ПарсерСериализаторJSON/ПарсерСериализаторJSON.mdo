@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:CommonModule xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="817b07f0-d42d-47a2-943b-8f3fbb937557">
+  <name>ПарсерСериализаторJSON</name>
+  <synonym>
+    <key>ru</key>
+    <value>Парсер сериализатор JSON</value>
+  </synonym>
+  <comment>https://github.com/legionwfz/1C-JSON</comment>
+  <clientManagedApplication>true</clientManagedApplication>
+  <server>true</server>
+  <externalConnection>true</externalConnection>
+  <serverCall>true</serverCall>
+</mdclass:CommonModule>

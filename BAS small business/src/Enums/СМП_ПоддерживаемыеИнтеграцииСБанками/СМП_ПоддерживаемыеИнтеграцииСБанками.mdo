@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="d1a633db-016a-4ebc-a2c4-2c1e0c422a8f">
+  <producedTypes>
+    <refType typeId="60646e4c-9062-4568-8eb9-10aca484b601" valueTypeId="ea6f4eaa-50c5-4086-9cf7-8dfc9ccf4b73"/>
+    <listType typeId="52b1d63f-c28f-4df2-b030-0f93efcd49b7" valueTypeId="1ffc4a85-867b-4e3f-b964-234c82c2f2e3"/>
+    <managerType typeId="b334380c-0ad6-4aa5-aa58-dc8eb2c6045d" valueTypeId="250fbfef-6281-4990-9ed3-d5b79b20382e"/>
+  </producedTypes>
+  <name>СМП_ПоддерживаемыеИнтеграцииСБанками</name>
+  <synonym>
+    <key>ru</key>
+    <value>Поддерживаемые интеграции с банками</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Банк</value>
+  </synonym>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>Order</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>Ref</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <quickChoice>true</quickChoice>
+  <choiceMode>BothWays</choiceMode>
+  <enumValues uuid="965d66e5-5506-4acb-8bdd-58c2a0393365">
+    <name>ПриватБанк</name>
+    <synonym>
+      <key>ru</key>
+      <value>ПриватБанк</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>ПриватБанк</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="fe323534-644a-4ead-b7a7-bec445c71e01">
+    <name>МОНОБанк</name>
+    <synonym>
+      <key>ru</key>
+      <value>monobank</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>monobank</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="014ea5e4-4878-4c3d-b295-c335a45f7f66">
+    <name>ПодключаемаяОбработка</name>
+    <synonym>
+      <key>ru</key>
+      <value>Подключаемая обработка</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Зовнішня обробка</value>
+    </synonym>
+  </enumValues>
+</mdclass:Enum>

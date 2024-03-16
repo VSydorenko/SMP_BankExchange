@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="46c2bdc2-729d-46ec-b36f-415b0ca231d0" extendedConfigurationObject="c1de86e7-6890-4317-9d2a-9a418164b2ce">
+  <producedTypes>
+    <objectType typeId="7799c097-73dd-4ba2-9d6a-675cf4d03475" valueTypeId="c037b533-b958-46e9-a7b3-9223446899ad"/>
+    <managerType typeId="b977cc21-417b-4cf8-811d-4b2830e52713" valueTypeId="2c8cbcf4-835c-4ee7-b080-b490b2772cd6"/>
+  </producedTypes>
+  <name>БанкИКасса</name>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:DataProcessorExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
+  <forms uuid="b1b85872-a502-49c0-bd68-42e8d95fe025" extendedConfigurationObject="699d5964-e6a1-4e44-a47b-2915e6dfe876">
+    <name>ФормаСписка</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:BasicFormExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <form>Extended</form>
+    </extension>
+  </forms>
+</mdclass:DataProcessor>
