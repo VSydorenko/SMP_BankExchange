@@ -105,7 +105,7 @@
   <dataProcessors>DataProcessor.БанкИКасса</dataProcessors>
   <dataProcessors>DataProcessor.СМП_КлиентБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_АльфаБанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</dataProcessors>

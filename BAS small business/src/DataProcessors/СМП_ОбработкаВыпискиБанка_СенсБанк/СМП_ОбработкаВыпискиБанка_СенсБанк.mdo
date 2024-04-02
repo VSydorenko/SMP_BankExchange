@@ -4,18 +4,18 @@
     <objectType typeId="fa44be6f-0c19-4d74-9561-8627ed936c8d" valueTypeId="89e5a252-fbb1-46d7-8403-53d8441284f7"/>
     <managerType typeId="c059d46e-8930-42f1-aa28-3a82aa7b6aa5" valueTypeId="966094eb-efe4-4bad-b8a4-5ff904316345"/>
   </producedTypes>
-  <name>СМП_ОбработкаВыпискиБанка_АльфаБанк</name>
+  <name>СМП_ОбработкаВыпискиБанка_СенсБанк</name>
   <synonym>
     <key>ru</key>
-    <value>Обработка выписки банка Альфа-Банк</value>
+    <value>Обработка выписки банка Сенс Банк</value>
   </synonym>
   <synonym>
     <key>uk</key>
-    <value>Обробка виписки банка Альфа-Банк</value>
+    <value>Обробка виписки банка Сенс Банк</value>
   </synonym>
   <comment>Выгрузить во внешние (csv)</comment>
   <useStandardCommands>true</useStandardCommands>
-  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_АльфаБанк.Form.Форма</defaultForm>
+  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк.Form.Форма</defaultForm>
   <forms uuid="11d4b18a-4933-4da8-aa59-a0d69730e5ff">
     <name>Форма</name>
     <synonym>

@@ -27,7 +27,7 @@
     <name>Объект</name>
     <id>1</id>
     <valueType>
-      <types>DataProcessorObject.СМП_ОбработкаВыпискиБанка_АльфаБанк</types>
+      <types>DataProcessorObject.СМП_ОбработкаВыпискиБанка_СенсБанк</types>
     </valueType>
     <view>
       <common>true</common>
