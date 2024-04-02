@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="a214b59a-a168-4200-8e9d-e8e31f02e283">
+  <name>ПриватБанк</name>
+  <synonym>
+    <key>ru</key>
+    <value>ПриватБанк интеграция API</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>ПриватБанк інтеграція API</value>
+  </synonym>
+  <includeHelpInContents>true</includeHelpInContents>
+  <content>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</content>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
+</mdclass:Subsystem>

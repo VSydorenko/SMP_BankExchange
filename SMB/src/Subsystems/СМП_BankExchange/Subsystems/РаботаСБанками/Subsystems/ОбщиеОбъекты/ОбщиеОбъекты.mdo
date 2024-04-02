@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="2017258f-6fa8-471b-b707-76707859cae5">
+  <name>ОбщиеОбъекты</name>
+  <synonym>
+    <key>ru</key>
+    <value>Общие объекты</value>
+  </synonym>
+  <includeHelpInContents>true</includeHelpInContents>
+  <content>Catalog.СМП_УчетныеЗаписиБанков</content>
+  <content>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</content>
+  <content>CommonPicture.СМП_РаботаСБанкамиПриватБанк</content>
+  <content>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</content>
+  <content>CommonModule.СМП_РаботаСБанкамиСервер</content>
+  <content>ScheduledJob.СМП_ОбменСБанкамиAPI</content>
+  <content>InformationRegister.СМП_НомерПоследнейТранзакции</content>
+  <content>CommonModule.ОбменСБанками</content>
+  <content>CommonModule.ОбменСБанкамиКлиент</content>
+  <content>CommonModule.ОбменСБанкамиКлиентСервер</content>
+  <content>CommonModule.ОбменСБанкамиПереопределяемый</content>
+  <content>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</content>
+  <content>Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</content>
+  <content>Enum.СостоянияВерсийЭД</content>
+  <content>CommonPicture.ИзменитьНастройки</content>
+  <content>CommonPicture.ОбновлениеВнешнихКомпонентССайта</content>
+  <content>InformationRegister.ИсторияРаботыСКлиентомБанка</content>
+  <content>InformationRegister.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</content>
+  <content>CommonPicture.КлиентБанкЗаголовокВыгрузка</content>
+  <content>CommonPicture.КлиентБанкЗаголовокЗагрузка</content>
+  <content>DataProcessor.СМП_КлиентБанк</content>
+  <content>CommonPicture.СМП_BankExchange</content>
+  <content>CommonModule.ПарсерСериализаторJSON</content>
+  <content>CommonModule.КоннекторHTTP_BankExchange</content>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
+</mdclass:Subsystem>

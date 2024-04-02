@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="558314ae-c21d-4a5b-9535-d678aed1cd55">
+  <producedTypes>
+    <objectType typeId="7026cf40-d602-44e3-afa5-d1f405bb28f7" valueTypeId="47af36c2-c2f4-4a80-b0cd-b858faaa2d53"/>
+    <managerType typeId="62bbacff-5988-4317-89eb-a3e1e9684d65" valueTypeId="14768889-3937-4fdc-b1b4-7b921b0e9dde"/>
+  </producedTypes>
+  <name>СМП_ОбработкаВыпискиБанка_Пивденный</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработка выписки банка Пивденный</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обробка виписки банка Південний</value>
+  </synonym>
+  <comment>Выгрузить во внешние (xml)</comment>
+  <useStandardCommands>true</useStandardCommands>
+  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный.Form.Форма</defaultForm>
+  <explanation>
+    <key>ru</key>
+    <value>Нужно выгрузить во внешние и добавить в справочник Дополнительные обработки</value>
+  </explanation>
+  <forms uuid="fc82bbd5-c9f9-487a-ab53-353954e54dd4">
+    <name>Форма</name>
+    <synonym>
+      <key>ru</key>
+      <value>Форма</value>
+    </synonym>
+    <usePurposes>PersonalComputer</usePurposes>
+    <usePurposes>MobileDevice</usePurposes>
+  </forms>
+</mdclass:DataProcessor>

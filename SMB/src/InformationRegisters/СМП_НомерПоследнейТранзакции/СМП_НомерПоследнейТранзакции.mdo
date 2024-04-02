@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:InformationRegister xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="75270d18-f4fc-47bd-94d1-47a8dcfa2cc3">
+  <producedTypes>
+    <selectionType typeId="220d2f18-62ab-4b5e-afb2-805bccedc29c" valueTypeId="d1f12aa4-a302-4dff-98e1-e8bc2aee4544"/>
+    <listType typeId="4ce8eb88-4e31-4d3d-9884-5c414578d707" valueTypeId="32179c57-2003-4e9d-93f2-c6b7e6d2f2ad"/>
+    <managerType typeId="aa57336a-3216-4236-b787-1dec6e3e7622" valueTypeId="ad7542b8-4238-459a-ae33-6939dc17d636"/>
+    <recordSetType typeId="72a525c4-a2ac-4408-9063-81f5e45d4cb8" valueTypeId="6ef49157-6a44-4c13-9a1a-1c4cf825025e"/>
+    <recordKeyType typeId="1346d59b-a87c-4746-939c-53f11483cf98" valueTypeId="3d5e0031-fda0-426d-b654-5a672c4194e7"/>
+    <recordType typeId="59b4f6ce-ba4c-4130-aca2-6b073c40be41" valueTypeId="0067097b-4e14-4f03-9ec8-36c9321cfb89"/>
+    <recordManagerType typeId="c17b2a2b-0ef4-416c-89d8-fe114a8641ad" valueTypeId="c893c0f8-01f3-4b7d-8c9f-a8fe36054796"/>
+  </producedTypes>
+  <name>СМП_НомерПоследнейТранзакции</name>
+  <synonym>
+    <key>ru</key>
+    <value>Номер последней транзакции</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Номер останньої транзакції</value>
+  </synonym>
+  <useStandardCommands>true</useStandardCommands>
+  <editType>InDialog</editType>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>Active</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>LineNumber</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>Recorder</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>Period</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fillChecking>ShowError</fillChecking>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <dataLockControlMode>Managed</dataLockControlMode>
+  <resources uuid="afe017c9-9fa6-48df-a664-2254a75d56fc">
+    <name>ИДТранзакции</name>
+    <synonym>
+      <key>ru</key>
+      <value>ИД транзакции</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>ІД транзакції</value>
+    </synonym>
+    <type>
+      <types>String</types>
+      <stringQualifiers>
+        <length>20</length>
+      </stringQualifiers>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+    <fillValue xsi:type="core:UndefinedValue"/>
+  </resources>
+  <resources uuid="d7abc36a-a2ed-439c-bcc0-5e74abc2f4e7">
+    <name>ДатаТранзакции</name>
+    <synonym>
+      <key>ru</key>
+      <value>Дата транзакции</value>
+    </synonym>
+    <type>
+      <types>Date</types>
+      <dateQualifiers>
+        <dateFractions>Date</dateFractions>
+      </dateQualifiers>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+    <fillValue xsi:type="core:UndefinedValue"/>
+  </resources>
+  <dimensions uuid="988edd2b-5bc8-45de-b60f-f11f7c359c66">
+    <name>БанковскийСчет</name>
+    <synonym>
+      <key>ru</key>
+      <value>Банковский счет</value>
+    </synonym>
+    <type>
+      <types>CatalogRef.БанковскиеСчета</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+    <fillFromFillingValue>true</fillFromFillingValue>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <mainFilter>true</mainFilter>
+  </dimensions>
+</mdclass:InformationRegister>

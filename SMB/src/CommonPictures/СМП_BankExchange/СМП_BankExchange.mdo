@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:CommonPicture xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="5f42ccf5-b497-4563-8ce5-4efd9f0e1514">
+  <name>СМП_BankExchange</name>
+  <synonym>
+    <key>ru</key>
+    <value>BankExchange</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>BankExchange</value>
+  </synonym>
+</mdclass:CommonPicture>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="981026da-2e1a-4a78-b316-93f1da6df1cf">
+  <producedTypes>
+    <objectType typeId="3114fa22-832d-4106-8416-f97ef1304242" valueTypeId="184cb036-acc2-4c6c-a499-541e54e49a51"/>
+    <managerType typeId="68d38b4c-d2d2-44ab-8785-a3eb2a10ebe9" valueTypeId="8e05d2ba-1a21-41c6-b909-a941b585b152"/>
+  </producedTypes>
+  <name>СМП_ОбработкаВыпискиБанка_УкрГазБанк</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработка выписки банка УКРГАЗБАНК</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обробка виписки банка УКРГАЗБАНК</value>
+  </synonym>
+  <comment>Выгрузить во внешние (csv)</comment>
+  <useStandardCommands>true</useStandardCommands>
+  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк.Form.Форма</defaultForm>
+  <forms uuid="a3912f62-21bd-42d7-8389-2362aabadff5">
+    <name>Форма</name>
+    <synonym>
+      <key>ru</key>
+      <value>Форма</value>
+    </synonym>
+    <usePurposes>PersonalComputer</usePurposes>
+    <usePurposes>MobileDevice</usePurposes>
+  </forms>
+</mdclass:DataProcessor>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="ea51ab4a-d931-4d3c-9a58-df21eef9faab">
+  <producedTypes>
+    <objectType typeId="67b9207b-82ca-403c-8ec4-8ef6d2214a89" valueTypeId="caa24207-0b28-41f8-aaea-ecc5988aeb64"/>
+    <managerType typeId="eb34e7cc-6703-4f8c-a672-ba57327de701" valueTypeId="ebfd6f90-2e12-4177-8dee-f43ea2cba191"/>
+  </producedTypes>
+  <name>СМП_ОбработкаВыпискиБанка_РайффайзенБанк</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработка выписки банка Райффайзен Банк</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обробка виписки банка Райффайзен Банк</value>
+  </synonym>
+  <comment>Выгрузить во внешние (csv)</comment>
+  <useStandardCommands>true</useStandardCommands>
+  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк.Form.Форма</defaultForm>
+  <forms uuid="14718963-a725-4ad4-ab7b-5f50bf1996db">
+    <name>Форма</name>
+    <synonym>
+      <key>ru</key>
+      <value>Форма</value>
+    </synonym>
+    <usePurposes>PersonalComputer</usePurposes>
+    <usePurposes>MobileDevice</usePurposes>
+  </forms>
+</mdclass:DataProcessor>

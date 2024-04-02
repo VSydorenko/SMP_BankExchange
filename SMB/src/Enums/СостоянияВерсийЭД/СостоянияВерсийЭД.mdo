@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="df3e0116-5822-4555-b4b9-d7afa1ae337d">
+  <producedTypes>
+    <refType typeId="41e01ac6-3ef9-4737-8cdb-e430518c12c6" valueTypeId="c4c2abf9-1403-4842-bf3f-81cadef0bae4"/>
+    <listType typeId="474f6771-c8db-4906-8764-fba1c5aa6e86" valueTypeId="545b3db4-c1f8-476d-88e3-069fa54fb2bc"/>
+    <managerType typeId="b48b8759-dc9e-4296-8349-1bd5b3403db1" valueTypeId="b3e2edec-01c5-441a-b7f0-ddb2487d8921"/>
+  </producedTypes>
+  <name>СостоянияВерсийЭД</name>
+  <synonym>
+    <key>ru</key>
+    <value>Состояния версий электронных документов</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Состояния версий электронных документов</value>
+  </synonym>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>Order</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <standardAttributes>
+    <dataHistory>Use</dataHistory>
+    <name>Ref</name>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+  </standardAttributes>
+  <quickChoice>true</quickChoice>
+  <choiceMode>BothWays</choiceMode>
+  <enumValues uuid="07f3ebdf-1cff-4be8-b5a5-e0430970af43">
+    <name>Аннулирован</name>
+    <synonym>
+      <key>ru</key>
+      <value>Аннулирован</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Аннулирован</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="bb29e942-d8b1-4b0c-98fe-015afd019a9b">
+    <name>ЗакрытПринудительно</name>
+    <synonym>
+      <key>ru</key>
+      <value>Закрыт принудительно</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Закрыт принудительно</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="eee092f7-d449-4b70-9f40-e1f82f1e6d0d">
+    <name>ИзвещениеНаПодписи</name>
+    <synonym>
+      <key>ru</key>
+      <value>Требуется подписание извещения</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Требуется подписание извещения</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="68f91e5a-3cf4-4cd8-a1fa-1076fb361520">
+    <name>НаПодписи</name>
+    <synonym>
+      <key>ru</key>
+      <value>На подписи</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>На подписи</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="23f631a5-2bd8-4a29-aa33-da31a2a34fd7">
+    <name>НаУтверждении</name>
+    <synonym>
+      <key>ru</key>
+      <value>Требуется утверждение</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Требуется утверждение</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="bf02e8fa-3370-4fa8-872e-bdea66941b77">
+    <name>НеПолучен</name>
+    <synonym>
+      <key>ru</key>
+      <value>Не получен</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Не получен</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="4d038624-67a3-4a25-9c0a-3c6257dcc1ce">
+    <name>НеСформирован</name>
+    <synonym>
+      <key>ru</key>
+      <value>Не начат</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Не начат</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="cc9b91b8-61de-4030-a1e5-d2899275910d">
+    <name>ОбменЗавершен</name>
+    <synonym>
+      <key>ru</key>
+      <value>Завершен</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Завершен</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="4155f901-374b-4e87-beeb-ce15745593a8">
+    <name>ОбменЗавершенСИсправлением</name>
+    <synonym>
+      <key>ru</key>
+      <value>Завершен с исправлением</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Завершен с исправлением</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="3e8cf7b6-eccd-4ede-a03c-33cb5e78d611">
+    <name>ОжидаетсяАннулирование</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается аннулирование</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается аннулирование</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="6c803153-5653-4261-9a2e-268b39c84e48">
+    <name>ОжидаетсяИзвещениеОПолучении</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается извещение о получении</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается извещение о получении</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="90439737-467e-4f64-a74e-a2d153a8be1d">
+    <name>ОжидаетсяИсправление</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается исправление</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается исправление</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="38f0e68e-3794-43eb-9af0-e9bacbd41f1b">
+    <name>ОжидаетсяОтправка</name>
+    <synonym>
+      <key>ru</key>
+      <value>Требуется отправка</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Потрібно відправлення</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="bddc99ef-2b6d-401f-875f-c7b78d3d3f3a">
+    <name>ОжидаетсяОтправкаИзвещения</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается отправка извещения</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается отправка извещения</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="88ccbc21-0d0c-41ce-a119-a6b3247c02cd">
+    <name>ОжидаетсяОтправкаПолучателю</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается подтверждение отправки</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается подтверждение отправки</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="8df5d83b-9d03-4c9b-9913-0427ba2f1a83">
+    <name>ОжидаетсяПередачаОператору</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается передача оператору</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается передача оператору</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="880db455-f254-49c5-ac13-4bdbdd6bb3ea">
+    <name>ОжидаетсяПодтверждение</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается подтверждение</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается подтверждение</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="0ad23277-4725-4df8-b288-720c63f15d71">
+    <name>ОжидаетсяПодтверждениеОператора</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается подтверждение оператора</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается подтверждение оператора</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="71fe3ccd-0231-4799-b25b-c8d90ead6096">
+    <name>Отклонен</name>
+    <synonym>
+      <key>ru</key>
+      <value>Закрыт с отклонением</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Закрыт с отклонением</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="eda74729-84f8-4390-9e0b-dc213442b7fd">
+    <name>ОтклоненОператором</name>
+    <synonym>
+      <key>ru</key>
+      <value>Отклонен оператором</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Отклонен оператором</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="fd39e0d6-d163-452e-9828-73325094f4dd">
+    <name>ОшибкаПередачи</name>
+    <synonym>
+      <key>ru</key>
+      <value>Требуется исправление</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Требуется исправление</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="7b76c14c-43a3-4fd7-b7c3-9c0fc969d080">
+    <name>ТребуетсяАннулировать</name>
+    <synonym>
+      <key>ru</key>
+      <value>Требуется аннулирование</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Требуется аннулирование</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="b97293f9-6e12-4bb6-ae46-344e6a51eb75">
+    <name>ТребуетсяУточнитьДокумент</name>
+    <synonym>
+      <key>ru</key>
+      <value>Требуется уточнение</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Требуется уточнение</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="ab008363-a787-4f49-a0bf-2e8e8351ded2">
+    <name>УдалитьОжидаетсяВыписка</name>
+    <synonym>
+      <key>ru</key>
+      <value>(не используется) Ожидается выписка</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>(не використовується) Ожидается выписка</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="ee0f3707-c3c0-4208-ac99-decc9c05e5c6">
+    <name>УдалитьОжидаетсяИзвещение</name>
+    <synonym>
+      <key>ru</key>
+      <value>(не используется) Ожидается извещение</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>(не використовується) Ожидается извещение</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="6c91f78d-3b4c-4999-b809-6c2c4b577fc1">
+    <name>УдалитьОжидаетсяИсполнение</name>
+    <synonym>
+      <key>ru</key>
+      <value>(не используется) Ожидается исполнение</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>(не використовується) Ожидается исполнение</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="773b9c4e-0022-4bb8-8c4c-f426e9e944e9">
+    <name>УдалитьОжидаетсяОтзыв</name>
+    <synonym>
+      <key>ru</key>
+      <value>(не используется) Ожидается отзыв</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>(не використовується) Ожидается отзыв</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="43f2a01d-36b8-4640-8ce3-052a7a7a8737">
+    <name>УдалитьПлатежИсполнен</name>
+    <synonym>
+      <key>ru</key>
+      <value>(не используется) Платеж исполнен</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>(не використовується) Платеж исполнен</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="6a794225-0d55-4e40-80be-39ad445cb3d4">
+    <name>УдалитьТребуетсяПодтверждение</name>
+    <synonym>
+      <key>ru</key>
+      <value>(не используется) Требуется подтверждение</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>(не використовується) Требуется подтверждение</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="48fa7816-aac5-4c35-9d6f-bd751934b0a4">
+    <name>ОжидаетсяСогласиеКонтрагента</name>
+    <synonym>
+      <key>ru</key>
+      <value>Ожидается согласие контрагента</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Ожидается согласие контрагента</value>
+    </synonym>
+  </enumValues>
+  <enumValues uuid="d843ebd5-a755-4869-a013-2cc85eb047e6">
+    <name>ПолученОтказОтКонтрагента</name>
+    <synonym>
+      <key>ru</key>
+      <value>Получен отказ от контрагента</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Получен отказ от контрагента</value>
+    </synonym>
+  </enumValues>
+</mdclass:Enum>
