@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="8619c5f4-58ac-494b-bf5a-9cda20a2f3d0">
+  <name>СМП_BankExchange</name>
+  <synonym>
+    <key>ru</key>
+    <value>BankExchange</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>BankExchange</value>
+  </synonym>
+  <includeHelpInContents>true</includeHelpInContents>
+  <includeInCommandInterface>true</includeInCommandInterface>
+  <picture xsi:type="core:PictureRef">
+    <picture>CommonPicture.СМП_BankExchange</picture>
+  </picture>
+  <subsystems>РаботаСБанками</subsystems>
+</mdclass:Subsystem>

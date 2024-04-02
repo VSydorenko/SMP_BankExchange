@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="560ebb06-8de0-4eb1-942d-6a8069406eb4">
+  <name>ОбработкиОбслуживания</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработки обслуживания</value>
+  </synonym>
+  <comment>Нужно выгружать во внешние обработки и подключать как элементы справочника</comment>
+  <includeHelpInContents>true</includeHelpInContents>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_Сбербанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк</content>
+  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УниверсалБанк</content>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
+</mdclass:Subsystem>

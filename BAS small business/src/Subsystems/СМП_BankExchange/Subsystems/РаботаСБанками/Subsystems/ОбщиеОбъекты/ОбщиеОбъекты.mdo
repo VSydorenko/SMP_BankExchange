@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="279500ea-15b4-49d3-aad4-d8335b8c9ee5">
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="2017258f-6fa8-471b-b707-76707859cae5">
   <name>ОбщиеОбъекты</name>
   <synonym>
     <key>ru</key>
@@ -24,9 +24,11 @@
   <content>CommonPicture.ОбновлениеВнешнихКомпонентССайта</content>
   <content>InformationRegister.ИсторияРаботыСКлиентомБанка</content>
   <content>InformationRegister.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</content>
-  <content>b1f1608a-bf4e-4e5b-a369-83387b4b6dfd</content>
-  <content>2483054d-78e3-45d3-80ca-4fd1ce172920</content>
   <content>CommonPicture.КлиентБанкЗаголовокВыгрузка</content>
   <content>CommonPicture.КлиентБанкЗаголовокЗагрузка</content>
-  <parentSubsystem>Subsystem.СМП_simplyUNF.Subsystem.РаботаСБанками</parentSubsystem>
+  <content>DataProcessor.СМП_КлиентБанк</content>
+  <content>CommonPicture.СМП_BankExchange</content>
+  <content>CommonModule.ПарсерСериализаторJSON</content>
+  <content>CommonModule.КоннекторHTTP_BankExchange</content>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

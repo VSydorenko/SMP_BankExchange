@@ -52,27 +52,29 @@
     </extension>
     <languageCode>uk</languageCode>
   </languages>
-  <subsystems>Subsystem.СМП_simplyUNF</subsystems>
-  <commonPictures>CommonPicture.СМП_simplyUNF</commonPictures>
+  <subsystems>Subsystem.СМП_BankExchange</subsystems>
+  <commonPictures>CommonPicture.СМП_BankExchange</commonPictures>
+  <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
+  <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
+  <commonPictures>CommonPicture.ИзменитьНастройки</commonPictures>
   <commonPictures>CommonPicture.КлиентБанкЗаголовокВыгрузка</commonPictures>
   <commonPictures>CommonPicture.КлиентБанкЗаголовокЗагрузка</commonPictures>
-  <commonPictures>CommonPicture.ИзменитьНастройки</commonPictures>
-  <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
-  <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
   <commonPictures>CommonPicture.ОбновлениеВнешнихКомпонентССайта</commonPictures>
+  <roles>Role.ДобавлениеИзменениеБанковскихСчетов</roles>
+  <roles>Role.ИспользованиеБанкаИКассы</roles>
   <roles>Role.ПолныеПрава</roles>
-  <commonModules>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</commonModules>
-  <commonModules>CommonModule.ОбменСБанкамиКлиентСервер</commonModules>
-  <commonModules>CommonModule.ОбменСБанками</commonModules>
-  <commonModules>CommonModule.КоннекторHTTP</commonModules>
-  <commonModules>CommonModule.ОбменСБанкамиКлиент</commonModules>
-  <commonModules>CommonModule.ПарсерСериализаторJSON</commonModules>
-  <commonModules>CommonModule.ОбменСБанкамиПереопределяемый</commonModules>
-  <commonModules>CommonModule.КлиентБанкВызовСервера</commonModules>
-  <commonModules>CommonModule.УправлениеНебольшойФирмойКлиент</commonModules>
+  <commonModules>CommonModule.СМП_РаботаСБанкамиМонобанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиМонобанкAPIСервер</commonModules>
+  <commonModules>CommonModule.КоннекторHTTP_BankExchange</commonModules>
+  <commonModules>CommonModule.ОбменСБанками</commonModules>
+  <commonModules>CommonModule.ОбменСБанкамиКлиент</commonModules>
+  <commonModules>CommonModule.ОбменСБанкамиКлиентСервер</commonModules>
+  <commonModules>CommonModule.ОбменСБанкамиПереопределяемый</commonModules>
+  <commonModules>CommonModule.ПарсерСериализаторJSON</commonModules>
+  <commonModules>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</commonModules>
+  <commonModules>CommonModule.КлиентБанкВызовСервера</commonModules>
+  <commonModules>CommonModule.УправлениеНебольшойФирмойКлиент</commonModules>
   <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>
   <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
   <catalogs>Catalog.Банки</catalogs>
@@ -105,13 +107,13 @@
   <dataProcessors>DataProcessor.БанкИКасса</dataProcessors>
   <dataProcessors>DataProcessor.СМП_КлиентБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_Сбербанк</dataProcessors>
+  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк</dataProcessors>
   <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УниверсалБанк</dataProcessors>

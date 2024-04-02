@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="f9af0240-d604-4dd0-803c-5a30eb3ca0db">
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="d5556b94-bff6-4549-b28f-00c7a9d5c3b9">
   <name>МОНОБанк</name>
   <synonym>
     <key>ru</key>
@@ -12,5 +12,5 @@
   <includeHelpInContents>true</includeHelpInContents>
   <includeInCommandInterface>true</includeInCommandInterface>
   <content>CommonModule.СМП_РаботаСБанкамиМонобанкAPIСервер</content>
-  <parentSubsystem>Subsystem.СМП_simplyUNF.Subsystem.РаботаСБанками</parentSubsystem>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

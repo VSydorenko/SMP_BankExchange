@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="8ca498e2-729a-4779-be15-60d5e8aced59">
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="a214b59a-a168-4200-8e9d-e8e31f02e283">
   <name>ПриватБанк</name>
   <synonym>
     <key>ru</key>
@@ -11,5 +11,5 @@
   </synonym>
   <includeHelpInContents>true</includeHelpInContents>
   <content>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</content>
-  <parentSubsystem>Subsystem.СМП_simplyUNF.Subsystem.РаботаСБанками</parentSubsystem>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>
