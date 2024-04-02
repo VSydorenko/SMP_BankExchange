@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="674858e4-ec64-4d49-baca-f3114084dd3b" extendedConfigurationObject="33005270-b568-464a-8dd5-c2713d55fc0f">
+  <producedTypes>
+    <objectType typeId="e017d5e7-7989-4c98-9975-6d4d1128586d" valueTypeId="a5e9cb2f-a833-44d0-8e3c-0c8bed88c8c5"/>
+    <refType typeId="022a50bd-f6e6-4bc2-b166-e0b96990d472" valueTypeId="8be1b92c-3a88-4a91-853e-bd46998b350a"/>
+    <selectionType typeId="7d3da4ac-9a24-4afd-8867-45f725a0db1a" valueTypeId="fac37be7-1a01-4464-ae68-da87deae9b6f"/>
+    <listType typeId="779c59de-a332-4766-8c23-6e3aaaea5c21" valueTypeId="cfad50c1-f791-45dd-918d-e808a85318f6"/>
+    <managerType typeId="77d26e26-0718-4139-88de-d77861386d7e" valueTypeId="7819450e-2f85-4788-b9c2-5abc8f6072f5"/>
+  </producedTypes>
+  <name>Кассы</name>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:CatalogExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
+</mdclass:Catalog>

@@ -12,4 +12,32 @@
   <extension xsi:type="mdclassExtension:CatalogExtension">
     <extendedConfigurationObject>Checked</extendedConfigurationObject>
   </extension>
+  <attributes uuid="18567ab3-2749-48c5-90af-56d2e1ea125c" extendedConfigurationObject="eb87f954-3763-41dd-a083-2e503d5e70e9">
+    <name>Банк</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <typeExtension>
+        <types>
+          <state>Checked</state>
+          <type>CatalogRef.Банки</type>
+        </types>
+      </typeExtension>
+    </extension>
+    <type/>
+  </attributes>
+  <attributes uuid="2d406480-075c-456f-b760-915f39d90a5f" extendedConfigurationObject="f50e07b0-e273-4808-9a28-4f22f4711157">
+    <name>БанкРасчетов</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+      <typeExtension>
+        <types>
+          <state>Checked</state>
+          <type>CatalogRef.Банки</type>
+        </types>
+      </typeExtension>
+    </extension>
+    <type/>
+  </attributes>
 </mdclass:Catalog>
