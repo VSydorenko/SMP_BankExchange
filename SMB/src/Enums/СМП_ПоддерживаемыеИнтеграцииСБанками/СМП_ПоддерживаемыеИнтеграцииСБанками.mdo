@@ -65,4 +65,15 @@
       <value>Зовнішня обробка</value>
     </synonym>
   </enumValues>
+  <enumValues uuid="aab4fc1e-2d6d-4132-8577-6cb580946a4c">
+    <name>ПУМБ</name>
+    <synonym>
+      <key>ru</key>
+      <value>ПУМБ</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>ПУМБ</value>
+    </synonym>
+  </enumValues>
 </mdclass:Enum>
