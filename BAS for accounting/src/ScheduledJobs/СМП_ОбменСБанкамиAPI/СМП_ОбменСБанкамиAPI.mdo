@@ -9,7 +9,7 @@
     <key>uk</key>
     <value>Обмін з банками по API</value>
   </synonym>
-  <methodName>CommonModule.СМП_РаботаСБанкамиСервер.ОбменСБанкамиAPI</methodName>
+  <methodName>CommonModule.СМП_РаботаСБанкамиСервер.РегламентноеЗаданиеВыполнитьОбмен</methodName>
   <use>true</use>
   <restartCountOnFailure>3</restartCountOnFailure>
   <restartIntervalOnFailure>10</restartIntervalOnFailure>

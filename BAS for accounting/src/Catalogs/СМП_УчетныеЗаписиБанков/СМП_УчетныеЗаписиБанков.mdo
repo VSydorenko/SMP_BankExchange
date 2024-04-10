@@ -271,10 +271,10 @@
     <dataHistory>Use</dataHistory>
   </attributes>
   <attributes uuid="d8eefb1e-ae62-4d80-ac45-8dd7d07838e9">
-    <name>ИспользоватьРегламентныеЗадания</name>
+    <name>ИспользоватьРегламентноеЗадание</name>
     <synonym>
       <key>ru</key>
-      <value>Использовать регламентные задания</value>
+      <value>Использовать регламентное задание</value>
     </synonym>
     <synonym>
       <key>uk</key>
@@ -656,6 +656,28 @@
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
     <fillChecking>ShowError</fillChecking>
+    <fillValue xsi:type="core:StringValue">
+      <value></value>
+    </fillValue>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
+  <attributes uuid="59939aab-6265-4908-99f2-c7bb67c98681">
+    <name>РасписаниеРегламентногоЗадания</name>
+    <synonym>
+      <key>ru</key>
+      <value>Расписание регламентного задания</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Розклад регламентного завдання</value>
+    </synonym>
+    <type>
+      <types>String</types>
+      <stringQualifiers/>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
     <fillValue xsi:type="core:StringValue">
       <value></value>
     </fillValue>

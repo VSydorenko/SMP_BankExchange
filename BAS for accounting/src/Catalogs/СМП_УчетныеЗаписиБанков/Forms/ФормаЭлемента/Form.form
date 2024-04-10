@@ -755,148 +755,35 @@
         </extInfo>
       </items>
       <items xsi:type="form:FormGroup">
-        <name>Группа2</name>
-        <id>118</id>
-        <items xsi:type="form:FormGroup">
-          <name>ГруппаРегламентноеЗадание</name>
-          <id>128</id>
-          <items xsi:type="form:FormField">
-            <name>ИспользоватьРегламентноеЗадание</name>
-            <id>130</id>
-            <title>
-              <key>ru</key>
-              <value>Обмен по расписанию</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Обмін за розкладом</value>
-            </title>
-            <visible>true</visible>
-            <enabled>true</enabled>
-            <userVisible>
-              <common>true</common>
-            </userVisible>
-            <dataPath xsi:type="form:DataPath">
-              <segments>Объект.ИспользоватьРегламентныеЗадания</segments>
-            </dataPath>
-            <titleLocation>Right</titleLocation>
-            <handlers>
-              <event>OnChange</event>
-              <name>ИспользоватьРегламентныеЗаданияПриИзменении</name>
-            </handlers>
-            <extendedTooltip>
-              <name>ИспользоватьРегламентноеЗаданиеРасширеннаяПодсказка</name>
-              <id>132</id>
-              <visible>true</visible>
-              <enabled>true</enabled>
-              <userVisible>
-                <common>true</common>
-              </userVisible>
-              <type>Label</type>
-              <autoMaxWidth>true</autoMaxWidth>
-              <autoMaxHeight>true</autoMaxHeight>
-              <extInfo xsi:type="form:LabelDecorationExtInfo">
-                <horizontalAlign>Left</horizontalAlign>
-              </extInfo>
-            </extendedTooltip>
-            <contextMenu>
-              <name>ИспользоватьРегламентноеЗаданиеКонтекстноеМеню</name>
-              <id>131</id>
-              <visible>true</visible>
-              <enabled>true</enabled>
-              <userVisible>
-                <common>true</common>
-              </userVisible>
-              <autoFill>true</autoFill>
-            </contextMenu>
-            <type>CheckBoxField</type>
-            <editMode>Enter</editMode>
-            <showInHeader>true</showInHeader>
-            <headerHorizontalAlign>Left</headerHorizontalAlign>
-            <showInFooter>true</showInFooter>
-            <extInfo xsi:type="form:CheckBoxFieldExtInfo"/>
-          </items>
-          <items xsi:type="form:Button">
-            <name>НастроитьРасписание</name>
-            <id>133</id>
-            <visible>true</visible>
-            <enabled>true</enabled>
-            <userVisible>
-              <common>true</common>
-            </userVisible>
-            <extendedTooltip>
-              <name>НастроитьРасписаниеРасширеннаяПодсказка</name>
-              <id>134</id>
-              <visible>true</visible>
-              <enabled>true</enabled>
-              <userVisible>
-                <common>true</common>
-              </userVisible>
-              <type>Label</type>
-              <autoMaxWidth>true</autoMaxWidth>
-              <autoMaxHeight>true</autoMaxHeight>
-              <extInfo xsi:type="form:LabelDecorationExtInfo">
-                <horizontalAlign>Left</horizontalAlign>
-              </extInfo>
-            </extendedTooltip>
-            <type>Hyperlink</type>
-            <commandName>Form.Command.ВыполнитьОбмен</commandName>
-            <representation>Auto</representation>
-            <autoMaxWidth>true</autoMaxWidth>
-            <autoMaxHeight>true</autoMaxHeight>
-            <placementArea>UserCmds</placementArea>
-            <picture xsi:type="core:PictureRef">
-              <picture>StdPicture.ScheduledJob</picture>
-            </picture>
-            <representationInContextMenu>Auto</representationInContextMenu>
-          </items>
-          <items xsi:type="form:Button">
-            <name>ВыполнитьОбмен</name>
-            <id>135</id>
-            <visible>true</visible>
-            <enabled>true</enabled>
-            <userVisible>
-              <common>true</common>
-            </userVisible>
-            <extendedTooltip>
-              <name>ВыполнитьОбменРасширеннаяПодсказка</name>
-              <id>136</id>
-              <visible>true</visible>
-              <enabled>true</enabled>
-              <userVisible>
-                <common>true</common>
-              </userVisible>
-              <type>Label</type>
-              <autoMaxWidth>true</autoMaxWidth>
-              <autoMaxHeight>true</autoMaxHeight>
-              <extInfo xsi:type="form:LabelDecorationExtInfo">
-                <horizontalAlign>Left</horizontalAlign>
-              </extInfo>
-            </extendedTooltip>
-            <type>UsualButton</type>
-            <commandName>Form.Command.НастроитьРасписание</commandName>
-            <representation>PictureAndText</representation>
-            <autoMaxWidth>true</autoMaxWidth>
-            <autoMaxHeight>true</autoMaxHeight>
-            <placementArea>UserCmds</placementArea>
-            <representationInContextMenu>Auto</representationInContextMenu>
-          </items>
+        <name>ГруппаРегламентноеЗадание</name>
+        <id>128</id>
+        <items xsi:type="form:FormField">
+          <name>ИспользоватьРегламентноеЗадание</name>
+          <id>130</id>
+          <title>
+            <key>ru</key>
+            <value>Обмен по расписанию</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Обмін за розкладом</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
             <common>true</common>
           </userVisible>
-          <title>
-            <key>ru</key>
-            <value>Группа регламентное задание</value>
-          </title>
-          <toolTip>
-            <key>ru</key>
-            <value>Группа регламентное задание</value>
-          </toolTip>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Объект.ИспользоватьРегламентноеЗадание</segments>
+          </dataPath>
+          <titleLocation>Right</titleLocation>
+          <handlers>
+            <event>OnChange</event>
+            <name>ИспользоватьРегламентныеЗаданияПриИзменении</name>
+          </handlers>
           <extendedTooltip>
-            <name>ГруппаРегламентноеЗаданиеРасширеннаяПодсказка</name>
-            <id>129</id>
+            <name>ИспользоватьРегламентноеЗаданиеРасширеннаяПодсказка</name>
+            <id>132</id>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -909,13 +796,75 @@
               <horizontalAlign>Left</horizontalAlign>
             </extInfo>
           </extendedTooltip>
-          <type>UsualGroup</type>
-          <extInfo xsi:type="form:UsualGroupExtInfo">
-            <group>AlwaysHorizontal</group>
-            <showLeftMargin>true</showLeftMargin>
-            <united>true</united>
-            <throughAlign>Auto</throughAlign>
-            <currentRowUse>Auto</currentRowUse>
+          <contextMenu>
+            <name>ИспользоватьРегламентноеЗаданиеКонтекстноеМеню</name>
+            <id>131</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <autoFill>true</autoFill>
+          </contextMenu>
+          <type>CheckBoxField</type>
+          <editMode>Enter</editMode>
+          <showInHeader>true</showInHeader>
+          <headerHorizontalAlign>Left</headerHorizontalAlign>
+          <showInFooter>true</showInFooter>
+          <extInfo xsi:type="form:CheckBoxFieldExtInfo">
+            <checkBoxType>Switcher</checkBoxType>
+          </extInfo>
+        </items>
+        <items xsi:type="form:FormField">
+          <name>НастроитьРасписаниеРегламентногоЗадания</name>
+          <id>153</id>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <dataPath xsi:type="form:DataPath">
+            <segments>НастроитьРасписаниеРегламентногоЗадания</segments>
+          </dataPath>
+          <titleLocation>None</titleLocation>
+          <extendedTooltip>
+            <name>НастроитьРасписаниеРегламентногоЗаданияРасширеннаяПодсказка</name>
+            <id>155</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <type>Label</type>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <extInfo xsi:type="form:LabelDecorationExtInfo">
+              <horizontalAlign>Left</horizontalAlign>
+            </extInfo>
+          </extendedTooltip>
+          <contextMenu>
+            <name>НастроитьРасписаниеРегламентногоЗаданияКонтекстноеМеню</name>
+            <id>154</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <autoFill>true</autoFill>
+          </contextMenu>
+          <type>LabelField</type>
+          <editMode>Enter</editMode>
+          <showInHeader>true</showInHeader>
+          <headerHorizontalAlign>Left</headerHorizontalAlign>
+          <showInFooter>true</showInFooter>
+          <extInfo xsi:type="form:LabelFieldExtInfo">
+            <handlers>
+              <event>Click</event>
+              <name>НастроитьРасписаниеРегламентногоЗаданияНажатие</name>
+            </handlers>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <hyperlink>true</hyperlink>
           </extInfo>
         </items>
         <visible>true</visible>
@@ -923,9 +872,17 @@
         <userVisible>
           <common>true</common>
         </userVisible>
+        <title>
+          <key>ru</key>
+          <value>Группа регламентное задание</value>
+        </title>
+        <toolTip>
+          <key>ru</key>
+          <value>Группа регламентное задание</value>
+        </toolTip>
         <extendedTooltip>
-          <name>Группа2РасширеннаяПодсказка</name>
-          <id>119</id>
+          <name>ГруппаРегламентноеЗаданиеРасширеннаяПодсказка</name>
+          <id>129</id>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -940,9 +897,10 @@
         </extendedTooltip>
         <type>UsualGroup</type>
         <extInfo xsi:type="form:UsualGroupExtInfo">
-          <group>Vertical</group>
+          <group>AlwaysHorizontal</group>
           <showLeftMargin>true</showLeftMargin>
-          <throughAlign>DontUse</throughAlign>
+          <united>true</united>
+          <throughAlign>Auto</throughAlign>
           <currentRowUse>Auto</currentRowUse>
         </extInfo>
       </items>
@@ -1865,6 +1823,36 @@
   <autoCommandBar>
     <name>ФормаКоманднаяПанель</name>
     <id>-1</id>
+    <items xsi:type="form:Button">
+      <name>ФормаВыполнитьОбмен</name>
+      <id>151</id>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <extendedTooltip>
+        <name>ФормаВыполнитьОбменРасширеннаяПодсказка</name>
+        <id>152</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <commandName>Form.Command.ВыполнитьОбмен</commandName>
+      <representation>Auto</representation>
+      <autoMaxWidth>true</autoMaxWidth>
+      <autoMaxHeight>true</autoMaxHeight>
+      <placementArea>UserCmds</placementArea>
+      <representationInContextMenu>Auto</representationInContextMenu>
+    </items>
     <visible>true</visible>
     <enabled>true</enabled>
     <userVisible>
@@ -1873,10 +1861,6 @@
     <horizontalAlign>Left</horizontalAlign>
     <autoFill>true</autoFill>
   </autoCommandBar>
-  <handlers>
-    <event>OnOpen</event>
-    <name>ПриОткрытии</name>
-  </handlers>
   <handlers>
     <event>OnCreateAtServer</event>
     <name>ПриСозданииНаСервере</name>
@@ -1905,13 +1889,20 @@
     <savedData>true</savedData>
   </attributes>
   <attributes>
-    <name>РасписаниеРегламентногоЗаданияОбмена</name>
+    <name>НастроитьРасписаниеРегламентногоЗадания</name>
     <title>
       <key>ru</key>
-      <value>Расписание регламентного задания обмена</value>
+      <value>Настроить расписание регламентного задания</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Налаштувати розклад регламентного завдання</value>
     </title>
     <id>2</id>
-    <valueType/>
+    <valueType>
+      <types>String</types>
+      <stringQualifiers/>
+    </valueType>
     <view>
       <common>true</common>
     </view>
@@ -1941,51 +1932,34 @@
     <name>ВыполнитьОбмен</name>
     <title>
       <key>ru</key>
-      <value>Выполнить обмен</value>
+      <value>Выполнить обмен с банком</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Виконати обмін з банком</value>
     </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
-      <value>Выполнить обмен</value>
+      <value>Загрузка банковских выписок</value>
     </toolTip>
-    <use>
-      <common>true</common>
-    </use>
-    <action xsi:type="form:FormCommandHandlerContainer">
-      <handler>
-        <name>ВыполнитьОбмен</name>
-      </handler>
-    </action>
-    <currentRowUse>Auto</currentRowUse>
-  </formCommands>
-  <formCommands>
-    <name>НастроитьРасписание</name>
-    <title>
-      <key>ru</key>
-      <value>Настроить расписание</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Настроить расписание</value>
-    </title>
-    <id>2</id>
     <toolTip>
       <key>uk</key>
-      <value>Настроить расписание</value>
+      <value>Завантаження банківських виписок</value>
     </toolTip>
     <use>
       <common>true</common>
     </use>
     <picture xsi:type="core:PictureRef">
-      <picture>StdPicture.ScheduledJob</picture>
+      <picture>CommonPicture.КлиентБанкКомандаЗагрузить</picture>
     </picture>
     <action xsi:type="form:FormCommandHandlerContainer">
       <handler>
-        <name>НастроитьРасписаниеОбмена</name>
+        <name>ВыполнитьОбмен</name>
       </handler>
     </action>
-    <modifiesStoredData>true</modifiesStoredData>
-    <currentRowUse>DontUse</currentRowUse>
+    <representation>TextPicture</representation>
+    <currentRowUse>Auto</currentRowUse>
   </formCommands>
   <commandInterface>
     <navigationPanel/>
@@ -1995,14 +1969,6 @@
     <handlers>
       <event>AfterWriteAtServer</event>
       <name>ПослеЗаписиНаСервере</name>
-    </handlers>
-    <handlers>
-      <event>OnReadAtServer</event>
-      <name>ПриЧтенииНаСервере</name>
-    </handlers>
-    <handlers>
-      <event>BeforeWriteAtServer</event>
-      <name>ПередЗаписьюНаСервере</name>
     </handlers>
   </extInfo>
 </form:Form>

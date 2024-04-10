@@ -4590,11 +4590,6 @@
                   <segments>ДокументыКИмпорту.ДокументРасчетов</segments>
                 </dataPath>
                 <skipOnInput>true</skipOnInput>
-                <handlers xsi:type="form:EventHandlerExtension">
-                  <event>OnChange</event>
-                  <name>СМП_ДокументыКИмпортуДокументРасчетовПриИзмененииВместо</name>
-                  <callType>Override</callType>
-                </handlers>
                 <extendedTooltip>
                   <name>ДокументыКИмпортуДокументРасчетовРасширеннаяПодсказка</name>
                   <id>869</id>

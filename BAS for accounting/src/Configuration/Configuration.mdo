@@ -68,9 +68,10 @@
   <roles>Role.ДобавлениеИзменениеДанныхБухгалтерии</roles>
   <roles>Role.ПолныеПрава</roles>
   <commonModules>CommonModule.КоннекторHTTP</commonModules>
-  <commonModules>CommonModule.СМП_ОбменСПУМБСервер</commonModules>
+  <commonModules>CommonModule.СМП_РаботаСБанкамиПУМБAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
+  <commonModules>CommonModule.РегламентныеЗаданияПереопределяемый</commonModules>
   <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>
   <catalogs>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</catalogs>
   <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
