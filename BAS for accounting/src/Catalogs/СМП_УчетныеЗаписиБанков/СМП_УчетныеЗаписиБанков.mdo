@@ -289,30 +289,6 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
-  <attributes uuid="7d1ef959-97b7-4fcb-ad80-14b2145fb208">
-    <name>Кодировка</name>
-    <synonym>
-      <key>ru</key>
-      <value>Кодировка</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Кодування</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers>
-        <length>10</length>
-      </stringQualifiers>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:StringValue">
-      <value></value>
-    </fillValue>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
   <attributes uuid="56d90c36-4966-4c76-8b04-ab0eb7b14c20">
     <name>Организация</name>
     <synonym>
@@ -345,44 +321,6 @@
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
     <fillChecking>ShowError</fillChecking>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="ae301ed5-2560-4b7d-864f-bcf57538793f">
-    <name>ПроводитьПриЗагрузкеПоступлениеНаРасчетныйСчет</name>
-    <synonym>
-      <key>ru</key>
-      <value>Проводить при загрузке поступление на расчетный счет</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Проводити при завантаженні надходжень на розрахунковий рахунок</value>
-    </synonym>
-    <type>
-      <types>Boolean</types>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="c3e00988-b6b5-47a8-92c0-1bed87113be9">
-    <name>ПроводитьПриЗагрузкеСписаниеСРасчетногоСчета</name>
-    <synonym>
-      <key>ru</key>
-      <value>Проводить при загрузке списание с расчетного счета</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Проводити при завантаженні списання з розрахункового рахунку</value>
-    </synonym>
-    <type>
-      <types>Boolean</types>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
     <fillValue xsi:type="core:UndefinedValue"/>
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
@@ -431,35 +369,6 @@
     <maxValue xsi:type="core:UndefinedValue"/>
     <fillValue xsi:type="core:StringValue">
       <value></value>
-    </fillValue>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="6c7568c4-6f79-40cf-a33f-07c48332f275">
-    <name>СоздаватьНенайденныеЭлементы</name>
-    <synonym>
-      <key>ru</key>
-      <value>Создавать ненайденные элементы</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Створювати нового контрагента при завантаженні виписки</value>
-    </synonym>
-    <type>
-      <types>Boolean</types>
-    </type>
-    <toolTip>
-      <key>ru</key>
-      <value>Будет создан новый контрагент, если не будет найден существующий</value>
-    </toolTip>
-    <toolTip>
-      <key>uk</key>
-      <value>Буде створено нового контрагента, якщо неможливо знайти існуючого</value>
-    </toolTip>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:BooleanValue">
-      <value>true</value>
     </fillValue>
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
