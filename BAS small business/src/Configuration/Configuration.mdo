@@ -13,7 +13,6 @@
   <extension xsi:type="mdclassExtension:ConfigurationExtension">
     <defaultRunMode>Checked</defaultRunMode>
     <usePurposes>Checked</usePurposes>
-    <defaultLanguage>Checked</defaultLanguage>
     <interfaceCompatibilityMode>Checked</interfaceCompatibilityMode>
   </extension>
   <containedObjects classId="9cd510cd-abfc-11d4-9434-004095e12fc7" objectId="ff17a0c1-5e4b-455b-99fb-b1a05b799299"/>
@@ -31,7 +30,6 @@
   <usePurposes>PersonalComputer</usePurposes>
   <scriptVariant>Russian</scriptVariant>
   <version>2.0.1.1</version>
-  <defaultLanguage>Language.Украинский</defaultLanguage>
   <interfaceCompatibilityMode>TaxiEnableVersion8_2</interfaceCompatibilityMode>
   <compatibilityMode>8.3.22</compatibilityMode>
   <languages uuid="144f8110-c4c6-4c8a-bb1b-df7d11dc72e2" extendedConfigurationObject="af1b61ff-d1b9-4053-ad85-8259b6626adc">
@@ -72,7 +70,6 @@
   <commonModules>CommonModule.ОбменСБанкамиКлиент</commonModules>
   <commonModules>CommonModule.ОбменСБанкамиКлиентСервер</commonModules>
   <commonModules>CommonModule.ОбменСБанкамиПереопределяемый</commonModules>
-  <commonModules>CommonModule.ПарсерСериализаторJSON</commonModules>
   <commonModules>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</commonModules>
   <commonModules>CommonModule.КлиентБанкВызовСервера</commonModules>
   <commonModules>CommonModule.УправлениеНебольшойФирмойКлиент</commonModules>

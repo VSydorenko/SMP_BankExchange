@@ -28,7 +28,6 @@
   <content>CommonPicture.КлиентБанкЗаголовокЗагрузка</content>
   <content>DataProcessor.СМП_КлиентБанк</content>
   <content>CommonPicture.СМП_BankExchange</content>
-  <content>CommonModule.ПарсерСериализаторJSON</content>
   <content>CommonModule.КоннекторHTTP_BankExchange</content>
   <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>
