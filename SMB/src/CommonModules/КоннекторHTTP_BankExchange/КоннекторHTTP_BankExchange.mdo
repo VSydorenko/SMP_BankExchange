@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdclass:CommonModule xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="1ddb44ef-38cd-4420-aedb-ac548b204487">
+<mdclass:CommonModule xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="5102d74a-e480-40a5-9770-b2c585525825">
   <name>КоннекторHTTP_BankExchange</name>
   <synonym>
     <key>ru</key>
