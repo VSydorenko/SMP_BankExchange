@@ -479,7 +479,7 @@
     <dataHistory>Use</dataHistory>
   </attributes>
   <attributes uuid="d1760392-c7b4-42f8-bdea-0a06c7791869">
-    <name>Username</name>
+    <name>Логин</name>
     <synonym>
       <key>ru</key>
       <value>Логин </value>
@@ -504,7 +504,7 @@
     <dataHistory>Use</dataHistory>
   </attributes>
   <attributes uuid="24fb48e7-d143-4920-86ce-b99c7ffbb47f">
-    <name>password</name>
+    <name>Пароль</name>
     <synonym>
       <key>ru</key>
       <value>Пароль</value>
@@ -520,48 +520,6 @@
       </stringQualifiers>
     </type>
     <passwordMode>true</passwordMode>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillChecking>ShowError</fillChecking>
-    <fillValue xsi:type="core:StringValue">
-      <value></value>
-    </fillValue>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="fe8c49bf-19ea-4cc1-8b20-dbefb18751ca">
-    <name>client_id</name>
-    <synonym>
-      <key>uk</key>
-      <value>Client id</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers>
-        <length>150</length>
-      </stringQualifiers>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillChecking>ShowError</fillChecking>
-    <fillValue xsi:type="core:StringValue">
-      <value></value>
-    </fillValue>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="2de64fe9-d6eb-4d5d-b727-9884d929a04e">
-    <name>client_secret</name>
-    <synonym>
-      <key>uk</key>
-      <value>Client secret</value>
-    </synonym>
-    <type>
-      <types>String</types>
-      <stringQualifiers>
-        <length>250</length>
-      </stringQualifiers>
-    </type>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
     <fillChecking>ShowError</fillChecking>
