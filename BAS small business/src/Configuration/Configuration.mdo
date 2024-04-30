@@ -63,8 +63,8 @@
   <roles>Role.ПолныеПрава</roles>
   <commonModules>CommonModule.СМП_РаботаСБанкамиМонобанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
+  <commonModules>CommonModule.СМП_РаботаСБанкамиПУМБAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
-  <commonModules>CommonModule.СМП_ОбменСПУМБСервер</commonModules>
   <commonModules>CommonModule.КоннекторHTTP_BankExchange</commonModules>
   <commonModules>CommonModule.ОбменСБанками</commonModules>
   <commonModules>CommonModule.ОбменСБанкамиКлиент</commonModules>
