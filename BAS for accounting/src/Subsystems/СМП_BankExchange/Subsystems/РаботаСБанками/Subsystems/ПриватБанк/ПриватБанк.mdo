@@ -11,5 +11,5 @@
   </synonym>
   <includeHelpInContents>true</includeHelpInContents>
   <content>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</content>
-  <parentSubsystem>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</parentSubsystem>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

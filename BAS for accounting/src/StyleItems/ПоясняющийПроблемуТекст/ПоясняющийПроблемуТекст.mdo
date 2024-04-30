@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:StyleItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="e73c06f1-8c41-4c35-a1a1-0d08039d00ef" extendedConfigurationObject="615512b6-4378-4fce-86f1-a56725f945da">
-  <name>ПоясняющийПроблемуТекст</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:StyleItemExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-    <type>Checked</type>
-  </extension>
-</mdclass:StyleItem>

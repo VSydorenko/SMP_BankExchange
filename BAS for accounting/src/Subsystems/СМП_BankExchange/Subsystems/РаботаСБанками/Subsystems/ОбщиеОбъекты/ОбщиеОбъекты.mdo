@@ -17,5 +17,8 @@
   <content>CommonModule.СМП_РаботаСБанкамиСервер</content>
   <content>InformationRegister.СМП_НомерПоследнейТранзакции</content>
   <content>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</content>
-  <parentSubsystem>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</parentSubsystem>
+  <content>CommonPicture.СМП_BankExchange</content>
+  <content>CommonModule.КоннекторHTTP_BankExchange</content>
+  <content>ScheduledJob.СМП_ОбменСБанкамиAPI</content>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

@@ -937,7 +937,7 @@
           <type>Popup</type>
           <extInfo xsi:type="form:PopupGroupExtInfo">
             <picture xsi:type="core:PictureRef">
-              <picture>CommonPicture.ЗаполнитьФорму</picture>
+              <picture>0:4a1d1e27-4163-4243-ae62-2041d2af2fdf</picture>
             </picture>
             <representation>Picture</representation>
           </extInfo>
@@ -984,7 +984,7 @@
           <type>Popup</type>
           <extInfo xsi:type="form:PopupGroupExtInfo">
             <picture xsi:type="core:PictureRef">
-              <picture>CommonPicture.Отчеты</picture>
+              <picture>0:019b62cd-e1bc-4ca2-99fc-33cf6ed2d2fc</picture>
             </picture>
             <representation>PictureAndText</representation>
           </extInfo>
@@ -1305,7 +1305,7 @@
       <editMode>Enter</editMode>
       <showInHeader>true</showInHeader>
       <headerPicture xsi:type="core:PictureRef">
-        <picture>CommonPicture.Скрепка</picture>
+        <picture>0:a41de59e-20cf-4181-a1f1-e4ad41b58496</picture>
       </headerPicture>
       <headerHorizontalAlign>Left</headerHorizontalAlign>
       <showInFooter>true</showInFooter>
@@ -1316,7 +1316,7 @@
         <horizontalStretch>true</horizontalStretch>
         <verticalStretch>true</verticalStretch>
         <valuesPicture xsi:type="core:PictureRef">
-          <picture>CommonPicture.Скрепка</picture>
+          <picture>0:a41de59e-20cf-4181-a1f1-e4ad41b58496</picture>
         </valuesPicture>
       </extInfo>
     </items>
@@ -2365,7 +2365,7 @@
       <segments>19</segments>
     </rowPictureDataPath>
     <rowsPicture xsi:type="core:PictureRef">
-      <picture>CommonPicture.СостоянияДокумента</picture>
+      <picture>0:386a3f62-87f4-4320-825f-9e3cae3e24b4</picture>
     </rowsPicture>
     <extInfo xsi:type="form:DynamicListTableExtInfo">
       <autoRefreshPeriod>60</autoRefreshPeriod>
@@ -2766,7 +2766,7 @@
       <showLeftMargin>true</showLeftMargin>
       <united>true</united>
       <backColor xsi:type="core:ColorRef">
-        <color>Style.ИтогиФонГруппы</color>
+        <color>0:ea976a83-6c22-484c-b2d8-c02bcf4121d7</color>
       </backColor>
       <throughAlign>Auto</throughAlign>
       <currentRowUse>Auto</currentRowUse>

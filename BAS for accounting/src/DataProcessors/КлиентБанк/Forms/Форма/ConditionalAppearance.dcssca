@@ -16,7 +16,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ПоясняющийПроблемуТекст</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -359,7 +359,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:НедоступныеДанныеЦвет</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -382,7 +382,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ПоясняющийПроблемуТекст</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -413,7 +413,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ПоясняющийПроблемуТекст</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -468,7 +468,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:НедоступныеДанныеЦвет</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -499,7 +499,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ПоясняющийПроблемуТекст</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -524,7 +524,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:НедоступныеДанныеЦвет</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -555,7 +555,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ПоясняющийПроблемуТекст</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -580,7 +580,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:НедоступныеДанныеЦвет</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -611,7 +611,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ПоясняющийПроблемуТекст</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>

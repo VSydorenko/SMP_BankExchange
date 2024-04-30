@@ -11,5 +11,5 @@
   </synonym>
   <comment>Нужно выгружать во внешние обработки и подключать как элементы справочника</comment>
   <includeHelpInContents>true</includeHelpInContents>
-  <parentSubsystem>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</parentSubsystem>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

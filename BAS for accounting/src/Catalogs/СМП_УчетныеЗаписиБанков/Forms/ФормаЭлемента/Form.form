@@ -1777,7 +1777,7 @@
       <common>true</common>
     </use>
     <picture xsi:type="core:PictureRef">
-      <picture>CommonPicture.КлиентБанкКомандаЗагрузить</picture>
+      <picture>0:4ca32ebc-326c-45be-9986-e7430e5e7e40</picture>
     </picture>
     <action xsi:type="form:FormCommandHandlerContainer">
       <handler>

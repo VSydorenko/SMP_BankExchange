@@ -1605,7 +1605,7 @@
               <segments>Объект.ПлатежныеДокументы.СостояниеДокумента</segments>
             </rowPictureDataPath>
             <rowsPicture xsi:type="core:PictureRef">
-              <picture>CommonPicture.СостоянияДокумента</picture>
+              <picture>0:386a3f62-87f4-4320-825f-9e3cae3e24b4</picture>
             </rowsPicture>
             <searchStringLocation>None</searchStringLocation>
             <viewStatusLocation>None</viewStatusLocation>
@@ -2326,7 +2326,7 @@
                 <autoMaxHeight>true</autoMaxHeight>
                 <placementArea>UserCmds</placementArea>
                 <picture xsi:type="core:PictureRef">
-                  <picture>CommonPicture.Шестеренка</picture>
+                  <picture>0:64c33b81-9dd2-4993-bd5d-57e8134990c1</picture>
                 </picture>
                 <representationInContextMenu>Auto</representationInContextMenu>
               </items>
@@ -2514,7 +2514,7 @@
       <type>Page</type>
       <extInfo xsi:type="form:PageGroupExtInfo">
         <picture xsi:type="core:PictureRef">
-          <picture>CommonPicture.КлиентБанкКомандаВыгрузить</picture>
+          <picture>0:ef981310-91ff-4320-8514-f4f9505a6bc1</picture>
         </picture>
         <group>Vertical</group>
         <showTitle>true</showTitle>
@@ -4198,7 +4198,7 @@
                   <typeDomainEnabled>true</typeDomainEnabled>
                   <textEdit>true</textEdit>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ПоясняющийПроблемуТекст</color>
+                    <color>0:e73c06f1-8c41-4c35-a1a1-0d08039d00ef</color>
                   </textColor>
                 </extInfo>
               </items>
@@ -5117,7 +5117,7 @@
           <enableStartDrag>true</enableStartDrag>
           <enableDrag>true</enableDrag>
           <rowsPicture xsi:type="core:PictureRef">
-            <picture>CommonPicture.СостоянияДокумента</picture>
+            <picture>0:386a3f62-87f4-4320-825f-9e3cae3e24b4</picture>
           </rowsPicture>
           <searchStringLocation>None</searchStringLocation>
           <viewStatusLocation>None</viewStatusLocation>
@@ -5207,7 +5207,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <textColor xsi:type="core:ColorRef">
-              <color>Style.ПоясняющийПроблемуТекст</color>
+              <color>0:e73c06f1-8c41-4c35-a1a1-0d08039d00ef</color>
             </textColor>
           </extInfo>
         </items>
@@ -5703,7 +5703,7 @@
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
             <picture xsi:type="core:PictureRef">
-              <picture>CommonPicture.Шестеренка</picture>
+              <picture>0:64c33b81-9dd2-4993-bd5d-57e8134990c1</picture>
             </picture>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
@@ -5840,7 +5840,7 @@
       <type>Page</type>
       <extInfo xsi:type="form:PageGroupExtInfo">
         <picture xsi:type="core:PictureRef">
-          <picture>CommonPicture.КлиентБанкКомандаЗагрузить</picture>
+          <picture>0:4ca32ebc-326c-45be-9986-e7430e5e7e40</picture>
         </picture>
         <group>Vertical</group>
         <showTitle>true</showTitle>
@@ -7323,7 +7323,7 @@
       <common>true</common>
     </use>
     <picture xsi:type="core:PictureRef">
-      <picture>CommonPicture.КлиентБанкКомандаВыгрузить</picture>
+      <picture>0:ef981310-91ff-4320-8514-f4f9505a6bc1</picture>
     </picture>
     <action xsi:type="form:FormExtensionCommandHandlerContainer">
       <handlers>

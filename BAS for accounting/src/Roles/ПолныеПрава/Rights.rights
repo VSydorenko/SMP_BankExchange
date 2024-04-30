@@ -4,21 +4,21 @@
 	<setForAttributesByDefault>true</setForAttributesByDefault>
 	<independentRightsOfChildObjects>false</independentRightsOfChildObjects>
 	<object>
-		<name>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками.Subsystem.ОбработкиОбслуживания</name>
+		<name>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками.Subsystem.ОбработкиОбслуживания</name>
 		<right>
 			<name>View</name>
 			<value>false</value>
 		</right>
 	</object>
 	<object>
-		<name>Subsystem.СМП_simplyBP</name>
+		<name>Subsystem.СМП_BankExchange</name>
 		<right>
 			<name>View</name>
 			<value>false</value>
 		</right>
 	</object>
 	<object>
-		<name>Configuration.SMP_BankExchange_BP</name>
+		<name>Configuration.SMP_BankExchange_ACC</name>
 		<right>
 			<name>MainWindowModeNormal</name>
 			<value>true</value>
@@ -45,21 +45,21 @@
 		</right>
 	</object>
 	<object>
-		<name>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками.Subsystem.ОбщиеОбъекты</name>
+		<name>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками.Subsystem.ОбщиеОбъекты</name>
 		<right>
 			<name>View</name>
 			<value>false</value>
 		</right>
 	</object>
 	<object>
-		<name>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками</name>
+		<name>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</name>
 		<right>
 			<name>View</name>
 			<value>false</value>
 		</right>
 	</object>
 	<object>
-		<name>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками.Subsystem.ПриватБанк</name>
+		<name>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками.Subsystem.ПриватБанк</name>
 		<right>
 			<name>View</name>
 			<value>false</value>
@@ -89,13 +89,6 @@
 		</right>
 	</object>
 	<object>
-		<name>Subsystem.СМП_simplyBP.Subsystem.ОбщиеОбъектыСлужебный</name>
-		<right>
-			<name>View</name>
-			<value>false</value>
-		</right>
-	</object>
-	<object>
 		<name>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</name>
 		<right>
 			<name>InteractiveDelete</name>
@@ -119,14 +112,7 @@
 		</right>
 	</object>
 	<object>
-		<name>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками.Subsystem.МОНОБанк</name>
-		<right>
-			<name>View</name>
-			<value>false</value>
-		</right>
-	</object>
-	<object>
-		<name>Subsystem.СМП_simplyBP.Subsystem.РаботаСБанками.Subsystem.ИзмененныеОбъекты</name>
+		<name>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками.Subsystem.МОНОБанк</name>
 		<right>
 			<name>View</name>
 			<value>false</value>
