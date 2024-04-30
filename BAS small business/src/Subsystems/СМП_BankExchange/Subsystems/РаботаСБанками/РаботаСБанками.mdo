@@ -13,8 +13,9 @@
   <includeInCommandInterface>true</includeInCommandInterface>
   <content>Catalog.СМП_УчетныеЗаписиБанков</content>
   <subsystems>ОбщиеОбъекты</subsystems>
-  <subsystems>ПриватБанк</subsystems>
   <subsystems>МОНОБанк</subsystems>
+  <subsystems>ПриватБанк</subsystems>
+  <subsystems>ПУМБ</subsystems>
   <subsystems>ОбработкиОбслуживания</subsystems>
   <parentSubsystem>Subsystem.СМП_BankExchange</parentSubsystem>
 </mdclass:Subsystem>

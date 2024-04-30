@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="7dcd5fad-1c54-45eb-a625-fbaba9ef2d97">
+  <name>ПУМБ</name>
+  <synonym>
+    <key>ru</key>
+    <value>ПУМБ Интеграция API</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>ПУМБ Інтеграція API</value>
+  </synonym>
+  <includeHelpInContents>true</includeHelpInContents>
+  <includeInCommandInterface>true</includeInCommandInterface>
+  <content>CommonModule.СМП_РаботаСБанкамиПУМБAPIСервер</content>
+  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
+</mdclass:Subsystem>
