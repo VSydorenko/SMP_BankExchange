@@ -200,6 +200,10 @@
       <key>ru</key>
       <value>Подключаемая обработка</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Обробка</value>
+    </synonym>
     <type>
       <types>CatalogRef.ДополнительныеОтчетыИОбработки</types>
     </type>
@@ -260,6 +264,10 @@
     <synonym>
       <key>ru</key>
       <value>Группа доступа для новых контрагентов</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Група доступу для нових контрагентів</value>
     </synonym>
     <type>
       <types>CatalogRef.ГруппыДоступаКонтрагентов</types>
@@ -322,6 +330,10 @@
     <synonym>
       <key>ru</key>
       <value>Идентификатор регламентного задания</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>ІД регламентного завдання</value>
     </synonym>
     <type>
       <types>UUID</types>

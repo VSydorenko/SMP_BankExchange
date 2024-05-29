@@ -56,6 +56,10 @@
             <key>ru</key>
             <value>Загрузка платежных документов завершена</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Завантаження платіжних документів завершене</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -206,6 +210,10 @@
             <value>Загрузка платежных документов завершена 
 с предупреждениями</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Завантаження платіжних документів завершене з попередженням</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -343,6 +351,10 @@
       <title>
         <key>ru</key>
         <value>Открыть протокол загрузки</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Відкрити протокол завантаження</value>
       </title>
       <visible>true</visible>
       <enabled>true</enabled>

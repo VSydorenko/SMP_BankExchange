@@ -82,6 +82,10 @@
       <key>ru</key>
       <value>Дата транзакции</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Дата транзакції</value>
+    </synonym>
     <type>
       <types>Date</types>
       <dateQualifiers>
@@ -99,6 +103,10 @@
     <synonym>
       <key>ru</key>
       <value>Банковский счет</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Банківський рахунок</value>
     </synonym>
     <type>
       <types>CatalogRef.БанковскиеСчета</types>

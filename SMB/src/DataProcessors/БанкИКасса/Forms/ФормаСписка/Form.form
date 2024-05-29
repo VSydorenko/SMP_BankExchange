@@ -5896,10 +5896,6 @@
                     <name>ИнформацияСуммаВалПриходРасширеннаяПодсказка</name>
                     <id>603</id>
                     <title>
-                      <key>ru</key>
-                      <value>&lt;i>Поступило:&lt;/></value>
-                    </title>
-                    <title>
                       <key>uk</key>
                       <value>&lt;i>Надійшло:&lt;/></value>
                     </title>
@@ -5986,10 +5982,6 @@
                   <extendedTooltip>
                     <name>ИнформацияСуммаВалРасходРасширеннаяПодсказка</name>
                     <id>606</id>
-                    <title>
-                      <key>ru</key>
-                      <value>&lt;i>Списано:&lt;/></value>
-                    </title>
                     <title>
                       <key>uk</key>
                       <value>&lt;i>Списано:&lt;/></value>
@@ -6085,10 +6077,6 @@
                     <extendedTooltip>
                       <name>ИнформацияСуммаВалКонечныйОстатокРасширеннаяПодсказка</name>
                       <id>609</id>
-                      <title>
-                        <key>ru</key>
-                        <value>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>           &lt;/>&lt;/>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>                                                 &lt;/>&lt;/></value>
-                      </title>
                       <title>
                         <key>uk</key>
                         <value>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>           &lt;/>&lt;/>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>                                                 &lt;/>&lt;/></value>

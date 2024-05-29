@@ -893,6 +893,10 @@
       <key>ru</key>
       <value>Назначение платежа (загружено из файла, не редактируется)</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Призначення платежу (завантажене з файлу, не редагується)</value>
+    </title>
     <id>2</id>
     <valueType>
       <types>String</types>
@@ -911,6 +915,10 @@
       <key>ru</key>
       <value>Вид операции списания</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Вид операції списання</value>
+    </title>
     <id>3</id>
     <valueType>
       <types>EnumRef.ВидыОперацийРасходСоСчета</types>
@@ -927,6 +935,10 @@
     <title>
       <key>ru</key>
       <value>Вид операции поступления</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Вид операціїї надходження</value>
     </title>
     <id>5</id>
     <valueType>
@@ -1003,6 +1015,10 @@
       <key>ru</key>
       <value>ОК</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>ОК</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
@@ -1023,6 +1039,10 @@
     <title>
       <key>ru</key>
       <value>Отмена</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Скасування</value>
     </title>
     <id>2</id>
     <toolTip>

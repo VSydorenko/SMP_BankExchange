@@ -1347,6 +1347,10 @@
       <key>ru</key>
       <value>Загрузить выписку из файла</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Завантажити виписку з файлу</value>
+    </title>
     <id>3</id>
     <toolTip>
       <key>ru</key>
@@ -1368,6 +1372,10 @@
       <key>ru</key>
       <value>Сохранить платежки в файл</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Зберегти доручення у файл</value>
+    </title>
     <id>4</id>
     <toolTip>
       <key>ru</key>
@@ -1388,6 +1396,10 @@
     <title>
       <key>ru</key>
       <value>По всем</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>По всіх</value>
     </title>
     <id>1</id>
     <toolTip>
@@ -1414,6 +1426,10 @@
       <key>ru</key>
       <value>Настройка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Налаштування</value>
+    </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
@@ -1434,6 +1450,10 @@
     <title>
       <key>ru</key>
       <value>Протоколы и файлы загрузки/выгрузки</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Протокол та файли завантаження/вивантаження</value>
     </title>
     <id>5</id>
     <toolTip>
