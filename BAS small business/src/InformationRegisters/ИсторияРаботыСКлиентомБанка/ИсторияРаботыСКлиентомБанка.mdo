@@ -14,6 +14,10 @@
     <key>ru</key>
     <value>Клиент банка. Протоколы и файлы загрузки/выгрузки</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Історія роботи з клієнт банка (протоколи та файли)</value>
+  </synonym>
   <editType>InDialog</editType>
   <defaultRecordForm>InformationRegister.ИсторияРаботыСКлиентомБанка.Form.ФормаПротокола</defaultRecordForm>
   <defaultListForm>InformationRegister.ИсторияРаботыСКлиентомБанка.Form.ФормаСписка</defaultListForm>

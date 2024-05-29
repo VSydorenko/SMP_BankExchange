@@ -648,6 +648,10 @@
         <key>ru</key>
         <value>Значение</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Значення</value>
+      </title>
       <id>2</id>
       <valueType>
         <types>String</types>
@@ -667,6 +671,10 @@
       <title>
         <key>ru</key>
         <value>Реквизит</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Реквізит</value>
       </title>
       <id>3</id>
       <valueType>
@@ -705,6 +713,10 @@
         <key>ru</key>
         <value>Загружать</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Завантажити</value>
+      </title>
       <id>5</id>
       <valueType>
         <types>Boolean</types>
@@ -718,6 +730,14 @@
     </columns>
     <columns>
       <name>ЭтоКонтрагент</name>
+      <title>
+        <key>ru</key>
+        <value>Это контрагент</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Це контрагент</value>
+      </title>
       <id>6</id>
       <valueType>
         <types>Boolean</types>
@@ -731,6 +751,14 @@
     </columns>
     <columns>
       <name>ВидОперации</name>
+      <title>
+        <key>ru</key>
+        <value>Вид операции</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Вид операції</value>
+      </title>
       <id>7</id>
       <valueType>
         <types>EnumRef.ВидыОперацийРасходСоСчета</types>
@@ -749,6 +777,10 @@
     <title>
       <key>ru</key>
       <value>Отметить все</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Встановити позначку для всіх</value>
     </title>
     <id>1</id>
     <toolTip>
@@ -774,6 +806,10 @@
       <key>ru</key>
       <value>Снять отметку у всех</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Зняти позначку у всіх</value>
+    </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
@@ -797,6 +833,10 @@
     <title>
       <key>ru</key>
       <value>Создать</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Створити</value>
     </title>
     <id>3</id>
     <use>

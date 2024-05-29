@@ -75,6 +75,10 @@
         <key>ru</key>
         <value>Печатная форма платежа</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Друкована форма платежу</value>
+      </title>
       <extendedTooltip>
         <name>ПечатнаяФормаПлатежаРасширеннаяПодсказка</name>
         <id>4</id>
@@ -240,6 +244,10 @@
       <title>
         <key>ru</key>
         <value>Текст из файла выписки</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Текст з файлу виписки</value>
       </title>
       <extendedTooltip>
         <name>ТекстИзФайлаВыпискиРасширеннаяПодсказка</name>
@@ -434,6 +442,10 @@
     <title>
       <key>ru</key>
       <value>Форматированный вид</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Форматований вигляд</value>
     </title>
     <id>1</id>
     <toolTip>

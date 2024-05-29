@@ -104,10 +104,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияПроверкаПоКнопке2</name>
             <id>102</id>
-            <title>
-              <key>ru</key>
-              <value>1. Загрузите файл в Клиент-банк</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -148,10 +144,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияПроверкаПоКнопке5</name>
             <id>174</id>
-            <title>
-              <key>ru</key>
-              <value>2. Выполните проверку</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -229,11 +221,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияПроверкаПоКнопке4</name>
             <id>112</id>
-            <title>
-              <key>ru</key>
-              <value>Эта проверка гарантирует, что платежные реквизиты в файле 
-не подменены вирусом</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -992,10 +979,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияФайлИзменен1</name>
             <id>40</id>
-            <title>
-              <key>ru</key>
-              <value>1. Удалите загруженные операции из Клиент-банка</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -1036,10 +1019,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияФайлИзменен2</name>
             <id>43</id>
-            <title>
-              <key>ru</key>
-              <value>2. Проверьте компьютер антивирусной программой</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -1080,10 +1059,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияФайлИзменен3</name>
             <id>46</id>
-            <title>
-              <key>ru</key>
-              <value>3. Выгрузите файл заново</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -1404,10 +1379,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияФайлУдален1</name>
             <id>52</id>
-            <title>
-              <key>ru</key>
-              <value>● Откройте Клиент-банк и отключите удаление файла после загрузки</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -1448,10 +1419,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияФайлУдален2</name>
             <id>58</id>
-            <title>
-              <key>ru</key>
-              <value>● Проверьте компьютер антивирусной программой</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -1493,10 +1460,6 @@
           <items xsi:type="form:Decoration">
             <name>ДекорацияИнструкцияФайлУдален3</name>
             <id>66</id>
-            <title>
-              <key>ru</key>
-              <value>● Выгрузите файл заново</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>

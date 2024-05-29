@@ -694,6 +694,10 @@
       <key>ru</key>
       <value>ОК</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>ОК</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
@@ -714,6 +718,10 @@
     <title>
       <key>ru</key>
       <value>Отмена</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Скасування</value>
     </title>
     <id>2</id>
     <toolTip>

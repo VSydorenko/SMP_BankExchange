@@ -30,6 +30,10 @@
       <key>ru</key>
       <value>Автоматически подставлять заказ, счет, ПП и док-т расчетов</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Підставляти замовлення, рахунок, ПД з документів розрахунку</value>
+    </synonym>
     <type>
       <types>Boolean</types>
     </type>
@@ -41,6 +45,10 @@
     <synonym>
       <key>ru</key>
       <value>Анализировать историю выбора значений реквизитов</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Аналізувати історію вибору значень</value>
     </synonym>
     <type>
       <types>Boolean</types>
@@ -54,6 +62,10 @@
       <key>ru</key>
       <value>Банковский счет</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Банківський рахунок</value>
+    </synonym>
     <type>
       <types>CatalogRef.БанковскиеСчета</types>
     </type>
@@ -66,6 +78,10 @@
     <synonym>
       <key>ru</key>
       <value>Версия формата</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Версія формату</value>
     </synonym>
     <type>
       <types>String</types>
@@ -118,6 +134,10 @@
       <key>ru</key>
       <value>Заполнять долги автоматически</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Заповнювати борги автоматично</value>
+    </synonym>
     <type>
       <types>Boolean</types>
     </type>
@@ -142,6 +162,10 @@
       <key>ru</key>
       <value>Кодировка</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Кодування</value>
+    </synonym>
     <type>
       <types>String</types>
       <stringQualifiers>
@@ -157,6 +181,10 @@
     <synonym>
       <key>ru</key>
       <value>Конец периода</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Кінець періоду</value>
     </synonym>
     <type>
       <types>Date</types>
@@ -174,6 +202,10 @@
       <key>ru</key>
       <value>Контролировать безопасность обмена с банком</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Контролювати безпеку обміну з банком</value>
+    </synonym>
     <type>
       <types>Boolean</types>
     </type>
@@ -185,6 +217,10 @@
     <synonym>
       <key>ru</key>
       <value>Начало периода</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Початок періоду</value>
     </synonym>
     <type>
       <types>Date</types>
@@ -201,6 +237,10 @@
     <synonym>
       <key>ru</key>
       <value>Не удалять документы, которых нет в выписке</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Не видаляти документи яких нема у виписці</value>
     </synonym>
     <type>
       <types>Boolean</types>
@@ -231,6 +271,10 @@
       <key>ru</key>
       <value>Организация</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Організація</value>
+    </synonym>
     <type>
       <types>CatalogRef.Организации</types>
     </type>
@@ -244,6 +288,10 @@
       <key>ru</key>
       <value>Проверять доступность работы с расширениями файлов при запуске</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Перевіряти доступність роботи з розширенням</value>
+    </synonym>
     <type>
       <types>Boolean</types>
     </type>
@@ -256,6 +304,10 @@
       <key>ru</key>
       <value>Проводить загружаемые</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Проведення документів, що завантажуються</value>
+    </synonym>
     <type>
       <types>Boolean</types>
     </type>
@@ -267,6 +319,10 @@
     <synonym>
       <key>ru</key>
       <value>Название программы</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Назва програми</value>
     </synonym>
     <type>
       <types>String</types>
@@ -284,6 +340,10 @@
       <key>ru</key>
       <value>Создавать контрагентов</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Створювати контрагентів</value>
+    </synonym>
     <type>
       <types>Number</types>
       <numberQualifiers>
@@ -299,6 +359,10 @@
       <key>ru</key>
       <value>Способ зачета</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Спосіб заліку</value>
+    </synonym>
     <type>
       <types>EnumRef.СпособыЗачетаИРаспределенияПлатежей</types>
     </type>
@@ -311,6 +375,10 @@
       <key>ru</key>
       <value>Статья ДДС (приход)</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Стаття РГК (надходження)</value>
+    </synonym>
     <type>
       <types>CatalogRef.СтатьиДвиженияДенежныхСредств</types>
     </type>
@@ -322,6 +390,10 @@
     <synonym>
       <key>ru</key>
       <value>Статья ДДС (расход)</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Стаття РГК (витрата)</value>
     </synonym>
     <type>
       <types>CatalogRef.СтатьиДвиженияДенежныхСредств</types>
@@ -354,6 +426,10 @@
       <key>ru</key>
       <value>Файл выгрузки</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Файл вивантаження</value>
+    </synonym>
     <type>
       <types>String</types>
       <stringQualifiers>
@@ -369,6 +445,10 @@
     <synonym>
       <key>ru</key>
       <value>Файл загрузки</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Файл завантаження</value>
     </synonym>
     <type>
       <types>String</types>
@@ -1517,6 +1597,10 @@
         <key>ru</key>
         <value>Банковский счет</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Банківський рахунок</value>
+      </synonym>
       <type>
         <types>CatalogRef.БанковскиеСчета</types>
       </type>
@@ -1554,6 +1638,10 @@
         <key>ru</key>
         <value>Вид документа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид документа</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1585,8 +1673,8 @@
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
       <fillChecking>ShowError</fillChecking>
-      <fillValue xsi:type="core:ReferenceValue">
-        <value>1948d7bc-4661-44e2-9998-b807e98e4ca5.00000000-0000-0000-0000-000000000000</value>
+      <fillValue xsi:type="core:StringValue">
+        <value></value>
       </fillValue>
     </attributes>
     <attributes uuid="41a8d394-a7e3-4aca-9583-fb8cb04cfe4b">
@@ -1594,6 +1682,10 @@
       <synonym>
         <key>ru</key>
         <value>Вид операции</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид операції</value>
       </synonym>
       <type>
         <types>EnumRef.ВидыОперацийРасходСоСчета</types>
@@ -1649,6 +1741,10 @@
         <key>ru</key>
         <value>Вид оплаты</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид оплати</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1702,6 +1798,10 @@
       <synonym>
         <key>ru</key>
         <value>Готовность</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Готовність</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -1878,6 +1978,10 @@
         <key>ru</key>
         <value>Договор</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Договір</value>
+      </synonym>
       <type>
         <types>String</types>
         <types>CatalogRef.ДоговорыКонтрагентов</types>
@@ -2039,6 +2143,10 @@
         <key>ru</key>
         <value>Документ расчетов</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Документ розрахунків</value>
+      </synonym>
       <type>
         <types>DocumentRef.ПоступлениеНаСчет</types>
         <types>DocumentRef.РасходСоСчета</types>
@@ -2095,6 +2203,10 @@
         <key>ru</key>
         <value>Заказ</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Замовлення</value>
+      </synonym>
       <comment>Заказ</comment>
       <type>
         <types>DocumentRef.ЗаказПоставщику</types>
@@ -2142,6 +2254,10 @@
         <key>ru</key>
         <value>Исходящий</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вихідний</value>
+      </synonym>
       <type>
         <types>Boolean</types>
       </type>
@@ -2154,6 +2270,10 @@
       <synonym>
         <key>ru</key>
         <value>Касса</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Каса</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2170,8 +2290,8 @@
       <quickChoice>DontUse</quickChoice>
       <createOnInput>Use</createOnInput>
       <fillFromFillingValue>true</fillFromFillingValue>
-      <fillValue xsi:type="core:ReferenceValue">
-        <value>98ed910c-8d52-48c4-b52f-c8c6c26a7a52.00000000-0000-0000-0000-000000000000</value>
+      <fillValue xsi:type="core:StringValue">
+        <value></value>
       </fillValue>
     </attributes>
     <attributes uuid="9494ba3d-5058-401c-9d93-35eef6346d4e">
@@ -2332,6 +2452,10 @@
         <key>ru</key>
         <value>Корреспонденция</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Кореспонденція</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2363,6 +2487,10 @@
       <synonym>
         <key>ru</key>
         <value>Назначение платежа</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2506,6 +2634,10 @@
       <name>НомерДок</name>
       <synonym>
         <key>ru</key>
+        <value>Номер</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Номер</value>
       </synonym>
       <type>
@@ -2667,6 +2799,10 @@
       <synonym>
         <key>ru</key>
         <value>Платежное поручение</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платіжне доручення</value>
       </synonym>
       <type>
         <types>DocumentRef.ПлатежноеПоручение</types>
@@ -3337,6 +3473,10 @@
         <key>ru</key>
         <value>Признак аванса</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Ознака авансу</value>
+      </synonym>
       <type>
         <types>Boolean</types>
       </type>
@@ -3399,6 +3539,10 @@
       <synonym>
         <key>ru</key>
         <value>Способ</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Спосіб заліку/розподілу платежів</value>
       </synonym>
       <type>
         <types>EnumRef.СпособыЗачетаИРаспределенияПлатежей</types>
@@ -3498,6 +3642,10 @@
       <synonym>
         <key>ru</key>
         <value>Статья ДДС</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Стаття РГК</value>
       </synonym>
       <type>
         <types>CatalogRef.СтатьиДвиженияДенежныхСредств</types>
@@ -3703,6 +3851,10 @@
       <synonym>
         <key>ru</key>
         <value>Счет на оплату</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Рахунок на оплату</value>
       </synonym>
       <type>
         <types>String</types>

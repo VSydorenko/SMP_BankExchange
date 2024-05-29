@@ -359,6 +359,10 @@
           <key>ru</key>
           <value>Кол-во док.</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Кількість док.</value>
+        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -569,6 +573,10 @@
         <title>
           <key>ru</key>
           <value>Файл обмена</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Файл обміну</value>
         </title>
         <extendedTooltip>
           <name>Группа1РасширеннаяПодсказка</name>
@@ -1163,7 +1171,11 @@
     <name>ОтборТолькоЗагрузкаВ1С</name>
     <title>
       <key>ru</key>
-      <value>Загрузка в 1С</value>
+      <value>Загрузка в BAS</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Завантаження до BAS</value>
     </title>
     <id>4</id>
     <valueType>
@@ -1180,7 +1192,11 @@
     <name>ОтборТолькоВыгрузкаИз1С</name>
     <title>
       <key>ru</key>
-      <value>Выгрузка из 1С</value>
+      <value>Выгрузка из BAS</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Вивантаження з BAS</value>
     </title>
     <id>5</id>
     <valueType>

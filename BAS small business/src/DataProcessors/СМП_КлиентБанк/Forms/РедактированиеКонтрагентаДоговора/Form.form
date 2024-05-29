@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Действия с ключевыми реквизитами</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Дії з ключовими реквізитами</value>
+  </title>
   <items xsi:type="form:FormGroup">
     <name>ГруппаКонтрагентРасчетныйСчет</name>
     <id>101</id>
@@ -107,6 +111,10 @@
             <presentation>
               <key>ru</key>
               <value>Создать нового контрагента при загрузке выписки в 1С</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Створювати нового при завантаженні виписки до BAS</value>
             </presentation>
             <value xsi:type="core:StringValue">
               <value>СоздатьНовогоПриЗагрузке</value>
@@ -221,6 +229,10 @@
               <key>ru</key>
               <value>Создать нового контрагента сейчас</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Створити нового контрагента зараз</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>СоздатьНового</value>
             </value>
@@ -290,6 +302,10 @@
               <key>ru</key>
               <value>Представление в программе</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>Як виглядає у програмі</value>
+            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -352,6 +368,10 @@
               <title>
                 <key>ru</key>
                 <value>Юридическое название</value>
+              </title>
+              <title>
+                <key>uk</key>
+                <value>Повна назва</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -700,6 +720,10 @@
               <key>ru</key>
               <value>Вид контрагента</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>Вид контрагента</value>
+            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -1019,6 +1043,10 @@
               <key>ru</key>
               <value>Использовать существующего контрагента</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Використовувати існуючого контрагента</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>ИспользоватьСуществующего</value>
             </value>
@@ -1186,6 +1214,10 @@
                 <key>ru</key>
                 <value>ИНН</value>
               </title>
+              <title>
+                <key>uk</key>
+                <value>ІПН</value>
+              </title>
               <visible>true</visible>
               <enabled>true</enabled>
               <userVisible>
@@ -1276,6 +1308,10 @@
               <title>
                 <key>ru</key>
                 <value>КПП</value>
+              </title>
+              <title>
+                <key>uk</key>
+                <value>ЄДРПОУ</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -1554,6 +1590,10 @@
               <key>ru</key>
               <value>Не создавать нового контрагента</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Не створювати нового контрагента</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>НеСоздавать</value>
             </value>
@@ -1575,6 +1615,10 @@
       </userVisible>
       <title>
         <key>ru</key>
+        <value>Контрагент</value>
+      </title>
+      <title>
+        <key>uk</key>
         <value>Контрагент</value>
       </title>
       <extendedTooltip>
@@ -1699,6 +1743,10 @@
               <key>ru</key>
               <value>Создавать новый счет контрагента при загрузке выписки в 1С</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Створювати новий рахунок при завантаженні виписки до BAS</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>СоздатьНовогоПриЗагрузке</value>
             </value>
@@ -1810,6 +1858,10 @@
             <presentation>
               <key>ru</key>
               <value>Создать новый расчетный счет контрагента сейчас</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Створити новий рахунок контрагента зараз</value>
             </presentation>
             <value xsi:type="core:StringValue">
               <value>СоздатьНового</value>
@@ -2767,6 +2819,10 @@
               <key>ru</key>
               <value>Использовать существующий счет</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Використовувати існуючий рахунок</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>ИспользоватьСуществующего</value>
             </value>
@@ -3164,6 +3220,10 @@
               <key>ru</key>
               <value>Не создавать новый счет</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Не створювати рахунок</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>НеСоздавать</value>
             </value>
@@ -3186,6 +3246,10 @@
       <title>
         <key>ru</key>
         <value>Р/счет</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Р/рахунок</value>
       </title>
       <extendedTooltip>
         <name>ДействияСоСчетомКонтрагентаРасширеннаяПодсказка</name>
@@ -3308,6 +3372,10 @@
             <presentation>
               <key>ru</key>
               <value>Создавать новый договор при загрузке выписки в 1С</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Створювати новий договір при завантаженні виписки до BAS</value>
             </presentation>
             <value xsi:type="core:StringValue">
               <value>СоздатьНовогоПриЗагрузке</value>
@@ -3536,6 +3604,10 @@
             <presentation>
               <key>ru</key>
               <value>Создать новый договор сейчас</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Створити новий договір зараз</value>
             </presentation>
             <value xsi:type="core:StringValue">
               <value>СоздатьНового</value>
@@ -4200,6 +4272,10 @@
               <key>ru</key>
               <value>Использовать существующий договор</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Використовувати існуючий договір</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>ИспользоватьСуществующего</value>
             </value>
@@ -4505,6 +4581,10 @@
               <key>ru</key>
               <value>Не создавать новый договор</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Не створювати новий договір</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>НеСоздавать</value>
             </value>
@@ -4527,6 +4607,10 @@
       <title>
         <key>ru</key>
         <value>Договор</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Договір</value>
       </title>
       <extendedTooltip>
         <name>ДействияСДоговоромРасширеннаяПодсказка</name>
@@ -5563,6 +5647,10 @@
         <key>ru</key>
         <value>Операция и назначение</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Операція та призначення</value>
+      </title>
       <extendedTooltip>
         <name>ДействияСВидомОперацииРасширеннаяПодсказка</name>
         <id>344</id>
@@ -5698,6 +5786,10 @@
       <title>
         <key>ru</key>
         <value>Сумма</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Сума</value>
       </title>
       <extendedTooltip>
         <name>ДействияССуммойРасширеннаяПодсказка</name>
@@ -6838,6 +6930,10 @@
         <key>ru</key>
         <value>Документы</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Документи</value>
+      </title>
       <extendedTooltip>
         <name>ДействияСоСпискомНайденныхДокументовРасширеннаяПодсказка</name>
         <id>339</id>
@@ -6922,6 +7018,10 @@
       <title>
         <key>ru</key>
         <value>Исходное описание ошибок</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Початковий опис помилок</value>
       </title>
       <extendedTooltip>
         <name>СтраницаОписаниеОшибокРасширеннаяПодсказка</name>
@@ -7883,6 +7983,10 @@
       <key>ru</key>
       <value>Создавать нового</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Створювати новий</value>
+    </title>
     <id>1</id>
     <valueType>
       <types>String</types>
@@ -7901,6 +8005,10 @@
       <key>ru</key>
       <value>Контрагент</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Контрагент</value>
+    </title>
     <id>2</id>
     <valueType>
       <types>CatalogRef.Контрагенты</types>
@@ -7917,6 +8025,10 @@
     <title>
       <key>ru</key>
       <value>Группа</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Група</value>
     </title>
     <id>3</id>
     <valueType>
@@ -7939,6 +8051,10 @@
       <key>ru</key>
       <value>Наименование</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Найменування</value>
+    </title>
     <id>5</id>
     <valueType>
       <types>String</types>
@@ -7958,6 +8074,10 @@
     <title>
       <key>ru</key>
       <value>ИНН</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>ІПН</value>
     </title>
     <id>6</id>
     <valueType>
@@ -7979,6 +8099,10 @@
       <key>ru</key>
       <value>КПП</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>ЄДРПОУ</value>
+    </title>
     <id>7</id>
     <valueType>
       <types>String</types>
@@ -7999,6 +8123,10 @@
       <key>ru</key>
       <value>Использовать существующего контрагента</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Використовувати контрагента, що вже існує</value>
+    </title>
     <id>8</id>
     <valueType>
       <types>String</types>
@@ -8013,6 +8141,10 @@
   </attributes>
   <attributes>
     <name>ПрименитьДляВсехСтрок</name>
+    <title>
+      <key>uk</key>
+      <value>Застосувати для всіх рядків</value>
+    </title>
     <id>4</id>
     <valueType>
       <types>Boolean</types>
@@ -8029,6 +8161,10 @@
     <title>
       <key>ru</key>
       <value>Полное наименование</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Повне найменування</value>
     </title>
     <id>9</id>
     <valueType>
@@ -8076,7 +8212,11 @@
     <name>СоздаватьНовогоПриЗагрузкеВыпискиВ1С</name>
     <title>
       <key>ru</key>
-      <value>Создавать нового при загрузке выписки в 1С</value>
+      <value>Создавать нового при загрузке выписки в BAS</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Створювати нового при завантаженні виписки до BAS</value>
     </title>
     <id>12</id>
     <valueType>
@@ -8113,6 +8253,10 @@
     <title>
       <key>ru</key>
       <value>Договор ссылка</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Договір (посилання)</value>
     </title>
     <id>14</id>
     <valueType>
@@ -8156,6 +8300,10 @@
     <title>
       <key>ru</key>
       <value>Не создавать нового контрагента</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Не створювати нового контрагента</value>
     </title>
     <id>17</id>
     <valueType>
@@ -8202,6 +8350,10 @@
       <key>ru</key>
       <value>Описание ошибок</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Опис помилок</value>
+    </title>
     <id>20</id>
     <valueType>
       <types>String</types>
@@ -8231,7 +8383,11 @@
     <name>СчетКонтрагентаСсылка</name>
     <title>
       <key>ru</key>
-      <value>Счет контрагента ссылка</value>
+      <value>Счет контрагента</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Рахунок контрагента</value>
     </title>
     <id>22</id>
     <valueType>
@@ -8249,6 +8405,10 @@
     <title>
       <key>ru</key>
       <value>Р/счет</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Р/рахунок</value>
     </title>
     <id>23</id>
     <valueType>
@@ -8268,6 +8428,10 @@
       <key>ru</key>
       <value>Создавать новый расчетный счет контрагента</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Створювати новий розрахунковий рахунок контрагента</value>
+    </title>
     <id>24</id>
     <valueType>
       <types>String</types>
@@ -8284,7 +8448,11 @@
     <name>СоздаватьНовыйСчетКонтрагентаПриЗагрузкеВыпискиВ1С</name>
     <title>
       <key>ru</key>
-      <value>Создавать новый счет контрагента при загрузке выписки в 1С</value>
+      <value>Создавать новый счет контрагента при загрузке выписки в BAS</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Створювати новий рахунок контрагента при завантаженні виписки у BAS</value>
     </title>
     <id>25</id>
     <valueType>
@@ -8302,6 +8470,10 @@
     <name>СчетБанк</name>
     <title>
       <key>ru</key>
+      <value>Банк</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>Банк</value>
     </title>
     <id>27</id>
@@ -8322,6 +8494,10 @@
       <key>ru</key>
       <value>Город банка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Місто банка</value>
+    </title>
     <id>28</id>
     <valueType>
       <types>String</types>
@@ -8339,6 +8515,10 @@
     <title>
       <key>ru</key>
       <value>Код банка (БИК)</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Код банка (МФО)</value>
     </title>
     <id>29</id>
     <valueType>
@@ -8358,6 +8538,10 @@
       <key>ru</key>
       <value>Кор. счет банка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Кор. рахунок банка</value>
+    </title>
     <id>30</id>
     <valueType>
       <types>String</types>
@@ -8374,6 +8558,10 @@
     <name>СчетБанкРасчетов</name>
     <title>
       <key>ru</key>
+      <value>РЦ банка</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>РЦ банка</value>
     </title>
     <id>31</id>
@@ -8394,6 +8582,10 @@
       <key>ru</key>
       <value>Местонахождение РЦ банка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Місцезнаходження РЦ банка</value>
+    </title>
     <id>32</id>
     <valueType>
       <types>String</types>
@@ -8411,6 +8603,10 @@
     <title>
       <key>ru</key>
       <value>Код РЦ банка (БИК)</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Код РЦ банка</value>
     </title>
     <id>33</id>
     <valueType>
@@ -8430,6 +8626,10 @@
       <key>ru</key>
       <value>Кор. счет РЦ банка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Кор. рахунок РЦ банка</value>
+    </title>
     <id>34</id>
     <valueType>
       <types>String</types>
@@ -8448,6 +8648,10 @@
       <key>ru</key>
       <value>Не прямые расчеты</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Непрямі розрахунки</value>
+    </title>
     <id>35</id>
     <valueType>
       <types>Boolean</types>
@@ -8464,6 +8668,10 @@
     <title>
       <key>ru</key>
       <value>Использовать существущий счет</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Використовувати існуючий рахунок</value>
     </title>
     <id>36</id>
     <valueType>
@@ -8482,6 +8690,10 @@
     <title>
       <key>ru</key>
       <value>Не создавать новый счет</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Не створювати новий рахунок</value>
     </title>
     <id>37</id>
     <valueType>
@@ -8514,6 +8726,10 @@
       <key>ru</key>
       <value>Договор наименование</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Договір найменування</value>
+    </title>
     <id>39</id>
     <valueType>
       <types>String</types>
@@ -8533,6 +8749,10 @@
     <title>
       <key>ru</key>
       <value>Договор номер</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Договір номер</value>
     </title>
     <id>40</id>
     <valueType>
@@ -8554,6 +8774,10 @@
       <key>ru</key>
       <value>Договор дата</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Договір дата</value>
+    </title>
     <id>41</id>
     <valueType>
       <types>Date</types>
@@ -8574,6 +8798,10 @@
       <key>ru</key>
       <value>Создавать новый договор контрагента</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Створювати новий договір контрагента</value>
+    </title>
     <id>42</id>
     <valueType>
       <types>String</types>
@@ -8590,7 +8818,11 @@
     <name>СоздаватьНовыйДоговорПриЗагрузкеВыпискиВ1С</name>
     <title>
       <key>ru</key>
-      <value>Создавать новый договор при загрузке выписки в 1С</value>
+      <value>Создавать новый договор при загрузке выписки в BAS</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Створювати новий договір при завантаженні виписки у BAS</value>
     </title>
     <id>43</id>
     <valueType>
@@ -8610,6 +8842,10 @@
       <key>ru</key>
       <value>Валюта расчетов</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Валюта розрахунків</value>
+    </title>
     <id>44</id>
     <valueType>
       <types>CatalogRef.Валюты</types>
@@ -8626,6 +8862,10 @@
     <title>
       <key>ru</key>
       <value>в у.е.</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>в у.о.</value>
     </title>
     <id>45</id>
     <valueType>
@@ -8644,6 +8884,10 @@
       <key>ru</key>
       <value>Использовать существущий договор</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Використовувати існуючий договір</value>
+    </title>
     <id>46</id>
     <valueType>
       <types>String</types>
@@ -8661,6 +8905,10 @@
     <title>
       <key>ru</key>
       <value>Не создавать новый договор</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Не створювати новий договір</value>
     </title>
     <id>47</id>
     <valueType>
@@ -8704,7 +8952,11 @@
     <name>СНаименованиемОсновнойДоговор</name>
     <title>
       <key>ru</key>
-      <value>С наименованием основной договор</value>
+      <value>С наименованием &quot;Основной договор&quot;</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>З назвою &quot;Основний договір&quot;</value>
     </title>
     <id>51</id>
     <valueType>
@@ -8832,6 +9084,10 @@
       <key>ru</key>
       <value>Сумма документа</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Сума документа</value>
+    </title>
     <id>59</id>
     <valueType>
       <types>Number</types>
@@ -8870,6 +9126,10 @@
         <key>ru</key>
         <value>Документ</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Документ</value>
+      </title>
       <id>1</id>
       <valueType>
         <types>DocumentRef.ПоступлениеНаСчет</types>
@@ -8890,6 +9150,10 @@
         <key>ru</key>
         <value>№ входящий</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>№ вхідний</value>
+      </title>
       <id>2</id>
       <valueType>
         <types>String</types>
@@ -8906,6 +9170,10 @@
       <name>Дата</name>
       <title>
         <key>ru</key>
+        <value>Дата вх.</value>
+      </title>
+      <title>
+        <key>uk</key>
         <value>Дата вх.</value>
       </title>
       <id>3</id>
@@ -8928,6 +9196,10 @@
         <key>ru</key>
         <value>Сумма</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Сума</value>
+      </title>
       <id>4</id>
       <valueType>
         <types>String</types>
@@ -8945,6 +9217,10 @@
       <title>
         <key>ru</key>
         <value>Вид операции</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Вид операції</value>
       </title>
       <id>5</id>
       <valueType>
@@ -8964,6 +9240,10 @@
         <key>ru</key>
         <value>Контрагент</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Контрагент</value>
+      </title>
       <id>6</id>
       <valueType>
         <types>CatalogRef.Контрагенты</types>
@@ -8977,6 +9257,10 @@
     </columns>
     <columns>
       <name>Проведен</name>
+      <title>
+        <key>uk</key>
+        <value>Проведений</value>
+      </title>
       <id>7</id>
       <valueType>
         <types>Boolean</types>
@@ -8993,6 +9277,10 @@
       <title>
         <key>ru</key>
         <value>Корреспонденция</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Кореспонденція</value>
       </title>
       <id>8</id>
       <valueType>
@@ -9011,6 +9299,10 @@
         <key>ru</key>
         <value>Статья ДДС</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Стаття РГК</value>
+      </title>
       <id>9</id>
       <valueType>
         <types>CatalogRef.СтатьиДвиженияДенежныхСредств</types>
@@ -9027,6 +9319,10 @@
       <title>
         <key>ru</key>
         <value>Счет контрагента</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Рахунок контрагента</value>
       </title>
       <id>10</id>
       <valueType>
@@ -9072,6 +9368,10 @@
         <key>ru</key>
         <value>Дата</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Дата</value>
+      </title>
       <id>13</id>
       <valueType>
         <types>Date</types>
@@ -9111,6 +9411,10 @@
       <key>ru</key>
       <value>Вид операции поступления</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Вид операції надходження</value>
+    </title>
     <id>62</id>
     <valueType>
       <types>EnumRef.ВидыОперацийПоступлениеНаСчет</types>
@@ -9127,6 +9431,10 @@
     <title>
       <key>ru</key>
       <value>Вид операции списания</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Вид операції списання</value>
     </title>
     <id>63</id>
     <valueType>
@@ -9158,6 +9466,10 @@
       <key>ru</key>
       <value>Назначение платежа (загружено из файла, не редактируется)</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Призначення платежу (завантажене з файлу, не редагується)</value>
+    </title>
     <id>65</id>
     <valueType>
       <types>String</types>
@@ -9176,6 +9488,10 @@
       <key>ru</key>
       <value>Статья ДДС</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Стаття РГК</value>
+    </title>
     <id>66</id>
     <valueType>
       <types>CatalogRef.СтатьиДвиженияДенежныхСредств</types>
@@ -9192,6 +9508,10 @@
     <title>
       <key>ru</key>
       <value>Корреспонденция</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Кореспонденція</value>
     </title>
     <id>67</id>
     <valueType>
@@ -9370,6 +9690,10 @@
       <key>ru</key>
       <value>Счет организации</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Рахунок організації</value>
+    </title>
     <id>79</id>
     <valueType>
       <types>CatalogRef.БанковскиеСчета</types>
@@ -9443,6 +9767,10 @@
       <key>ru</key>
       <value>Вид налога</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Вид податку</value>
+    </title>
     <id>50</id>
     <valueType>
       <types>CatalogRef.ВидыНалогов</types>
@@ -9459,6 +9787,10 @@
     <title>
       <key>ru</key>
       <value>Срок уплаты</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Строк сплати</value>
     </title>
     <id>83</id>
     <valueType>
@@ -9478,6 +9810,10 @@
     <name>ДатаДок</name>
     <title>
       <key>ru</key>
+      <value>Дата док</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>Дата док</value>
     </title>
     <id>84</id>
@@ -9526,6 +9862,10 @@
       <key>ru</key>
       <value>ОК</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>ОК</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
@@ -9547,6 +9887,10 @@
       <key>ru</key>
       <value>Отмена</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Скасування</value>
+    </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
@@ -9567,6 +9911,10 @@
     <title>
       <key>ru</key>
       <value>Заполнить ИНН и КПП из выписки</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Заповнити ІПН та ЄДРПОУ з виписки</value>
     </title>
     <id>3</id>
     <toolTip>
@@ -9592,6 +9940,10 @@
     <title>
       <key>ru</key>
       <value>Заполнить договор по данным назначения платежа</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Заповнити договір згідно даних призначення платежу</value>
     </title>
     <id>4</id>
     <toolTip>
