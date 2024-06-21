@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdclass:CommonPicture xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="33b30f65-7e92-414d-8568-b08a8959b65c">
+<mdclass:CommonPicture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="d5bfb392-ca75-4d51-bb5c-30f046fb0143" extendedConfigurationObject="33b30f65-7e92-414d-8568-b08a8959b65c">
   <name>ИзменитьНастройки</name>
-  <synonym>
-    <key>ru</key>
-    <value>Изменить настройки</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>Изменить настройки</value>
-  </synonym>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:CommonPictureExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
 </mdclass:CommonPicture>

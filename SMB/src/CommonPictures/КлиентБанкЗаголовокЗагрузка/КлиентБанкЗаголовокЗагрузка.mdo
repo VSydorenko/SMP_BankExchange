@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdclass:CommonPicture xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="6f3cdf40-8faa-4f9a-be3d-d0a694f393fd">
+<mdclass:CommonPicture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="94c65331-b14a-467e-b66b-c2619e7a6b82" extendedConfigurationObject="6f3cdf40-8faa-4f9a-be3d-d0a694f393fd">
   <name>КлиентБанкЗаголовокЗагрузка</name>
-  <synonym>
-    <key>ru</key>
-    <value>Клиент банк загрузка(заголовок)</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>Клієнт банк завантаження(заголовок)</value>
-  </synonym>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:CommonPictureExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
 </mdclass:CommonPicture>

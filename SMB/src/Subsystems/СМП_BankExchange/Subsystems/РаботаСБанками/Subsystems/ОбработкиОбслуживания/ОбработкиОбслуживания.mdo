@@ -7,16 +7,5 @@
   </synonym>
   <comment>Нужно выгружать во внешние обработки и подключать как элементы справочника</comment>
   <includeHelpInContents>true</includeHelpInContents>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_Сбербанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УниверсалБанк</content>
   <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
 </mdclass:Subsystem>

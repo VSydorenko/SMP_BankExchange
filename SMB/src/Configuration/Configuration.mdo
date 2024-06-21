@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mdclass:Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="aaee27e8-47d2-4aed-9688-e474e54de358">
-  <name>SMP_BankExchange_SMB</name>
+  <name>SMP_BankExchange_SMBru</name>
   <synonym>
     <key>ru</key>
-    <value>BankExchange (SmallBusiness)</value>
+    <value>BankExchange (SMB)</value>
   </synonym>
   <synonym>
     <key>uk</key>
-    <value>BankExchange (SmallBusiness)</value>
+    <value>BankExchange (SMB)</value>
   </synonym>
   <objectBelonging>Adopted</objectBelonging>
   <extension xsi:type="mdclassExtension:ConfigurationExtension">
@@ -29,7 +29,7 @@
   <defaultRunMode>ManagedApplication</defaultRunMode>
   <usePurposes>PersonalComputer</usePurposes>
   <scriptVariant>Russian</scriptVariant>
-  <version>2.0.1.4</version>
+  <version>2.0.1.5</version>
   <interfaceCompatibilityMode>TaxiEnableVersion8_2</interfaceCompatibilityMode>
   <compatibilityMode>8.3.22</compatibilityMode>
   <languages uuid="144f8110-c4c6-4c8a-bb1b-df7d11dc72e2" extendedConfigurationObject="af1b61ff-d1b9-4053-ad85-8259b6626adc">
@@ -100,22 +100,12 @@
   <enums>Enum.ВидыОперацийПоступлениеНаСчет</enums>
   <enums>Enum.ВидыОперацийРасходСоСчета</enums>
   <enums>Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</enums>
-  <enums>Enum.СостоянияВерсийЭД</enums>
   <enums>Enum.СпособыЗачетаИРаспределенияПлатежей</enums>
+  <enums>Enum.СостоянияДокументовЭДО</enums>
   <dataProcessors>DataProcessor.БанкИКасса</dataProcessors>
   <dataProcessors>DataProcessor.СМП_КлиентБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_Сбербанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_ОбработкаВыпискиБанка_УниверсалБанк</dataProcessors>
   <informationRegisters>InformationRegister.ИсторияРаботыСКлиентомБанка</informationRegisters>
   <informationRegisters>InformationRegister.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</informationRegisters>
   <informationRegisters>InformationRegister.СМП_НомерПоследнейТранзакции</informationRegisters>
+  <chartsOfAccounts>ChartOfAccounts.Управленческий</chartsOfAccounts>
 </mdclass:Configuration>

@@ -4,7 +4,7 @@
 	<setForAttributesByDefault>false</setForAttributesByDefault>
 	<independentRightsOfChildObjects>false</independentRightsOfChildObjects>
 	<object>
-		<name>Configuration.SMP_BankExchange_SMB</name>
+		<name>Configuration.SMP_BankExchange_SMBru</name>
 		<right>
 			<name>MainWindowModeNormal</name>
 			<value>true</value>

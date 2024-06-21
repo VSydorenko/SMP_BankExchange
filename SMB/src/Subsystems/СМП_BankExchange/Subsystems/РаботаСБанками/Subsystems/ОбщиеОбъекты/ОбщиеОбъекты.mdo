@@ -19,7 +19,7 @@
   <content>CommonModule.ОбменСБанкамиПереопределяемый</content>
   <content>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</content>
   <content>Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</content>
-  <content>Enum.СостоянияВерсийЭД</content>
+  <content>Enum.СостоянияДокументовЭДО</content>
   <content>CommonPicture.ИзменитьНастройки</content>
   <content>CommonPicture.ОбновлениеВнешнихКомпонентССайта</content>
   <content>InformationRegister.ИсторияРаботыСКлиентомБанка</content>

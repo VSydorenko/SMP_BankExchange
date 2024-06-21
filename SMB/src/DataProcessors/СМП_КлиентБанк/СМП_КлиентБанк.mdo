@@ -1457,7 +1457,7 @@
         <value>Состояние ЭД</value>
       </synonym>
       <type>
-        <types>EnumRef.СостоянияВерсийЭД</types>
+        <types>EnumRef.СостоянияДокументовЭДО</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>

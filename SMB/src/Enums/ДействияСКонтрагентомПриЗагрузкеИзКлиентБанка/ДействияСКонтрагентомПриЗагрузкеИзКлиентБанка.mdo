@@ -1,79 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="fd592794-76e4-4050-9ba3-40b2ad9dd294">
+<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="eedd89a9-db18-4800-8293-7f01eea09e21" extendedConfigurationObject="fd592794-76e4-4050-9ba3-40b2ad9dd294">
   <producedTypes>
-    <refType typeId="bd9a73ce-efb1-45cd-ac63-d66a9c439cd5" valueTypeId="4ec8acd6-4d1f-4c6d-9a15-d2a2e85541c9"/>
-    <listType typeId="0c367d9b-5473-43a4-a037-2d4940acd03f" valueTypeId="a7ad3a19-ad46-4417-b997-a4d4e7087839"/>
-    <managerType typeId="90f0ff5f-6fab-49f8-aeea-700efa63492c" valueTypeId="b17287b7-3c35-4412-ab32-dc3b22576b56"/>
+    <refType typeId="818158ce-6b99-4946-9934-4f1623e914ea" valueTypeId="b5f04851-04b6-4256-a2e4-4b70fa8ef1a8"/>
+    <listType typeId="e5cea625-e4c0-4cdd-bae4-ace523ef8922" valueTypeId="b65c21f6-fef7-467f-8c01-43068f13f464"/>
+    <managerType typeId="628a8d8b-1c2f-45bb-bbb6-2c7f669dd662" valueTypeId="738382bc-bf5c-4fd7-b495-57bd386139a5"/>
   </producedTypes>
   <name>ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</name>
-  <synonym>
-    <key>ru</key>
-    <value>Действия с контрагентом при загрузке из клиент банка</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>Дії з контрагентом при завантаженні із клієнт банку</value>
-  </synonym>
-  <standardAttributes>
-    <dataHistory>Use</dataHistory>
-    <name>Order</name>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-  </standardAttributes>
-  <standardAttributes>
-    <dataHistory>Use</dataHistory>
-    <name>Ref</name>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-  </standardAttributes>
-  <quickChoice>true</quickChoice>
-  <choiceMode>BothWays</choiceMode>
-  <enumValues uuid="cb6ff22a-84b3-4846-842e-30935cae80ae">
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:EnumExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
+  <enumValues uuid="67e0a002-7c34-42ca-9a7a-dfac29a06907" extendedConfigurationObject="cb6ff22a-84b3-4846-842e-30935cae80ae">
     <name>СоздатьНовогоПриЗагрузкеВыпискиВ1С</name>
-    <synonym>
-      <key>ru</key>
-      <value>Будет создан новый при загрузке в 1С</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Буде створений новий при завантаженні в 1С</value>
-    </synonym>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:MdObjectExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+    </extension>
   </enumValues>
-  <enumValues uuid="1837c319-750d-4fac-b183-39d539ae9d02">
+  <enumValues uuid="69c066bb-84e0-4a6c-814f-6fc507db2496" extendedConfigurationObject="1837c319-750d-4fac-b183-39d539ae9d02">
     <name>СоздатьНовогоСейчас</name>
-    <synonym>
-      <key>ru</key>
-      <value>Был создан в диалоге действий</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Був створений у діалозі дій</value>
-    </synonym>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:MdObjectExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+    </extension>
   </enumValues>
-  <enumValues uuid="1697c84c-5f83-42dc-a72f-65306eba38c1">
+  <enumValues uuid="8e1b9c47-1279-4476-bdd5-d618df397659" extendedConfigurationObject="1697c84c-5f83-42dc-a72f-65306eba38c1">
     <name>ИспользоватьСуществующего</name>
-    <synonym>
-      <key>ru</key>
-      <value>Будет использован существующий</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Буде використаний існуючий</value>
-    </synonym>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:MdObjectExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+    </extension>
   </enumValues>
-  <enumValues uuid="4f870f17-a578-44ec-b301-2ccf2c10b569">
+  <enumValues uuid="3fee8fae-3830-4623-8c70-57a3ead3e00c" extendedConfigurationObject="4f870f17-a578-44ec-b301-2ccf2c10b569">
     <name>НеСоздаватьНовогоКонтрагента</name>
-    <synonym>
-      <key>ru</key>
-      <value>Не будет создан</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Не буде створений</value>
-    </synonym>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:MdObjectExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+    </extension>
   </enumValues>
 </mdclass:Enum>
