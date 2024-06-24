@@ -2,11 +2,7 @@
 <form:Form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:form="http://g5.1c.ru/v8/dt/form">
   <title>
     <key>ru</key>
-    <value>Загрузка выписки из банка в BAS</value>
-  </title>
-  <title>
-    <key>uk</key>
-    <value>Завантаження виписки у BAS</value>
+    <value>Загрузка выписки из банка в 1С</value>
   </title>
   <items xsi:type="form:FormGroup">
     <name>СтраницыЗагрузкаИПротокол</name>
@@ -94,10 +90,6 @@
                 <title>
                   <key>ru</key>
                   <value>Период</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Період</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -1183,10 +1175,6 @@
                 <key>ru</key>
                 <value>Действия</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Дії</value>
-              </title>
               <toolTip>
                 <key>ru</key>
                 <value>Группа действия</value>
@@ -1836,10 +1824,6 @@
                     <key>ru</key>
                     <value>Дата</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Дата</value>
-                  </title>
                   <visible>true</visible>
                   <enabled>true</enabled>
                   <userVisible>
@@ -2175,10 +2159,6 @@
                   <key>ru</key>
                   <value>Документ</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Документ</value>
-                </title>
                 <toolTip>
                   <key>ru</key>
                   <value>Строки нач верх</value>
@@ -2383,10 +2363,6 @@
                       <key>ru</key>
                       <value>Зачислено</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Зараховано</value>
-                    </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible>
@@ -2448,10 +2424,6 @@
                     <id>713</id>
                     <title>
                       <key>ru</key>
-                      <value>Списано</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
                       <value>Списано</value>
                     </title>
                     <visible>true</visible>
@@ -2520,10 +2492,6 @@
                     <key>ru</key>
                     <value>Сумма</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Сума</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа поступило и списано</value>
@@ -2556,10 +2524,6 @@
                   <id>381</id>
                   <title>
                     <key>ru</key>
-                    <value>Документ</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
                     <value>Документ</value>
                   </title>
                   <visible>true</visible>
@@ -2667,10 +2631,6 @@
                     <title>
                       <key>ru</key>
                       <value>Контрагент (поставщик, покупатель, прочие)</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Контрагент (постачальник, покупець, інше)</value>
                     </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -2959,10 +2919,6 @@
                   <title>
                     <key>ru</key>
                     <value>ИНН и КПП</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>ІПН та ЄДРПОУ</value>
                   </title>
                   <toolTip>
                     <key>ru</key>
@@ -4133,10 +4089,6 @@
                 <title>
                   <key>ru</key>
                   <value>Данные</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Дані</value>
                 </title>
                 <toolTip>
                   <key>ru</key>
@@ -6074,10 +6026,6 @@
                     <key>ru</key>
                     <value>Всего новых контрагентов:</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Всього нових контрагентів</value>
-                  </title>
                   <visible>true</visible>
                   <enabled>true</enabled>
                   <userVisible>
@@ -6137,10 +6085,6 @@
                   <title>
                     <key>ru</key>
                     <value>Поступило</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Надійшло</value>
                   </title>
                   <titleFont xsi:type="core:FontRef">
                     <font>System.DefaultGUIFont</font>
@@ -6255,10 +6199,6 @@
                   <id>640</id>
                   <title>
                     <key>ru</key>
-                    <value>Списано</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
                     <value>Списано</value>
                   </title>
                   <titleTextColor xsi:type="core:ColorRef">
@@ -7105,10 +7045,6 @@
             <key>ru</key>
             <value>Все не найденные в информационной базе контрагенты и расчетные счета</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Всі контрагенти, що не знайдені в інформаційній базі</value>
-          </title>
           <toolTip>
             <key>ru</key>
             <value>Не найденные реквизиты</value>
@@ -7211,10 +7147,6 @@
               <key>ru</key>
               <value>Описание загрузки выписки</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Опис завантаження виписки</value>
-            </title>
             <toolTip>
               <key>ru</key>
               <value>Описание загрузки выписки</value>
@@ -7304,10 +7236,6 @@
                   <key>ru</key>
                   <value>Посмотреть содержимое файла</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Переглянути вміст файлу</value>
-                </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible>
@@ -7361,10 +7289,6 @@
                 <title>
                   <key>ru</key>
                   <value>Протоколы и файлы загрузки в 1С</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Протокол та файли завантаження у BAS</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -8261,10 +8185,6 @@
       <key>ru</key>
       <value>Текст предупреждения</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Текст попередження</value>
-    </title>
     <id>6</id>
     <valueType>
       <types>String</types>
@@ -8282,10 +8202,6 @@
     <title>
       <key>ru</key>
       <value>Соглашение прямого обмена с банками</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Прямий обмін з банком</value>
     </title>
     <id>8</id>
     <valueType>
@@ -8323,10 +8239,6 @@
       <key>ru</key>
       <value>Электронная выписка банка</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Електронна виписка банку</value>
-    </title>
     <id>10</id>
     <valueType>
       <types>String</types>
@@ -8344,10 +8256,6 @@
     <title>
       <key>ru</key>
       <value>Адрес файла</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Адреса файлу</value>
     </title>
     <id>11</id>
     <valueType/>
@@ -8733,10 +8641,6 @@
       <key>ru</key>
       <value>Остаток</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Залишок</value>
-    </title>
     <id>19</id>
     <valueType>
       <types>Number</types>
@@ -8757,10 +8661,6 @@
     <title>
       <key>ru</key>
       <value>Остаток</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Залишок</value>
     </title>
     <id>20</id>
     <valueType>
@@ -8800,10 +8700,6 @@
       <key>ru</key>
       <value>Банковский счет номер</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Банківський рахунок номер</value>
-    </title>
     <id>22</id>
     <valueType>
       <types>String</types>
@@ -8823,10 +8719,6 @@
     <title>
       <key>ru</key>
       <value>Банковский счет валюта</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Банківськаий рахунок валюта</value>
     </title>
     <id>23</id>
     <valueType>
@@ -9648,15 +9540,29 @@
       <common>true</common>
     </edit>
   </attributes>
+  <attributes>
+    <name>РасширениеФайлаЗагрузки</name>
+    <title>
+      <key>ru</key>
+      <value>Расширение файла загрузки</value>
+    </title>
+    <id>48</id>
+    <valueType>
+      <types>String</types>
+      <stringQualifiers/>
+    </valueType>
+    <view>
+      <common>true</common>
+    </view>
+    <edit>
+      <common>true</common>
+    </edit>
+  </attributes>
   <formCommands>
     <name>Загрузить</name>
     <title>
       <key>ru</key>
       <value>Загрузить</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Завантажити</value>
     </title>
     <id>2</id>
     <toolTip>
@@ -9679,10 +9585,6 @@
     <title>
       <key>ru</key>
       <value>Снять отметку у всех</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Прибрати позначку у всіх</value>
     </title>
     <id>7</id>
     <toolTip>
@@ -9708,10 +9610,6 @@
       <key>ru</key>
       <value>Отметить все</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Встановити позначку у всіх</value>
-    </title>
     <id>8</id>
     <toolTip>
       <key>ru</key>
@@ -9735,10 +9633,6 @@
     <title>
       <key>ru</key>
       <value>Загрузка обновить</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Завантажити/оновити</value>
     </title>
     <id>9</id>
     <toolTip>
@@ -9765,10 +9659,6 @@
       <key>ru</key>
       <value>Создать</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Створити</value>
-    </title>
     <id>10</id>
     <use>
       <common>true</common>
@@ -9788,10 +9678,6 @@
     <title>
       <key>ru</key>
       <value>Отметить все</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Позначити всі</value>
     </title>
     <id>11</id>
     <toolTip>
@@ -9817,10 +9703,6 @@
       <key>ru</key>
       <value>Снять отметку у всех</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Зняти позначку у всіх</value>
-    </title>
     <id>12</id>
     <toolTip>
       <key>ru</key>
@@ -9844,10 +9726,6 @@
     <title>
       <key>ru</key>
       <value>Настройка</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Налаштування</value>
     </title>
     <id>14</id>
     <toolTip>
@@ -9874,10 +9752,6 @@
       <key>ru</key>
       <value>Запросить выписку</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Запросити виписку</value>
-    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
@@ -9899,10 +9773,6 @@
       <key>ru</key>
       <value>Видео урок</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Відео урок</value>
-    </title>
     <id>3</id>
     <toolTip>
       <key>ru</key>
@@ -9918,10 +9788,6 @@
     <title>
       <key>ru</key>
       <value>Отсортировать по возрастанию в текущей колонке</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Сортування за зростанням в поточному стовпчику</value>
     </title>
     <id>5</id>
     <toolTip>
@@ -9949,10 +9815,6 @@
       <key>ru</key>
       <value>Снять отметку у всех строк с предупреждениями</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Зняти позначку у всіх рядків з попередженням</value>
-    </title>
     <id>13</id>
     <toolTip>
       <key>ru</key>
@@ -9973,10 +9835,6 @@
     <title>
       <key>ru</key>
       <value>Открыть файл</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Відкрити файл</value>
     </title>
     <id>15</id>
     <toolTip>
@@ -9999,10 +9857,6 @@
       <key>ru</key>
       <value>Изменить операцию в выделенных строках</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Змінити вид операції у виділених рядках</value>
-    </title>
     <id>16</id>
     <toolTip>
       <key>ru</key>
@@ -10024,10 +9878,6 @@
       <key>ru</key>
       <value>Изменить статью ДДС в выделенных строках</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Змінити статтю РГК у виділених рядках</value>
-    </title>
     <id>17</id>
     <toolTip>
       <key>ru</key>
@@ -10048,10 +9898,6 @@
     <title>
       <key>ru</key>
       <value>Загрузить текущий платеж</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Завантажити поточний платіж</value>
     </title>
     <id>18</id>
     <toolTip>
@@ -10076,10 +9922,6 @@
       <key>ru</key>
       <value>Посмотреть текущий платеж в отдельном окне</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Переглянути поточний платіж в окремому вікні</value>
-    </title>
     <id>19</id>
     <toolTip>
       <key>ru</key>
@@ -10103,10 +9945,6 @@
       <key>ru</key>
       <value>Протоколы и файлы загрузки и выгрузки</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Протокол та файлі завантаження й вивантаження</value>
-    </title>
     <id>20</id>
     <toolTip>
       <key>ru</key>
@@ -10128,10 +9966,6 @@
     <title>
       <key>ru</key>
       <value>Отсортировать по убыванию в текущей колонке</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Сортування за спаданням в поточному стовпчику</value>
     </title>
     <id>21</id>
     <toolTip>
@@ -10158,10 +9992,6 @@
       <key>ru</key>
       <value>Убрать предупреждающий знак в текущей колонке</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Прибрати попередження в поточному стовпчику</value>
-    </title>
     <id>22</id>
     <toolTip>
       <key>ru</key>
@@ -10185,10 +10015,6 @@
       <key>ru</key>
       <value>Убрать предупреждающий знак во всех колонках</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Прибрати попередження у всіх колонках</value>
-    </title>
     <id>23</id>
     <toolTip>
       <key>ru</key>
@@ -10209,10 +10035,6 @@
     <title>
       <key>ru</key>
       <value>Изменить счет корреспонденции в выделенных строках</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Змінити рахунок кореспонденції у виділених рядках</value>
     </title>
     <id>24</id>
     <toolTip>
@@ -10235,10 +10057,6 @@
       <key>ru</key>
       <value>Вернуться обратно к загрузке</value>
     </title>
-    <title>
-      <key>uk</key>
-      <value>Повернутися до завантаження</value>
-    </title>
     <id>26</id>
     <toolTip>
       <key>ru</key>
@@ -10259,10 +10077,6 @@
     <title>
       <key>ru</key>
       <value>Открыть помощник &quot;Действия с ключевыми реквизитами&quot;</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Відкрити помічника &quot;Дії з ключовими реквізитами&quot;</value>
     </title>
     <id>4</id>
     <toolTip>
@@ -10286,10 +10100,6 @@
     <title>
       <key>ru</key>
       <value>Изменить способ во всех строках</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Змінити спосіб у всіх рядках</value>
     </title>
     <id>6</id>
     <toolTip>

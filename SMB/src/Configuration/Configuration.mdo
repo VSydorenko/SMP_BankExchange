@@ -51,6 +51,11 @@
     <languageCode>uk</languageCode>
   </languages>
   <subsystems>Subsystem.СМП_BankExchange</subsystems>
+  <styleItems>StyleItem.ТекстВторостепеннойНадписи</styleItems>
+  <styleItems>StyleItem.ЦветТекстаПравойПанелиОтборов</styleItems>
+  <styleItems>StyleItem.ЦветСуммыПоступления</styleItems>
+  <styleItems>StyleItem.ДосьеВторостепеннаяНадписьЦвет</styleItems>
+  <styleItems>StyleItem.ПеремещениеДСВЖурналахЦвет</styleItems>
   <commonPictures>CommonPicture.СМП_BankExchange</commonPictures>
   <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
   <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
@@ -58,6 +63,11 @@
   <commonPictures>CommonPicture.КлиентБанкЗаголовокВыгрузка</commonPictures>
   <commonPictures>CommonPicture.КлиентБанкЗаголовокЗагрузка</commonPictures>
   <commonPictures>CommonPicture.ОбновлениеВнешнихКомпонентССайта</commonPictures>
+  <commonPictures>CommonPicture.Минус</commonPictures>
+  <commonPictures>CommonPicture.Плюс</commonPictures>
+  <commonPictures>CommonPicture.СоздатьПоШаблону</commonPictures>
+  <commonPictures>CommonPicture.КассаИБанк</commonPictures>
+  <commonPictures>CommonPicture.КлиентБанкКомандаЗагрузить</commonPictures>
   <roles>Role.ДобавлениеИзменениеБанковскихСчетов</roles>
   <roles>Role.ИспользованиеБанкаИКассы</roles>
   <roles>Role.ПолныеПрава</roles>
@@ -102,6 +112,7 @@
   <enums>Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</enums>
   <enums>Enum.СпособыЗачетаИРаспределенияПлатежей</enums>
   <enums>Enum.СостоянияДокументовЭДО</enums>
+  <enums>Enum.ВидыОперацийЭквайринга</enums>
   <dataProcessors>DataProcessor.БанкИКасса</dataProcessors>
   <dataProcessors>DataProcessor.СМП_КлиентБанк</dataProcessors>
   <informationRegisters>InformationRegister.ИсторияРаботыСКлиентомБанка</informationRegisters>

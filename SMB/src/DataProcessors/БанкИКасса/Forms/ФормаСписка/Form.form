@@ -4,10 +4,6 @@
     <key>ru</key>
     <value>Банк и касса</value>
   </title>
-  <title>
-    <key>uk</key>
-    <value>Банк і каса</value>
-  </title>
   <items xsi:type="form:FormGroup">
     <name>Страницы</name>
     <id>680</id>
@@ -93,10 +89,6 @@
                 <key>ru</key>
                 <value>Банк</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Банк</value>
-              </title>
               <extendedTooltip>
                 <name>ПодменюБанкПоступлениеРасширеннаяПодсказка</name>
                 <id>1396</id>
@@ -129,10 +121,6 @@
                 <key>ru</key>
                 <value>Касса</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Каса</value>
-              </title>
               <extendedTooltip>
                 <name>ПодменюКассаПоступлениеРасширеннаяПодсказка</name>
                 <id>1398</id>
@@ -162,10 +150,6 @@
               <key>ru</key>
               <value>Поступление</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Надходження</value>
-            </title>
             <width>10</width>
             <horizontalStretch>false</horizontalStretch>
             <extendedTooltip>
@@ -186,7 +170,7 @@
             <type>Popup</type>
             <extInfo xsi:type="form:PopupGroupExtInfo">
               <picture xsi:type="core:PictureRef">
-                <picture>0:a541f07a-cd5d-47b2-babc-5b80e2099a2e</picture>
+                <picture>CommonPicture.Плюс</picture>
               </picture>
               <representation>Auto</representation>
             </extInfo>
@@ -204,10 +188,6 @@
               </userVisible>
               <title>
                 <key>ru</key>
-                <value>Банк</value>
-              </title>
-              <title>
-                <key>uk</key>
                 <value>Банк</value>
               </title>
               <extendedTooltip>
@@ -242,10 +222,6 @@
                 <key>ru</key>
                 <value>Касса</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Каса</value>
-              </title>
               <extendedTooltip>
                 <name>ПодменюКассаРасходРасширеннаяПодсказка</name>
                 <id>1730</id>
@@ -275,17 +251,9 @@
               <key>ru</key>
               <value>Расход</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Витрата</value>
-            </title>
             <toolTip>
               <key>ru</key>
               <value>Поступление</value>
-            </toolTip>
-            <toolTip>
-              <key>uk</key>
-              <value>Надходження</value>
             </toolTip>
             <extendedTooltip>
               <name>СписокСоздатьРасходРасширеннаяПодсказка</name>
@@ -305,7 +273,7 @@
             <type>Popup</type>
             <extInfo xsi:type="form:PopupGroupExtInfo">
               <picture xsi:type="core:PictureRef">
-                <picture>0:09ae94e7-0bd0-48f9-bf34-ec7a1958c175</picture>
+                <picture>CommonPicture.Минус</picture>
               </picture>
               <representation>Auto</representation>
             </extInfo>
@@ -442,10 +410,6 @@
               <key>ru</key>
               <value>Перемещение</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Переміщення</value>
-            </title>
             <extendedTooltip>
               <name>ПодменюПеремещениеБез57СчетаРасширеннаяПодсказка</name>
               <id>1806</id>
@@ -509,10 +473,6 @@
                   <key>ru</key>
                   <value>Расход из кассы</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Витрата з каси</value>
-                </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible>
@@ -546,10 +506,6 @@
                 <title>
                   <key>ru</key>
                   <value>Поступление на счет</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Надходження на рахунок</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -587,10 +543,6 @@
                 <key>ru</key>
                 <value>Из кассы на счет</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>З каси на рахунок</value>
-              </title>
               <extendedTooltip>
                 <name>ПодменюИзКассыНаСчетРасширеннаяПодсказка</name>
                 <id>1985</id>
@@ -620,10 +572,6 @@
                 <title>
                   <key>ru</key>
                   <value>Поступление в кассу</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Надходження в касу</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -658,10 +606,6 @@
                 <title>
                   <key>ru</key>
                   <value>Расход со счета</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Витрата з рахунку</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -699,10 +643,6 @@
                 <key>ru</key>
                 <value>Со счета в кассу</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>З рахунку в касу</value>
-              </title>
               <extendedTooltip>
                 <name>ПодменюСоСчетаВКассуРасширеннаяПодсказка</name>
                 <id>1987</id>
@@ -732,10 +672,6 @@
                 <title>
                   <key>ru</key>
                   <value>Расход со счета</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Витрата з рахунку</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -770,10 +706,6 @@
                 <title>
                   <key>ru</key>
                   <value>Поступление на счет</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Надходження на рахунок</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -811,10 +743,6 @@
                 <key>ru</key>
                 <value>Между счетами</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Між рахунками</value>
-              </title>
               <extendedTooltip>
                 <name>ПодменюМеждуСчетамиРасширеннаяПодсказка</name>
                 <id>1989</id>
@@ -843,10 +771,6 @@
             <title>
               <key>ru</key>
               <value>Перемещение</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Переміщення</value>
             </title>
             <extendedTooltip>
               <name>ПодменюПеремещениеРасширеннаяПодсказка</name>
@@ -927,7 +851,7 @@
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
             <picture xsi:type="core:PictureRef">
-              <picture>0:2420ee86-97a4-41dc-9594-87d52d64efb3</picture>
+              <picture>CommonPicture.СоздатьПоШаблону</picture>
             </picture>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
@@ -939,10 +863,6 @@
           <title>
             <key>ru</key>
             <value>Создание</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Створення</value>
           </title>
           <extendedTooltip>
             <name>ГруппаСозданиеРасширеннаяПодсказка</name>
@@ -996,11 +916,7 @@
           <id>530</id>
           <title>
             <key>ru</key>
-            <value>Загрузить из банка</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Завантажити з банку</value>
+            <value>Загрузить из банка в 1С</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -1022,7 +938,7 @@
               <horizontalAlign>Left</horizontalAlign>
             </extInfo>
           </extendedTooltip>
-          <commandName>0</commandName>
+          <commandName>Form.Command.ЗагрузитьИзФайла</commandName>
           <representation>PictureAndText</representation>
           <autoMaxWidth>true</autoMaxWidth>
           <autoMaxHeight>true</autoMaxHeight>
@@ -1185,7 +1101,7 @@
             </userVisible>
             <autoFill>true</autoFill>
           </contextMenu>
-          <source>БанковскиеВыпискиСтрокаПоиска</source>
+          <source>СписокБанковскиеВыпискиСтрокаПоиска</source>
           <groupHorizontalAlign>Right</groupHorizontalAlign>
           <extInfo xsi:type="form:SearchStringAdditionExtInfo">
             <maxWidth>25</maxWidth>
@@ -1226,7 +1142,7 @@
             <autoFill>true</autoFill>
           </contextMenu>
           <type>SearchControlAddition</type>
-          <source>БанковскиеВыпискиУправлениеПоиском</source>
+          <source>СписокБанковскиеВыпискиУправлениеПоиском</source>
           <groupHorizontalAlign>Right</groupHorizontalAlign>
           <extInfo xsi:type="form:SearchControlAdditionExtInfo">
             <autoMaxWidth>true</autoMaxWidth>
@@ -1240,10 +1156,6 @@
         <title>
           <key>ru</key>
           <value>Командная панель право</value>
-        </title>
-        <title>
-          <key>uk</key>
-          <value>Командна панель право</value>
         </title>
         <extendedTooltip>
           <name>КоманднаяПанельПравоРасширеннаяПодсказка</name>
@@ -1276,15 +1188,11 @@
             <name>ГруппаСписокИПодвал</name>
             <id>1211</id>
             <items xsi:type="form:Table">
-              <name>БанковскиеВыписки</name>
+              <name>СписокБанковскиеВыписки</name>
               <id>1</id>
               <title>
                 <key>ru</key>
                 <value>Банковские выписки</value>
-              </title>
-              <title>
-                <key>uk</key>
-                <value>Банківські виписки</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -1307,10 +1215,6 @@
                       <id>4</id>
                       <title>
                         <key>ru</key>
-                        <value>Дата</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
                         <value>Дата</value>
                       </title>
                       <visible>true</visible>
@@ -1359,10 +1263,6 @@
                           <key>ru</key>
                           <value>ДЛФ=D</value>
                         </format>
-                        <format>
-                          <key>uk</key>
-                          <value>ДЛФ=D</value>
-                        </format>
                       </extInfo>
                     </items>
                     <items xsi:type="form:FormField">
@@ -1371,10 +1271,6 @@
                       <title>
                         <key>ru</key>
                         <value>Банк / Касса</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Банк / Каса</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -1457,10 +1353,6 @@
                         <key>ru</key>
                         <value>Банк / касса (картинка)</value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Банк / каса (картинка)</value>
-                      </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
                       <userVisible/>
@@ -1499,7 +1391,7 @@
                         <horizontalStretch>true</horizontalStretch>
                         <verticalStretch>true</verticalStretch>
                         <valuesPicture xsi:type="core:PictureRef">
-                          <picture>0:9b6f8c9e-684f-45f8-ac36-e669fd0b0da4</picture>
+                          <picture>CommonPicture.КассаИБанк</picture>
                         </valuesPicture>
                       </extInfo>
                     </items>
@@ -1509,10 +1401,6 @@
                       <title>
                         <key>ru</key>
                         <value>Операция</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Операція</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -1562,10 +1450,6 @@
                         <key>ru</key>
                         <value>Операция</value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Операція</value>
-                      </title>
                       <enabled>true</enabled>
                       <userVisible>
                         <common>true</common>
@@ -1614,10 +1498,6 @@
                       <key>ru</key>
                       <value>Группа хоз. операция</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Група хоз. операція</value>
-                    </title>
                     <extendedTooltip>
                       <name>ГруппаХозОперацияРасширеннаяПодсказка</name>
                       <id>1528</id>
@@ -1646,14 +1526,6 @@
                       <name>СуммаДокумента</name>
                       <id>677</id>
                       <displayImportance>VeryHigh</displayImportance>
-                      <title>
-                        <key>ru</key>
-                        <value>Сумма</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Сума</value>
-                      </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
                       <userVisible>
@@ -1698,12 +1570,8 @@
                           <key>ru</key>
                           <value>ЧДЦ=2</value>
                         </format>
-                        <format>
-                          <key>uk</key>
-                          <value>ЧДЦ=2</value>
-                        </format>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</color>
+                          <color>Style.ЦветСуммыПоступления</color>
                         </textColor>
                       </extInfo>
                     </items>
@@ -1749,7 +1617,7 @@
                         <autoMaxWidth>true</autoMaxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:c7a6d570-1b18-4061-a08f-f0503c1a4fef</color>
+                          <color>Style.ПеремещениеДСВЖурналахЦвет</color>
                         </textColor>
                       </extInfo>
                     </items>
@@ -1760,10 +1628,6 @@
                       <title>
                         <key>ru</key>
                         <value>Сумма</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Сума</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -1806,12 +1670,8 @@
                           <key>ru</key>
                           <value>ЧДЦ=2</value>
                         </format>
-                        <format>
-                          <key>uk</key>
-                          <value>ЧДЦ=2</value>
-                        </format>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</color>
+                          <color>Style.ЦветСуммыПоступления</color>
                         </textColor>
                       </extInfo>
                     </items>
@@ -1821,10 +1681,6 @@
                       <displayImportance>VeryHigh</displayImportance>
                       <title>
                         <key>ru</key>
-                        <value>Списано</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
                         <value>Списано</value>
                       </title>
                       <visible>true</visible>
@@ -1867,10 +1723,6 @@
                           <key>ru</key>
                           <value>ЧДЦ=2</value>
                         </format>
-                        <format>
-                          <key>uk</key>
-                          <value>ЧДЦ=2</value>
-                        </format>
                         <textColor xsi:type="core:ColorRef">
                           <color>Style.SpecialTextColor</color>
                         </textColor>
@@ -1882,10 +1734,6 @@
                       <displayImportance>VeryHigh</displayImportance>
                       <title>
                         <key>ru</key>
-                        <value>Валюта</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
                         <value>Валюта</value>
                       </title>
                       <visible>true</visible>
@@ -1937,10 +1785,6 @@
                       <key>ru</key>
                       <value>Сумма</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Сума</value>
-                    </title>
                     <width>13</width>
                     <horizontalStretch>false</horizontalStretch>
                     <extendedTooltip>
@@ -1973,10 +1817,6 @@
                       <title>
                         <key>ru</key>
                         <value>Откуда / куда</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Звідки / куди</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -2067,10 +1907,6 @@
                         <key>ru</key>
                         <value>Подотчетник</value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Підзвітник</value>
-                      </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
                       <userVisible/>
@@ -2157,11 +1993,7 @@
                     </userVisible>
                     <title>
                       <key>ru</key>
-                      <value>Список контрагент подотчетник</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Список контрагент підзвітник</value>
+                      <value>Контрагент подотчетник</value>
                     </title>
                     <width>20</width>
                     <extendedTooltip>
@@ -2194,10 +2026,6 @@
                       <title>
                         <key>ru</key>
                         <value>Касса / счет</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Каса / рахунок</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -2247,10 +2075,6 @@
                         <key>ru</key>
                         <value>Банковский счет</value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Банківський рахунок</value>
-                      </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
                       <userVisible/>
@@ -2294,10 +2118,6 @@
                       <title>
                         <key>ru</key>
                         <value>Касса</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Каса</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -2425,10 +2245,6 @@
                       <key>ru</key>
                       <value>Касса / счет</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Каса / рахунок</value>
-                    </title>
                     <verticalStretch>true</verticalStretch>
                     <extendedTooltip>
                       <name>ГруппаКассаИСчетРасширеннаяПодсказка</name>
@@ -2460,10 +2276,6 @@
                       <title>
                         <key>ru</key>
                         <value>Назначение</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Призначення</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -2505,7 +2317,7 @@
                         <autoMaxWidth>true</autoMaxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                          <color>Style.ТекстВторостепеннойНадписи</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>System.DefaultGUIFont</font>
@@ -2526,10 +2338,6 @@
                     <title>
                       <key>ru</key>
                       <value>Назначение</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Призначення</value>
                     </title>
                     <extendedTooltip>
                       <name>ГруппаНазначениеРасширеннаяПодсказка</name>
@@ -2558,10 +2366,6 @@
                     <title>
                       <key>ru</key>
                       <value>Организация</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Організація</value>
                     </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -2608,10 +2412,6 @@
                       <key>ru</key>
                       <value>Комментарий</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Коментар</value>
-                    </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible>
@@ -2657,10 +2457,6 @@
                     <id>6</id>
                     <title>
                       <key>ru</key>
-                      <value>Номер</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
                       <value>Номер</value>
                     </title>
                     <visible>true</visible>
@@ -2712,10 +2508,6 @@
                       <key>ru</key>
                       <value>Тип</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Тип</value>
-                    </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible/>
@@ -2761,10 +2553,6 @@
                       <key>ru</key>
                       <value>Вид операции</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Вид операції</value>
-                    </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible/>
@@ -2809,10 +2597,6 @@
                     <title>
                       <key>ru</key>
                       <value>Статья</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Стаття</value>
                     </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -2902,10 +2686,6 @@
                       <key>ru</key>
                       <value>Ссылка</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Посилання</value>
-                    </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible/>
@@ -2982,6 +2762,44 @@
                     <showInFooter>true</showInFooter>
                     <extInfo xsi:type="form:CheckBoxFieldExtInfo"/>
                   </items>
+                  <items xsi:type="form:FormField">
+                    <name>УчитыватьВНУ</name>
+                    <id>1961</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible/>
+                    <extendedTooltip>
+                      <name>УчитыватьВНУРасширеннаяПодсказка</name>
+                      <id>1963</id>
+                      <visible>true</visible>
+                      <enabled>true</enabled>
+                      <userVisible>
+                        <common>true</common>
+                      </userVisible>
+                      <type>Label</type>
+                      <autoMaxWidth>true</autoMaxWidth>
+                      <autoMaxHeight>true</autoMaxHeight>
+                      <extInfo xsi:type="form:LabelDecorationExtInfo">
+                        <horizontalAlign>Left</horizontalAlign>
+                      </extInfo>
+                    </extendedTooltip>
+                    <contextMenu>
+                      <name>УчитыватьВНУКонтекстноеМеню</name>
+                      <id>1962</id>
+                      <visible>true</visible>
+                      <enabled>true</enabled>
+                      <userVisible>
+                        <common>true</common>
+                      </userVisible>
+                      <autoFill>true</autoFill>
+                    </contextMenu>
+                    <type>CheckBoxField</type>
+                    <editMode>Enter</editMode>
+                    <showInHeader>true</showInHeader>
+                    <headerHorizontalAlign>Left</headerHorizontalAlign>
+                    <showInFooter>true</showInFooter>
+                    <extInfo xsi:type="form:CheckBoxFieldExtInfo"/>
+                  </items>
                   <visible>true</visible>
                   <enabled>true</enabled>
                   <userVisible>
@@ -2990,10 +2808,6 @@
                   <title>
                     <key>ru</key>
                     <value>Строка 1</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Рядок1</value>
                   </title>
                   <extendedTooltip>
                     <name>Строка1РасширеннаяПодсказка</name>
@@ -3027,10 +2841,6 @@
                     <key>ru</key>
                     <value>Строка 2</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Рядок2</value>
-                  </title>
                   <extendedTooltip>
                     <name>Строка2РасширеннаяПодсказка</name>
                     <id>661</id>
@@ -3061,10 +2871,6 @@
                   <key>ru</key>
                   <value>Строки</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Рядки</value>
-                </title>
                 <extendedTooltip>
                   <name>СтрокиРасширеннаяПодсказка</name>
                   <id>629</id>
@@ -3087,7 +2893,7 @@
                 </extInfo>
               </items>
               <autoCommandBar>
-                <name>БанковскиеВыпискиКоманднаяПанель</name>
+                <name>СписокБанковскиеВыпискиКоманднаяПанель</name>
                 <id>3</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -3096,16 +2902,21 @@
                 </userVisible>
                 <horizontalAlign>Left</horizontalAlign>
               </autoCommandBar>
+              <handlers xsi:type="form:EventHandlerExtension">
+                <event>OnActivateRow</event>
+                <name>СМП_СписокБанковскиеВыпискиПриАктивизацииСтрокиПосле</name>
+                <callType>After</callType>
+              </handlers>
               <searchStringAddition>
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible>
                   <common>true</common>
                 </userVisible>
-                <name>БанковскиеВыпискиСтрокаПоиска</name>
+                <name>СписокБанковскиеВыпискиСтрокаПоиска</name>
                 <id>633</id>
                 <extendedTooltip>
-                  <name>БанковскиеВыпискиСтрокаПоискаРасширеннаяПодсказка</name>
+                  <name>СписокБанковскиеВыпискиСтрокаПоискаРасширеннаяПодсказка</name>
                   <id>635</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -3120,7 +2931,7 @@
                   </extInfo>
                 </extendedTooltip>
                 <contextMenu>
-                  <name>БанковскиеВыпискиСтрокаПоискаКонтекстноеМеню</name>
+                  <name>СписокБанковскиеВыпискиСтрокаПоискаКонтекстноеМеню</name>
                   <id>634</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -3129,7 +2940,7 @@
                   </userVisible>
                   <autoFill>true</autoFill>
                 </contextMenu>
-                <source>БанковскиеВыпискиСтрокаПоиска</source>
+                <source>СписокБанковскиеВыпискиСтрокаПоиска</source>
                 <extInfo xsi:type="form:SearchStringAdditionExtInfo">
                   <autoMaxWidth>true</autoMaxWidth>
                 </extInfo>
@@ -3140,10 +2951,10 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
-                <name>БанковскиеВыпискиСостояниеПросмотра</name>
+                <name>СписокБанковскиеВыпискиСостояниеПросмотра</name>
                 <id>636</id>
                 <extendedTooltip>
-                  <name>БанковскиеВыпискиСостояниеПросмотраРасширеннаяПодсказка</name>
+                  <name>СписокБанковскиеВыпискиСостояниеПросмотраРасширеннаяПодсказка</name>
                   <id>638</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -3158,7 +2969,7 @@
                   </extInfo>
                 </extendedTooltip>
                 <contextMenu>
-                  <name>БанковскиеВыпискиСостояниеПросмотраКонтекстноеМеню</name>
+                  <name>СписокБанковскиеВыпискиСостояниеПросмотраКонтекстноеМеню</name>
                   <id>637</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -3168,7 +2979,7 @@
                   <autoFill>true</autoFill>
                 </contextMenu>
                 <type>ViewStatusAddition</type>
-                <source>БанковскиеВыпискиСостояниеПросмотра</source>
+                <source>СписокБанковскиеВыпискиСостояниеПросмотра</source>
                 <extInfo xsi:type="form:ViewStatusAdditionExtInfo">
                   <autoMaxWidth>true</autoMaxWidth>
                 </extInfo>
@@ -3179,10 +2990,10 @@
                 <userVisible>
                   <common>true</common>
                 </userVisible>
-                <name>БанковскиеВыпискиУправлениеПоиском</name>
+                <name>СписокБанковскиеВыпискиУправлениеПоиском</name>
                 <id>639</id>
                 <extendedTooltip>
-                  <name>БанковскиеВыпискиУправлениеПоискомРасширеннаяПодсказка</name>
+                  <name>СписокБанковскиеВыпискиУправлениеПоискомРасширеннаяПодсказка</name>
                   <id>641</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -3197,7 +3008,7 @@
                   </extInfo>
                 </extendedTooltip>
                 <contextMenu>
-                  <name>БанковскиеВыпискиУправлениеПоискомКонтекстноеМеню</name>
+                  <name>СписокБанковскиеВыпискиУправлениеПоискомКонтекстноеМеню</name>
                   <id>640</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -3207,13 +3018,13 @@
                   <autoFill>true</autoFill>
                 </contextMenu>
                 <type>SearchControlAddition</type>
-                <source>БанковскиеВыпискиУправлениеПоиском</source>
+                <source>СписокБанковскиеВыпискиУправлениеПоиском</source>
                 <extInfo xsi:type="form:SearchControlAdditionExtInfo">
                   <autoMaxWidth>true</autoMaxWidth>
                 </extInfo>
               </searchControlAddition>
               <extendedTooltip>
-                <name>БанковскиеВыпискиExtendedTooltip</name>
+                <name>СписокБанковскиеВыпискиРасширеннаяПодсказка</name>
                 <id>580</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -3228,7 +3039,7 @@
                 </extInfo>
               </extendedTooltip>
               <contextMenu>
-                <name>БанковскиеВыпискиКонтекстноеМеню</name>
+                <name>СписокБанковскиеВыпискиКонтекстноеМеню</name>
                 <id>2</id>
                 <items xsi:type="form:Button">
                   <name>ПоказатьИтогиКонтекстноеМеню</name>
@@ -3236,10 +3047,6 @@
                   <title>
                     <key>ru</key>
                     <value>Показать итоги</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Показати підсумки</value>
                   </title>
                   <enabled>true</enabled>
                   <userVisible>
@@ -3316,10 +3123,6 @@
                   <key>ru</key>
                   <value>Назначение</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Призначення</value>
-                </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible/>
@@ -3327,10 +3130,6 @@
                 <toolTip>
                   <key>ru</key>
                   <value>Назначение:</value>
-                </toolTip>
-                <toolTip>
-                  <key>uk</key>
-                  <value>Призначення:</value>
                 </toolTip>
                 <toolTipRepresentation>None</toolTipRepresentation>
                 <extendedTooltip>
@@ -3377,10 +3176,6 @@
                 <key>ru</key>
                 <value>Назначение платежа</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Призначення платежу</value>
-              </title>
               <extendedTooltip>
                 <name>ГруппаНазначениеПлатежаРасширеннаяПодсказка</name>
                 <id>1228</id>
@@ -3414,10 +3209,6 @@
               <key>ru</key>
               <value>Список и подвал</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Група список і підвал</value>
-            </title>
             <extendedTooltip>
               <name>ГруппаСписокИПодвалРасширеннаяПодсказка</name>
               <id>1212</id>
@@ -3446,10 +3237,6 @@
           <title>
             <key>ru</key>
             <value>Список</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Група список</value>
           </title>
           <extendedTooltip>
             <name>ГруппаСписокРасширеннаяПодсказка</name>
@@ -3481,10 +3268,6 @@
             <title>
               <key>ru</key>
               <value>Декорация развернуть отборы</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Декорація розгорнути відбори</value>
             </title>
             <enabled>true</enabled>
             <userVisible>
@@ -3545,12 +3328,8 @@
                   <key>ru</key>
                   <value>Период</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Період</value>
-                </title>
                 <titleTextColor xsi:type="core:ColorRef">
-                  <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                 </titleTextColor>
                 <titleFont xsi:type="core:FontRef">
                   <font>Style.NormalTextFont</font>
@@ -3565,10 +3344,6 @@
                 <toolTip>
                   <key>ru</key>
                   <value>Отбор по дате документа</value>
-                </toolTip>
-                <toolTip>
-                  <key>uk</key>
-                  <value>Відбір за датою документа</value>
                 </toolTip>
                 <extendedTooltip>
                   <name>ПредставлениеПериодаРасширеннаяПодсказка</name>
@@ -3605,7 +3380,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <hyperlink>true</hyperlink>
                   <textColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -3675,10 +3450,6 @@
                         <key>ru</key>
                         <value>Операция</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Операція</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -3690,17 +3461,9 @@
                     <key>ru</key>
                     <value>Группа отбор хоз. операция</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір хоз. операція</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
-                  </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
                   </toolTip>
                   <extendedTooltip>
                     <name>ГруппаОтборХозОперацияРасширеннаяПодсказка</name>
@@ -3783,10 +3546,6 @@
                         <key>ru</key>
                         <value>Контрагент, ИНН, телефон</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Контрагент, ІПН, телефон</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -3797,10 +3556,6 @@
                   <title>
                     <key>ru</key>
                     <value>Отбор контрагент</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Відбір контрагент</value>
                   </title>
                   <extendedTooltip>
                     <name>ГруппаОтборКонтрагентРасширеннаяПодсказка</name>
@@ -3889,10 +3644,6 @@
                         <key>ru</key>
                         <value>Счет / касса</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Рахунок / каса</value>
-                      </inputHint>
                       <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
                     </extInfo>
                   </items>
@@ -3905,17 +3656,9 @@
                     <key>ru</key>
                     <value>Отбор счет и касса</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Відбір рахунок і каса</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
-                  </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
                   </toolTip>
                   <extendedTooltip>
                     <name>ГруппаОтборСчетИКассаРасширеннаяПодсказка</name>
@@ -3997,10 +3740,6 @@
                         <key>ru</key>
                         <value>Валюта</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Валюта</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -4012,17 +3751,9 @@
                     <key>ru</key>
                     <value>Отбор валюта</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Відбір валюта</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор организация</value>
-                  </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір організація</value>
                   </toolTip>
                   <extendedTooltip>
                     <name>ГруппаОтборВалютаРасширеннаяПодсказка</name>
@@ -4103,10 +3834,6 @@
                         <key>ru</key>
                         <value>Автор</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Автор</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -4117,10 +3844,6 @@
                   <title>
                     <key>ru</key>
                     <value>Отбор автор</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Відбір автор</value>
                   </title>
                   <extendedTooltip>
                     <name>ГруппаОтборАвторРасширеннаяПодсказка</name>
@@ -4202,10 +3925,6 @@
                         <key>ru</key>
                         <value>Организация</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Організація</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -4216,10 +3935,6 @@
                   <title>
                     <key>ru</key>
                     <value>Отбор организация</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Відбір організація</value>
                   </title>
                   <extendedTooltip>
                     <name>ГруппаОтборОрганизацияРасширеннаяПодсказка</name>
@@ -4252,20 +3967,8 @@
                 </userVisible>
                 <title>
                   <key>ru</key>
-                  <value>Группа отборы</value>
+                  <value>Отборы</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Група відбори</value>
-                </title>
-                <toolTip>
-                  <key>ru</key>
-                  <value>Группа отборы</value>
-                </toolTip>
-                <toolTip>
-                  <key>uk</key>
-                  <value>Група відбори</value>
-                </toolTip>
                 <extendedTooltip>
                   <name>ГруппаОтборыРасширеннаяПодсказка</name>
                   <id>2024</id>
@@ -4290,17 +3993,94 @@
                   <currentRowUse>Auto</currentRowUse>
                 </extInfo>
               </items>
-              <items xsi:type="form:Button">
-                <name>НастроитьОтборы</name>
-                <id>2025</id>
+              <items xsi:type="form:FormGroup">
+                <name>ГруппаРаботаСОтборами</name>
+                <id>2037</id>
+                <items xsi:type="form:Button">
+                  <name>СброситьВсеОтборыБанковскиеВыписки</name>
+                  <id>2039</id>
+                  <visible>true</visible>
+                  <enabled>true</enabled>
+                  <userVisible>
+                    <common>true</common>
+                  </userVisible>
+                  <extendedTooltip>
+                    <name>СброситьВсеОтборыБанковскиеВыпискиРасширеннаяПодсказка</name>
+                    <id>2040</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <type>Label</type>
+                    <autoMaxWidth>true</autoMaxWidth>
+                    <autoMaxHeight>true</autoMaxHeight>
+                    <extInfo xsi:type="form:LabelDecorationExtInfo">
+                      <horizontalAlign>Left</horizontalAlign>
+                    </extInfo>
+                  </extendedTooltip>
+                  <type>UsualButton</type>
+                  <commandName>0</commandName>
+                  <representation>Auto</representation>
+                  <autoMaxWidth>true</autoMaxWidth>
+                  <autoMaxHeight>true</autoMaxHeight>
+                  <groupHorizontalAlign>Left</groupHorizontalAlign>
+                  <placementArea>UserCmds</placementArea>
+                  <textColor xsi:type="core:ColorRef">
+                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                  </textColor>
+                  <representationInContextMenu>Auto</representationInContextMenu>
+                  <shapeRepresentation>None</shapeRepresentation>
+                </items>
+                <items xsi:type="form:Button">
+                  <name>НастроитьОтборы</name>
+                  <id>2025</id>
+                  <visible>true</visible>
+                  <enabled>true</enabled>
+                  <userVisible>
+                    <common>true</common>
+                  </userVisible>
+                  <extendedTooltip>
+                    <name>НастроитьОтборыРасширеннаяПодсказка</name>
+                    <id>2026</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <type>Label</type>
+                    <autoMaxWidth>true</autoMaxWidth>
+                    <autoMaxHeight>true</autoMaxHeight>
+                    <extInfo xsi:type="form:LabelDecorationExtInfo">
+                      <horizontalAlign>Left</horizontalAlign>
+                    </extInfo>
+                  </extendedTooltip>
+                  <type>UsualButton</type>
+                  <commandName>0</commandName>
+                  <representation>Auto</representation>
+                  <autoMaxWidth>true</autoMaxWidth>
+                  <autoMaxHeight>true</autoMaxHeight>
+                  <groupHorizontalAlign>Right</groupHorizontalAlign>
+                  <placementArea>UserCmds</placementArea>
+                  <textColor xsi:type="core:ColorRef">
+                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                  </textColor>
+                  <representationInContextMenu>Auto</representationInContextMenu>
+                  <shapeRepresentation>None</shapeRepresentation>
+                </items>
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <title>
+                  <key>ru</key>
+                  <value>Работа с отборами</value>
+                </title>
+                <horizontalStretch>true</horizontalStretch>
                 <extendedTooltip>
-                  <name>НастроитьОтборыРасширеннаяПодсказка</name>
-                  <id>2026</id>
+                  <name>ГруппаРаботаСОтборамиРасширеннаяПодсказка</name>
+                  <id>2038</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
                   <userVisible>
@@ -4313,20 +4093,14 @@
                     <horizontalAlign>Left</horizontalAlign>
                   </extInfo>
                 </extendedTooltip>
-                <type>UsualButton</type>
-                <commandName>0</commandName>
-                <representation>Auto</representation>
-                <autoMaxWidth>true</autoMaxWidth>
-                <autoMaxHeight>true</autoMaxHeight>
-                <groupHorizontalAlign>Right</groupHorizontalAlign>
-                <placementArea>UserCmds</placementArea>
-                <textColor xsi:type="core:ColorDef">
-                  <red>100</red>
-                  <green>100</green>
-                  <blue>100</blue>
-                </textColor>
-                <representationInContextMenu>Auto</representationInContextMenu>
-                <shapeRepresentation>None</shapeRepresentation>
+                <type>UsualGroup</type>
+                <extInfo xsi:type="form:UsualGroupExtInfo">
+                  <group>AlwaysHorizontal</group>
+                  <showLeftMargin>true</showLeftMargin>
+                  <united>true</united>
+                  <throughAlign>Auto</throughAlign>
+                  <currentRowUse>Auto</currentRowUse>
+                </extInfo>
               </items>
               <items xsi:type="form:FormGroup">
                 <name>ОтборыОбщие</name>
@@ -4468,10 +4242,6 @@
                     <key>ru</key>
                     <value>Левая колонка общих отборов</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Ліва колонка загальних відборів</value>
-                  </title>
                   <extendedTooltip>
                     <name>ГруппаЛеваяКолонкаОбщихОтборовРасширеннаяПодсказка</name>
                     <id>2012</id>
@@ -4506,10 +4276,6 @@
                     <title>
                       <key>ru</key>
                       <value>Поступления</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Надходження</value>
                     </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -4556,10 +4322,6 @@
                     <title>
                       <key>ru</key>
                       <value>Расходы</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Витрати</value>
                     </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -4608,10 +4370,6 @@
                     <key>ru</key>
                     <value>Центральная колонка общих отборов</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група центральна колонка загальних відборів</value>
-                  </title>
                   <extendedTooltip>
                     <name>ГруппаЦентральнаяКолонкаОбщихОтборовРасширеннаяПодсказка</name>
                     <id>2014</id>
@@ -4643,10 +4401,6 @@
                   <title>
                     <key>ru</key>
                     <value>Перемещения</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Переміщення</value>
                   </title>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -4695,10 +4449,6 @@
                   <key>ru</key>
                   <value>Отборы общие</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Відбори загальні</value>
-                </title>
                 <extendedTooltip>
                   <name>ОтборыОбщиеРасширеннаяПодсказка</name>
                   <id>1146</id>
@@ -4737,10 +4487,6 @@
                   <key>ru</key>
                   <value>Отборы общие левая колонка</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Відбори загальні ліва колонка</value>
-                </title>
                 <extendedTooltip>
                   <name>ОтборыОбщиеЛеваяКолонкаРасширеннаяПодсказка</name>
                   <id>1144</id>
@@ -4778,7 +4524,7 @@
                       <name>Дата1</name>
                       <id>1316</id>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -4838,7 +4584,7 @@
                         <autoMaxHeight>true</autoMaxHeight>
                         <hyperlink>true</hyperlink>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.LargeTextFont</font>
@@ -4856,10 +4602,6 @@
                       <title>
                         <key>ru</key>
                         <value>Декорация открыть форму настройки итогов</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Декорація відкрити форму налаштування підсумків</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -4934,7 +4676,7 @@
                       <name>НомерБанковскогоСчета</name>
                       <id>533</id>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </titleTextColor>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -4976,7 +4718,7 @@
                         <autoMaxWidth>true</autoMaxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.NormalTextFont</font>
@@ -4991,10 +4733,6 @@
                     <title>
                       <key>ru</key>
                       <value>Дата и счет касса</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Дата й рахунок каса</value>
                     </title>
                     <extendedTooltip>
                       <name>ГруппаДатаИСчетКассаРасширеннаяПодсказка</name>
@@ -5028,10 +4766,6 @@
                   <title>
                     <key>ru</key>
                     <value>Страница за день</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Сторінка за день</value>
                   </title>
                   <extendedTooltip>
                     <name>СтраницаЗаДеньРасширеннаяПодсказка</name>
@@ -5067,12 +4801,8 @@
                         <key>ru</key>
                         <value>Ведомость в</value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Відомість в</value>
-                      </title>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.LargeTextFont</font>
@@ -5122,7 +4852,7 @@
                         <autoMaxHeight>true</autoMaxHeight>
                         <hyperlink>true</hyperlink>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.LargeTextFont</font>
@@ -5140,10 +4870,6 @@
                       <title>
                         <key>ru</key>
                         <value>Ведомость в:</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Відомість в:</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -5178,7 +4904,7 @@
                       <type>Label</type>
                       <autoMaxHeight>true</autoMaxHeight>
                       <textColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5198,10 +4924,6 @@
                       <title>
                         <key>ru</key>
                         <value>Декорация открыть форму настройки итогов2</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Декорація відкрити форму налаштування підсумків2</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -5280,10 +5002,6 @@
                     <key>ru</key>
                     <value>Страница за период</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Сторінка за період</value>
-                  </title>
                   <extendedTooltip>
                     <name>СтраницаЗаПериодРасширеннаяПодсказка</name>
                     <id>1313</id>
@@ -5318,12 +5036,8 @@
                         <key>ru</key>
                         <value>Остатки в</value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Залишки в</value>
-                      </title>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5372,7 +5086,7 @@
                         <autoMaxHeight>true</autoMaxHeight>
                         <hyperlink>true</hyperlink>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.NormalTextFont</font>
@@ -5385,10 +5099,6 @@
                       <title>
                         <key>ru</key>
                         <value>Остаток в:</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Залишок в:</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -5425,7 +5135,7 @@
                       <autoMaxWidth>true</autoMaxWidth>
                       <autoMaxHeight>true</autoMaxHeight>
                       <textColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5445,10 +5155,6 @@
                       <title>
                         <key>ru</key>
                         <value>Декорация открыть форму настройки итогов3</value>
-                      </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Декорація відкрити форму налаштування підсумків3</value>
                       </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -5527,12 +5233,8 @@
                         <key>ru</key>
                         <value>Курс на 01.01.2001</value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>Курс на 01.01.2001</value>
-                      </title>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5583,7 +5285,7 @@
                         <maxWidth>9</maxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.NormalTextFont</font>
@@ -5628,10 +5330,6 @@
                     <key>ru</key>
                     <value>Страница в валюте</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Сторінка у валюті</value>
-                  </title>
                   <extendedTooltip>
                     <name>СтраницаВВалютеРасширеннаяПодсказка</name>
                     <id>1328</id>
@@ -5662,10 +5360,6 @@
                     <title>
                       <key>ru</key>
                       <value>Настройка вывода итогов</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Налаштування виводу підсумків</value>
                     </title>
                     <enabled>true</enabled>
                     <userVisible>
@@ -5702,7 +5396,7 @@
                     <autoMaxHeight>true</autoMaxHeight>
                     <horizontalStretch>false</horizontalStretch>
                     <textColor xsi:type="core:ColorRef">
-                      <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                      <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                     </textColor>
                     <font xsi:type="core:FontRef">
                       <font>Style.NormalTextFont</font>
@@ -5724,10 +5418,6 @@
                   <title>
                     <key>ru</key>
                     <value>Страница не отображать итоги</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Сторінка не відображати підсумки</value>
                   </title>
                   <extendedTooltip>
                     <name>СтраницаНеОтображатьИтогиРасширеннаяПодсказка</name>
@@ -5759,10 +5449,6 @@
                   <key>ru</key>
                   <value>Страницы итоги</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Сторінки підсумки</value>
-                </title>
                 <extendedTooltip>
                   <name>СтраницыИтогиРасширеннаяПодсказка</name>
                   <id>1309</id>
@@ -5793,12 +5479,8 @@
                     <key>ru</key>
                     <value>Начало дня</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Початок дня</value>
-                  </title>
                   <titleTextColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </titleTextColor>
                   <enabled>true</enabled>
                   <userVisible>
@@ -5812,10 +5494,6 @@
                     <title>
                       <key>ru</key>
                       <value>Начало дня:</value>
-                    </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Початок дня:</value>
                     </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -5856,14 +5534,10 @@
                       <key>ru</key>
                       <value>ЧДЦ=2</value>
                     </editFormat>
-                    <editFormat>
-                      <key>uk</key>
-                      <value>ЧДЦ=2</value>
-                    </editFormat>
                     <chooseType>true</chooseType>
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textColor xsi:type="core:ColorRef">
-                      <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                      <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -5880,12 +5554,8 @@
                     <key>ru</key>
                     <value>Поступило</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Надійшло</value>
-                  </title>
                   <titleTextColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </titleTextColor>
                   <enabled>true</enabled>
                   <userVisible>
@@ -5899,10 +5569,6 @@
                       <key>ru</key>
                       <value>&lt;i>Поступило:&lt;/></value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>&lt;i>Надійшло:&lt;/></value>
-                    </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible>
@@ -5914,7 +5580,7 @@
                     <autoMaxHeight>true</autoMaxHeight>
                     <horizontalStretch>true</horizontalStretch>
                     <textColor xsi:type="core:ColorRef">
-                      <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                      <color>Style.ТекстВторостепеннойНадписи</color>
                     </textColor>
                     <extInfo xsi:type="form:LabelDecorationExtInfo">
                       <horizontalAlign>Left</horizontalAlign>
@@ -5946,15 +5612,11 @@
                       <key>ru</key>
                       <value>ЧДЦ=2</value>
                     </editFormat>
-                    <editFormat>
-                      <key>uk</key>
-                      <value>ЧДЦ=2</value>
-                    </editFormat>
                     <chooseType>true</chooseType>
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textEdit>true</textEdit>
                     <textColor xsi:type="core:ColorRef">
-                      <color>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</color>
+                      <color>Style.ЦветСуммыПоступления</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -5971,12 +5633,8 @@
                     <key>ru</key>
                     <value>Списано</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Списано</value>
-                  </title>
                   <titleTextColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </titleTextColor>
                   <enabled>true</enabled>
                   <userVisible>
@@ -5990,10 +5648,6 @@
                       <key>ru</key>
                       <value>&lt;i>Списано:&lt;/></value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>&lt;i>Списано:&lt;/></value>
-                    </title>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible>
@@ -6005,7 +5659,7 @@
                     <autoMaxHeight>true</autoMaxHeight>
                     <horizontalStretch>true</horizontalStretch>
                     <textColor xsi:type="core:ColorRef">
-                      <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                      <color>Style.ТекстВторостепеннойНадписи</color>
                     </textColor>
                     <extInfo xsi:type="form:LabelDecorationExtInfo">
                       <horizontalAlign>Left</horizontalAlign>
@@ -6037,10 +5691,6 @@
                       <key>ru</key>
                       <value>ЧДЦ=2</value>
                     </editFormat>
-                    <editFormat>
-                      <key>uk</key>
-                      <value>ЧДЦ=2</value>
-                    </editFormat>
                     <chooseType>true</chooseType>
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textEdit>true</textEdit>
@@ -6065,12 +5715,8 @@
                       <key>ru</key>
                       <value>Остаток</value>
                     </title>
-                    <title>
-                      <key>uk</key>
-                      <value>Залишок</value>
-                    </title>
                     <titleTextColor xsi:type="core:ColorRef">
-                      <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                      <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                     </titleTextColor>
                     <titleFont xsi:type="core:FontRef">
                       <font>Style.NormalTextFont</font>
@@ -6089,10 +5735,6 @@
                         <key>ru</key>
                         <value>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>           &lt;/>&lt;/>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>                                                 &lt;/>&lt;/></value>
                       </title>
-                      <title>
-                        <key>uk</key>
-                        <value>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>           &lt;/>&lt;/>&lt;i>&lt;u>                                                                   &lt;/>&lt;/>&lt;i>&lt;u>                                                 &lt;/>&lt;/></value>
-                      </title>
                       <visible>true</visible>
                       <enabled>true</enabled>
                       <userVisible>
@@ -6104,7 +5746,7 @@
                       <autoMaxHeight>true</autoMaxHeight>
                       <horizontalStretch>true</horizontalStretch>
                       <textColor xsi:type="core:ColorRef">
-                        <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                        <color>Style.ТекстВторостепеннойНадписи</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>System.DefaultGUIFont</font>
@@ -6139,7 +5781,7 @@
                       <autoMaxHeight>true</autoMaxHeight>
                       <horizontalStretch>true</horizontalStretch>
                       <textColor xsi:type="core:ColorRef">
-                        <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -6224,7 +5866,7 @@
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textEdit>true</textEdit>
                     <textColor xsi:type="core:ColorRef">
-                      <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                      <color>Style.ТекстВторостепеннойНадписи</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -6282,7 +5924,7 @@
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textEdit>true</textEdit>
                     <textColor xsi:type="core:ColorRef">
-                      <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                      <color>Style.ТекстВторостепеннойНадписи</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -6300,10 +5942,6 @@
                 <title>
                   <key>ru</key>
                   <value>Элементы итогов</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Група елементи підсумків</value>
                 </title>
                 <extendedTooltip>
                   <name>ГруппаЭлементыИтоговРасширеннаяПодсказка</name>
@@ -6335,10 +5973,6 @@
                 <title>
                   <key>ru</key>
                   <value>Таблица итогов</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Таблиця підсумків</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -6444,16 +6078,8 @@
                       <key>ru</key>
                       <value>ЧДЦ=2; ЧН=0.00</value>
                     </format>
-                    <format>
-                      <key>uk</key>
-                      <value>ЧДЦ=2; ЧН=0.00</value>
-                    </format>
                     <editFormat>
                       <key>ru</key>
-                      <value>ЧДЦ=2; ЧН=0.00</value>
-                    </editFormat>
-                    <editFormat>
-                      <key>uk</key>
                       <value>ЧДЦ=2; ЧН=0.00</value>
                     </editFormat>
                     <chooseType>true</chooseType>
@@ -6625,7 +6251,7 @@
                 <searchOnInput>Auto</searchOnInput>
                 <initialListView>Auto</initialListView>
                 <textColor xsi:type="core:ColorRef">
-                  <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                 </textColor>
                 <borderColor xsi:type="core:ColorRef">
                   <color>Style.FormBackColor</color>
@@ -6645,10 +6271,6 @@
                   <title>
                     <key>ru</key>
                     <value>свернуть</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>згорнути</value>
                   </title>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -6684,7 +6306,7 @@
                   <autoMaxWidth>true</autoMaxWidth>
                   <autoMaxHeight>true</autoMaxHeight>
                   <textColor xsi:type="core:ColorRef">
-                    <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                    <color>Style.ТекстВторостепеннойНадписи</color>
                   </textColor>
                   <extInfo xsi:type="form:LabelDecorationExtInfo">
                     <hyperlink>true</hyperlink>
@@ -6700,10 +6322,6 @@
                 <title>
                   <key>ru</key>
                   <value>Отступ</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Відступ</value>
                 </title>
                 <horizontalStretch>true</horizontalStretch>
                 <verticalStretch>true</verticalStretch>
@@ -6741,10 +6359,6 @@
                 <key>ru</key>
                 <value>Фильтры настройки и доп инфо</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Фільтри налаштування і дод інфо</value>
-              </title>
               <extendedTooltip>
                 <name>ФильтрыНастройкиИДопИнфоРасширеннаяПодсказка</name>
                 <id>1358</id>
@@ -6773,10 +6387,6 @@
             <title>
               <key>ru</key>
               <value>Правая панель страницы</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Права панель сторінки</value>
             </title>
             <horizontalStretch>false</horizontalStretch>
             <extendedTooltip>
@@ -6807,10 +6417,6 @@
           <title>
             <key>ru</key>
             <value>Правая панель</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Права панель</value>
           </title>
           <horizontalStretch>false</horizontalStretch>
           <extendedTooltip>
@@ -6845,10 +6451,6 @@
           <key>ru</key>
           <value>Журнал документов и панель отборов</value>
         </title>
-        <title>
-          <key>uk</key>
-          <value>Журнал документів і панель відборів</value>
-        </title>
         <extendedTooltip>
           <name>ГруппаСписокИПанельРасширеннаяПодсказка</name>
           <id>643</id>
@@ -6881,10 +6483,6 @@
         <key>ru</key>
         <value>Поступления и расход</value>
       </title>
-      <title>
-        <key>uk</key>
-        <value>Надходження й витрати</value>
-      </title>
       <extendedTooltip>
         <name>СтраницаДокументыПоБанкуРасширеннаяПодсказка</name>
         <id>683</id>
@@ -6910,7 +6508,7 @@
       <name>СтраницаПлатежныеПоручения</name>
       <id>684</id>
       <items xsi:type="form:FormGroup">
-        <name>КоманднаяПанельПП</name>
+        <name>КоманднаяПанельПлатежныхПоручений</name>
         <id>1712</id>
         <items xsi:type="form:FormGroup">
           <name>ПодменюСоздатьПлатежноеПоручение</name>
@@ -6923,10 +6521,6 @@
           <title>
             <key>ru</key>
             <value>Создать</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Створити</value>
           </title>
           <extendedTooltip>
             <name>ПодменюСоздатьПлатежноеПоручениеРасширеннаяПодсказка</name>
@@ -7084,10 +6678,6 @@
               <key>ru</key>
               <value>Подменю печать</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Підменю друк</value>
-            </title>
             <extendedTooltip>
               <name>ПодменюПечатьРасширеннаяПодсказка</name>
               <id>1965</id>
@@ -7120,10 +6710,6 @@
             <key>ru</key>
             <value>Важные команды</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Важливі команди</value>
-          </title>
           <extendedTooltip>
             <name>ГруппаВажныеКомандыРасширеннаяПодсказка</name>
             <id>964</id>
@@ -7148,11 +6734,7 @@
           <id>967</id>
           <title>
             <key>ru</key>
-            <value>Выгрузить в банк</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Вивантажити в банк</value>
+            <value>Выгрузить из 1С в банк</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -7226,10 +6808,6 @@
               <key>ru</key>
               <value>Заполнение</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Заповнення</value>
-            </title>
             <extendedTooltip>
               <name>ПодменюЗаполнитьРасширеннаяПодсказка</name>
               <id>2001</id>
@@ -7258,10 +6836,6 @@
           <title>
             <key>ru</key>
             <value>Глобальные команды</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Глобальні команди</value>
           </title>
           <extendedTooltip>
             <name>ГруппаГлобальныеКомандыРасширеннаяПодсказка</name>
@@ -7346,19 +6920,15 @@
             <key>ru</key>
             <value>Строка поиска (платежные поручения)</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Рядок пошуку (платіжні доручення)</value>
-          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
             <common>true</common>
           </userVisible>
-          <name>СтрокаПоискаПП</name>
+          <name>СтрокаПоискаПлатежныхПоручений</name>
           <id>1717</id>
           <extendedTooltip>
-            <name>СтрокаПоискаППРасширеннаяПодсказка</name>
+            <name>СтрокаПоискаПлатежныхПорученийРасширеннаяПодсказка</name>
             <id>1719</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -7373,7 +6943,7 @@
             </extInfo>
           </extendedTooltip>
           <contextMenu>
-            <name>СтрокаПоискаППКонтекстноеМеню</name>
+            <name>СтрокаПоискаПлатежныхПорученийКонтекстноеМеню</name>
             <id>1718</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -7392,19 +6962,15 @@
             <key>ru</key>
             <value>Управление поиском (платежные поручения)</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Управління пошуком (платіжні доручення)</value>
-          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
             <common>true</common>
           </userVisible>
-          <name>УправлениеПоискомПП</name>
+          <name>УправлениеПоискомПлатежныхПоручений</name>
           <id>1714</id>
           <extendedTooltip>
-            <name>УправлениеПоискомППРасширеннаяПодсказка</name>
+            <name>УправлениеПоискомПлатежныхПорученийРасширеннаяПодсказка</name>
             <id>1716</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -7419,7 +6985,7 @@
             </extInfo>
           </extendedTooltip>
           <contextMenu>
-            <name>УправлениеПоискомППКонтекстноеМеню</name>
+            <name>УправлениеПоискомПлатежныхПорученийКонтекстноеМеню</name>
             <id>1715</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -7443,12 +7009,8 @@
           <key>ru</key>
           <value>Командная панель (платежные поручения)</value>
         </title>
-        <title>
-          <key>uk</key>
-          <value>Командна панель (платіжні доручення)</value>
-        </title>
         <extendedTooltip>
-          <name>КоманднаяПанельППРасширеннаяПодсказка</name>
+          <name>КоманднаяПанельПлатежныхПорученийРасширеннаяПодсказка</name>
           <id>1713</id>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -7469,7 +7031,7 @@
         </extInfo>
       </items>
       <items xsi:type="form:FormGroup">
-        <name>ГруппаСписокИПраваяПанельПП</name>
+        <name>ГруппаСписокИПраваяПанельПлатежныхПоручений</name>
         <id>1544</id>
         <items xsi:type="form:FormGroup">
           <name>ГруппаПлатежныеПоручения</name>
@@ -7480,10 +7042,6 @@
             <title>
               <key>ru</key>
               <value>Список платежных поручений</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Список платіжних доручень</value>
             </title>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -7538,10 +7096,6 @@
               <titleLocation>None</titleLocation>
               <toolTip>
                 <key>ru</key>
-                <value>Оплачено</value>
-              </toolTip>
-              <toolTip>
-                <key>uk</key>
                 <value>Оплачено</value>
               </toolTip>
               <extendedTooltip>
@@ -7624,10 +7178,6 @@
                   <key>ru</key>
                   <value>ДЛФ=D</value>
                 </format>
-                <format>
-                  <key>uk</key>
-                  <value>ДЛФ=D</value>
-                </format>
               </extInfo>
             </items>
             <items xsi:type="form:FormField">
@@ -7680,10 +7230,6 @@
               <id>899</id>
               <title>
                 <key>ru</key>
-                <value>Кому</value>
-              </title>
-              <title>
-                <key>uk</key>
                 <value>Кому</value>
               </title>
               <visible>true</visible>
@@ -7764,6 +7310,49 @@
               <showInFooter>true</showInFooter>
               <extInfo xsi:type="form:LabelFieldExtInfo">
                 <width>17</width>
+                <autoMaxWidth>true</autoMaxWidth>
+                <autoMaxHeight>true</autoMaxHeight>
+              </extInfo>
+            </items>
+            <items xsi:type="form:FormField">
+              <name>СписокПлатежныхПорученийСостояние</name>
+              <id>2054</id>
+              <visible>true</visible>
+              <enabled>true</enabled>
+              <userVisible>
+                <common>true</common>
+              </userVisible>
+              <extendedTooltip>
+                <name>СписокПлатежныхПорученийСостояниеРасширеннаяПодсказка</name>
+                <id>2056</id>
+                <visible>true</visible>
+                <enabled>true</enabled>
+                <userVisible>
+                  <common>true</common>
+                </userVisible>
+                <type>Label</type>
+                <autoMaxWidth>true</autoMaxWidth>
+                <autoMaxHeight>true</autoMaxHeight>
+                <extInfo xsi:type="form:LabelDecorationExtInfo">
+                  <horizontalAlign>Left</horizontalAlign>
+                </extInfo>
+              </extendedTooltip>
+              <contextMenu>
+                <name>СписокПлатежныхПорученийСостояниеКонтекстноеМеню</name>
+                <id>2055</id>
+                <visible>true</visible>
+                <enabled>true</enabled>
+                <userVisible>
+                  <common>true</common>
+                </userVisible>
+                <autoFill>true</autoFill>
+              </contextMenu>
+              <type>LabelField</type>
+              <editMode>Enter</editMode>
+              <showInHeader>true</showInHeader>
+              <headerHorizontalAlign>Left</headerHorizontalAlign>
+              <showInFooter>true</showInFooter>
+              <extInfo xsi:type="form:LabelFieldExtInfo">
                 <autoMaxWidth>true</autoMaxWidth>
                 <autoMaxHeight>true</autoMaxHeight>
               </extInfo>
@@ -7908,10 +7497,6 @@
               <title>
                 <key>ru</key>
                 <value>Сумма платежного поручения</value>
-              </title>
-              <title>
-                <key>uk</key>
-                <value>Сума платіжного доручення</value>
               </title>
               <extendedTooltip>
                 <name>СуммаПлатежногоПорученияРасширеннаяПодсказка</name>
@@ -8100,13 +7685,13 @@
               </extInfo>
             </items>
             <items xsi:type="form:FormField">
-              <name>СписокПлатежныхПорученийКодКОАТУУ</name>
+              <name>СписокПлатежныхПорученийКодОКАТО</name>
               <id>893</id>
               <visible>true</visible>
               <enabled>true</enabled>
               <userVisible/>
               <extendedTooltip>
-                <name>СписокПлатежныхПорученийКодКОАТУУРасширеннаяПодсказка</name>
+                <name>СписокПлатежныхПорученийКодОКАТОРасширеннаяПодсказка</name>
                 <id>895</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -8121,7 +7706,7 @@
                 </extInfo>
               </extendedTooltip>
               <contextMenu>
-                <name>СписокПлатежныхПорученийКодКОАТУУКонтекстноеМеню</name>
+                <name>СписокПлатежныхПорученийКодОКАТОКонтекстноеМеню</name>
                 <id>894</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -8183,13 +7768,13 @@
               </extInfo>
             </items>
             <items xsi:type="form:FormField">
-              <name>СписокПлатежныхПорученийЕДРПОУПлательщика</name>
+              <name>СписокПлатежныхПорученийКПППлательщика</name>
               <id>902</id>
               <visible>true</visible>
               <enabled>true</enabled>
               <userVisible/>
               <extendedTooltip>
-                <name>СписокПлатежныхПорученийЕДРПОУПлательщикаРасширеннаяПодсказка</name>
+                <name>СписокПлатежныхПорученийКПППлательщикаРасширеннаяПодсказка</name>
                 <id>904</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -8204,7 +7789,7 @@
                 </extInfo>
               </extendedTooltip>
               <contextMenu>
-                <name>СписокПлатежныхПорученийЕДРПОУПлательщикаКонтекстноеМеню</name>
+                <name>СписокПлатежныхПорученийКПППлательщикаКонтекстноеМеню</name>
                 <id>903</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -8225,13 +7810,13 @@
               </extInfo>
             </items>
             <items xsi:type="form:FormField">
-              <name>СписокПлатежныхПорученийЕДРПОУПолучателя</name>
+              <name>СписокПлатежныхПорученийКПППолучателя</name>
               <id>905</id>
               <visible>true</visible>
               <enabled>true</enabled>
               <userVisible/>
               <extendedTooltip>
-                <name>СписокПлатежныхПорученийЕДРПОУПолучателяРасширеннаяПодсказка</name>
+                <name>СписокПлатежныхПорученийКПППолучателяРасширеннаяПодсказка</name>
                 <id>907</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -8246,7 +7831,7 @@
                 </extInfo>
               </extendedTooltip>
               <contextMenu>
-                <name>СписокПлатежныхПорученийЕДРПОУПолучателяКонтекстноеМеню</name>
+                <name>СписокПлатежныхПорученийКПППолучателяКонтекстноеМеню</name>
                 <id>906</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -8930,15 +8515,52 @@
               </extInfo>
             </items>
             <items xsi:type="form:FormField">
+              <name>СписокПлатежныхПорученийСостояниеВерсииЭД</name>
+              <id>935</id>
+              <visible>true</visible>
+              <enabled>true</enabled>
+              <userVisible/>
+              <extendedTooltip>
+                <name>СписокПлатежныхПорученийСостояниеВерсииЭДРасширеннаяПодсказка</name>
+                <id>937</id>
+                <visible>true</visible>
+                <enabled>true</enabled>
+                <userVisible>
+                  <common>true</common>
+                </userVisible>
+                <type>Label</type>
+                <autoMaxWidth>true</autoMaxWidth>
+                <autoMaxHeight>true</autoMaxHeight>
+                <extInfo xsi:type="form:LabelDecorationExtInfo">
+                  <horizontalAlign>Left</horizontalAlign>
+                </extInfo>
+              </extendedTooltip>
+              <contextMenu>
+                <name>СписокПлатежныхПорученийСостояниеВерсииЭДКонтекстноеМеню</name>
+                <id>936</id>
+                <visible>true</visible>
+                <enabled>true</enabled>
+                <userVisible>
+                  <common>true</common>
+                </userVisible>
+                <autoFill>true</autoFill>
+              </contextMenu>
+              <type>LabelField</type>
+              <editMode>Enter</editMode>
+              <showInHeader>true</showInHeader>
+              <headerHorizontalAlign>Left</headerHorizontalAlign>
+              <showInFooter>true</showInFooter>
+              <extInfo xsi:type="form:LabelFieldExtInfo">
+                <autoMaxWidth>true</autoMaxWidth>
+                <autoMaxHeight>true</autoMaxHeight>
+              </extInfo>
+            </items>
+            <items xsi:type="form:FormField">
               <name>СписокПлатежныхПорученийСсылка</name>
               <id>857</id>
               <title>
                 <key>ru</key>
                 <value>Ссылка (нажмите кнопку &quot;Добавить поля&quot;)</value>
-              </title>
-              <title>
-                <key>uk</key>
-                <value>Посилання (натисніть кнопку &quot;Додати поля&quot;)</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -9233,18 +8855,14 @@
             </extInfo>
           </items>
           <items xsi:type="form:FormGroup">
-            <name>ГруппаНазначениеПлатежаПП</name>
+            <name>ГруппаНазначениеПлатежаПлатежныхПоручений</name>
             <id>1722</id>
             <items xsi:type="form:FormField">
-              <name>НазначениеПлатежаПП</name>
+              <name>НазначениеПлатежаПлатежныхПоручений</name>
               <id>1724</id>
               <title>
                 <key>ru</key>
                 <value>Назначение</value>
-              </title>
-              <title>
-                <key>uk</key>
-                <value>Призначення</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -9256,13 +8874,9 @@
                 <key>ru</key>
                 <value>Назначение:</value>
               </toolTip>
-              <toolTip>
-                <key>uk</key>
-                <value>Призначення:</value>
-              </toolTip>
               <toolTipRepresentation>None</toolTipRepresentation>
               <extendedTooltip>
-                <name>НазначениеПлатежаППРасширеннаяПодсказка</name>
+                <name>НазначениеПлатежаПлатежныхПорученийРасширеннаяПодсказка</name>
                 <id>1726</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -9277,7 +8891,7 @@
                 </extInfo>
               </extendedTooltip>
               <contextMenu>
-                <name>НазначениеПлатежаППКонтекстноеМеню</name>
+                <name>НазначениеПлатежаПлатежныхПорученийКонтекстноеМеню</name>
                 <id>1725</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -9307,20 +8921,12 @@
               <key>ru</key>
               <value>Назначение платежа (платежные поручения)</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Призначення платежу (платіжні доручення)</value>
-            </title>
             <toolTip>
               <key>ru</key>
               <value>Группа назначение платежа</value>
             </toolTip>
-            <toolTip>
-              <key>uk</key>
-              <value>Група призначення платежу</value>
-            </toolTip>
             <extendedTooltip>
-              <name>ГруппаНазначениеПлатежаППРасширеннаяПодсказка</name>
+              <name>ГруппаНазначениеПлатежаПлатежныхПорученийРасширеннаяПодсказка</name>
               <id>1723</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -9352,10 +8958,6 @@
             <key>ru</key>
             <value>Платежные поручения</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Платіжні доручення</value>
-          </title>
           <extendedTooltip>
             <name>ГруппаПлатежныеПорученияРасширеннаяПодсказка</name>
             <id>1721</id>
@@ -9381,26 +8983,22 @@
           </extInfo>
         </items>
         <items xsi:type="form:FormGroup">
-          <name>ПраваяПанельПП</name>
+          <name>ПраваяПанельПлатежныхПоручений</name>
           <id>1546</id>
           <displayImportance>Low</displayImportance>
           <items xsi:type="form:Decoration">
-            <name>ДекорацияРазвернутьОтборыПП</name>
+            <name>ДекорацияРазвернутьОтборыПлатежныхПоручений</name>
             <id>1553</id>
             <title>
               <key>ru</key>
               <value>Декорация развернуть отборы</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Декорація розгорнути відбори</value>
             </title>
             <enabled>true</enabled>
             <userVisible>
               <common>true</common>
             </userVisible>
             <extendedTooltip>
-              <name>ДекорацияРазвернутьОтборыППРасширеннаяПодсказка</name>
+              <name>ДекорацияРазвернутьОтборыПлатежныхПорученийРасширеннаяПодсказка</name>
               <id>1555</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -9415,7 +9013,7 @@
               </extInfo>
             </extendedTooltip>
             <contextMenu>
-              <name>ДекорацияРазвернутьОтборыППКонтекстноеМеню</name>
+              <name>ДекорацияРазвернутьОтборыПлатежныхПорученийКонтекстноеМеню</name>
               <id>1554</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -9442,24 +9040,20 @@
             </extInfo>
           </items>
           <items xsi:type="form:FormGroup">
-            <name>ПраваяПанельСтраницыПП</name>
+            <name>ПраваяПанельСтраницыПлатежныхПоручений</name>
             <id>1559</id>
             <items xsi:type="form:FormGroup">
-              <name>ФильтрыНастройкиИДопИнфоПП</name>
+              <name>ФильтрыНастройкиИДопИнфоПлатежныхПоручений</name>
               <id>1561</id>
               <items xsi:type="form:FormField">
-                <name>ПредставлениеПериодаПП</name>
+                <name>ПредставлениеПериодаПлатежныхПоручений</name>
                 <id>1563</id>
                 <title>
                   <key>ru</key>
                   <value>Период</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Період</value>
-                </title>
                 <titleTextColor xsi:type="core:ColorRef">
-                  <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                 </titleTextColor>
                 <titleFont xsi:type="core:FontRef">
                   <font>Style.NormalTextFont</font>
@@ -9475,12 +9069,8 @@
                   <key>ru</key>
                   <value>Отбор по дате документа</value>
                 </toolTip>
-                <toolTip>
-                  <key>uk</key>
-                  <value>Відбір за датою документа</value>
-                </toolTip>
                 <extendedTooltip>
-                  <name>ПредставлениеПериодаППРасширеннаяПодсказка</name>
+                  <name>ПредставлениеПериодаПлатежныхПорученийРасширеннаяПодсказка</name>
                   <id>1565</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -9495,7 +9085,7 @@
                   </extInfo>
                 </extendedTooltip>
                 <contextMenu>
-                  <name>ПредставлениеПериодаППКонтекстноеМеню</name>
+                  <name>ПредставлениеПериодаПлатежныхПорученийКонтекстноеМеню</name>
                   <id>1564</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -9514,7 +9104,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <hyperlink>true</hyperlink>
                   <textColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -9523,13 +9113,13 @@
                 </extInfo>
               </items>
               <items xsi:type="form:FormGroup">
-                <name>ГруппаОтборыПП</name>
+                <name>ГруппаОтборыПлатежныхПоручений</name>
                 <id>2027</id>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборВидОперацииПП</name>
+                  <name>ГруппаОтборВидОперацииПлатежныхПоручений</name>
                   <id>1566</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборВидОперацииПП</name>
+                    <name>ОтборВидОперацииПлатежныхПоручений</name>
                     <id>1568</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9538,7 +9128,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборВидОперацииППРасширеннаяПодсказка</name>
+                      <name>ОтборВидОперацииПлатежныхПорученийРасширеннаяПодсказка</name>
                       <id>1570</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9553,7 +9143,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборВидОперацииППКонтекстноеМеню</name>
+                      <name>ОтборВидОперацииПлатежныхПорученийКонтекстноеМеню</name>
                       <id>1569</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9584,10 +9174,6 @@
                         <key>ru</key>
                         <value>Операция</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Операція</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -9599,20 +9185,12 @@
                     <key>ru</key>
                     <value>Вид операции</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Вид операції</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
                   </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
-                  </toolTip>
                   <extendedTooltip>
-                    <name>ГруппаОтборВидОперацииППРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборВидОперацииПлатежныхПорученийРасширеннаяПодсказка</name>
                     <id>1567</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9636,10 +9214,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборКонтрагентПП</name>
+                  <name>ГруппаОтборКонтрагентПлатежныхПоручений</name>
                   <id>1571</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборКонтрагентПП</name>
+                    <name>ОтборКонтрагентПлатежныхПоручений</name>
                     <id>1573</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9648,7 +9226,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборКонтрагентППРасширеннаяПодсказка</name>
+                      <name>ОтборКонтрагентПлатежныхПорученийРасширеннаяПодсказка</name>
                       <id>1575</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9663,7 +9241,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборКонтрагентППКонтекстноеМеню</name>
+                      <name>ОтборКонтрагентПлатежныхПорученийКонтекстноеМеню</name>
                       <id>1574</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9692,10 +9270,6 @@
                         <key>ru</key>
                         <value>Контрагент, ИНН, телефон</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Контрагент, ІПН, телефон</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -9707,12 +9281,8 @@
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
-                  </title>
                   <extendedTooltip>
-                    <name>ГруппаОтборКонтрагентППРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборКонтрагентПлатежныхПорученийРасширеннаяПодсказка</name>
                     <id>1572</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9736,10 +9306,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборСчетИКассаПП</name>
+                  <name>ГруппаОтборСчетИКассаПлатежныхПоручений</name>
                   <id>1576</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборСчетПП</name>
+                    <name>ОтборСчетПлатежныхПоручений</name>
                     <id>1734</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9748,7 +9318,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборСчетППРасширеннаяПодсказка</name>
+                      <name>ОтборСчетПлатежныхПорученийРасширеннаяПодсказка</name>
                       <id>1736</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9763,7 +9333,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборСчетППКонтекстноеМеню</name>
+                      <name>ОтборСчетПлатежныхПорученийКонтекстноеМеню</name>
                       <id>1735</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9797,10 +9367,6 @@
                         <key>ru</key>
                         <value>Счет</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Рахунок</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -9812,20 +9378,12 @@
                     <key>ru</key>
                     <value>Группа отбор счет и касса</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір рахунок і каса</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
                   </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
-                  </toolTip>
                   <extendedTooltip>
-                    <name>ГруппаОтборСчетИКассаППРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборСчетИКассаПлатежныхПорученийРасширеннаяПодсказка</name>
                     <id>1577</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9849,10 +9407,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборВалютаПП</name>
+                  <name>ГруппаОтборВалютаПлатежныхПоручений</name>
                   <id>1581</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборВалютаПП</name>
+                    <name>ОтборВалютаПлатежныхПоручений</name>
                     <id>1583</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9861,7 +9419,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборВалютаППРасширеннаяПодсказка</name>
+                      <name>ОтборВалютаПлатежныхПорученийРасширеннаяПодсказка</name>
                       <id>1585</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9876,7 +9434,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборВалютаППКонтекстноеМеню</name>
+                      <name>ОтборВалютаПлатежныхПорученийКонтекстноеМеню</name>
                       <id>1584</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9905,10 +9463,6 @@
                         <key>ru</key>
                         <value>Валюта</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Валюта</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -9920,20 +9474,12 @@
                     <key>ru</key>
                     <value>Группа отбор валюта</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір валюта</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор организация</value>
                   </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір організація</value>
-                  </toolTip>
                   <extendedTooltip>
-                    <name>ГруппаОтборВалютаППРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборВалютаПлатежныхПорученийРасширеннаяПодсказка</name>
                     <id>1582</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9957,10 +9503,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборАвторПП</name>
+                  <name>ГруппаОтборАвторПлатежныхПоручений</name>
                   <id>1927</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборАвторПП</name>
+                    <name>ОтборАвторПлатежныхПоручений</name>
                     <id>1929</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -9969,7 +9515,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборАвторППРасширеннаяПодсказка</name>
+                      <name>ОтборАвторПлатежныхПорученийРасширеннаяПодсказка</name>
                       <id>1931</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -9984,7 +9530,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборАвторППКонтекстноеМеню</name>
+                      <name>ОтборАвторПлатежныхПорученийКонтекстноеМеню</name>
                       <id>1930</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -10012,10 +9558,6 @@
                         <key>ru</key>
                         <value>Автор</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Автор</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -10027,12 +9569,8 @@
                     <key>ru</key>
                     <value>Группа отбор автор</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір автор</value>
-                  </title>
                   <extendedTooltip>
-                    <name>ГруппаОтборАвторППРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборАвторПлатежныхПорученийРасширеннаяПодсказка</name>
                     <id>1928</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -10056,10 +9594,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборОрганизацияПП</name>
+                  <name>ГруппаОтборОрганизацияПлатежныхПоручений</name>
                   <id>1586</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборОрганизацияПП</name>
+                    <name>ОтборОрганизацияПлатежныхПоручений</name>
                     <id>1588</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -10068,7 +9606,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборОрганизацияППРасширеннаяПодсказка</name>
+                      <name>ОтборОрганизацияПлатежныхПорученийРасширеннаяПодсказка</name>
                       <id>1590</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -10083,7 +9621,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборОрганизацияППКонтекстноеМеню</name>
+                      <name>ОтборОрганизацияПлатежныхПорученийКонтекстноеМеню</name>
                       <id>1589</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -10112,10 +9650,6 @@
                         <key>ru</key>
                         <value>Организация</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Організація</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -10127,13 +9661,100 @@
                     <key>ru</key>
                     <value>Группа отбор организация</value>
                   </title>
+                  <extendedTooltip>
+                    <name>ГруппаОтборОрганизацияПлатежныхПорученийРасширеннаяПодсказка</name>
+                    <id>1587</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <type>Label</type>
+                    <autoMaxWidth>true</autoMaxWidth>
+                    <autoMaxHeight>true</autoMaxHeight>
+                    <extInfo xsi:type="form:LabelDecorationExtInfo">
+                      <horizontalAlign>Left</horizontalAlign>
+                    </extInfo>
+                  </extendedTooltip>
+                  <type>UsualGroup</type>
+                  <extInfo xsi:type="form:UsualGroupExtInfo">
+                    <group>Vertical</group>
+                    <showLeftMargin>true</showLeftMargin>
+                    <united>true</united>
+                    <throughAlign>Auto</throughAlign>
+                    <currentRowUse>Auto</currentRowUse>
+                  </extInfo>
+                </items>
+                <items xsi:type="form:FormGroup">
+                  <name>ГруппаОтборСостояниеПлатежныхПоручений</name>
+                  <id>2049</id>
+                  <items xsi:type="form:FormField">
+                    <name>ОтборСостояниеПлатежныхПоручений</name>
+                    <id>2051</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <titleLocation>None</titleLocation>
+                    <extendedTooltip>
+                      <name>ОтборСостояниеПлатежныхПорученийРасширеннаяПодсказка</name>
+                      <id>2053</id>
+                      <visible>true</visible>
+                      <enabled>true</enabled>
+                      <userVisible>
+                        <common>true</common>
+                      </userVisible>
+                      <type>Label</type>
+                      <autoMaxWidth>true</autoMaxWidth>
+                      <autoMaxHeight>true</autoMaxHeight>
+                      <extInfo xsi:type="form:LabelDecorationExtInfo">
+                        <horizontalAlign>Left</horizontalAlign>
+                      </extInfo>
+                    </extendedTooltip>
+                    <contextMenu>
+                      <name>ОтборСостояниеПлатежныхПорученийКонтекстноеМеню</name>
+                      <id>2052</id>
+                      <visible>true</visible>
+                      <enabled>true</enabled>
+                      <userVisible>
+                        <common>true</common>
+                      </userVisible>
+                      <autoFill>true</autoFill>
+                    </contextMenu>
+                    <type>InputField</type>
+                    <editMode>Enter</editMode>
+                    <showInHeader>true</showInHeader>
+                    <headerHorizontalAlign>Left</headerHorizontalAlign>
+                    <showInFooter>true</showInFooter>
+                    <extInfo xsi:type="form:InputFieldExtInfo">
+                      <width>23</width>
+                      <autoMaxWidth>true</autoMaxWidth>
+                      <autoMaxHeight>true</autoMaxHeight>
+                      <wrap>true</wrap>
+                      <openButton>false</openButton>
+                      <createButton>false</createButton>
+                      <chooseType>true</chooseType>
+                      <typeDomainEnabled>true</typeDomainEnabled>
+                      <textEdit>true</textEdit>
+                      <inputHint>
+                        <key>ru</key>
+                        <value>Состояние</value>
+                      </inputHint>
+                    </extInfo>
+                  </items>
+                  <visible>true</visible>
+                  <enabled>true</enabled>
+                  <userVisible>
+                    <common>true</common>
+                  </userVisible>
                   <title>
-                    <key>uk</key>
-                    <value>Група відбір організація</value>
+                    <key>ru</key>
+                    <value>Группа отбор состояние</value>
                   </title>
                   <extendedTooltip>
-                    <name>ГруппаОтборОрганизацияППРасширеннаяПодсказка</name>
-                    <id>1587</id>
+                    <name>ГруппаОтборСостояниеПлатежныхПорученийРасширеннаяПодсказка</name>
+                    <id>2050</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
                     <userVisible>
@@ -10162,22 +9783,10 @@
                 </userVisible>
                 <title>
                   <key>ru</key>
-                  <value>Группа отборы ПП</value>
+                  <value>Отборы платежных поручений</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Група відбори ПП</value>
-                </title>
-                <toolTip>
-                  <key>ru</key>
-                  <value>Группа отборы ПП</value>
-                </toolTip>
-                <toolTip>
-                  <key>uk</key>
-                  <value>Група відбори ПП</value>
-                </toolTip>
                 <extendedTooltip>
-                  <name>ГруппаОтборыППРасширеннаяПодсказка</name>
+                  <name>ГруппаОтборыПлатежныхПорученийРасширеннаяПодсказка</name>
                   <id>2028</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -10200,17 +9809,94 @@
                   <currentRowUse>Auto</currentRowUse>
                 </extInfo>
               </items>
-              <items xsi:type="form:Button">
-                <name>НастроитьОтборыПП</name>
-                <id>2029</id>
+              <items xsi:type="form:FormGroup">
+                <name>ГруппаРаботаСОтборамиПлатежныхПоручений</name>
+                <id>2041</id>
+                <items xsi:type="form:Button">
+                  <name>СброситьВсеОтборыПлатежныхПоручений</name>
+                  <id>2043</id>
+                  <visible>true</visible>
+                  <enabled>true</enabled>
+                  <userVisible>
+                    <common>true</common>
+                  </userVisible>
+                  <extendedTooltip>
+                    <name>СброситьВсеОтборыПлатежныхПорученийРасширеннаяПодсказка</name>
+                    <id>2044</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <type>Label</type>
+                    <autoMaxWidth>true</autoMaxWidth>
+                    <autoMaxHeight>true</autoMaxHeight>
+                    <extInfo xsi:type="form:LabelDecorationExtInfo">
+                      <horizontalAlign>Left</horizontalAlign>
+                    </extInfo>
+                  </extendedTooltip>
+                  <type>UsualButton</type>
+                  <commandName>0</commandName>
+                  <representation>Auto</representation>
+                  <autoMaxWidth>true</autoMaxWidth>
+                  <autoMaxHeight>true</autoMaxHeight>
+                  <groupHorizontalAlign>Left</groupHorizontalAlign>
+                  <placementArea>UserCmds</placementArea>
+                  <textColor xsi:type="core:ColorRef">
+                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                  </textColor>
+                  <representationInContextMenu>Auto</representationInContextMenu>
+                  <shapeRepresentation>None</shapeRepresentation>
+                </items>
+                <items xsi:type="form:Button">
+                  <name>НастроитьОтборыПлатежныхПоручений</name>
+                  <id>2029</id>
+                  <visible>true</visible>
+                  <enabled>true</enabled>
+                  <userVisible>
+                    <common>true</common>
+                  </userVisible>
+                  <extendedTooltip>
+                    <name>НастроитьОтборыПлатежныхПорученийРасширеннаяПодсказка</name>
+                    <id>2030</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <type>Label</type>
+                    <autoMaxWidth>true</autoMaxWidth>
+                    <autoMaxHeight>true</autoMaxHeight>
+                    <extInfo xsi:type="form:LabelDecorationExtInfo">
+                      <horizontalAlign>Left</horizontalAlign>
+                    </extInfo>
+                  </extendedTooltip>
+                  <type>UsualButton</type>
+                  <commandName>0</commandName>
+                  <representation>Auto</representation>
+                  <autoMaxWidth>true</autoMaxWidth>
+                  <autoMaxHeight>true</autoMaxHeight>
+                  <groupHorizontalAlign>Right</groupHorizontalAlign>
+                  <placementArea>UserCmds</placementArea>
+                  <textColor xsi:type="core:ColorRef">
+                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                  </textColor>
+                  <representationInContextMenu>Auto</representationInContextMenu>
+                  <shapeRepresentation>None</shapeRepresentation>
+                </items>
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <title>
+                  <key>ru</key>
+                  <value>Группа работа с отборами</value>
+                </title>
+                <horizontalStretch>true</horizontalStretch>
                 <extendedTooltip>
-                  <name>НастроитьОтборыППРасширеннаяПодсказка</name>
-                  <id>2030</id>
+                  <name>ГруппаРаботаСОтборамиПлатежныхПорученийРасширеннаяПодсказка</name>
+                  <id>2042</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
                   <userVisible>
@@ -10223,20 +9909,14 @@
                     <horizontalAlign>Left</horizontalAlign>
                   </extInfo>
                 </extendedTooltip>
-                <type>UsualButton</type>
-                <commandName>0</commandName>
-                <representation>Auto</representation>
-                <autoMaxWidth>true</autoMaxWidth>
-                <autoMaxHeight>true</autoMaxHeight>
-                <groupHorizontalAlign>Right</groupHorizontalAlign>
-                <placementArea>UserCmds</placementArea>
-                <textColor xsi:type="core:ColorDef">
-                  <red>100</red>
-                  <green>100</green>
-                  <blue>100</blue>
-                </textColor>
-                <representationInContextMenu>Auto</representationInContextMenu>
-                <shapeRepresentation>None</shapeRepresentation>
+                <type>UsualGroup</type>
+                <extInfo xsi:type="form:UsualGroupExtInfo">
+                  <group>AlwaysHorizontal</group>
+                  <showLeftMargin>true</showLeftMargin>
+                  <united>true</united>
+                  <throughAlign>Auto</throughAlign>
+                  <currentRowUse>Auto</currentRowUse>
+                </extInfo>
               </items>
               <items xsi:type="form:FormGroup">
                 <name>ГруппаВедомостьИНастройка</name>
@@ -10247,10 +9927,6 @@
                   <title>
                     <key>ru</key>
                     <value>Открыть отчет по деньгам</value>
-                  </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Відкрити звіт за коштами</value>
                   </title>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -10288,7 +9964,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -10303,10 +9979,6 @@
                 <title>
                   <key>ru</key>
                   <value>Ведомость и настройка</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>Відомість і налаштування</value>
                 </title>
                 <extendedTooltip>
                   <name>ГруппаВедомостьИНастройкаРасширеннаяПодсказка</name>
@@ -10332,15 +10004,11 @@
                 </extInfo>
               </items>
               <items xsi:type="form:Decoration">
-                <name>СвернутьОтборыПП</name>
+                <name>СвернутьОтборыПлатежныхПоручений</name>
                 <id>1709</id>
                 <title>
                   <key>ru</key>
                   <value>свернуть</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>згорнути</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -10348,7 +10016,7 @@
                   <common>true</common>
                 </userVisible>
                 <extendedTooltip>
-                  <name>СвернутьОтборыППРасширеннаяПодсказка</name>
+                  <name>СвернутьОтборыПлатежныхПорученийРасширеннаяПодсказка</name>
                   <id>1711</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -10363,7 +10031,7 @@
                   </extInfo>
                 </extendedTooltip>
                 <contextMenu>
-                  <name>СвернутьОтборыППКонтекстноеМеню</name>
+                  <name>СвернутьОтборыПлатежныхПорученийКонтекстноеМеню</name>
                   <id>1710</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -10379,7 +10047,7 @@
                 <horizontalStretch>true</horizontalStretch>
                 <verticalStretch>true</verticalStretch>
                 <textColor xsi:type="core:ColorRef">
-                  <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                  <color>Style.ТекстВторостепеннойНадписи</color>
                 </textColor>
                 <extInfo xsi:type="form:LabelDecorationExtInfo">
                   <hyperlink>true</hyperlink>
@@ -10394,22 +10062,14 @@
               </userVisible>
               <title>
                 <key>ru</key>
-                <value>Фильтры настройки и доп инфо ПП</value>
-              </title>
-              <title>
-                <key>uk</key>
-                <value>Фільтри налаштування й дод інфо ПП</value>
+                <value>Фильтры настройки и доп инфо платежных поручений</value>
               </title>
               <toolTip>
                 <key>ru</key>
                 <value>Фильтры настройки и доп инфо</value>
               </toolTip>
-              <toolTip>
-                <key>uk</key>
-                <value>Фільтри налаштування і дод інфо</value>
-              </toolTip>
               <extendedTooltip>
-                <name>ФильтрыНастройкиИДопИнфоППРасширеннаяПодсказка</name>
+                <name>ФильтрыНастройкиИДопИнфоПлатежныхПорученийРасширеннаяПодсказка</name>
                 <id>1562</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -10437,14 +10097,10 @@
               <key>ru</key>
               <value>Правая панель страницы</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Права панель сторінки</value>
-            </title>
             <width>25</width>
             <horizontalStretch>false</horizontalStretch>
             <extendedTooltip>
-              <name>ПраваяПанельСтраницыППРасширеннаяПодсказка</name>
+              <name>ПраваяПанельСтраницыПлатежныхПорученийРасширеннаяПодсказка</name>
               <id>1560</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -10472,21 +10128,13 @@
             <key>ru</key>
             <value>Правая панель (платежные поручения)</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Права панель (платіжні доручення)</value>
-          </title>
           <toolTip>
             <key>ru</key>
             <value>Правая панель</value>
           </toolTip>
-          <toolTip>
-            <key>uk</key>
-            <value>Права панель</value>
-          </toolTip>
           <horizontalStretch>false</horizontalStretch>
           <extendedTooltip>
-            <name>ПраваяПанельППРасширеннаяПодсказка</name>
+            <name>ПраваяПанельПлатежныхПорученийРасширеннаяПодсказка</name>
             <id>1547</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -10517,12 +10165,8 @@
           <key>ru</key>
           <value>Группа список и правая панель (платежные поручения)</value>
         </title>
-        <title>
-          <key>uk</key>
-          <value>Група список і права панель (платіжні доручення)</value>
-        </title>
         <extendedTooltip>
-          <name>ГруппаСписокИПраваяПанельППРасширеннаяПодсказка</name>
+          <name>ГруппаСписокИПраваяПанельПлатежныхПорученийРасширеннаяПодсказка</name>
           <id>1545</id>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -10552,10 +10196,6 @@
       <title>
         <key>ru</key>
         <value>Платежные поручения</value>
-      </title>
-      <title>
-        <key>uk</key>
-        <value>Платіжні доручення</value>
       </title>
       <extendedTooltip>
         <name>СтраницаПлатежныеПорученияРасширеннаяПодсказка</name>
@@ -10593,10 +10233,6 @@
             <title>
               <key>ru</key>
               <value>Оплата картой (от покупателя)</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Оплата карткою (від покупця)</value>
             </title>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -10663,10 +10299,6 @@
           <title>
             <key>ru</key>
             <value>Создать</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Створити</value>
           </title>
           <extendedTooltip>
             <name>ПодменюСоздатьОплатуПлатежнойКартойРасширеннаяПодсказка</name>
@@ -10780,7 +10412,7 @@
           <locationInCommandBar>InAdditionalSubmenu</locationInCommandBar>
         </items>
         <items xsi:type="form:FormGroup">
-          <name>ГруппаВажныеКомандыЭ</name>
+          <name>ГруппаВажныеКомандыОперацииПоПлатежнымКартам</name>
           <id>1890</id>
           <items xsi:type="form:Button">
             <name>ОбщаяКомандаНапомнить</name>
@@ -10821,12 +10453,8 @@
             <key>ru</key>
             <value>Группа важные команды</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Група важливі команди</value>
-          </title>
           <extendedTooltip>
-            <name>ГруппаВажныеКомандыЭРасширеннаяПодсказка</name>
+            <name>ГруппаВажныеКомандыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
             <id>1891</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -10843,10 +10471,10 @@
           <extInfo xsi:type="form:ButtonGroupExtInfo"/>
         </items>
         <items xsi:type="form:FormGroup">
-          <name>ГруппаГлобальныеКомандыЭ</name>
+          <name>ГруппаГлобальныеКомандыОперацииПоПлатежнымКартам</name>
           <id>1894</id>
           <items xsi:type="form:Button">
-            <name>ОбщаяКомандаСтруктураПодчиненностиЭ</name>
+            <name>ОбщаяКомандаСтруктураПодчиненностиОперацииПоПлатежнымКартам</name>
             <id>1896</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -10854,7 +10482,7 @@
               <common>true</common>
             </userVisible>
             <extendedTooltip>
-              <name>ОбщаяКомандаСтруктураПодчиненностиЭРасширеннаяПодсказка</name>
+              <name>ОбщаяКомандаСтруктураПодчиненностиОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
               <id>1897</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -10876,7 +10504,7 @@
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <items xsi:type="form:Button">
-            <name>ОбщаяКомандаОтчетПоДвижениямЭ</name>
+            <name>ОбщаяКомандаОтчетПоДвижениямОперацииПоПлатежнымКартам</name>
             <id>2002</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -10884,7 +10512,7 @@
               <common>true</common>
             </userVisible>
             <extendedTooltip>
-              <name>ОбщаяКомандаОтчетПоДвижениямЭРасширеннаяПодсказка</name>
+              <name>ОбщаяКомандаОтчетПоДвижениямОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
               <id>2003</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -10915,12 +10543,8 @@
             <key>ru</key>
             <value>Группа глобальные команды</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Група глобальні команди</value>
-          </title>
           <extendedTooltip>
-            <name>ГруппаГлобальныеКомандыЭРасширеннаяПодсказка</name>
+            <name>ГруппаГлобальныеКомандыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
             <id>1895</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -10944,10 +10568,6 @@
         <title>
           <key>ru</key>
           <value>Командная панель операций по платежным картам</value>
-        </title>
-        <title>
-          <key>uk</key>
-          <value>Командна панель операцій по платіжних картках</value>
         </title>
         <extendedTooltip>
           <name>КоманднаяПанельОперацийПоПлатежнымКартамРасширеннаяПодсказка</name>
@@ -10979,10 +10599,6 @@
           <title>
             <key>ru</key>
             <value>Список операции по платежным картам</value>
-          </title>
-          <title>
-            <key>uk</key>
-            <value>Список операції по платіжних картках</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -11076,10 +10692,6 @@
                 <key>ru</key>
                 <value>ДЛФ=D</value>
               </format>
-              <format>
-                <key>uk</key>
-                <value>ДЛФ=D</value>
-              </format>
             </extInfo>
           </items>
           <items xsi:type="form:FormField">
@@ -11137,10 +10749,6 @@
               <title>
                 <key>ru</key>
                 <value>Сумма</value>
-              </title>
-              <title>
-                <key>uk</key>
-                <value>Сума</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -11235,10 +10843,6 @@
             <title>
               <key>ru</key>
               <value>Сумма</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Сума</value>
             </title>
             <extendedTooltip>
               <name>СписокОперацииПоПлатежнымКартамГруппаСуммаРасширеннаяПодсказка</name>
@@ -11358,10 +10962,6 @@
               <key>ru</key>
               <value>Контрагент и касса ККМ</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Контрагент і каса ККМ</value>
-            </title>
             <extendedTooltip>
               <name>ГруппаКонтрагентКассаККМРасширеннаяПодсказка</name>
               <id>1882</id>
@@ -11433,10 +11033,6 @@
               <key>ru</key>
               <value>№ карты</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>№ картки</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -11483,10 +11079,6 @@
             <title>
               <key>ru</key>
               <value>Вид карты</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Вид картки</value>
             </title>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -11577,14 +11169,6 @@
           <items xsi:type="form:FormField">
             <name>СписокОперацииПоПлатежнымКартамЭквайрер</name>
             <id>1084</id>
-            <title>
-              <key>ru</key>
-              <value>Эквайрер</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Еквайрер</value>
-            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -11795,10 +11379,6 @@
             <title>
               <key>ru</key>
               <value>Ссылка (нажмите кнопку &quot;Добавить поля&quot;)</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Посилання (натисніть кнопку &quot;Додати поля&quot;)</value>
             </title>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -12021,26 +11601,22 @@
           </extInfo>
         </items>
         <items xsi:type="form:FormGroup">
-          <name>ПраваяПанельЭ</name>
+          <name>ПраваяПанельОперацииПоПлатежнымКартам</name>
           <id>1813</id>
           <displayImportance>Low</displayImportance>
           <items xsi:type="form:Decoration">
-            <name>ДекорацияРазвернутьОтборыЭ</name>
+            <name>ДекорацияРазвернутьОтборыОперацииПоПлатежнымКартам</name>
             <id>1820</id>
             <title>
               <key>ru</key>
               <value>Декорация развернуть отборы</value>
-            </title>
-            <title>
-              <key>uk</key>
-              <value>Декорація розгорнути відбори</value>
             </title>
             <enabled>true</enabled>
             <userVisible>
               <common>true</common>
             </userVisible>
             <extendedTooltip>
-              <name>ДекорацияРазвернутьОтборыЭРасширеннаяПодсказка</name>
+              <name>ДекорацияРазвернутьОтборыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
               <id>1822</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -12055,7 +11631,7 @@
               </extInfo>
             </extendedTooltip>
             <contextMenu>
-              <name>ДекорацияРазвернутьОтборыЭКонтекстноеМеню</name>
+              <name>ДекорацияРазвернутьОтборыОперацииПоПлатежнымКартамКонтекстноеМеню</name>
               <id>1821</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -12082,24 +11658,20 @@
             </extInfo>
           </items>
           <items xsi:type="form:FormGroup">
-            <name>ПраваяПанельСтраницыЭ</name>
+            <name>ПраваяПанельСтраницыОперацииПоПлатежнымКартам</name>
             <id>1826</id>
             <items xsi:type="form:FormGroup">
-              <name>ФильтрыНастройкиИДопИнфоЭ</name>
+              <name>ФильтрыНастройкиИДопИнфоОперацииПоПлатежнымКартам</name>
               <id>1828</id>
               <items xsi:type="form:FormField">
-                <name>ПредставлениеПериодаЭ</name>
+                <name>ПредставлениеПериодаОперацииПоПлатежнымКартам</name>
                 <id>1830</id>
                 <title>
                   <key>ru</key>
                   <value>Период</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Період</value>
-                </title>
                 <titleTextColor xsi:type="core:ColorRef">
-                  <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                 </titleTextColor>
                 <titleFont xsi:type="core:FontRef">
                   <font>Style.NormalTextFont</font>
@@ -12115,12 +11687,8 @@
                   <key>ru</key>
                   <value>Отбор по дате документа</value>
                 </toolTip>
-                <toolTip>
-                  <key>uk</key>
-                  <value>Відбір за датою документа</value>
-                </toolTip>
                 <extendedTooltip>
-                  <name>ПредставлениеПериодаЭРасширеннаяПодсказка</name>
+                  <name>ПредставлениеПериодаОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                   <id>1832</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -12135,7 +11703,7 @@
                   </extInfo>
                 </extendedTooltip>
                 <contextMenu>
-                  <name>ПредставлениеПериодаЭКонтекстноеМеню</name>
+                  <name>ПредставлениеПериодаОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                   <id>1831</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -12154,7 +11722,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <hyperlink>true</hyperlink>
                   <textColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -12163,13 +11731,13 @@
                 </extInfo>
               </items>
               <items xsi:type="form:FormGroup">
-                <name>ГруппаОтборыЭ</name>
+                <name>ГруппаОтборыОперацииПоПлатежнымКартам</name>
                 <id>2031</id>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборОрганизацияЭ</name>
+                  <name>ГруппаОтборОрганизацияОперацииПоПлатежнымКартам</name>
                   <id>1853</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборОрганизацияЭ</name>
+                    <name>ОтборОрганизацияОперацииПоПлатежнымКартам</name>
                     <id>1855</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12178,7 +11746,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборОрганизацияЭРасширеннаяПодсказка</name>
+                      <name>ОтборОрганизацияОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                       <id>1857</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12193,7 +11761,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборОрганизацияЭКонтекстноеМеню</name>
+                      <name>ОтборОрганизацияОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                       <id>1856</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12222,10 +11790,6 @@
                         <key>ru</key>
                         <value>Организация</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Організація</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -12237,12 +11801,8 @@
                     <key>ru</key>
                     <value>Группа отбор организация</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір організація</value>
-                  </title>
                   <extendedTooltip>
-                    <name>ГруппаОтборОрганизацияЭРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборОрганизацияОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                     <id>1854</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12266,10 +11826,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборАвторЭ</name>
+                  <name>ГруппаОтборАвторОперацииПоПлатежнымКартам</name>
                   <id>1932</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборАвторЭ</name>
+                    <name>ОтборАвторОперацииПоПлатежнымКартам</name>
                     <id>1934</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12278,7 +11838,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборАвторЭРасширеннаяПодсказка</name>
+                      <name>ОтборАвторОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                       <id>1936</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12293,7 +11853,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборАвторЭКонтекстноеМеню</name>
+                      <name>ОтборАвторОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                       <id>1935</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12321,10 +11881,6 @@
                         <key>ru</key>
                         <value>Автор</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Автор</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -12336,12 +11892,8 @@
                     <key>ru</key>
                     <value>Группа отбор автор</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір автор</value>
-                  </title>
                   <extendedTooltip>
-                    <name>ГруппаОтборАвторЭРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборАвторОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                     <id>1933</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12365,10 +11917,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборЭквайринговыйТерминалЭ</name>
+                  <name>ГруппаОтборЭквайринговыйТерминалОперацииПоПлатежнымКартам</name>
                   <id>1843</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборЭквайринговыйТерминалЭ</name>
+                    <name>ОтборЭквайринговыйТерминалОперацииПоПлатежнымКартам</name>
                     <id>1101</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12378,7 +11930,7 @@
                     <skipOnInput>true</skipOnInput>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборЭквайринговыйТерминалЭРасширеннаяПодсказка</name>
+                      <name>ОтборЭквайринговыйТерминалОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                       <id>1103</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12393,7 +11945,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборЭквайринговыйТерминалЭКонтекстноеМеню</name>
+                      <name>ОтборЭквайринговыйТерминалОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                       <id>1102</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12420,10 +11972,6 @@
                         <key>ru</key>
                         <value>Эквайринговый терминал</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Еквайринговий термінал</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -12435,20 +11983,12 @@
                     <key>ru</key>
                     <value>Группа отбора по эквайринговому терминалу</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбору за еквайринговим терміналом</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
                   </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
-                  </toolTip>
                   <extendedTooltip>
-                    <name>ГруппаОтборЭквайринговыйТерминалЭРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборЭквайринговыйТерминалОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                     <id>1844</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12472,10 +12012,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборКонтрагентЭ</name>
+                  <name>ГруппаОтборКонтрагентОперацииПоПлатежнымКартам</name>
                   <id>1868</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборКонтрагентЭ</name>
+                    <name>ОтборКонтрагентОперацииПоПлатежнымКартам</name>
                     <id>1870</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12484,7 +12024,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборКонтрагентЭРасширеннаяПодсказка</name>
+                      <name>ОтборКонтрагентОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                       <id>1872</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12499,7 +12039,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборКонтрагентЭКонтекстноеМеню</name>
+                      <name>ОтборКонтрагентОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                       <id>1871</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12537,10 +12077,6 @@
                         <key>ru</key>
                         <value>Покупатель, ИНН, телефон</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Покупець, ІПН, телефон</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -12552,12 +12088,8 @@
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
-                  </title>
                   <extendedTooltip>
-                    <name>ГруппаОтборКонтрагентЭРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборКонтрагентОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                     <id>1869</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12581,10 +12113,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборБанкЭквайрерЭ</name>
+                  <name>ГруппаОтборБанкЭквайрерОперацииПоПлатежнымКартам</name>
                   <id>1838</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборБанкЭквайрерЭ</name>
+                    <name>ОтборБанкЭквайрерОперацииПоПлатежнымКартам</name>
                     <id>1840</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12593,7 +12125,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборБанкЭквайрерЭРасширеннаяПодсказка</name>
+                      <name>ОтборБанкЭквайрерОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                       <id>1842</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12608,7 +12140,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборБанкЭквайрерЭКонтекстноеМеню</name>
+                      <name>ОтборБанкЭквайрерОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                       <id>1841</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12638,10 +12170,6 @@
                         <key>ru</key>
                         <value>Банк-эквайрер, ИНН, телефон</value>
                       </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Банк-еквайрер, ІПН, телефон</value>
-                      </inputHint>
                     </extInfo>
                   </items>
                   <visible>true</visible>
@@ -12653,20 +12181,12 @@
                     <key>ru</key>
                     <value>Группа отбор банк-эквайрер</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Група відбір банк-еквайрер</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
                   </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
-                  </toolTip>
                   <extendedTooltip>
-                    <name>ГруппаОтборБанкЭквайрерЭРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборБанкЭквайрерОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                     <id>1839</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12690,10 +12210,10 @@
                   </extInfo>
                 </items>
                 <items xsi:type="form:FormGroup">
-                  <name>ГруппаОтборВидОперацииЭ</name>
+                  <name>ГруппаОтборВидОперацииОперацииПоПлатежнымКартам</name>
                   <id>1833</id>
                   <items xsi:type="form:FormField">
-                    <name>ОтборВидОперацииЭ</name>
+                    <name>ОтборВидОперацииОперацииПоПлатежнымКартам</name>
                     <id>1835</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12702,7 +12222,7 @@
                     </userVisible>
                     <titleLocation>None</titleLocation>
                     <extendedTooltip>
-                      <name>ОтборВидОперацииЭРасширеннаяПодсказка</name>
+                      <name>ОтборВидОперацииОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                       <id>1837</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12717,7 +12237,7 @@
                       </extInfo>
                     </extendedTooltip>
                     <contextMenu>
-                      <name>ОтборВидОперацииЭКонтекстноеМеню</name>
+                      <name>ОтборВидОперацииОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                       <id>1836</id>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -12747,21 +12267,17 @@
                       <editTextUpdate>OnValueChange</editTextUpdate>
                       <choiceList>
                         <value xsi:type="core:ReferenceValue">
-                          <value>67ad8c2d-7635-487f-9d2f-1824a26f4d10.cd7a5f9e-cfab-4084-9ac7-b819d043b6ed</value>
+                          <value>Enum.ВидыОперацийЭквайринга.EnumValue.ПоступлениеОплатыОтПокупателя</value>
                         </value>
                       </choiceList>
                       <choiceList>
                         <value xsi:type="core:ReferenceValue">
-                          <value>67ad8c2d-7635-487f-9d2f-1824a26f4d10.30ad20e6-9a90-47ce-ab4e-653aea775d2d</value>
+                          <value>Enum.ВидыОперацийЭквайринга.EnumValue.ВозвратОплатыПокупателю</value>
                         </value>
                       </choiceList>
                       <inputHint>
                         <key>ru</key>
                         <value>Операция</value>
-                      </inputHint>
-                      <inputHint>
-                        <key>uk</key>
-                        <value>Операція</value>
                       </inputHint>
                     </extInfo>
                   </items>
@@ -12774,20 +12290,12 @@
                     <key>ru</key>
                     <value>Вид операции</value>
                   </title>
-                  <title>
-                    <key>uk</key>
-                    <value>Вид операції</value>
-                  </title>
                   <toolTip>
                     <key>ru</key>
                     <value>Группа отбор контрагент</value>
                   </toolTip>
-                  <toolTip>
-                    <key>uk</key>
-                    <value>Група відбір контрагент</value>
-                  </toolTip>
                   <extendedTooltip>
-                    <name>ГруппаОтборВидОперацииЭРасширеннаяПодсказка</name>
+                    <name>ГруппаОтборВидОперацииОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                     <id>1834</id>
                     <visible>true</visible>
                     <enabled>true</enabled>
@@ -12817,22 +12325,10 @@
                 </userVisible>
                 <title>
                   <key>ru</key>
-                  <value>Группа отборы Э</value>
+                  <value>Отборы операции по платежным картам</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Група відбори Е</value>
-                </title>
-                <toolTip>
-                  <key>ru</key>
-                  <value>Группа отборы Э</value>
-                </toolTip>
-                <toolTip>
-                  <key>uk</key>
-                  <value>Група відбори Е</value>
-                </toolTip>
                 <extendedTooltip>
-                  <name>ГруппаОтборыЭРасширеннаяПодсказка</name>
+                  <name>ГруппаОтборыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                   <id>2032</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -12855,17 +12351,94 @@
                   <currentRowUse>Auto</currentRowUse>
                 </extInfo>
               </items>
-              <items xsi:type="form:Button">
-                <name>НастроитьОтборыЭ</name>
-                <id>2033</id>
+              <items xsi:type="form:FormGroup">
+                <name>ГруппаРаботаСОтборамиОперацииПоПлатежнымКартам</name>
+                <id>2045</id>
+                <items xsi:type="form:Button">
+                  <name>СброситьВсеОтборыОперацииПоПлатежнымКартам</name>
+                  <id>2047</id>
+                  <visible>true</visible>
+                  <enabled>true</enabled>
+                  <userVisible>
+                    <common>true</common>
+                  </userVisible>
+                  <extendedTooltip>
+                    <name>СброситьВсеОтборыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
+                    <id>2048</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <type>Label</type>
+                    <autoMaxWidth>true</autoMaxWidth>
+                    <autoMaxHeight>true</autoMaxHeight>
+                    <extInfo xsi:type="form:LabelDecorationExtInfo">
+                      <horizontalAlign>Left</horizontalAlign>
+                    </extInfo>
+                  </extendedTooltip>
+                  <type>UsualButton</type>
+                  <commandName>0</commandName>
+                  <representation>Auto</representation>
+                  <autoMaxWidth>true</autoMaxWidth>
+                  <autoMaxHeight>true</autoMaxHeight>
+                  <groupHorizontalAlign>Left</groupHorizontalAlign>
+                  <placementArea>UserCmds</placementArea>
+                  <textColor xsi:type="core:ColorRef">
+                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                  </textColor>
+                  <representationInContextMenu>Auto</representationInContextMenu>
+                  <shapeRepresentation>None</shapeRepresentation>
+                </items>
+                <items xsi:type="form:Button">
+                  <name>НастроитьОтборыОперацииПоПлатежнымКартам</name>
+                  <id>2033</id>
+                  <visible>true</visible>
+                  <enabled>true</enabled>
+                  <userVisible>
+                    <common>true</common>
+                  </userVisible>
+                  <extendedTooltip>
+                    <name>НастроитьОтборыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
+                    <id>2034</id>
+                    <visible>true</visible>
+                    <enabled>true</enabled>
+                    <userVisible>
+                      <common>true</common>
+                    </userVisible>
+                    <type>Label</type>
+                    <autoMaxWidth>true</autoMaxWidth>
+                    <autoMaxHeight>true</autoMaxHeight>
+                    <extInfo xsi:type="form:LabelDecorationExtInfo">
+                      <horizontalAlign>Left</horizontalAlign>
+                    </extInfo>
+                  </extendedTooltip>
+                  <type>UsualButton</type>
+                  <commandName>0</commandName>
+                  <representation>Auto</representation>
+                  <autoMaxWidth>true</autoMaxWidth>
+                  <autoMaxHeight>true</autoMaxHeight>
+                  <groupHorizontalAlign>Right</groupHorizontalAlign>
+                  <placementArea>UserCmds</placementArea>
+                  <textColor xsi:type="core:ColorRef">
+                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                  </textColor>
+                  <representationInContextMenu>Auto</representationInContextMenu>
+                  <shapeRepresentation>None</shapeRepresentation>
+                </items>
                 <visible>true</visible>
                 <enabled>true</enabled>
                 <userVisible>
                   <common>true</common>
                 </userVisible>
+                <title>
+                  <key>ru</key>
+                  <value>Группа работа с отборами</value>
+                </title>
+                <horizontalStretch>true</horizontalStretch>
                 <extendedTooltip>
-                  <name>НастроитьОтборыЭРасширеннаяПодсказка</name>
-                  <id>2034</id>
+                  <name>ГруппаРаботаСОтборамиОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
+                  <id>2046</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
                   <userVisible>
@@ -12878,23 +12451,17 @@
                     <horizontalAlign>Left</horizontalAlign>
                   </extInfo>
                 </extendedTooltip>
-                <type>UsualButton</type>
-                <commandName>0</commandName>
-                <representation>Auto</representation>
-                <autoMaxWidth>true</autoMaxWidth>
-                <autoMaxHeight>true</autoMaxHeight>
-                <groupHorizontalAlign>Right</groupHorizontalAlign>
-                <placementArea>UserCmds</placementArea>
-                <textColor xsi:type="core:ColorDef">
-                  <red>100</red>
-                  <green>100</green>
-                  <blue>100</blue>
-                </textColor>
-                <representationInContextMenu>Auto</representationInContextMenu>
-                <shapeRepresentation>None</shapeRepresentation>
+                <type>UsualGroup</type>
+                <extInfo xsi:type="form:UsualGroupExtInfo">
+                  <group>AlwaysHorizontal</group>
+                  <showLeftMargin>true</showLeftMargin>
+                  <united>true</united>
+                  <throughAlign>Auto</throughAlign>
+                  <currentRowUse>Auto</currentRowUse>
+                </extInfo>
               </items>
               <items xsi:type="form:FormGroup">
-                <name>ГруппаВедомостьИНастройкаЭ</name>
+                <name>ГруппаВедомостьИНастройкаОперацииПоПлатежнымКартам</name>
                 <id>1858</id>
                 <items xsi:type="form:Button">
                   <name>ВедомостьПерейтиКОтчетуПоЭквайрингу</name>
@@ -12935,7 +12502,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>0:63da025d-789b-4c17-96f4-57ba42a32180</color>
+                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -12951,12 +12518,8 @@
                   <key>ru</key>
                   <value>Ведомость и настройка</value>
                 </title>
-                <title>
-                  <key>uk</key>
-                  <value>Відомість і налаштування</value>
-                </title>
                 <extendedTooltip>
-                  <name>ГруппаВедомостьИНастройкаЭРасширеннаяПодсказка</name>
+                  <name>ГруппаВедомостьИНастройкаОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                   <id>1859</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -12979,15 +12542,11 @@
                 </extInfo>
               </items>
               <items xsi:type="form:Decoration">
-                <name>СвернутьОтборыЭ</name>
+                <name>СвернутьОтборыОперацииПоПлатежнымКартам</name>
                 <id>1865</id>
                 <title>
                   <key>ru</key>
                   <value>свернуть</value>
-                </title>
-                <title>
-                  <key>uk</key>
-                  <value>згорнути</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -12995,7 +12554,7 @@
                   <common>true</common>
                 </userVisible>
                 <extendedTooltip>
-                  <name>СвернутьОтборыЭРасширеннаяПодсказка</name>
+                  <name>СвернутьОтборыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                   <id>1867</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -13010,7 +12569,7 @@
                   </extInfo>
                 </extendedTooltip>
                 <contextMenu>
-                  <name>СвернутьОтборыЭКонтекстноеМеню</name>
+                  <name>СвернутьОтборыОперацииПоПлатежнымКартамКонтекстноеМеню</name>
                   <id>1866</id>
                   <visible>true</visible>
                   <enabled>true</enabled>
@@ -13026,7 +12585,7 @@
                 <horizontalStretch>true</horizontalStretch>
                 <verticalStretch>true</verticalStretch>
                 <textColor xsi:type="core:ColorRef">
-                  <color>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</color>
+                  <color>Style.ТекстВторостепеннойНадписи</color>
                 </textColor>
                 <extInfo xsi:type="form:LabelDecorationExtInfo">
                   <hyperlink>true</hyperlink>
@@ -13043,20 +12602,12 @@
                 <key>ru</key>
                 <value>Фильтры настройки и доп инфо (эквайринг)</value>
               </title>
-              <title>
-                <key>uk</key>
-                <value>Фільтри налаштування й дод інфо (еквайринг)</value>
-              </title>
               <toolTip>
                 <key>ru</key>
                 <value>Фильтры настройки и доп инфо</value>
               </toolTip>
-              <toolTip>
-                <key>uk</key>
-                <value>Фільтри налаштування і дод інфо</value>
-              </toolTip>
               <extendedTooltip>
-                <name>ФильтрыНастройкиИДопИнфоЭРасширеннаяПодсказка</name>
+                <name>ФильтрыНастройкиИДопИнфоОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
                 <id>1829</id>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -13084,22 +12635,14 @@
               <key>ru</key>
               <value>Правая панель страницы &quot;Операция по платежным картам&quot;.</value>
             </title>
-            <title>
-              <key>uk</key>
-              <value>Права панель сторінки &quot;Операція з платіжними картками&quot;.</value>
-            </title>
             <toolTip>
               <key>ru</key>
               <value>Правая панель страницы</value>
             </toolTip>
-            <toolTip>
-              <key>uk</key>
-              <value>Права панель сторінки</value>
-            </toolTip>
             <width>25</width>
             <horizontalStretch>false</horizontalStretch>
             <extendedTooltip>
-              <name>ПраваяПанельСтраницыЭРасширеннаяПодсказка</name>
+              <name>ПраваяПанельСтраницыОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
               <id>1827</id>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -13127,21 +12670,13 @@
             <key>ru</key>
             <value>Правая панель (эквайринг)</value>
           </title>
-          <title>
-            <key>uk</key>
-            <value>Права панель (еквайринг)</value>
-          </title>
           <toolTip>
             <key>ru</key>
             <value>Правая панель</value>
           </toolTip>
-          <toolTip>
-            <key>uk</key>
-            <value>Права панель</value>
-          </toolTip>
           <horizontalStretch>false</horizontalStretch>
           <extendedTooltip>
-            <name>ПраваяПанельЭРасширеннаяПодсказка</name>
+            <name>ПраваяПанельОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
             <id>1814</id>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -13171,10 +12706,6 @@
         <title>
           <key>ru</key>
           <value>Список операций по платежным картам и правая панель</value>
-        </title>
-        <title>
-          <key>uk</key>
-          <value>Список операцій по платіжних картках і права панель</value>
         </title>
         <extendedTooltip>
           <name>ГруппаСписокИПраваяПанельРасширеннаяПодсказка</name>
@@ -13208,10 +12739,6 @@
         <key>ru</key>
         <value>Операции по платежным картам</value>
       </title>
-      <title>
-        <key>uk</key>
-        <value>Операції з платіжними картками</value>
-      </title>
       <extendedTooltip>
         <name>СтраницаОперацииПоПлатежнымКартамРасширеннаяПодсказка</name>
         <id>831</id>
@@ -13241,10 +12768,6 @@
     <title>
       <key>ru</key>
       <value>Страницы</value>
-    </title>
-    <title>
-      <key>uk</key>
-      <value>Сторінки</value>
     </title>
     <extendedTooltip>
       <name>СтраницыРасширеннаяПодсказка</name>
@@ -13287,6 +12810,31 @@
   <verticalScroll>UseIfNecessary</verticalScroll>
   <showTitle>true</showTitle>
   <showCloseButton>true</showCloseButton>
+  <formCommands>
+    <name>ЗагрузитьИзФайла</name>
+    <title>
+      <key>ru</key>
+      <value>Загрузить выписку из файла</value>
+    </title>
+    <id>1000002</id>
+    <toolTip>
+      <key>ru</key>
+      <value>Загрузить списания по счету из клиент-банка</value>
+    </toolTip>
+    <use>
+      <common>true</common>
+    </use>
+    <picture xsi:type="core:PictureRef">
+      <picture>CommonPicture.КлиентБанкКомандаЗагрузить</picture>
+    </picture>
+    <action xsi:type="form:FormExtensionCommandHandlerContainer">
+      <handlers>
+        <name>СМП_ЗагрузитьИзФайлаВместо</name>
+        <callType>Override</callType>
+      </handlers>
+    </action>
+    <currentRowUse>DontUse</currentRowUse>
+  </formCommands>
   <commandInterface>
     <navigationPanel/>
     <commandBar/>

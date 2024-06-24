@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="65c6b733-1f21-452e-b6bf-037073986b1f" extendedConfigurationObject="2a79738e-a3bf-4ea4-aff3-224cf20003f4">
+  <producedTypes>
+    <refType typeId="52c81883-aa12-4cc5-a893-c0d67f8469c3" valueTypeId="6907393a-31c4-4589-aa00-41d463261a23"/>
+    <listType typeId="39ff136f-c491-45d0-8006-ccc938adf5d4" valueTypeId="17b8615b-05be-4ac5-8e54-cc5462c5f253"/>
+    <managerType typeId="8d8bb7b5-bb79-4121-bbbc-5afb5b2437c0" valueTypeId="6b521666-e66f-4e31-b993-d0f83dc2eb13"/>
+  </producedTypes>
+  <name>ВидыОперацийЭквайринга</name>
+  <objectBelonging>Adopted</objectBelonging>
+  <extension xsi:type="mdclassExtension:EnumExtension">
+    <extendedConfigurationObject>Checked</extendedConfigurationObject>
+  </extension>
+  <enumValues uuid="340cbdb3-003c-4eb3-8e5c-35a72ba6fa0f" extendedConfigurationObject="85c66010-caff-453e-b98a-38c9ab84bb8e">
+    <name>ПоступлениеОплатыОтПокупателя</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:MdObjectExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+    </extension>
+  </enumValues>
+  <enumValues uuid="176c6b66-46b1-4335-a509-7b17aac28ad7" extendedConfigurationObject="0ea7e2da-db55-490c-a85c-e1eca77ab8ed">
+    <name>ВозвратОплатыПокупателю</name>
+    <objectBelonging>Adopted</objectBelonging>
+    <extension xsi:type="mdclassExtension:MdObjectExtension">
+      <extendedConfigurationObject>Checked</extendedConfigurationObject>
+    </extension>
+  </enumValues>
+</mdclass:Enum>
