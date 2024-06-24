@@ -13,11 +13,11 @@
   <content>CommonModule.СМП_РаботаСБанкамиСервер</content>
   <content>ScheduledJob.СМП_ОбменСБанкамиAPI</content>
   <content>InformationRegister.СМП_НомерПоследнейТранзакции</content>
-  <content>CommonModule.ОбменСБанками</content>
-  <content>CommonModule.ОбменСБанкамиКлиент</content>
-  <content>CommonModule.ОбменСБанкамиКлиентСервер</content>
-  <content>CommonModule.ОбменСБанкамиПереопределяемый</content>
-  <content>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</content>
+  <content>3b17e22f-3513-482e-acaf-76b8dc481990</content>
+  <content>2ef5fd2f-c64f-48f3-ad59-5f6a42032fb4</content>
+  <content>b392a90b-afbd-44c5-a841-6577a4507a76</content>
+  <content>f011e981-5a32-42da-9306-c80a342bd596</content>
+  <content>c3c0330e-844c-4e6a-8190-9aad7cffad5a</content>
   <content>Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</content>
   <content>Enum.СостоянияДокументовЭДО</content>
   <content>CommonPicture.ИзменитьНастройки</content>

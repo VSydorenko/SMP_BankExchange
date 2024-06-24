@@ -51,11 +51,6 @@
     <languageCode>uk</languageCode>
   </languages>
   <subsystems>Subsystem.СМП_BankExchange</subsystems>
-  <styleItems>StyleItem.ТекстВторостепеннойНадписи</styleItems>
-  <styleItems>StyleItem.ЦветТекстаПравойПанелиОтборов</styleItems>
-  <styleItems>StyleItem.ЦветСуммыПоступления</styleItems>
-  <styleItems>StyleItem.ДосьеВторостепеннаяНадписьЦвет</styleItems>
-  <styleItems>StyleItem.ПеремещениеДСВЖурналахЦвет</styleItems>
   <commonPictures>CommonPicture.СМП_BankExchange</commonPictures>
   <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
   <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
@@ -63,11 +58,6 @@
   <commonPictures>CommonPicture.КлиентБанкЗаголовокВыгрузка</commonPictures>
   <commonPictures>CommonPicture.КлиентБанкЗаголовокЗагрузка</commonPictures>
   <commonPictures>CommonPicture.ОбновлениеВнешнихКомпонентССайта</commonPictures>
-  <commonPictures>CommonPicture.Минус</commonPictures>
-  <commonPictures>CommonPicture.Плюс</commonPictures>
-  <commonPictures>CommonPicture.СоздатьПоШаблону</commonPictures>
-  <commonPictures>CommonPicture.КассаИБанк</commonPictures>
-  <commonPictures>CommonPicture.КлиентБанкКомандаЗагрузить</commonPictures>
   <roles>Role.ДобавлениеИзменениеБанковскихСчетов</roles>
   <roles>Role.ИспользованиеБанкаИКассы</roles>
   <roles>Role.ПолныеПрава</roles>
@@ -76,11 +66,6 @@
   <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиПУМБAPIСервер</commonModules>
   <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
-  <commonModules>CommonModule.ОбменСБанками</commonModules>
-  <commonModules>CommonModule.ОбменСБанкамиКлиент</commonModules>
-  <commonModules>CommonModule.ОбменСБанкамиКлиентСервер</commonModules>
-  <commonModules>CommonModule.ОбменСБанкамиПереопределяемый</commonModules>
-  <commonModules>CommonModule.ЭлектронноеВзаимодействиеКлиентПереопределяемый</commonModules>
   <commonModules>CommonModule.КлиентБанкВызовСервера</commonModules>
   <commonModules>CommonModule.УправлениеНебольшойФирмойКлиент</commonModules>
   <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>

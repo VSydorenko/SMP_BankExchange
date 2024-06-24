@@ -95,7 +95,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ЦветТекстаПравойПанелиОтборов</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>
@@ -115,7 +115,7 @@
 		<appearance>
 			<dcscor:item xsi:type="SettingsParameterValue">
 				<dcscor:parameter>ЦветТекста</dcscor:parameter>
-				<dcscor:value xsi:type="v8ui:Color">style:ЦветСуммыПоступления</dcscor:value>
+				<dcscor:value xsi:type="v8ui:Color">#FFFF00</dcscor:value>
 			</dcscor:item>
 		</appearance>
 	</item>

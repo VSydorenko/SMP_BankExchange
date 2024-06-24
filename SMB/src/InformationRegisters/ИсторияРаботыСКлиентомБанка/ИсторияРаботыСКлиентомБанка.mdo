@@ -150,28 +150,4 @@
     </extension>
     <type/>
   </dimensions>
-  <forms uuid="d8149513-4ec4-4515-bcf4-432626134593" extendedConfigurationObject="e588889f-89e5-40ee-98b0-be30e2af1354">
-    <name>ФормаСписка</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFormExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <form>Extended</form>
-    </extension>
-  </forms>
-  <forms uuid="ade7b080-43eb-4b18-ad9c-d78bf3a316af" extendedConfigurationObject="3362aaa1-c0c5-4f72-9856-88ef9c83dafa">
-    <name>ФормаПротокола</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFormExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <form>Extended</form>
-    </extension>
-  </forms>
-  <forms uuid="cafe0a31-ec92-4685-850c-36fd55c29761" extendedConfigurationObject="d2e57ed8-5216-4085-b642-ea9cb5cf7241">
-    <name>ФормаФайла</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFormExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <form>Extended</form>
-    </extension>
-  </forms>
 </mdclass:InformationRegister>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:StyleItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e" extendedConfigurationObject="2a29a148-1bea-4d41-bf3b-fcf976448851">
-  <name>ТекстВторостепеннойНадписи</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:StyleItemExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-    <type>Checked</type>
-  </extension>
-</mdclass:StyleItem>

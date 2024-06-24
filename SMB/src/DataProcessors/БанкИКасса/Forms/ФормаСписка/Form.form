@@ -170,7 +170,7 @@
             <type>Popup</type>
             <extInfo xsi:type="form:PopupGroupExtInfo">
               <picture xsi:type="core:PictureRef">
-                <picture>CommonPicture.Плюс</picture>
+                <picture>0:b638b38f-28ea-48fa-b8df-ffc4fd6b0baa</picture>
               </picture>
               <representation>Auto</representation>
             </extInfo>
@@ -273,7 +273,7 @@
             <type>Popup</type>
             <extInfo xsi:type="form:PopupGroupExtInfo">
               <picture xsi:type="core:PictureRef">
-                <picture>CommonPicture.Минус</picture>
+                <picture>0:5741f7c0-4a9a-4721-8c7f-282f908c3644</picture>
               </picture>
               <representation>Auto</representation>
             </extInfo>
@@ -851,7 +851,7 @@
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
             <picture xsi:type="core:PictureRef">
-              <picture>CommonPicture.СоздатьПоШаблону</picture>
+              <picture>0:7c026f8d-20e2-497b-a24a-bafe67a09289</picture>
             </picture>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
@@ -1391,7 +1391,7 @@
                         <horizontalStretch>true</horizontalStretch>
                         <verticalStretch>true</verticalStretch>
                         <valuesPicture xsi:type="core:PictureRef">
-                          <picture>CommonPicture.КассаИБанк</picture>
+                          <picture>0:03749d63-7eb2-4f4a-900f-7441c6891d8b</picture>
                         </valuesPicture>
                       </extInfo>
                     </items>
@@ -1571,7 +1571,7 @@
                           <value>ЧДЦ=2</value>
                         </format>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ЦветСуммыПоступления</color>
+                          <color>0:2df5e1bb-093f-4b6c-bfdf-c1eb8c4388f0</color>
                         </textColor>
                       </extInfo>
                     </items>
@@ -1617,7 +1617,7 @@
                         <autoMaxWidth>true</autoMaxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ПеремещениеДСВЖурналахЦвет</color>
+                          <color>0:6fb43f7b-3ef8-4d48-bbe5-cb1f76dac5a5</color>
                         </textColor>
                       </extInfo>
                     </items>
@@ -1671,7 +1671,7 @@
                           <value>ЧДЦ=2</value>
                         </format>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ЦветСуммыПоступления</color>
+                          <color>0:2df5e1bb-093f-4b6c-bfdf-c1eb8c4388f0</color>
                         </textColor>
                       </extInfo>
                     </items>
@@ -2317,7 +2317,7 @@
                         <autoMaxWidth>true</autoMaxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ТекстВторостепеннойНадписи</color>
+                          <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>System.DefaultGUIFont</font>
@@ -3329,7 +3329,7 @@
                   <value>Период</value>
                 </title>
                 <titleTextColor xsi:type="core:ColorRef">
-                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                  <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                 </titleTextColor>
                 <titleFont xsi:type="core:FontRef">
                   <font>Style.NormalTextFont</font>
@@ -3380,7 +3380,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <hyperlink>true</hyperlink>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -4027,7 +4027,7 @@
                   <groupHorizontalAlign>Left</groupHorizontalAlign>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                    <color>0:a83c4bb0-e8aa-49bc-88f3-3a48b5be2d42</color>
                   </textColor>
                   <representationInContextMenu>Auto</representationInContextMenu>
                   <shapeRepresentation>None</shapeRepresentation>
@@ -4063,7 +4063,7 @@
                   <groupHorizontalAlign>Right</groupHorizontalAlign>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                    <color>0:a83c4bb0-e8aa-49bc-88f3-3a48b5be2d42</color>
                   </textColor>
                   <representationInContextMenu>Auto</representationInContextMenu>
                   <shapeRepresentation>None</shapeRepresentation>
@@ -4524,7 +4524,7 @@
                       <name>Дата1</name>
                       <id>1316</id>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -4584,7 +4584,7 @@
                         <autoMaxHeight>true</autoMaxHeight>
                         <hyperlink>true</hyperlink>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                          <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.LargeTextFont</font>
@@ -4676,7 +4676,7 @@
                       <name>НомерБанковскогоСчета</name>
                       <id>533</id>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </titleTextColor>
                       <visible>true</visible>
                       <enabled>true</enabled>
@@ -4718,7 +4718,7 @@
                         <autoMaxWidth>true</autoMaxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                          <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.NormalTextFont</font>
@@ -4802,7 +4802,7 @@
                         <value>Ведомость в</value>
                       </title>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.LargeTextFont</font>
@@ -4852,7 +4852,7 @@
                         <autoMaxHeight>true</autoMaxHeight>
                         <hyperlink>true</hyperlink>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                          <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.LargeTextFont</font>
@@ -4904,7 +4904,7 @@
                       <type>Label</type>
                       <autoMaxHeight>true</autoMaxHeight>
                       <textColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5037,7 +5037,7 @@
                         <value>Остатки в</value>
                       </title>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5086,7 +5086,7 @@
                         <autoMaxHeight>true</autoMaxHeight>
                         <hyperlink>true</hyperlink>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                          <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.NormalTextFont</font>
@@ -5135,7 +5135,7 @@
                       <autoMaxWidth>true</autoMaxWidth>
                       <autoMaxHeight>true</autoMaxHeight>
                       <textColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5234,7 +5234,7 @@
                         <value>Курс на 01.01.2001</value>
                       </title>
                       <titleTextColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </titleTextColor>
                       <titleFont xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5285,7 +5285,7 @@
                         <maxWidth>9</maxWidth>
                         <autoMaxHeight>true</autoMaxHeight>
                         <textColor xsi:type="core:ColorRef">
-                          <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                          <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                         </textColor>
                         <font xsi:type="core:FontRef">
                           <font>Style.NormalTextFont</font>
@@ -5396,7 +5396,7 @@
                     <autoMaxHeight>true</autoMaxHeight>
                     <horizontalStretch>false</horizontalStretch>
                     <textColor xsi:type="core:ColorRef">
-                      <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                      <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                     </textColor>
                     <font xsi:type="core:FontRef">
                       <font>Style.NormalTextFont</font>
@@ -5480,7 +5480,7 @@
                     <value>Начало дня</value>
                   </title>
                   <titleTextColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </titleTextColor>
                   <enabled>true</enabled>
                   <userVisible>
@@ -5537,7 +5537,7 @@
                     <chooseType>true</chooseType>
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textColor xsi:type="core:ColorRef">
-                      <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                      <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -5555,7 +5555,7 @@
                     <value>Поступило</value>
                   </title>
                   <titleTextColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </titleTextColor>
                   <enabled>true</enabled>
                   <userVisible>
@@ -5580,7 +5580,7 @@
                     <autoMaxHeight>true</autoMaxHeight>
                     <horizontalStretch>true</horizontalStretch>
                     <textColor xsi:type="core:ColorRef">
-                      <color>Style.ТекстВторостепеннойНадписи</color>
+                      <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                     </textColor>
                     <extInfo xsi:type="form:LabelDecorationExtInfo">
                       <horizontalAlign>Left</horizontalAlign>
@@ -5616,7 +5616,7 @@
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textEdit>true</textEdit>
                     <textColor xsi:type="core:ColorRef">
-                      <color>Style.ЦветСуммыПоступления</color>
+                      <color>0:2df5e1bb-093f-4b6c-bfdf-c1eb8c4388f0</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -5634,7 +5634,7 @@
                     <value>Списано</value>
                   </title>
                   <titleTextColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </titleTextColor>
                   <enabled>true</enabled>
                   <userVisible>
@@ -5659,7 +5659,7 @@
                     <autoMaxHeight>true</autoMaxHeight>
                     <horizontalStretch>true</horizontalStretch>
                     <textColor xsi:type="core:ColorRef">
-                      <color>Style.ТекстВторостепеннойНадписи</color>
+                      <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                     </textColor>
                     <extInfo xsi:type="form:LabelDecorationExtInfo">
                       <horizontalAlign>Left</horizontalAlign>
@@ -5716,7 +5716,7 @@
                       <value>Остаток</value>
                     </title>
                     <titleTextColor xsi:type="core:ColorRef">
-                      <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                      <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                     </titleTextColor>
                     <titleFont xsi:type="core:FontRef">
                       <font>Style.NormalTextFont</font>
@@ -5746,7 +5746,7 @@
                       <autoMaxHeight>true</autoMaxHeight>
                       <horizontalStretch>true</horizontalStretch>
                       <textColor xsi:type="core:ColorRef">
-                        <color>Style.ТекстВторостепеннойНадписи</color>
+                        <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>System.DefaultGUIFont</font>
@@ -5781,7 +5781,7 @@
                       <autoMaxHeight>true</autoMaxHeight>
                       <horizontalStretch>true</horizontalStretch>
                       <textColor xsi:type="core:ColorRef">
-                        <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                        <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                       </textColor>
                       <font xsi:type="core:FontRef">
                         <font>Style.NormalTextFont</font>
@@ -5866,7 +5866,7 @@
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textEdit>true</textEdit>
                     <textColor xsi:type="core:ColorRef">
-                      <color>Style.ТекстВторостепеннойНадписи</color>
+                      <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -5924,7 +5924,7 @@
                     <typeDomainEnabled>true</typeDomainEnabled>
                     <textEdit>true</textEdit>
                     <textColor xsi:type="core:ColorRef">
-                      <color>Style.ТекстВторостепеннойНадписи</color>
+                      <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                     </textColor>
                     <borderColor xsi:type="core:ColorRef">
                       <color>Style.FormBackColor</color>
@@ -6251,7 +6251,7 @@
                 <searchOnInput>Auto</searchOnInput>
                 <initialListView>Auto</initialListView>
                 <textColor xsi:type="core:ColorRef">
-                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                  <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                 </textColor>
                 <borderColor xsi:type="core:ColorRef">
                   <color>Style.FormBackColor</color>
@@ -6306,7 +6306,7 @@
                   <autoMaxWidth>true</autoMaxWidth>
                   <autoMaxHeight>true</autoMaxHeight>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ТекстВторостепеннойНадписи</color>
+                    <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                   </textColor>
                   <extInfo xsi:type="form:LabelDecorationExtInfo">
                     <hyperlink>true</hyperlink>
@@ -9053,7 +9053,7 @@
                   <value>Период</value>
                 </title>
                 <titleTextColor xsi:type="core:ColorRef">
-                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                  <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                 </titleTextColor>
                 <titleFont xsi:type="core:FontRef">
                   <font>Style.NormalTextFont</font>
@@ -9104,7 +9104,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <hyperlink>true</hyperlink>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -9843,7 +9843,7 @@
                   <groupHorizontalAlign>Left</groupHorizontalAlign>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                    <color>0:a83c4bb0-e8aa-49bc-88f3-3a48b5be2d42</color>
                   </textColor>
                   <representationInContextMenu>Auto</representationInContextMenu>
                   <shapeRepresentation>None</shapeRepresentation>
@@ -9879,7 +9879,7 @@
                   <groupHorizontalAlign>Right</groupHorizontalAlign>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                    <color>0:a83c4bb0-e8aa-49bc-88f3-3a48b5be2d42</color>
                   </textColor>
                   <representationInContextMenu>Auto</representationInContextMenu>
                   <shapeRepresentation>None</shapeRepresentation>
@@ -9964,7 +9964,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -10047,7 +10047,7 @@
                 <horizontalStretch>true</horizontalStretch>
                 <verticalStretch>true</verticalStretch>
                 <textColor xsi:type="core:ColorRef">
-                  <color>Style.ТекстВторостепеннойНадписи</color>
+                  <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                 </textColor>
                 <extInfo xsi:type="form:LabelDecorationExtInfo">
                   <hyperlink>true</hyperlink>
@@ -11671,7 +11671,7 @@
                   <value>Период</value>
                 </title>
                 <titleTextColor xsi:type="core:ColorRef">
-                  <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                  <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                 </titleTextColor>
                 <titleFont xsi:type="core:FontRef">
                   <font>Style.NormalTextFont</font>
@@ -11722,7 +11722,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <hyperlink>true</hyperlink>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -12385,7 +12385,7 @@
                   <groupHorizontalAlign>Left</groupHorizontalAlign>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                    <color>0:a83c4bb0-e8aa-49bc-88f3-3a48b5be2d42</color>
                   </textColor>
                   <representationInContextMenu>Auto</representationInContextMenu>
                   <shapeRepresentation>None</shapeRepresentation>
@@ -12421,7 +12421,7 @@
                   <groupHorizontalAlign>Right</groupHorizontalAlign>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ДосьеВторостепеннаяНадписьЦвет</color>
+                    <color>0:a83c4bb0-e8aa-49bc-88f3-3a48b5be2d42</color>
                   </textColor>
                   <representationInContextMenu>Auto</representationInContextMenu>
                   <shapeRepresentation>None</shapeRepresentation>
@@ -12502,7 +12502,7 @@
                   <autoMaxHeight>true</autoMaxHeight>
                   <placementArea>UserCmds</placementArea>
                   <textColor xsi:type="core:ColorRef">
-                    <color>Style.ЦветТекстаПравойПанелиОтборов</color>
+                    <color>0:26983c7d-abd5-4c4a-96af-013d6dcf8d2b</color>
                   </textColor>
                   <font xsi:type="core:FontRef">
                     <font>Style.NormalTextFont</font>
@@ -12585,7 +12585,7 @@
                 <horizontalStretch>true</horizontalStretch>
                 <verticalStretch>true</verticalStretch>
                 <textColor xsi:type="core:ColorRef">
-                  <color>Style.ТекстВторостепеннойНадписи</color>
+                  <color>0:14ebf12e-5b4d-42cf-8ce8-c7786c1cb04e</color>
                 </textColor>
                 <extInfo xsi:type="form:LabelDecorationExtInfo">
                   <hyperlink>true</hyperlink>
@@ -12825,7 +12825,7 @@
       <common>true</common>
     </use>
     <picture xsi:type="core:PictureRef">
-      <picture>CommonPicture.КлиентБанкКомандаЗагрузить</picture>
+      <picture>0:7272fea0-a063-4f9a-9b09-11f08f950332</picture>
     </picture>
     <action xsi:type="form:FormExtensionCommandHandlerContainer">
       <handlers>
