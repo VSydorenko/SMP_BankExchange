@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<WindowOpeningMode>LockOwnerWindow</WindowOpeningMode>
+	<UseForFoldersAndItems>Items</UseForFoldersAndItems>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<Events>
+		<Event name="OnOpen">ПриОткрытии</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+		<Event name="BeforeWriteAtServer">ПередЗаписьюНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<InputField name="Код" id="1">
+			<DataPath>Объект.Code</DataPath>
+			<UserVisible>
+				<xr:Common>false</xr:Common>
+			</UserVisible>
+			<EditMode>EnterOnInput</EditMode>
+			<ContextMenu name="КодКонтекстноеМеню" id="2"/>
+			<ExtendedTooltip name="КодРасширеннаяПодсказка" id="3"/>
+		</InputField>
+		<InputField name="ФразаДляПоискаВНазначенииПлатежа" id="4">
+			<DataPath>Объект.ФразаДляПоискаВНазначенииПлатежа</DataPath>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Регистр букв (строчные или прописные) не имеет значения.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<ToolTipRepresentation>Button</ToolTipRepresentation>
+			<EditMode>EnterOnInput</EditMode>
+			<ContextMenu name="ФразаДляПоискаВНазначенииПлатежаКонтекстноеМеню" id="5"/>
+			<ExtendedTooltip name="ФразаДляПоискаВНазначенииПлатежаРасширеннаяПодсказка" id="6"/>
+		</InputField>
+		<InputField name="Организация" id="35">
+			<DataPath>Объект.Организация</DataPath>
+			<InputHint>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>для всіх, якщо не вказано</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>для всех, если не указано</v8:content>
+				</v8:item>
+			</InputHint>
+			<ContextMenu name="ОрганизацияКонтекстноеМеню" id="36"/>
+			<ExtendedTooltip name="ОрганизацияРасширеннаяПодсказка" id="37"/>
+		</InputField>
+		<UsualGroup name="ГруппаРеквизиты" id="19">
+			<Title>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Реквізити для підстановки в документ</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Реквизиты для подстановки в документ</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<Behavior>Usual</Behavior>
+			<ExtendedTooltip name="ГруппаРеквизитыРасширеннаяПодсказка" id="20"/>
+			<ChildItems>
+				<InputField name="ВидОперацииПоступленияНаСчет" id="10">
+					<DataPath>Объект.ВидОперацииПоступленияНаСчет</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ВидОперацииПоступленияНаСчетКонтекстноеМеню" id="11"/>
+					<ExtendedTooltip name="ВидОперацииПоступленияНаСчетРасширеннаяПодсказка" id="12"/>
+					<Events>
+						<Event name="OnChange">ВидОперацииПоступленияНаСчетПриИзменении</Event>
+					</Events>
+				</InputField>
+				<InputField name="ВидОперацииРасходаСоСчета" id="13">
+					<DataPath>Объект.ВидОперацииРасходаСоСчета</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ВидОперацииРасходаСоСчетаКонтекстноеМеню" id="14"/>
+					<ExtendedTooltip name="ВидОперацииРасходаСоСчетаРасширеннаяПодсказка" id="15"/>
+					<Events>
+						<Event name="OnChange">ВидОперацииРасходаСоСчетаПриИзменении</Event>
+					</Events>
+				</InputField>
+				<InputField name="СтатьяДДС" id="7">
+					<DataPath>Объект.СтатьяДДС</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="СтатьяДДСКонтекстноеМеню" id="8"/>
+					<ExtendedTooltip name="СтатьяДДСРасширеннаяПодсказка" id="9"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="ГруппаСчетУчета" id="33">
+			<Group>Vertical</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаСчетУчетаРасширеннаяПодсказка" id="34"/>
+			<ChildItems>
+				<InputField name="СчетУчетаРасчетовСКонтрагентом" id="21">
+					<DataPath>Объект.СчетУчетаРасчетовСКонтрагентом</DataPath>
+					<ContextMenu name="СчетУчетаРасчетовСКонтрагентомКонтекстноеМеню" id="22"/>
+					<ExtendedTooltip name="СчетУчетаРасчетовСКонтрагентомРасширеннаяПодсказка" id="23"/>
+					<Events>
+						<Event name="OnChange">СчетУчетаРасчетовСКонтрагентомПриИзменении</Event>
+					</Events>
+				</InputField>
+				<InputField name="СубконтоДт1" id="24">
+					<DataPath>СубконтоДт1</DataPath>
+					<ContextMenu name="СубконтоДт1КонтекстноеМеню" id="25"/>
+					<ExtendedTooltip name="СубконтоДт1РасширеннаяПодсказка" id="26"/>
+				</InputField>
+				<InputField name="СубконтоДт2" id="27">
+					<DataPath>СубконтоДт2</DataPath>
+					<ContextMenu name="СубконтоДт2КонтекстноеМеню" id="28"/>
+					<ExtendedTooltip name="СубконтоДт2РасширеннаяПодсказка" id="29"/>
+				</InputField>
+				<InputField name="СубконтоДт3" id="30">
+					<DataPath>СубконтоДт3</DataPath>
+					<ContextMenu name="СубконтоДт3КонтекстноеМеню" id="31"/>
+					<ExtendedTooltip name="СубконтоДт3РасширеннаяПодсказка" id="32"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:CatalogObject.СМП_СоответствияНазначенийИРеквизитовПлатежа</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+			<SavedData>true</SavedData>
+		</Attribute>
+		<Attribute name="СубконтоДт1" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Субконто Дт1</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Субконто Дт1</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:TypeSet>cfg:Characteristic.ВидыСубконтоХозрасчетные</v8:TypeSet>
+			</Type>
+		</Attribute>
+		<Attribute name="СубконтоДт2" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Субконто Дт2</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Субконто Дт2</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:TypeSet>cfg:Characteristic.ВидыСубконтоХозрасчетные</v8:TypeSet>
+			</Type>
+		</Attribute>
+		<Attribute name="СубконтоДт3" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Субконто Дт3</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Субконто Дт3</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:TypeSet>cfg:Characteristic.ВидыСубконтоХозрасчетные</v8:TypeSet>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаголовокСубконтоДт1" id="5">
+			<Title>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Заголовок субконто Дт1</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заголовок субконто Дт1</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаголовокСубконтоДт2" id="6">
+			<Title>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Заголовок субконто Дт2</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заголовок субконто Дт2</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаголовокСубконтоДт3" id="7">
+			<Title>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Заголовок субконто Дт3</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заголовок субконто Дт3</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+</Form>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="de9ba9a8-c61e-4e4b-996c-a4079ecb419b">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ВидыОперацийСписаниеДенежныхСредств" category="Ref">
+				<xr:TypeId>d7588555-4e9f-4448-a27a-94de807bde29</xr:TypeId>
+				<xr:ValueId>55a55c3f-f690-4c0d-81be-336d86494ea7</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ВидыОперацийСписаниеДенежныхСредств" category="Manager">
+				<xr:TypeId>1bf7635a-b93d-490a-b44f-f2f90ee50413</xr:TypeId>
+				<xr:ValueId>d45407ce-a057-4dde-8ddd-aec0cd3faf90</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ВидыОперацийСписаниеДенежныхСредств" category="List">
+				<xr:TypeId>d307e687-79a0-4c2b-a85d-7de470d3e8da</xr:TypeId>
+				<xr:ValueId>de8129b3-1bc8-4e13-b0aa-6efa566631a9</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ВидыОперацийСписаниеДенежныхСредств</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>af6ef148-7e1e-4191-8572-312071f79445</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Enum>
+</MetaDataObject>
