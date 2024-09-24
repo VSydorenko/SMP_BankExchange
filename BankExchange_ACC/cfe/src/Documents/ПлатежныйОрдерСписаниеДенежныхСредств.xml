@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Document uuid="e4a89680-c5e7-403f-8d04-f3e343f5f9d3">
+		<InternalInfo>
+			<xr:GeneratedType name="DocumentObject.ПлатежныйОрдерСписаниеДенежныхСредств" category="Object">
+				<xr:TypeId>82ab391f-2d2f-45b3-a89c-3a2efc813342</xr:TypeId>
+				<xr:ValueId>87123bf8-3d6c-4370-b7c2-55958bd74cf5</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentRef.ПлатежныйОрдерСписаниеДенежныхСредств" category="Ref">
+				<xr:TypeId>e4211112-7290-4e8e-ac6d-d6733fa3bd74</xr:TypeId>
+				<xr:ValueId>e76800a6-32ba-4b22-8b16-14b2a16c4a55</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentSelection.ПлатежныйОрдерСписаниеДенежныхСредств" category="Selection">
+				<xr:TypeId>f3b850a0-e53b-48bc-b60a-641f1f614d05</xr:TypeId>
+				<xr:ValueId>6deaaf95-d968-4802-af8b-1fed5087dc76</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentList.ПлатежныйОрдерСписаниеДенежныхСредств" category="List">
+				<xr:TypeId>2126180a-306a-4181-a429-18d281dd5b2c</xr:TypeId>
+				<xr:ValueId>af67fbe0-8628-4ee9-afdc-7ea223dd1166</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentManager.ПлатежныйОрдерСписаниеДенежныхСредств" category="Manager">
+				<xr:TypeId>e96101d3-64af-463a-a133-11537c79c38c</xr:TypeId>
+				<xr:ValueId>22244e0b-71d9-4db2-97ed-06cf82cde340</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ПлатежныйОрдерСписаниеДенежныхСредств</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>31abe434-0545-476d-a656-dc1df7c9de81</ExtendedConfigurationObject>
+			<RegisterRecords/>
+		</Properties>
+		<ChildObjects/>
+	</Document>
+</MetaDataObject>
