@@ -25,6 +25,10 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Регистр букв (строчные или прописные) не имеет значения.</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Реєстр літер (маленькі чи великі) не має значення.</v8:content>
+				</v8:item>
 			</ToolTip>
 			<ToolTipRepresentation>Button</ToolTipRepresentation>
 			<EditMode>EnterOnInput</EditMode>

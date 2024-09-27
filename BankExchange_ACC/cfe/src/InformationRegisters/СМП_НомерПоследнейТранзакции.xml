@@ -233,6 +233,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Дата транзакции</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Дата транзакції</v8:content>
+						</v8:item>
 					</Synonym>
 					<Comment/>
 					<Type>
@@ -274,6 +278,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Банковский счет</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Банківський рахунок</v8:content>
 						</v8:item>
 					</Synonym>
 					<Comment/>

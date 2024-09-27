@@ -636,6 +636,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Идентификатор регламентного задания</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Ідентифікатор регламентного завдання</v8:content>
+						</v8:item>
 					</Synonym>
 					<Comment/>
 					<Type>
@@ -763,6 +767,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Подключаемая обработка</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Зовнішня обробка</v8:content>
 						</v8:item>
 					</Synonym>
 					<Comment/>
