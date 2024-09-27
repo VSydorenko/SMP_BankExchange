@@ -24,6 +24,10 @@
     <key>ru</key>
     <value>Загрузка / выгрузка платежных документов.</value>
   </explanation>
+  <explanation>
+    <key>uk</key>
+    <value>Завантаження / вивантаження платіжних документів</value>
+  </explanation>
   <attributes uuid="7031333f-4373-42f6-9c7a-8be00327e3db">
     <name>АвтоматическиПодставлятьДокументы</name>
     <synonym>
@@ -32,7 +36,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Підставляти замовлення, рахунок, ПД з документів розрахунку</value>
+      <value>Автоматично підставляти замовлення, рахунок, ПД з документів розрахунку</value>
     </synonym>
     <type>
       <types>Boolean</types>
@@ -93,6 +97,10 @@
       <key>ru</key>
       <value>Версия формата обмена с банками</value>
     </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Версія формату обміну з банками</value>
+    </toolTip>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
   </attributes>
@@ -102,12 +110,20 @@
       <key>ru</key>
       <value>Группа доступа</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Група доступу</value>
+    </synonym>
     <type>
       <types>CatalogRef.ГруппыДоступаКонтрагентов</types>
     </type>
     <toolTip>
       <key>ru</key>
       <value>Группа доступа, к которой отнесен контрагент</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Група доступу, до якої віднесено контрагента</value>
     </toolTip>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
@@ -306,7 +322,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Проведення документів, що завантажуються</value>
+      <value>Проводити докумени, що завантажуються</value>
     </synonym>
     <type>
       <types>Boolean</types>
@@ -470,6 +486,10 @@
       <key>ru</key>
       <value>Выгрузка</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Вивантаження</value>
+    </synonym>
     <standardAttributes>
       <dataHistory>Use</dataHistory>
       <name>LineNumber</name>
@@ -482,6 +502,10 @@
       <name>ВидДокумента</name>
       <synonym>
         <key>ru</key>
+        <value>Вид документа</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Вид документа</value>
       </synonym>
       <type>
@@ -502,6 +526,10 @@
         <key>ru</key>
         <value>Вид операции</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид операції</value>
+      </synonym>
       <type>
         <types>EnumRef.ВидыОперацийПлатежноеПоручение</types>
       </type>
@@ -516,6 +544,10 @@
       <synonym>
         <key>ru</key>
         <value>Вид платежа</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид платежу</value>
       </synonym>
       <type>
         <types>String</types>
@@ -533,6 +565,10 @@
         <key>ru</key>
         <value>Выгружать</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вивантажувати</value>
+      </synonym>
       <type>
         <types>Boolean</types>
       </type>
@@ -545,6 +581,10 @@
       <synonym>
         <key>ru</key>
         <value>Готовность</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Готовність</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -562,6 +602,10 @@
       <name>Дата</name>
       <synonym>
         <key>ru</key>
+        <value>Дата</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Дата</value>
       </synonym>
       <type>
@@ -582,6 +626,10 @@
         <key>ru</key>
         <value>Документ</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Документ</value>
+      </synonym>
       <type>
         <types>DocumentRef.ПлатежноеПоручение</types>
       </type>
@@ -596,6 +644,10 @@
       <synonym>
         <key>ru</key>
         <value>Идентификатор платежа</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Ідентифікатор платежа</value>
       </synonym>
       <comment>поле 22 &quot;Код&quot;</comment>
       <type>
@@ -616,6 +668,10 @@
         <key>ru</key>
         <value>ИНН плательщика</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ІПН платника</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -633,6 +689,10 @@
       <synonym>
         <key>ru</key>
         <value>ИНН получателя</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ІПН отримувача</value>
       </synonym>
       <type>
         <types>String</types>
@@ -670,6 +730,10 @@
         <key>ru</key>
         <value>Код вида дохода</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Код виду доходу</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -688,6 +752,10 @@
         <key>ru</key>
         <value>Код выплат</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Код виплат</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -698,8 +766,16 @@
         <key>ru</key>
         <value>ЧН=-</value>
       </format>
+      <format>
+        <key>uk</key>
+        <value>ЧН=-</value>
+      </format>
       <editFormat>
         <key>ru</key>
+        <value>ЧН=-</value>
+      </editFormat>
+      <editFormat>
+        <key>uk</key>
         <value>ЧН=-</value>
       </editFormat>
       <minValue xsi:type="core:StringValue">
@@ -734,6 +810,10 @@
         <key>ru</key>
         <value>Контрагент</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Контрагент</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -752,6 +832,10 @@
         <key>ru</key>
         <value>Банк контрагента</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Банк контрагента</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -767,6 +851,10 @@
       <synonym>
         <key>ru</key>
         <value>Банк для расчетов</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Банк для розрахунків</value>
       </synonym>
       <type>
         <types>String</types>
@@ -784,7 +872,11 @@
       <name>КонтрагентБИКБанка</name>
       <synonym>
         <key>ru</key>
-        <value>БИК банка</value>
+        <value>МФО банка</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>МФО банка</value>
       </synonym>
       <type>
         <types>String</types>
@@ -802,7 +894,11 @@
       <name>КонтрагентБИКРЦБанка</name>
       <synonym>
         <key>ru</key>
-        <value>БИК РЦ банка</value>
+        <value>МФО РЦ банка</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>МФО РЦ банка</value>
       </synonym>
       <type>
         <types>String</types>
@@ -822,6 +918,10 @@
         <key>ru</key>
         <value>Город банка контрагента</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Місто банка контрагента</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -839,6 +939,10 @@
       <synonym>
         <key>ru</key>
         <value>Город РЦ банка</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Місто РЦ банка</value>
       </synonym>
       <type>
         <types>String</types>
@@ -858,6 +962,10 @@
         <key>ru</key>
         <value>ИНН контрагента</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ІПН контрагента</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -876,6 +984,10 @@
         <key>ru</key>
         <value>Корр счет РЦ банка</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Кор. рахунок РЦ банка</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -893,7 +1005,11 @@
       <name>КонтрагентКПП</name>
       <synonym>
         <key>ru</key>
-        <value>КПП контрагента</value>
+        <value>ЕГРПОУ контрагента</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ЄДРПОУ контрагента</value>
       </synonym>
       <type>
         <types>String</types>
@@ -913,6 +1029,10 @@
         <key>ru</key>
         <value>Номер счета контрагента</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Номер рахунка контрагента</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -931,6 +1051,10 @@
         <key>ru</key>
         <value>Счет контрагента</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Рахунок контрагента</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -946,6 +1070,10 @@
       <synonym>
         <key>ru</key>
         <value>Расчетный счет контрагента</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Розрахунковий рахунок контрагента</value>
       </synonym>
       <type>
         <types>String</types>
@@ -966,6 +1094,10 @@
         <key>ru</key>
         <value>Счет контрагента</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Рахунок контрагента</value>
+      </synonym>
       <type>
         <types>CatalogRef.БанковскиеСчета</types>
       </type>
@@ -979,7 +1111,11 @@
       <name>КПППлательщика</name>
       <synonym>
         <key>ru</key>
-        <value>КПП плательщика</value>
+        <value>ЕГРПОУ плательщика</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ЄДРПОУ платника</value>
       </synonym>
       <type>
         <types>String</types>
@@ -997,7 +1133,11 @@
       <name>КПППолучателя</name>
       <synonym>
         <key>ru</key>
-        <value>КПП получателя</value>
+        <value>ЕГРПОУ получателя</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ЄДРПОУ отримувача</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1017,6 +1157,10 @@
         <key>ru</key>
         <value>Назначение платежа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -1031,6 +1175,10 @@
       <name>Номер</name>
       <synonym>
         <key>ru</key>
+        <value>Номер</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Номер</value>
       </synonym>
       <type>
@@ -1083,6 +1231,10 @@
         <key>ru</key>
         <value>Описание ошибок</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Опис помилок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1101,6 +1253,10 @@
         <key>ru</key>
         <value>Организация</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Організація</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -1116,6 +1272,10 @@
       <synonym>
         <key>ru</key>
         <value>Банк организации</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Банк організації</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1133,6 +1293,10 @@
         <key>ru</key>
         <value>Банк для расчетов</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Банк для розрахунків</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1149,7 +1313,11 @@
       <name>ОрганизацияБИКБанка</name>
       <synonym>
         <key>ru</key>
-        <value>БИК Банка организации</value>
+        <value>МФО Банка организации</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>МФО Банка організації</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1167,7 +1335,11 @@
       <name>ОрганизацияБИКРЦБанка</name>
       <synonym>
         <key>ru</key>
-        <value>БИК РЦ банка</value>
+        <value>МФО РЦ банка</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>МФО РЦ банка</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1187,6 +1359,10 @@
         <key>ru</key>
         <value>Город банка организации</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Місто банка організації</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1204,6 +1380,10 @@
       <synonym>
         <key>ru</key>
         <value>Город РЦ банка</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Місто РЦ банка</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1223,6 +1403,10 @@
         <key>ru</key>
         <value>ИНН организации</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ІПН організації</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1241,6 +1425,10 @@
         <key>ru</key>
         <value>Корр счет РЦ банка</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Кор. рахунок РЦ банка</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1258,7 +1446,11 @@
       <name>ОрганизацияКПП</name>
       <synonym>
         <key>ru</key>
-        <value>КПП организации</value>
+        <value>ЕГРПОУ организации</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>ЄДРПОУ організації</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1278,6 +1470,10 @@
         <key>ru</key>
         <value>Номер счета организации</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Номер рахунка організації</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1295,6 +1491,10 @@
       <synonym>
         <key>ru</key>
         <value>Организация перечисление налога</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Організація перерахування податку</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1314,6 +1514,10 @@
         <key>ru</key>
         <value>Расчетный счет организации</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Розрахунковий рахунок організації</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1332,6 +1536,10 @@
       <synonym>
         <key>ru</key>
         <value>Счет организации</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Рахунок організації</value>
       </synonym>
       <type>
         <types>CatalogRef.БанковскиеСчета</types>
@@ -1366,6 +1574,10 @@
         <key>ru</key>
         <value>Показатель даты</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник дати</value>
+      </synonym>
       <type>
         <types>Date</types>
         <dateQualifiers>
@@ -1383,6 +1595,10 @@
       <synonym>
         <key>ru</key>
         <value>Показатель номера</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник номера</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1402,6 +1618,10 @@
         <key>ru</key>
         <value>Показатель основания</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник підстави</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1419,6 +1639,10 @@
       <synonym>
         <key>ru</key>
         <value>Показатель периода</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник періоду</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1438,6 +1662,10 @@
         <key>ru</key>
         <value>Показатель типа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник типу</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1455,6 +1683,10 @@
       <synonym>
         <key>ru</key>
         <value>Состояние ЭД</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Стан ЕД</value>
       </synonym>
       <type>
         <types>EnumRef.СостоянияВерсийЭД</types>
@@ -1488,6 +1720,10 @@
         <key>ru</key>
         <value>Сумма документа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Сума документа</value>
+      </synonym>
       <type>
         <types>Number</types>
         <numberQualifiers>
@@ -1507,6 +1743,10 @@
       <synonym>
         <key>ru</key>
         <value>Выделено</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Виділено</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -1528,6 +1768,10 @@
         <key>ru</key>
         <value>Текст плательщика</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Текст платника</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -1544,6 +1788,10 @@
         <key>ru</key>
         <value>Текст получателя</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Текст отримувача</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -1558,6 +1806,10 @@
       <name>ТипДокумента</name>
       <synonym>
         <key>ru</key>
+        <value>Тип документа</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Тип документа</value>
       </synonym>
       <type>
@@ -1582,6 +1834,10 @@
     <synonym>
       <key>ru</key>
       <value>Загрузка</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Завантаження</value>
     </synonym>
     <standardAttributes>
       <dataHistory>Use</dataHistory>
@@ -1619,6 +1875,10 @@
       <synonym>
         <key>ru</key>
         <value>Вид аккредитива</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид акредитиву</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1660,6 +1920,10 @@
         <key>ru</key>
         <value>Вид налога</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид податку</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1669,6 +1933,10 @@
       <toolTip>
         <key>ru</key>
         <value>Указывается вид налога</value>
+      </toolTip>
+      <toolTip>
+        <key>uk</key>
+        <value>Зазначається вид податку</value>
       </toolTip>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -1701,6 +1969,10 @@
         <key>ru</key>
         <value>Вид операции исходное значение</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид операції вихідне значення</value>
+      </synonym>
       <type>
         <types>EnumRef.ВидыОперацийРасходСоСчета</types>
         <types>EnumRef.ВидыОперацийПоступлениеНаСчет</types>
@@ -1715,6 +1987,10 @@
         <key>ru</key>
         <value>Вид операции</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид операції</value>
+      </synonym>
       <type>
         <types>EnumRef.ВидыОперацийПоступлениеНаСчет</types>
       </type>
@@ -1727,6 +2003,10 @@
       <synonym>
         <key>ru</key>
         <value>Вид операции</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид операції</value>
       </synonym>
       <type>
         <types>EnumRef.ВидыОперацийРасходСоСчета</types>
@@ -1763,6 +2043,10 @@
         <key>ru</key>
         <value>Вид платежа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Вид платежу</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1780,6 +2064,10 @@
       <synonym>
         <key>ru</key>
         <value>Выделять вид операции</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Виділяти вид операції</value>
       </synonym>
       <type>
         <types>String</types>
@@ -1821,6 +2109,10 @@
         <key>ru</key>
         <value>Дата</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Дата</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1837,6 +2129,10 @@
       <name>ДатаДок</name>
       <synonym>
         <key>ru</key>
+        <value>Дата док</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Дата док</value>
       </synonym>
       <type>
@@ -1887,6 +2183,10 @@
         <key>ru</key>
         <value>Дата поступило</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Дата надійшло</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -1905,6 +2205,10 @@
         <key>ru</key>
         <value>Дата</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Дата</value>
+      </synonym>
       <type>
         <types>Date</types>
         <dateQualifiers/>
@@ -1919,6 +2223,10 @@
       <name>ДатаСписано</name>
       <synonym>
         <key>ru</key>
+        <value>Дата списано</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Дата списано</value>
       </synonym>
       <type>
@@ -1939,6 +2247,10 @@
         <key>ru</key>
         <value>Действие с договором</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Дія з договором</value>
+      </synonym>
       <type>
         <types>EnumRef.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</types>
       </type>
@@ -1952,6 +2264,10 @@
         <key>ru</key>
         <value>Действие с контрагентом</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Дія з контрагентом</value>
+      </synonym>
       <type>
         <types>EnumRef.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</types>
       </type>
@@ -1964,6 +2280,10 @@
       <synonym>
         <key>ru</key>
         <value>Действие со счетом контрагента</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Дія з рахунком контрагента</value>
       </synonym>
       <type>
         <types>EnumRef.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</types>
@@ -2005,6 +2325,10 @@
         <key>ru</key>
         <value>Договор валюта расчетов</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Договір валюта розрахунків</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2021,6 +2345,10 @@
         <key>ru</key>
         <value>Договор дата</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Договір дата</value>
+      </synonym>
       <type>
         <types>Date</types>
         <dateQualifiers>
@@ -2036,6 +2364,10 @@
       <synonym>
         <key>ru</key>
         <value>Договор исходное значение</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Договір початкове значення</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2060,6 +2392,10 @@
         <key>ru</key>
         <value>Договор наименование левая часть</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Договір найменування ліва частина</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2075,6 +2411,10 @@
       <synonym>
         <key>ru</key>
         <value>Договор номер</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Договір номер</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2094,6 +2434,10 @@
         <key>ru</key>
         <value>Договор расчеты в условных единицах</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Договір розрахунки в умовних одиницях</value>
+      </synonym>
       <type>
         <types>Boolean</types>
       </type>
@@ -2105,6 +2449,10 @@
       <name>Документ</name>
       <synonym>
         <key>ru</key>
+        <value>Документ</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Документ</value>
       </synonym>
       <type>
@@ -2172,6 +2520,10 @@
         <key>ru</key>
         <value>Дополнительные условия</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Додаткові умови</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2189,6 +2541,10 @@
       <synonym>
         <key>ru</key>
         <value>Загружать</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Завантажувати</value>
       </synonym>
       <type>
         <types>Boolean</types>
@@ -2215,6 +2571,10 @@
       <toolTip>
         <key>ru</key>
         <value>Используется для указания заказа, к которому относится платеж</value>
+      </toolTip>
+      <toolTip>
+        <key>uk</key>
+        <value>Використовується для вказівки замовлення, до якого відноситься платіж</value>
       </toolTip>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -2285,6 +2645,10 @@
         <key>ru</key>
         <value>Касса организации, на которую оформляется поступление наличных</value>
       </toolTip>
+      <toolTip>
+        <key>uk</key>
+        <value>Каса організації, на яку оформляється надходження готівки</value>
+      </toolTip>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
       <quickChoice>DontUse</quickChoice>
@@ -2299,6 +2663,10 @@
       <synonym>
         <key>ru</key>
         <value>Квитанция время</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Квитанція час</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2318,6 +2686,10 @@
         <key>ru</key>
         <value>Квитанция дата</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Квитанція дата</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2336,6 +2708,10 @@
         <key>ru</key>
         <value>Квитанция содержание</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Квитанція вміст</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2352,6 +2728,10 @@
       <name>Код</name>
       <synonym>
         <key>ru</key>
+        <value>Код</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Код</value>
       </synonym>
       <comment>поле 22 &quot;Код&quot;</comment>
@@ -2395,6 +2775,10 @@
         <key>ru</key>
         <value>Код вида дохода</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Код виду доходу</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2411,6 +2795,10 @@
       <name>Контрагент</name>
       <synonym>
         <key>ru</key>
+        <value>Контрагент</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Контрагент</value>
       </synonym>
       <type>
@@ -2432,6 +2820,10 @@
       <synonym>
         <key>ru</key>
         <value>Контрагент исходный</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Контрагент вихідний</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2472,6 +2864,10 @@
         <key>ru</key>
         <value>Корреспонденция исходное значение</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Кореспонденція вихідне значення</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2510,6 +2906,10 @@
         <key>ru</key>
         <value>Назначение платежа 1</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу 1</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2527,6 +2927,10 @@
       <synonym>
         <key>ru</key>
         <value>Назначение платежа 2</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу 2</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2546,6 +2950,10 @@
         <key>ru</key>
         <value>Назначение платежа 3</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу 3</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2563,6 +2971,10 @@
       <synonym>
         <key>ru</key>
         <value>Назначение платежа 4</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу 4</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2582,6 +2994,10 @@
         <key>ru</key>
         <value>Назначение платежа 5</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу 5</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2600,6 +3016,10 @@
         <key>ru</key>
         <value>Назначение платежа 6</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Призначення платежу 6</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2616,6 +3036,10 @@
       <name>Номер</name>
       <synonym>
         <key>ru</key>
+        <value>Номер</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Номер</value>
       </synonym>
       <type>
@@ -2692,6 +3116,10 @@
         <key>ru</key>
         <value>Номер счета поставщика</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Номер рахунка постачальника</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2728,6 +3156,10 @@
         <key>ru</key>
         <value>Операция</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Операція</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2745,6 +3177,10 @@
       <synonym>
         <key>ru</key>
         <value>Описание ошибок</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Опис помилок</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2825,6 +3261,10 @@
         <key>ru</key>
         <value>Платежный ордер</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платіжний ордер</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2842,6 +3282,10 @@
       <synonym>
         <key>ru</key>
         <value>Платеж</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платіж</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2861,6 +3305,10 @@
         <key>ru</key>
         <value>Плательщик</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2878,6 +3326,10 @@
       <synonym>
         <key>ru</key>
         <value>Плательщик 1</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник 1</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2897,6 +3349,10 @@
         <key>ru</key>
         <value>Плательщик 2</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник 2</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2914,6 +3370,10 @@
       <synonym>
         <key>ru</key>
         <value>Плательщик 3</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник 3</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2933,6 +3393,10 @@
         <key>ru</key>
         <value>Плательщик 4</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник 4</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2950,6 +3414,10 @@
       <synonym>
         <key>ru</key>
         <value>Плательщик банк 1</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник банк 1</value>
       </synonym>
       <type>
         <types>String</types>
@@ -2969,6 +3437,10 @@
         <key>ru</key>
         <value>Плательщик банк 2</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник банк 2</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -2985,7 +3457,11 @@
       <name>ПлательщикБИК</name>
       <synonym>
         <key>ru</key>
-        <value>Плательщик БИК</value>
+        <value>Плательщик МФО</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник МФО</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3005,6 +3481,10 @@
         <key>ru</key>
         <value>Плательщик ИНН</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник ІПН</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3023,6 +3503,10 @@
         <key>ru</key>
         <value>Плательщик корсчет</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник коррахунок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3039,7 +3523,11 @@
       <name>ПлательщикКПП</name>
       <synonym>
         <key>ru</key>
-        <value>Плательщик ЕДРПОУ</value>
+        <value>Плательщик ЕГРПОУ</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник ЄДРПОУ</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3059,6 +3547,10 @@
         <key>ru</key>
         <value>Плательщик расч счет</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник р. рахунок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3076,6 +3568,10 @@
       <synonym>
         <key>ru</key>
         <value>Плательщик счет</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Платник рахунок</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3095,6 +3591,10 @@
         <key>ru</key>
         <value>Показатель даты</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник дати</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3112,6 +3612,10 @@
       <synonym>
         <key>ru</key>
         <value>Показатель даты док</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник дати док</value>
       </synonym>
       <type>
         <types>Date</types>
@@ -3131,6 +3635,10 @@
         <key>ru</key>
         <value>Показатель КБК</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник КБК</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3148,6 +3656,10 @@
       <synonym>
         <key>ru</key>
         <value>Показатель номера</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник номера</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3167,6 +3679,10 @@
         <key>ru</key>
         <value>Показатель основания</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник підстави</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3184,6 +3700,10 @@
       <synonym>
         <key>ru</key>
         <value>Показатель периода</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник періоду</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3203,6 +3723,10 @@
         <key>ru</key>
         <value>Показатель типа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Показник типу</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3220,6 +3744,10 @@
       <synonym>
         <key>ru</key>
         <value>Получатель</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3239,6 +3767,10 @@
         <key>ru</key>
         <value>Получатель 1</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач 1</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3256,6 +3788,10 @@
       <synonym>
         <key>ru</key>
         <value>Получатель 2</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач 2</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3275,6 +3811,10 @@
         <key>ru</key>
         <value>Получатель 3</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач 3</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3292,6 +3832,10 @@
       <synonym>
         <key>ru</key>
         <value>Получатель 4</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач 4</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3311,6 +3855,10 @@
         <key>ru</key>
         <value>Получатель банк 1</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач банк 1</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3329,6 +3877,10 @@
         <key>ru</key>
         <value>Получатель банк 2</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач банк 2</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3345,7 +3897,11 @@
       <name>ПолучательБИК</name>
       <synonym>
         <key>ru</key>
-        <value>Получатель БИК</value>
+        <value>Получатель МФО</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач МФО</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3365,6 +3921,10 @@
         <key>ru</key>
         <value>Получатель ИНН</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач ІПН</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3383,6 +3943,10 @@
         <key>ru</key>
         <value>Получатель корсчет</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач коррахунок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3399,7 +3963,11 @@
       <name>ПолучательКПП</name>
       <synonym>
         <key>ru</key>
-        <value>Получатель ЕДРПОУ</value>
+        <value>Получатель ЕГРПОУ</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач ЕДРПОУ</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3419,6 +3987,10 @@
         <key>ru</key>
         <value>Получатель расч счет</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач р. рахунок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3437,6 +4009,10 @@
         <key>ru</key>
         <value>Получатель счет</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Отримувач рахунок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3454,6 +4030,10 @@
       <synonym>
         <key>ru</key>
         <value>Поступило</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Надійшло</value>
       </synonym>
       <type>
         <types>Date</types>
@@ -3491,6 +4071,10 @@
         <key>ru</key>
         <value>Проведен</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Проведений</value>
+      </synonym>
       <type>
         <types>Boolean</types>
       </type>
@@ -3520,6 +4104,10 @@
       <name>Списано</name>
       <synonym>
         <key>ru</key>
+        <value>Списано</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Списано</value>
       </synonym>
       <type>
@@ -3591,6 +4179,10 @@
         <key>ru</key>
         <value>Срок платежа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Строк платежа</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3608,6 +4200,10 @@
       <synonym>
         <key>ru</key>
         <value>Срок уплаты</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Строк сплати</value>
       </synonym>
       <type>
         <types>Date</types>
@@ -3677,6 +4273,10 @@
         <key>ru</key>
         <value>Сумма</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Сума</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3694,6 +4294,10 @@
       <synonym>
         <key>ru</key>
         <value>Сумма документа</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Сума документа</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -3715,6 +4319,10 @@
         <key>ru</key>
         <value>Выделено</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Виділено</value>
+      </synonym>
       <type>
         <types>Number</types>
         <numberQualifiers>
@@ -3734,6 +4342,10 @@
       <synonym>
         <key>ru</key>
         <value>Поступило</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Надійшло</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -3755,6 +4367,10 @@
         <key>ru</key>
         <value>Поступило</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Надійшло</value>
+      </synonym>
       <type>
         <types>Number</types>
         <numberQualifiers>
@@ -3773,6 +4389,10 @@
       <name>СуммаСписано</name>
       <synonym>
         <key>ru</key>
+        <value>Списано</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Списано</value>
       </synonym>
       <type>
@@ -3795,6 +4415,10 @@
         <key>ru</key>
         <value>Списано</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Списано</value>
+      </synonym>
       <type>
         <types>Number</types>
         <numberQualifiers>
@@ -3814,6 +4438,10 @@
       <synonym>
         <key>ru</key>
         <value>Счет контрагента</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Рахунок контрагента</value>
       </synonym>
       <type>
         <types>CatalogRef.БанковскиеСчета</types>
@@ -3880,6 +4508,10 @@
         <key>ru</key>
         <value>Текст документа</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Текст документа</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -3894,6 +4526,10 @@
       <name>ТипДокумента</name>
       <synonym>
         <key>ru</key>
+        <value>Тип документа</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
         <value>Тип документа</value>
       </synonym>
       <type>
@@ -3914,6 +4550,10 @@
         <key>ru</key>
         <value>Условие оплаты</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Умова оплати</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3932,6 +4572,10 @@
         <key>ru</key>
         <value>Условие оплаты</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Умова оплати</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers>
@@ -3949,6 +4593,10 @@
       <synonym>
         <key>ru</key>
         <value>Условие оплаты</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Умова оплати</value>
       </synonym>
       <type>
         <types>String</types>
@@ -3987,6 +4635,10 @@
         <key>ru</key>
         <value>Всего поступило</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Всього надійшло</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -4002,6 +4654,10 @@
       <synonym>
         <key>ru</key>
         <value>Всего списано</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Всього списано</value>
       </synonym>
       <type>
         <types>String</types>
@@ -4051,6 +4707,10 @@
         <key>ru</key>
         <value>Конец</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Кінець</value>
+      </synonym>
       <type>
         <types>Date</types>
         <dateQualifiers>
@@ -4068,6 +4728,10 @@
       <synonym>
         <key>ru</key>
         <value>Конечная сумма</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Кінцева сума</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -4088,6 +4752,10 @@
         <key>ru</key>
         <value>Конечный остаток</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Кінцевий залишок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -4103,6 +4771,10 @@
       <synonym>
         <key>ru</key>
         <value>Начало</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Початок</value>
       </synonym>
       <type>
         <types>Date</types>
@@ -4121,6 +4793,10 @@
       <synonym>
         <key>ru</key>
         <value>Начальная сумма</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Початкова сума</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -4141,6 +4817,10 @@
         <key>ru</key>
         <value>Начальный остаток</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Початковий залишок</value>
+      </synonym>
       <type>
         <types>String</types>
         <stringQualifiers/>
@@ -4156,6 +4836,10 @@
       <synonym>
         <key>ru</key>
         <value>Поступило</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Надійшло</value>
       </synonym>
       <type>
         <types>Number</types>
@@ -4175,6 +4859,10 @@
       <synonym>
         <key>ru</key>
         <value>Расчетный счет</value>
+      </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Розрахунковий рахунок</value>
       </synonym>
       <type>
         <types>CatalogRef.БанковскиеСчета</types>
@@ -4207,6 +4895,10 @@
         <key>ru</key>
         <value>Списано</value>
       </synonym>
+      <synonym>
+        <key>uk</key>
+        <value>Списано</value>
+      </synonym>
       <type>
         <types>Number</types>
         <numberQualifiers>
@@ -4227,6 +4919,10 @@
       <key>ru</key>
       <value>Форма старт</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма старт</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4235,6 +4931,10 @@
     <synonym>
       <key>ru</key>
       <value>Форма выгрузка</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма вивантаження</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
@@ -4245,6 +4945,10 @@
       <key>ru</key>
       <value>Форма настройка</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма налаштування</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4253,6 +4957,10 @@
     <synonym>
       <key>ru</key>
       <value>Форма загрузка</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма завантаження</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
@@ -4263,6 +4971,10 @@
       <key>ru</key>
       <value>Файл обмена</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Файл обміну</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4271,6 +4983,10 @@
     <synonym>
       <key>ru</key>
       <value>Редактирование контрагента договора</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Редагування контрагента договору</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
@@ -4281,6 +4997,10 @@
       <key>ru</key>
       <value>Форма не найденных контрагентов</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма не знайдених контрагентів</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4289,6 +5009,10 @@
     <synonym>
       <key>ru</key>
       <value>Форма просмотра строки</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма перегляду строчки</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
@@ -4299,6 +5023,10 @@
       <key>ru</key>
       <value>Редактирование назначения</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Редагування призначення</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4307,6 +5035,10 @@
     <synonym>
       <key>ru</key>
       <value>Редактирование статьи ДДС</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Редагування татті РГК</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
@@ -4317,6 +5049,10 @@
       <key>ru</key>
       <value>Редактирование корреспонденции</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Редагування кореспонденції</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4325,6 +5061,10 @@
     <synonym>
       <key>ru</key>
       <value>Загрузка документов завершена</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Завантаження документів закінчена</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
@@ -4335,6 +5075,10 @@
       <key>ru</key>
       <value>Сохранение платежек</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Збережений платіж</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4344,6 +5088,10 @@
       <key>ru</key>
       <value>Выписки банка</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Виписки банка</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -4352,6 +5100,10 @@
     <synonym>
       <key>ru</key>
       <value>Контроль безопасности обмена с банком</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Контроль безпеки обміну з банком</value>
     </synonym>
     <help>
       <pages>
@@ -4367,12 +5119,20 @@
       <key>ru</key>
       <value>Протокол загрузки</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Протокол завантаження</value>
+    </synonym>
   </templates>
   <templates uuid="e992a99a-6a9e-47cf-a11d-3c150fcfbdec">
     <name>ПротоколСохранения</name>
     <synonym>
       <key>ru</key>
       <value>Протокол сохранения</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Протокол зберігання</value>
     </synonym>
   </templates>
   <templates uuid="9e98b672-40b3-4c18-bd5c-fd47d8a37eb1">
@@ -4381,12 +5141,20 @@
       <key>ru</key>
       <value>Платежное поручение</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Платіжне доручення</value>
+    </synonym>
   </templates>
   <templates uuid="e195260c-5f2f-42ae-818b-428535f72956">
     <name>ПФ_MXL_БанковскийОрдер</name>
     <synonym>
       <key>ru</key>
       <value>Банковский ордер</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Банківський ордер</value>
     </synonym>
   </templates>
   <templates uuid="08c47595-c924-4878-ab3d-1ea35f479ca1">
@@ -4395,12 +5163,20 @@
       <key>ru</key>
       <value>Не найдена операция</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Не знайдена операція</value>
+    </synonym>
   </templates>
   <templates uuid="72cab5ce-5f8a-443f-a421-abba94cfd0aa">
     <name>ПФ_MXL_ПлатежноеПоручениеНеПрямыеРасчеты</name>
     <synonym>
       <key>ru</key>
       <value>Платежное поручение</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Платіжне доручення</value>
     </synonym>
   </templates>
   <templates uuid="01042522-5228-49ae-b5d2-45a8c56d3fd4">
@@ -4422,6 +5198,10 @@
     <synonym>
       <key>ru</key>
       <value>Аккредитив</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Акредитив</value>
     </synonym>
   </templates>
   <commands uuid="62b2f1bf-892b-47bd-a211-5f97ff8048d1">

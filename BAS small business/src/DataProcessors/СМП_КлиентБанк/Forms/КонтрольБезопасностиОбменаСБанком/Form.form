@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Контроль безопасности обмена с банком</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Контроль безпеки обміну з банком</value>
+  </title>
   <items xsi:type="form:FormGroup">
     <name>ГруппаПроверка</name>
     <id>34</id>
@@ -16,6 +20,10 @@
         <title>
           <key>ru</key>
           <value>Восклицательный знак</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Знак оклику</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -61,6 +69,11 @@
             <key>ru</key>
             <value>Файл выгружен на компьютер.
 Оставьте окно открытым до загрузки файла в Клиент-банк</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Файл вивантажено на комп'ютер.
+Залиште вікно відкритим до завантаження файлу в Клієнт-банк</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -270,6 +283,10 @@
             <key>ru</key>
             <value>Подсказка</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Підказка</value>
+          </title>
           <extendedTooltip>
             <name>ГруппаИнструкцияПроверкаПоКнопкеПодсказкаРасширеннаяПодсказка</name>
             <id>111</id>
@@ -302,6 +319,10 @@
         <title>
           <key>ru</key>
           <value>Проверка по кнопке</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Перевірка по кнопці</value>
         </title>
         <extendedTooltip>
           <name>ГруппаИнструкцияПроверкаПоКнопкеРасширеннаяПодсказка</name>
@@ -337,6 +358,10 @@
         <key>ru</key>
         <value>Проверка по кнопке</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Перевірка по кнопці</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаПроверкаПоКнопкеРасширеннаяПодсказка</name>
         <id>98</id>
@@ -366,6 +391,10 @@
         <title>
           <key>ru</key>
           <value>Проверка выполняется</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Перевірка виконується</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -411,6 +440,10 @@
             <key>ru</key>
             <value>Файл выгружен на компьютер. Он соответствует данным программы</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Файл вивантажений на комп'ютер. Він відповідає даним програми</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -454,6 +487,11 @@
             <key>ru</key>
             <value>Эта проверка гарантирует, что платежные реквизиты в файле
 не подменены вирусом</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Ця перевірка гарантує, що платіжні реквізити в файлі
+не замінені вірусом</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -503,6 +541,10 @@
             <title>
               <key>ru</key>
               <value>Оставьте окно открытым до загрузки в Клиент-банк</value>
+            </title>
+            <title>
+              <key>uk</key>
+              <value>Залиште вікно відкритим до завантаження в Клієнт-банк</value>
             </title>
             <visible>true</visible>
             <enabled>true</enabled>
@@ -583,6 +625,10 @@
           <key>ru</key>
           <value>Текст сообщения</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Текст повідомлення</value>
+        </title>
         <extendedTooltip>
           <name>ГруппаПроверкаВыполняетсяСообщениеРасширеннаяПодсказка</name>
           <id>130</id>
@@ -617,6 +663,10 @@
         <key>ru</key>
         <value>Проверка выполняется</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Перевірка виконується</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаПроверкаВыполняетсяРасширеннаяПодсказка</name>
         <id>118</id>
@@ -646,6 +696,10 @@
         <title>
           <key>ru</key>
           <value>Проверка успешна</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Перевірка успішна</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -691,6 +745,10 @@
             <key>ru</key>
             <value>Файл на компьютере совпадает с данными программы</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Файл на комп'ютері співпадає з даними програми</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -734,6 +792,11 @@
             <key>ru</key>
             <value>Эта проверка гарантирует, что платежные реквизиты в файле
 не подменены вирусом</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Ця перевірка гарантує, що платіжні реквізити в файлі
+не замінені вірусом</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -817,6 +880,10 @@
         <key>ru</key>
         <value>Проверка успешна</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Перевірка успішна</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаПроверкаУспешнаРасширеннаяПодсказка</name>
         <id>24</id>
@@ -846,6 +913,10 @@
         <title>
           <key>ru</key>
           <value>Файл изменен</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Файл змінений</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -891,6 +962,10 @@
             <key>ru</key>
             <value>Содержимое файла на компьютере не совпадает с данными программы</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Вміст файлу на комп'ютері не збігається з даними програми</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -933,6 +1008,10 @@
           <title>
             <key>ru</key>
             <value>Платежные реквизиты могли быть подменены вирусом</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Платіжні реквізити могли бути підмінені вірусом</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -1138,6 +1217,10 @@
             <key>ru</key>
             <value>После закрытия окна файл будет удален</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Після закриття вікна файл буде видалено</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -1183,6 +1266,10 @@
           <key>ru</key>
           <value>Файл изменен</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Файл змінений</value>
+        </title>
         <extendedTooltip>
           <name>ГруппаФайлИзмененСообщениеРасширеннаяПодсказка</name>
           <id>150</id>
@@ -1217,6 +1304,10 @@
         <key>ru</key>
         <value>Файл изменен</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Файл змінений</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаФайлИзмененРасширеннаяПодсказка</name>
         <id>37</id>
@@ -1246,6 +1337,10 @@
         <title>
           <key>ru</key>
           <value>Файл удален</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Файл видалений</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -1291,6 +1386,10 @@
             <key>ru</key>
             <value>Файл на компьютере был удален</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Файл на комп'ютері був видалений</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -1333,6 +1432,10 @@
           <title>
             <key>ru</key>
             <value>Платежные реквизиты могли быть подменены вирусом</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Платіжні реквізити могли бути підмінені вірусом</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -1540,6 +1643,10 @@
           <key>ru</key>
           <value>Файл удален</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Файл видалений</value>
+        </title>
         <extendedTooltip>
           <name>ГруппаФайлУдаленСообщениеРасширеннаяПодсказка</name>
           <id>163</id>
@@ -1574,6 +1681,10 @@
         <key>ru</key>
         <value>Файл удален</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Файл видалений</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаФайлУдаленРасширеннаяПодсказка</name>
         <id>39</id>
@@ -1602,6 +1713,10 @@
     <title>
       <key>ru</key>
       <value>Проверка</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Перевірка</value>
     </title>
     <extendedTooltip>
       <name>ГруппаПроверкаРасширеннаяПодсказка</name>
@@ -1694,6 +1809,10 @@
     </userVisible>
     <title>
       <key>ru</key>
+      <value>Кнопки</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>Кнопки</value>
     </title>
     <extendedTooltip>
@@ -1877,10 +1996,18 @@
       <key>ru</key>
       <value>Проверить</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Перевірити</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
       <value>Проверить</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Перевірити</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -1898,10 +2025,18 @@
       <key>ru</key>
       <value>Закрыть</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Закрити</value>
+    </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
       <value>Закрыть</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Закрити</value>
     </toolTip>
     <use>
       <common>true</common>

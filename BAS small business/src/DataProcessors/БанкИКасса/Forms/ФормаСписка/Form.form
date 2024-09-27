@@ -3449,7 +3449,7 @@
           </title>
           <title>
             <key>uk</key>
-            <value>Група список</value>
+            <value>Список</value>
           </title>
           <extendedTooltip>
             <name>ГруппаСписокРасширеннаяПодсказка</name>
@@ -11583,7 +11583,7 @@
             </title>
             <title>
               <key>uk</key>
-              <value>Еквайрер</value>
+              <value>Еквайєр</value>
             </title>
             <visible>true</visible>
             <enabled>true</enabled>

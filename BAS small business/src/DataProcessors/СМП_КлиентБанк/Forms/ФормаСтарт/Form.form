@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Обмен с банком</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Обмін з банком</value>
+  </title>
   <items xsi:type="form:FormGroup">
     <name>ГруппаФильтр</name>
     <id>217</id>
@@ -113,6 +117,10 @@
         <key>ru</key>
         <value>Надпись отбора по счету</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Надпис відбору по рахунку</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаНадписьОтбораПоСчетуРасширеннаяПодсказка</name>
         <id>273</id>
@@ -217,6 +225,10 @@
       <key>ru</key>
       <value>Фильтр</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Фільтр</value>
+    </title>
     <extendedTooltip>
       <name>ГруппаФильтрExtendedTooltip</name>
       <id>225</id>
@@ -295,6 +307,10 @@
         <title>
           <key>ru</key>
           <value>Загрузить выписку из банка в 1С</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Завантажити виписку із банка в програму</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -383,6 +399,10 @@
         <title>
           <key>ru</key>
           <value>Выгрузить платежные поручения из 1С в банк</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Вивантажити платіжні доручення в банк</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -553,6 +573,10 @@
       <title>
         <key>ru</key>
         <value>Команд клиента банка</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Команд клієнт банка</value>
       </title>
       <extendedTooltip>
         <name>ГруппаКомандКлиентаБанкаExtendedTooltip</name>
@@ -978,6 +1002,10 @@
           <key>ru</key>
           <value>Обмен с банком позволяет получать выписки по счетам из банка и передавать платежные поручения в банк. Взаимодействие с банком может выполняться через программу &quot;Клиент-Банк&quot; или по прямому каналу подключения к банку. Для использования прямого обмена необходимо включить обмен электронными документами с банками и создать настройку ЭДО с банком.</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Обмін з банком дозволяє отримувати виписки по рахунках з банку та передавати платіжні доручення в банк. Взаємодія з банком може виконуватися через програму &quot;Клієнт-Банк&quot; або за прямим каналом підключення до банку. Для використання прямого обміну необхідно включити обмін електронними документами з банками та створити налаштування ЕДО з банком</value>
+        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -1028,6 +1056,12 @@
 Если счет не указан, по умолчанию используется обмен через программу &quot;Клиент-Банк&quot;, а после выбора файла выписки банковский счет будет определен автоматически. Если в выписке содержатся данные по нескольким счетам, то будет выбран 1-ый. Для загрузки данных по другим счетам, укажите нужный счет по ссылке вверху этого диалога.
 </value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Вибраний банківський рахунок визначає варіант обміну з банком.  
+Якщо рахунок не вказано, за замовчуванням використовується обмін через програму &quot;Клієнт-Банк&quot;, а після вибору файлу виписки банківський рахунок буде визначено автоматично.  
+Якщо у виписці містяться дані по кількох рахунках, буде вибрано 1-й. Для завантаження даних по інших рахунках, вкажіть потрібний рахунок за посиланням у верхній частині цього діалогу.</value>
+        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -1077,6 +1111,10 @@
         <key>ru</key>
         <value>Декорации описания</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Декорація опис</value>
+      </title>
       <horizontalStretch>true</horizontalStretch>
       <extendedTooltip>
         <name>ГруппаДекорацииОписанияExtendedTooltip</name>
@@ -1111,6 +1149,10 @@
     <title>
       <key>ru</key>
       <value>Форматирования команд</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Форматування команд</value>
     </title>
     <extendedTooltip>
       <name>ГруппаФорматированияКомандExtendedTooltip</name>
@@ -1187,6 +1229,10 @@
         <key>ru</key>
         <value>Подробнее о прямом обмене с банком</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Детальніше про прямий обмін з банком</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -1237,6 +1283,10 @@
     <title>
       <key>ru</key>
       <value>Дополнительная информация</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Додаткова інформація</value>
     </title>
     <extendedTooltip>
       <name>ДополнительнаяИнформацияРасширеннаяПодсказка</name>
@@ -1356,6 +1406,10 @@
       <key>ru</key>
       <value>Загрузить списания по счету </value>
     </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Завантажити списання по рахунку</value>
+    </toolTip>
     <use>
       <common>true</common>
     </use>
@@ -1381,6 +1435,10 @@
       <key>ru</key>
       <value>Сохранить новые исходящие поручения в файл обмена с клиентом банка</value>
     </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Зберегти нові вихідні доручення у файл обміну з клієнтом банку</value>
+    </toolTip>
     <use>
       <common>true</common>
     </use>
@@ -1405,6 +1463,10 @@
     <toolTip>
       <key>ru</key>
       <value>По всем банковским счетам</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>По всім банківським рахункам</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -1435,6 +1497,10 @@
       <key>ru</key>
       <value>Настройка</value>
     </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Налаштування</value>
+    </toolTip>
     <use>
       <common>true</common>
     </use>
@@ -1459,6 +1525,10 @@
     <toolTip>
       <key>ru</key>
       <value>История загрузки и выгрузки</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Історія завантаження та вивантаження</value>
     </toolTip>
     <use>
       <common>true</common>

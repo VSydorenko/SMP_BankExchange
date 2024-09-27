@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Файл обмена с клиентом банка</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Файл обмену з клієнт банком</value>
+  </title>
   <items xsi:type="form:FormField">
     <name>ТекстФайла</name>
     <id>2</id>
@@ -263,6 +267,10 @@
         <key>ru</key>
         <value>Форма группа 1</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Форма група 1</value>
+      </title>
       <extendedTooltip>
         <name>ФормаГруппа1РасширеннаяПодсказка</name>
         <id>11</id>
@@ -307,6 +315,10 @@
     <name>ТекстФайла</name>
     <title>
       <key>ru</key>
+      <value>Текст файла</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>Текст файла</value>
     </title>
     <id>2</id>
@@ -374,10 +386,18 @@
       <key>ru</key>
       <value>Форматированный вид</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Форматований вигляд</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
       <value>Форматированный вид</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Форматований вигляд</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -396,10 +416,18 @@
       <key>ru</key>
       <value>Сохранить на диск</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Зберегти на диск</value>
+    </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
       <value>Сохранить на диск</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Зберегти на диск</value>
     </toolTip>
     <use>
       <common>true</common>

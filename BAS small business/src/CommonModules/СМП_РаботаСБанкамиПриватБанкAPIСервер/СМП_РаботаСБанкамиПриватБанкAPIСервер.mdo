@@ -5,5 +5,9 @@
     <key>ru</key>
     <value>СМП обмен приват банк API</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>СМП обмін ПриватБанк API</value>
+  </synonym>
   <server>true</server>
 </mdclass:CommonModule>

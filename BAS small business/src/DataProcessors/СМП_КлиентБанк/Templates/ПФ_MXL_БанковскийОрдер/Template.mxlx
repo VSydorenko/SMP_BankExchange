@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://v8.1c.ru/8.2/data/spreadsheet" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<languageSettings>
-		<currentLanguage>ru</currentLanguage>
+		<currentLanguage>uk</currentLanguage>
 		<defaultLanguage>ru</defaultLanguage>
 		<languageInfo>
 			<id>ru</id>
@@ -161,6 +161,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>БАНКОВСКИЙ ОРДЕР №</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>БАНКІВСКИЙ ОРДЕР №</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -221,6 +225,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>0401067</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>0401067</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -252,6 +260,10 @@
 					<tl>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
+							<v8:content>Дата</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
 							<v8:content>Дата</v8:content>
 						</v8:item>
 					</tl>
@@ -326,6 +338,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Вид оплаты</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Вид оплати</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -410,6 +426,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Плательщик</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Платник</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -422,6 +442,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Сч. №</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Рах. №</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -433,6 +457,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Сумма</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Сума</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -491,6 +519,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Получатель</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Отримувач</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -502,6 +534,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Сч. №</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Рах. №</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -587,6 +623,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Назначение платежа</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Призначення платежу</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -645,6 +685,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Отметки банка</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Відмітки банка</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -767,6 +811,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Подписи</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Підписи</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -1099,6 +1147,10 @@
 		<format>
 			<v8:item>
 				<v8:lang>ru</v8:lang>
+				<v8:content>ДФ=dd.MM.yyyy</v8:content>
+			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
 				<v8:content>ДФ=dd.MM.yyyy</v8:content>
 			</v8:item>
 		</format>

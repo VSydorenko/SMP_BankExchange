@@ -10,6 +10,10 @@
         <key>ru</key>
         <value>Выписки банка</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Виписки банка</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -34,6 +38,10 @@
         <title>
           <key>ru</key>
           <value>Выписки банка дата выписки</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Виписки банка дата виписки</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -455,6 +463,10 @@
       <key>ru</key>
       <value>Список</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Список</value>
+    </title>
     <id>1</id>
     <valueType>
       <types>DynamicList</types>
@@ -491,6 +503,10 @@
       <key>ru</key>
       <value>Табличный документ</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Табличний документ</value>
+    </title>
     <id>2</id>
     <valueType>
       <types>SpreadsheetDocument</types>
@@ -509,10 +525,18 @@
       <key>ru</key>
       <value>Открыть </value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Відкрити</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
       <value>Открыть ЭД</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Відкрити ЕД</value>
     </toolTip>
     <use>
       <common>true</common>

@@ -524,9 +524,17 @@
       <key>ru</key>
       <value>ОК</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>ОК</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
+      <value>ОК</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
       <value>ОК</value>
     </toolTip>
     <use>

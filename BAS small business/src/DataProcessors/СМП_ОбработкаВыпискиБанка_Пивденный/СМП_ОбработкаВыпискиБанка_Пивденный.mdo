@@ -20,10 +20,18 @@
     <key>ru</key>
     <value>Нужно выгрузить во внешние и добавить в справочник Дополнительные обработки</value>
   </explanation>
+  <explanation>
+    <key>uk</key>
+    <value>Потрібно вивантажити у зовнішні та додати в довідник Додаткові обробки</value>
+  </explanation>
   <forms uuid="fc82bbd5-c9f9-487a-ab53-353954e54dd4">
     <name>Форма</name>
     <synonym>
       <key>ru</key>
+      <value>Форма</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
       <value>Форма</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>

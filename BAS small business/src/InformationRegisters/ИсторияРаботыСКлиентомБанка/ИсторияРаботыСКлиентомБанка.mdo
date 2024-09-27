@@ -52,6 +52,10 @@
       <key>ru</key>
       <value>Дата загрузки/выгрузки</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Дата завантаження/вивантаження</value>
+    </synonym>
     <fillValue xsi:type="core:UndefinedValue"/>
     <fillChecking>ShowError</fillChecking>
     <fullTextSearch>Use</fullTextSearch>
@@ -72,6 +76,10 @@
       <key>ru</key>
       <value>Загрузка</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Завантаження</value>
+    </synonym>
     <type>
       <types>Boolean</types>
     </type>
@@ -86,6 +94,10 @@
     <synonym>
       <key>ru</key>
       <value>Кол-во документов</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>К-сть документів</value>
     </synonym>
     <type>
       <types>Number</types>
@@ -106,6 +118,10 @@
       <key>ru</key>
       <value>Исходный файл</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Оригінальний файл</value>
+    </synonym>
     <type>
       <types>ValueStorage</types>
     </type>
@@ -120,6 +136,10 @@
     <synonym>
       <key>ru</key>
       <value>Форматированный файл</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форматований файл</value>
     </synonym>
     <type>
       <types>ValueStorage</types>
@@ -136,6 +156,10 @@
       <key>ru</key>
       <value>Файл отформатирован</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Файл відформатований</value>
+    </synonym>
     <type>
       <types>Boolean</types>
     </type>
@@ -151,6 +175,10 @@
       <key>ru</key>
       <value>Протокол загрузки</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Протокол завантаження</value>
+    </synonym>
     <type>
       <types>ValueStorage</types>
     </type>
@@ -165,6 +193,10 @@
     <synonym>
       <key>ru</key>
       <value>Кодировка</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Кодування</value>
     </synonym>
     <type>
       <types>String</types>
@@ -187,6 +219,10 @@
       <key>ru</key>
       <value>Организация</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Організація</value>
+    </synonym>
     <type>
       <types>CatalogRef.Организации</types>
     </type>
@@ -206,6 +242,10 @@
       <key>ru</key>
       <value>Банковский счет</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Банківський рахунок</value>
+    </synonym>
     <type>
       <types>CatalogRef.БанковскиеСчета</types>
     </type>
@@ -224,6 +264,10 @@
       <key>ru</key>
       <value>Форма списка</value>
     </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма списку</value>
+    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
@@ -231,6 +275,10 @@
     <name>ФормаПротокола</name>
     <synonym>
       <key>ru</key>
+      <value>Протокол</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
       <value>Протокол</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
@@ -241,6 +289,10 @@
     <synonym>
       <key>ru</key>
       <value>Файл обмена</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Файл обміну</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>

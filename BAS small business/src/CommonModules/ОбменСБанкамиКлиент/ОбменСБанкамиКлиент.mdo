@@ -5,6 +5,10 @@
     <key>ru</key>
     <value>Обмен с банками клиент</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обмін з банками клієнт</value>
+  </synonym>
   <clientManagedApplication>true</clientManagedApplication>
   <clientOrdinaryApplication>true</clientOrdinaryApplication>
 </mdclass:CommonModule>

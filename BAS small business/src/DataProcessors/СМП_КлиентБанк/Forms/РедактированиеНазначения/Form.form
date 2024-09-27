@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Изменение операции</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Зміна операції</value>
+  </title>
   <items xsi:type="form:FormField">
     <name>НазначениеПлатежа</name>
     <id>1</id>
@@ -135,6 +139,10 @@
               <key>ru</key>
               <value>От покупателя</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Від покупця</value>
+            </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.6b0bcc99-61d6-429e-a503-fb65b3098dc2</value>
             </value>
@@ -143,6 +151,10 @@
             <presentation>
               <key>ru</key>
               <value>От поставщика</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Від постачальника</value>
             </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.ebeeddc4-6027-4d37-97b6-2d7a81e5ab93</value>
@@ -153,6 +165,10 @@
               <key>ru</key>
               <value>От подотчетника</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Від підзвітника</value>
+            </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.19588320-1904-404a-add2-d5fee92024e0</value>
             </value>
@@ -161,6 +177,10 @@
             <presentation>
               <key>ru</key>
               <value>Покупка валюты</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Покупка валюти</value>
             </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.c7d533b7-dde2-446a-b086-a65d0c457c1f</value>
@@ -171,6 +191,10 @@
               <key>ru</key>
               <value>Прочее</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Інше</value>
+            </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.1679d729-e492-485b-a416-04af7f2a056d</value>
             </value>
@@ -179,6 +203,10 @@
             <presentation>
               <key>ru</key>
               <value>Прочие расчеты (контрагенты, учредители)</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Інші розрахунки (контрагенти, засновники)</value>
             </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.20b33f6a-c56e-483c-b568-b6665e0e4bf4</value>
@@ -189,6 +217,10 @@
               <key>ru</key>
               <value>Возврат налогов</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Повернення податків</value>
+            </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.30281789-0db7-4f04-99e2-3fd66b597c42</value>
             </value>
@@ -197,6 +229,10 @@
             <presentation>
               <key>ru</key>
               <value>Расчеты по кредитам</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Розрахунки по кредитам</value>
             </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.884f9769-2fbc-4b40-b606-c778c4f88660</value>
@@ -207,6 +243,10 @@
               <key>ru</key>
               <value>Возврат займа сотрудником</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Повернення позики працівником</value>
+            </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.9aed7d72-bc7e-439d-a986-82192e332993</value>
             </value>
@@ -215,6 +255,10 @@
             <presentation>
               <key>ru</key>
               <value>Поступление оплаты по картам</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Надходження оплати по картам</value>
             </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>8c4cd0c2-5218-4a88-85db-741b1584723a.8fcfdae0-0ee0-4d59-8a32-dac4c2eef2d0</value>
@@ -230,6 +274,10 @@
       <title>
         <key>ru</key>
         <value>Настройки входящих</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Налаштування вхідних</value>
       </title>
       <horizontalStretch>true</horizontalStretch>
       <extendedTooltip>
@@ -350,6 +398,10 @@
               <key>ru</key>
               <value>Прочие расчеты (контрагенты, учредители)</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Інші розрахунки (контрагенти, засновники)</value>
+            </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.0c23b137-a2ed-445c-9733-dafa1145f653</value>
             </value>
@@ -358,6 +410,10 @@
             <presentation>
               <key>ru</key>
               <value>Расчеты по кредитам</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Розрахунки по кредитам</value>
             </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.1004bc9f-ab25-4447-8b63-f14a7c434723</value>
@@ -368,6 +424,10 @@
               <key>ru</key>
               <value>Выдача займа сотруднику</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Видача позики працівнику</value>
+            </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.5c483c55-5ebc-48e8-af24-2ec66e3d45e9</value>
             </value>
@@ -376,6 +436,10 @@
             <presentation>
               <key>ru</key>
               <value>Возврат оплаты на карты</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>Повернення оплати на карти</value>
             </presentation>
             <value xsi:type="core:ReferenceValue">
               <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.f7034e2d-0011-4d33-b780-a0992b36d8ff</value>
@@ -651,6 +715,10 @@
           <key>ru</key>
           <value>Виды операций</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Види операцій</value>
+        </title>
         <extendedTooltip>
           <name>ГруппаВидыОперацийExtendedTooltip</name>
           <id>100</id>
@@ -679,6 +747,10 @@
       <title>
         <key>ru</key>
         <value>Настройки исходящих</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Налаштування вихідних</value>
       </title>
       <horizontalStretch>true</horizontalStretch>
       <extendedTooltip>
@@ -834,6 +906,10 @@
     </userVisible>
     <title>
       <key>ru</key>
+      <value>Команд</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>Команд</value>
     </title>
     <extendedTooltip>
@@ -1024,6 +1100,10 @@
       <key>ru</key>
       <value>ОК</value>
     </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>ОК</value>
+    </toolTip>
     <use>
       <common>true</common>
     </use>
@@ -1042,12 +1122,16 @@
     </title>
     <title>
       <key>uk</key>
-      <value>Скасування</value>
+      <value>Скасувати</value>
     </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
       <value>Отмена</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Скасувати</value>
     </toolTip>
     <use>
       <common>true</common>

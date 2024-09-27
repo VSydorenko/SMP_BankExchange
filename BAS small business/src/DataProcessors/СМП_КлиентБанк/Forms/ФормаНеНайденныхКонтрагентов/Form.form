@@ -83,6 +83,10 @@
         <key>ru</key>
         <value>Плательщик: р/счет</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Платник: р/рахунок</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -628,6 +632,10 @@
         <key>ru</key>
         <value>Представление</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Представлення</value>
+      </title>
       <id>1</id>
       <valueType>
         <types>String</types>
@@ -715,7 +723,7 @@
       </title>
       <title>
         <key>uk</key>
-        <value>Завантажити</value>
+        <value>Завантажувати</value>
       </title>
       <id>5</id>
       <valueType>
@@ -780,12 +788,16 @@
     </title>
     <title>
       <key>uk</key>
-      <value>Встановити позначку для всіх</value>
+      <value>Позначити все</value>
     </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
       <value>Отметить все</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Позначити все</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -814,6 +826,10 @@
     <toolTip>
       <key>ru</key>
       <value>Снять отметку у всех</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Зняти позначку у всіх</value>
     </toolTip>
     <use>
       <common>true</common>

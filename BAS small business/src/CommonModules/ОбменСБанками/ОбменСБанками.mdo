@@ -5,6 +5,10 @@
     <key>ru</key>
     <value>Обмен с банками</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обмін з банками</value>
+  </synonym>
   <server>true</server>
   <externalConnection>true</externalConnection>
   <clientOrdinaryApplication>true</clientOrdinaryApplication>

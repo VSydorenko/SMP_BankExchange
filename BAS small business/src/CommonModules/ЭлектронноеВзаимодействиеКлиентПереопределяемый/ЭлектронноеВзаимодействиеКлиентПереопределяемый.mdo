@@ -5,6 +5,10 @@
     <key>ru</key>
     <value>Электронное взаимодействие клиент переопределяемый</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Електронна взаємодія клієнт перевизначаємий</value>
+  </synonym>
   <clientManagedApplication>true</clientManagedApplication>
   <clientOrdinaryApplication>true</clientOrdinaryApplication>
 </mdclass:CommonModule>

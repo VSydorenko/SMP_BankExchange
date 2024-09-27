@@ -5,6 +5,10 @@
     <key>ru</key>
     <value>Обработки обслуживания</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обробка обслуговування</value>
+  </synonym>
   <comment>Нужно выгружать во внешние обработки и подключать как элементы справочника</comment>
   <includeHelpInContents>true</includeHelpInContents>
   <content>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</content>

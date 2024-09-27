@@ -371,7 +371,7 @@
               </title>
               <title>
                 <key>uk</key>
-                <value>Повна назва</value>
+                <value>Юридичне найменування</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -432,6 +432,10 @@
             <title>
               <key>ru</key>
               <value>Наименование полное</value>
+            </title>
+            <title>
+              <key>uk</key>
+              <value>Найменування повне</value>
             </title>
             <extendedTooltip>
               <name>ГруппаНаименованиеПолноеРасширеннаяПодсказка</name>
@@ -565,6 +569,10 @@
                 <key>ru</key>
                 <value>ИНН</value>
               </title>
+              <title>
+                <key>uk</key>
+                <value>ІПН</value>
+              </title>
               <extendedTooltip>
                 <name>ГруппаИННРасширеннаяПодсказка</name>
                 <id>511</id>
@@ -652,7 +660,11 @@
               </userVisible>
               <title>
                 <key>ru</key>
-                <value>КПП</value>
+                <value>ЕГРПОУ</value>
+              </title>
+              <title>
+                <key>uk</key>
+                <value>ЄДРПОУ</value>
               </title>
               <extendedTooltip>
                 <name>ГруппаКППРасширеннаяПодсказка</name>
@@ -685,7 +697,11 @@
             </userVisible>
             <title>
               <key>ru</key>
-              <value>ИНН/КПП нового контрагента</value>
+              <value>ИНН/ЕГРПОУ нового контрагента</value>
+            </title>
+            <title>
+              <key>uk</key>
+              <value>ІПН/ЄДРПОУ нового контрагента</value>
             </title>
             <enableContentChange>true</enableContentChange>
             <extendedTooltip>
@@ -1179,6 +1195,10 @@
               <key>ru</key>
               <value>Контрагент ссылка</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>Контрагент посилання</value>
+            </title>
             <extendedTooltip>
               <name>ГруппаКонтрагентСсылкаРасширеннаяПодсказка</name>
               <id>495</id>
@@ -1275,6 +1295,10 @@
               <key>ru</key>
               <value>Контроль ИНН</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>Контроль ІПН</value>
+            </title>
             <extendedTooltip>
               <name>КонтрольИННРасширеннаяПодсказка</name>
               <id>484</id>
@@ -1307,7 +1331,7 @@
               <displayImportance>VeryHigh</displayImportance>
               <title>
                 <key>ru</key>
-                <value>КПП</value>
+                <value>ЕГРПОУ</value>
               </title>
               <title>
                 <key>uk</key>
@@ -1368,7 +1392,11 @@
             </userVisible>
             <title>
               <key>ru</key>
-              <value>Контроль КПП</value>
+              <value>Контроль ЕГРПОУ</value>
+            </title>
+            <title>
+              <key>uk</key>
+              <value>Контроль ЄДРПОУ</value>
             </title>
             <extendedTooltip>
               <name>КонтрольКППРасширеннаяПодсказка</name>
@@ -2144,7 +2172,11 @@
                 </userVisible>
                 <title>
                   <key>ru</key>
-                  <value>БИК банка</value>
+                  <value>МФО банка</value>
+                </title>
+                <title>
+                  <key>uk</key>
+                  <value>МФО банка</value>
                 </title>
                 <extendedTooltip>
                   <name>ГруппаБИКБанкаРасширеннаяПодсказка</name>
@@ -2503,7 +2535,7 @@
                   </userVisible>
                   <title>
                     <key>ru</key>
-                    <value>Группа БИК Банка (не прямые расчеты)</value>
+                    <value>Группа МФО Банка (не прямые расчеты)</value>
                   </title>
                   <extendedTooltip>
                     <name>ГруппаБИКБанкаНеПрямыеРасширеннаяПодсказка</name>
@@ -2890,6 +2922,10 @@
               <key>ru</key>
               <value>Счет контрагента</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>Рахунок контрагента</value>
+            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -3069,6 +3105,10 @@
           <title>
             <key>ru</key>
             <value>Счет контрагента</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Рахунок контрагента</value>
           </title>
           <extendedTooltip>
             <name>ГруппаСчетКонтрагентаРасширеннаяПодсказка</name>
@@ -3442,6 +3482,10 @@
             <key>ru</key>
             <value>с наименованием договора по умолчанию</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>з найменуванням договору за замовчуванням</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -3677,6 +3721,10 @@
               <key>ru</key>
               <value>с наименованием договора по умолчанию</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>з найменуванням договору за замовчуванням</value>
+            </title>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -3733,6 +3781,10 @@
                 <title>
                   <key>ru</key>
                   <value>№ договора</value>
+                </title>
+                <title>
+                  <key>uk</key>
+                  <value>№ договору</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -3791,6 +3843,10 @@
                 <title>
                   <key>ru</key>
                   <value>от</value>
+                </title>
+                <title>
+                  <key>uk</key>
+                  <value>від</value>
                 </title>
                 <visible>true</visible>
                 <enabled>true</enabled>
@@ -4039,6 +4095,10 @@
               <title>
                 <key>ru</key>
                 <value>Наименование</value>
+              </title>
+              <title>
+                <key>uk</key>
+                <value>Найменування</value>
               </title>
               <visible>true</visible>
               <enabled>true</enabled>
@@ -4339,6 +4399,10 @@
           <title>
             <key>ru</key>
             <value>Договор контрагента</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Договір контрагента</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -4812,6 +4876,10 @@
                     <key>ru</key>
                     <value>От покупателя</value>
                   </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Від покупця</value>
+                  </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.6b0bcc99-61d6-429e-a503-fb65b3098dc2</value>
                   </value>
@@ -4820,6 +4888,10 @@
                   <presentation>
                     <key>ru</key>
                     <value>От поставщика</value>
+                  </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Від постачальника</value>
                   </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.ebeeddc4-6027-4d37-97b6-2d7a81e5ab93</value>
@@ -4830,6 +4902,10 @@
                     <key>ru</key>
                     <value>От подотчетника</value>
                   </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Від підзвітника</value>
+                  </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.19588320-1904-404a-add2-d5fee92024e0</value>
                   </value>
@@ -4838,6 +4914,10 @@
                   <presentation>
                     <key>ru</key>
                     <value>Покупка валюты</value>
+                  </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Покупка валюти</value>
                   </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.c7d533b7-dde2-446a-b086-a65d0c457c1f</value>
@@ -4848,6 +4928,10 @@
                     <key>ru</key>
                     <value>Прочее</value>
                   </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Інше</value>
+                  </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.1679d729-e492-485b-a416-04af7f2a056d</value>
                   </value>
@@ -4856,6 +4940,10 @@
                   <presentation>
                     <key>ru</key>
                     <value>Прочие расчеты (контрагенты, учредители)</value>
+                  </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Інші розрахунки (контрагенти, засновники)</value>
                   </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.20b33f6a-c56e-483c-b568-b6665e0e4bf4</value>
@@ -4866,6 +4954,10 @@
                     <key>ru</key>
                     <value>Возврат налогов</value>
                   </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Повернення податків</value>
+                  </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.30281789-0db7-4f04-99e2-3fd66b597c42</value>
                   </value>
@@ -4874,6 +4966,10 @@
                   <presentation>
                     <key>ru</key>
                     <value>Расчеты по кредитам</value>
+                  </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Розрахунки по кредитам</value>
                   </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.884f9769-2fbc-4b40-b606-c778c4f88660</value>
@@ -4884,6 +4980,10 @@
                     <key>ru</key>
                     <value>Возврат займа сотрудником</value>
                   </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Повернення позики працівником</value>
+                  </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.9aed7d72-bc7e-439d-a986-82192e332993</value>
                   </value>
@@ -4892,6 +4992,10 @@
                   <presentation>
                     <key>ru</key>
                     <value>Поступление оплаты по картам</value>
+                  </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Надходження оплати по картам</value>
                   </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>8c4cd0c2-5218-4a88-85db-741b1584723a.8fcfdae0-0ee0-4d59-8a32-dac4c2eef2d0</value>
@@ -4907,6 +5011,10 @@
             <title>
               <key>ru</key>
               <value>Настройки входящих</value>
+            </title>
+            <title>
+              <key>uk</key>
+              <value>Налаштування вхідних</value>
             </title>
             <extendedTooltip>
               <name>ГруппаНастройкиВходящихExtendedTooltip</name>
@@ -5021,6 +5129,10 @@
                     <key>ru</key>
                     <value>Прочие расчеты (контрагенты, учредители)</value>
                   </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Інші розрахунки (контрагенти, засновники)</value>
+                  </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.0c23b137-a2ed-445c-9733-dafa1145f653</value>
                   </value>
@@ -5029,6 +5141,10 @@
                   <presentation>
                     <key>ru</key>
                     <value>Расчеты по кредитам</value>
+                  </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Розрахунки по кредитам</value>
                   </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.1004bc9f-ab25-4447-8b63-f14a7c434723</value>
@@ -5039,6 +5155,10 @@
                     <key>ru</key>
                     <value>Выдача займа сотруднику</value>
                   </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Видача позики працівнику</value>
+                  </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.5c483c55-5ebc-48e8-af24-2ec66e3d45e9</value>
                   </value>
@@ -5047,6 +5167,10 @@
                   <presentation>
                     <key>ru</key>
                     <value>Возврат оплаты на карты</value>
+                  </presentation>
+                  <presentation>
+                    <key>uk</key>
+                    <value>Повернення оплати на карти</value>
                   </presentation>
                   <value xsi:type="core:ReferenceValue">
                     <value>1848502d-fdaf-4b11-9892-6c435c0ad64c.f7034e2d-0011-4d33-b780-a0992b36d8ff</value>
@@ -5062,6 +5186,10 @@
             <title>
               <key>ru</key>
               <value>Настройки исходящих</value>
+            </title>
+            <title>
+              <key>uk</key>
+              <value>Налаштування вихідних</value>
             </title>
             <extendedTooltip>
               <name>ГруппаНастройкиИсходящихExtendedTooltip</name>
@@ -5299,6 +5427,10 @@
         <title>
           <key>ru</key>
           <value>Статья ДДС и корреспонденция</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Стаття РГК та кореспонденція</value>
         </title>
         <extendedTooltip>
           <name>ГруппаСтатьяДДСИКорреспонденцияРасширеннаяПодсказка</name>
@@ -5552,6 +5684,10 @@
             <key>ru</key>
             <value>Дата</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Дата</value>
+          </title>
           <titleTextColor xsi:type="core:ColorDef">
             <red>128</red>
             <green>128</green>
@@ -5613,6 +5749,10 @@
         <title>
           <key>ru</key>
           <value>Вид налога и срок уплаты</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Вид податку та строку сплати</value>
         </title>
         <extendedTooltip>
           <name>ГруппаВидНалогаИСрокУплатыРасширеннаяПодсказка</name>
@@ -5681,6 +5821,10 @@
         <title>
           <key>ru</key>
           <value>Введите нужное число вместо суммы:</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Введіть потрібне число замість суми:</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -5821,6 +5965,11 @@
           <key>ru</key>
           <value>В информационной базе найдено несколько документов с указанными в выписке номером, датой и банковским счетом контрагента (или с пустым счетом контрагента).
 Документы, которые не выделены жирным, будут помечены на удаление при загрузке.</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>У інформаційній базі знайдено кілька документів з вказаними у виписці номером, датою та банківським рахунком контрагента (або з порожнім рахунком контрагента).  
+Документи, які не виділені жирним, будуть позначені на видалення під час завантаження.</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -6261,6 +6410,10 @@
             <key>ru</key>
             <value>№ счета контрагента</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>№ рахунка контрагента</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible/>
@@ -6314,6 +6467,10 @@
           <title>
             <key>ru</key>
             <value>Счет контрагента</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Рахунок контрагента</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -6377,6 +6534,10 @@
           <toolTip>
             <key>ru</key>
             <value>Статья движения денежных средств</value>
+          </toolTip>
+          <toolTip>
+            <key>uk</key>
+            <value>Стаття руху грошових коштів</value>
           </toolTip>
           <extendedTooltip>
             <name>ТаблицаНайденныхДокументовСтатьяРасширеннаяПодсказка</name>
@@ -6546,6 +6707,10 @@
               <key>ru</key>
               <value>Поиск</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>Пошук</value>
+            </title>
             <extendedTooltip>
               <name>ГруппаПоискРасширеннаяПодсказка</name>
               <id>390</id>
@@ -6637,6 +6802,10 @@
               <key>ru</key>
               <value>Сортировка</value>
             </title>
+            <title>
+              <key>uk</key>
+              <value>Сортування</value>
+            </title>
             <extendedTooltip>
               <name>ГруппаСортировкаРасширеннаяПодсказка</name>
               <id>392</id>
@@ -6727,6 +6896,10 @@
             <title>
               <key>ru</key>
               <value>Разное</value>
+            </title>
+            <title>
+              <key>uk</key>
+              <value>Різне</value>
             </title>
             <extendedTooltip>
               <name>ГруппаРазноеРасширеннаяПодсказка</name>
@@ -7053,6 +7226,10 @@
       <key>ru</key>
       <value>Контрагент и расчетный счет</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Контрагент та розрахунковий рахунок</value>
+    </title>
     <extendedTooltip>
       <name>ГруппаКонтрагентРасчетныйСчетРасширеннаяПодсказка</name>
       <id>102</id>
@@ -7085,6 +7262,10 @@
         <id>90</id>
         <title>
           <key>ru</key>
+          <value>Контрагент:</value>
+        </title>
+        <title>
+          <key>uk</key>
           <value>Контрагент:</value>
         </title>
         <visible>true</visible>
@@ -7138,6 +7319,10 @@
           <key>ru</key>
           <value>Р/счет:</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Р/рахунок:</value>
+        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -7188,6 +7373,10 @@
         <title>
           <key>ru</key>
           <value>Договор:</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Договір:</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -7276,6 +7465,10 @@
         <title>
           <key>ru</key>
           <value>Использовать существующего</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Використовувати існуючого</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -7688,6 +7881,10 @@
       <key>ru</key>
       <value>Информация</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Інформація</value>
+    </title>
     <extendedTooltip>
       <name>ГруппаИнформацияРасширеннаяПодсказка</name>
       <id>67</id>
@@ -7827,7 +8024,11 @@
         <id>30</id>
         <title>
           <key>ru</key>
-          <value>Применить для всех строк с  ИНН &quot;%1&quot; (%2 %3)</value>
+          <value>Применить для всех строк с ИНН &quot;%1&quot; (%2 %3)</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Застосувати для всіх рядків з ІПН &quot;%1&quot; (%2 %3)</value>
         </title>
         <titleFont xsi:type="core:FontRef">
           <font>Style.NormalTextFont</font>
@@ -7848,6 +8049,10 @@
         <toolTip>
           <key>ru</key>
           <value>Действие для контрагента и договора.</value>
+        </toolTip>
+        <toolTip>
+          <key>uk</key>
+          <value>Дія для контрагента та договору.</value>
         </toolTip>
         <extendedTooltip>
           <name>ПрименитьДляВсехСтрокExtendedTooltip</name>
@@ -7891,6 +8096,10 @@
         <key>ru</key>
         <value>Флаг применить для всех найденных строк</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Прапорець прийняти для всіх знайдених строчок</value>
+      </title>
       <groupHorizontalAlign>Right</groupHorizontalAlign>
       <extendedTooltip>
         <name>ГруппаФлагПрименитьДляВсехНайденныхСтрокРасширеннаяПодсказка</name>
@@ -7924,6 +8133,10 @@
     <title>
       <key>ru</key>
       <value>Подвал</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Підвал</value>
     </title>
     <horizontalStretch>true</horizontalStretch>
     <extendedTooltip>
@@ -8097,7 +8310,7 @@
     <name>КонтрагентКПП</name>
     <title>
       <key>ru</key>
-      <value>КПП</value>
+      <value>ЕГРПОУ</value>
     </title>
     <title>
       <key>uk</key>
@@ -8141,6 +8354,10 @@
   </attributes>
   <attributes>
     <name>ПрименитьДляВсехСтрок</name>
+    <title>
+      <key>ru</key>
+      <value>Применить для всех строк</value>
+    </title>
     <title>
       <key>uk</key>
       <value>Застосувати для всіх рядків</value>
@@ -8234,6 +8451,10 @@
     <name>КонтрагентВидКонтрагента</name>
     <title>
       <key>ru</key>
+      <value>Контрагент вид контрагента</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>Контрагент вид контрагента</value>
     </title>
     <id>13</id>
@@ -8514,7 +8735,7 @@
     <name>СчетКодБанка</name>
     <title>
       <key>ru</key>
-      <value>Код банка (БИК)</value>
+      <value>Код банка (МФО)</value>
     </title>
     <title>
       <key>uk</key>
@@ -8602,11 +8823,11 @@
     <name>СчетКодБанкаРасчетов</name>
     <title>
       <key>ru</key>
-      <value>Код РЦ банка (БИК)</value>
+      <value>Код РЦ банка (МФО)</value>
     </title>
     <title>
       <key>uk</key>
-      <value>Код РЦ банка</value>
+      <value>Код РЦ банка (МФО)</value>
     </title>
     <id>33</id>
     <valueType>
@@ -9261,6 +9482,10 @@
         <key>uk</key>
         <value>Проведений</value>
       </title>
+      <title>
+        <key>ru</key>
+        <value>Проведен</value>
+      </title>
       <id>7</id>
       <valueType>
         <types>Boolean</types>
@@ -9570,6 +9795,10 @@
       <key>ru</key>
       <value>Контрагент ссылка ИНН</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Контрагент посилання ІПН</value>
+    </title>
     <id>71</id>
     <valueType>
       <types>String</types>
@@ -9588,7 +9817,11 @@
     <name>КонтрагентСсылкаКПП</name>
     <title>
       <key>ru</key>
-      <value>Контрагент ссылка КПП</value>
+      <value>Контрагент ссылка ЕГРПОУ</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Контрагент посилання ЄДРПОУ</value>
     </title>
     <id>72</id>
     <valueType>
@@ -9710,6 +9943,10 @@
     <title>
       <key>ru</key>
       <value>Касса организации</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Каса організації</value>
     </title>
     <id>80</id>
     <valueType>
@@ -9871,6 +10108,10 @@
       <key>ru</key>
       <value>ОК</value>
     </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>ОК</value>
+    </toolTip>
     <use>
       <common>true</common>
     </use>
@@ -9889,12 +10130,16 @@
     </title>
     <title>
       <key>uk</key>
-      <value>Скасування</value>
+      <value>Скасувати</value>
     </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
       <value>Отмена</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Скасувати</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -9910,7 +10155,7 @@
     <name>ЗаполнитьИННиКППИзВыписки</name>
     <title>
       <key>ru</key>
-      <value>Заполнить ИНН и КПП из выписки</value>
+      <value>Заполнить ИНН и ЕГРПОУ из выписки</value>
     </title>
     <title>
       <key>uk</key>
@@ -9919,7 +10164,11 @@
     <id>3</id>
     <toolTip>
       <key>ru</key>
-      <value>Заполнить по данным выписки ИНН и КПП контрагента.</value>
+      <value>Заполнить по данным выписки ИНН и ЕГРПОУ контрагента.</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Заповнити по даним виписки ІПН та ЄДРПОУ контрагента.</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -9949,6 +10198,10 @@
     <toolTip>
       <key>ru</key>
       <value>Заполнить договор по данным назначения платежа</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Заповнити договір згідно даних призначення платежу</value>
     </toolTip>
     <use>
       <common>true</common>

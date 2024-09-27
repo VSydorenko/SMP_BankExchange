@@ -7,7 +7,7 @@
   </synonym>
   <synonym>
     <key>uk</key>
-    <value>СМП обмен с ПУМБ сервер</value>
+    <value>СМП обмін ПУМБ API</value>
   </synonym>
   <server>true</server>
   <externalConnection>true</externalConnection>

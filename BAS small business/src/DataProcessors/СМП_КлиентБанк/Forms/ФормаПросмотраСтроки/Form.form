@@ -279,6 +279,10 @@
       <key>ru</key>
       <value>Страницы</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Сторінки</value>
+    </title>
     <extendedTooltip>
       <name>СтраницыРасширеннаяПодсказка</name>
       <id>2</id>
@@ -376,6 +380,10 @@
       <key>ru</key>
       <value>Печатная форма</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Друкована форма</value>
+    </title>
     <id>2</id>
     <valueType>
       <types>SpreadsheetDocument</types>
@@ -392,6 +400,10 @@
     <name>ТекстФайла</name>
     <title>
       <key>ru</key>
+      <value>Текст файла</value>
+    </title>
+    <title>
+      <key>uk</key>
       <value>Текст файла</value>
     </title>
     <id>3</id>
@@ -451,6 +463,10 @@
     <toolTip>
       <key>ru</key>
       <value>Форматированный вид</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Форматований вигляд</value>
     </toolTip>
     <use>
       <common>true</common>

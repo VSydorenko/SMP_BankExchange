@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Протокол обмена с клиентом банка</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Протокол обміну з клієнт банком</value>
+  </title>
   <items xsi:type="form:FormField">
     <name>ТаблицаПротокола</name>
     <id>2</id>

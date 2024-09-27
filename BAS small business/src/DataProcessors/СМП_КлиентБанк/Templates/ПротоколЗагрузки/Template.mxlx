@@ -288,6 +288,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Протокол загрузки от [ДатаСеанса]</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Протокол завантаження від [ДатаСеанса]</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -304,6 +308,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>За период: [ОписаниеПериода]</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>За період: [ОписаниеПериода]</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -407,6 +415,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>№ п/п</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>№ п/д</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -417,6 +429,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Загруженный документ</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Завантажений документ</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -445,6 +461,11 @@
 							<v8:content>Документ в
 информационной базе</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Документ в
+інформаційній базі</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -471,6 +492,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Вид операции</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Вид операції</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -482,6 +507,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Сумма</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Сума</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -492,6 +521,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Действия</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Дії</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -523,6 +556,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Комментарий</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Коментар</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -2196,6 +2233,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Документы, которые не найдены в загруженном файле и помечены на удаление</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Документи, які не знайдені у завантаженому файлі та позначені на видалення.</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -2245,6 +2286,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>№ п/п</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>№ п/д</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -2256,6 +2301,11 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Документ в
 информационной базе</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Документ в
+інформаційній базі</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -2269,6 +2319,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Вид операции</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Вид операції</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -2280,6 +2334,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Сумма</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Сума</v8:content>
+						</v8:item>
 					</tl>
 				</c>
 			</c>
@@ -2290,6 +2348,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Комментарий</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Коментар</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -3289,6 +3351,10 @@
 				<v8:lang>ru</v8:lang>
 				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
 			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
+				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
+			</v8:item>
 		</format>
 		<picVerticalAlignment>Top</picVerticalAlignment>
 	</format>
@@ -3429,6 +3495,10 @@
 				<v8:lang>ru</v8:lang>
 				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
 			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
+				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
+			</v8:item>
 		</format>
 		<picVerticalAlignment>Top</picVerticalAlignment>
 	</format>
@@ -3521,6 +3591,10 @@
 		<format>
 			<v8:item>
 				<v8:lang>ru</v8:lang>
+				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
+			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
 				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
 			</v8:item>
 		</format>
@@ -3664,6 +3738,10 @@
 				<v8:lang>ru</v8:lang>
 				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
 			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
+				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
+			</v8:item>
 		</format>
 		<picVerticalAlignment>Top</picVerticalAlignment>
 	</format>
@@ -3755,6 +3833,10 @@
 				<v8:lang>ru</v8:lang>
 				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
 			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
+				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
+			</v8:item>
 		</format>
 		<picVerticalAlignment>Top</picVerticalAlignment>
 	</format>
@@ -3831,6 +3913,10 @@
 		<format>
 			<v8:item>
 				<v8:lang>ru</v8:lang>
+				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
+			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
 				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
 			</v8:item>
 		</format>
@@ -3996,6 +4082,10 @@
 		<format>
 			<v8:item>
 				<v8:lang>ru</v8:lang>
+				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
+			</v8:item>
+			<v8:item>
+				<v8:lang>uk</v8:lang>
 				<v8:content>ЧЦ=15; ЧДЦ=2; ЧРД=,; ЧРГ=' '; ЧН=-; ЧГ=3,0</v8:content>
 			</v8:item>
 		</format>

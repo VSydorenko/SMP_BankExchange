@@ -5,6 +5,10 @@
     <key>ru</key>
     <value>Общие объекты</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Загальні об'єкти</value>
+  </synonym>
   <includeHelpInContents>true</includeHelpInContents>
   <content>Catalog.СМП_УчетныеЗаписиБанков</content>
   <content>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</content>

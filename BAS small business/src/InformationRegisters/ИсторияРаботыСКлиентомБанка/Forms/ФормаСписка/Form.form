@@ -47,9 +47,17 @@
         <key>ru</key>
         <value>Командная панель списка слева</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Командна панель списка зліва</value>
+      </title>
       <toolTip>
         <key>ru</key>
         <value>Командная панель списка справа</value>
+      </toolTip>
+      <toolTip>
+        <key>uk</key>
+        <value>Командна панель списка справа</value>
       </toolTip>
       <extendedTooltip>
         <name>КоманднаяПанельСпискаСлеваРасширеннаяПодсказка</name>
@@ -217,9 +225,17 @@
         <key>ru</key>
         <value>Командная панель списка справа</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Командна панель списка справа</value>
+      </title>
       <toolTip>
         <key>ru</key>
         <value>Командная панель списка справа</value>
+      </toolTip>
+      <toolTip>
+        <key>uk</key>
+        <value>Командна панель списка справа</value>
       </toolTip>
       <extendedTooltip>
         <name>КоманднаяПанельСпискаСправаРасширеннаяПодсказка</name>
@@ -250,8 +266,16 @@
       <key>ru</key>
       <value>Шапка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Шапка</value>
+    </title>
     <toolTip>
       <key>ru</key>
+      <value>Шапка</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
       <value>Шапка</value>
     </toolTip>
     <extendedTooltip>
@@ -286,6 +310,10 @@
       <title>
         <key>ru</key>
         <value>История обмена данными с клиентом банка</value>
+      </title>
+      <title>
+        <key>uk</key>
+        <value>Історія обміну даними з клієнтом банку</value>
       </title>
       <visible>true</visible>
       <enabled>true</enabled>
@@ -361,7 +389,7 @@
         </title>
         <title>
           <key>uk</key>
-          <value>Кількість док.</value>
+          <value>К-сть док.</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -1034,9 +1062,17 @@
         <key>ru</key>
         <value>Отбор</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Відбір</value>
+      </title>
       <toolTip>
         <key>ru</key>
         <value>Отбор</value>
+      </toolTip>
+      <toolTip>
+        <key>uk</key>
+        <value>Відбір</value>
       </toolTip>
       <width>12</width>
       <horizontalStretch>false</horizontalStretch>

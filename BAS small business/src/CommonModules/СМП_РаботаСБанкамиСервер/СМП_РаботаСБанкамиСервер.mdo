@@ -3,7 +3,11 @@
   <name>СМП_РаботаСБанкамиСервер</name>
   <synonym>
     <key>ru</key>
-    <value>Обмен с банками</value>
+    <value>Обмен с банками сервер</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обмін з банками сервер</value>
   </synonym>
   <server>true</server>
   <serverCall>true</serverCall>

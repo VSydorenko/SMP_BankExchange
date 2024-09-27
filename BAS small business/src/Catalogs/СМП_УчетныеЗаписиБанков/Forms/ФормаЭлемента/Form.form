@@ -335,9 +335,17 @@
             <key>ru</key>
             <value>Группа банк картинка</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Група банк зображення</value>
+          </title>
           <toolTip>
             <key>ru</key>
             <value>Группа банк картинка</value>
+          </toolTip>
+          <toolTip>
+            <key>uk</key>
+            <value>Група банк зображення</value>
           </toolTip>
           <extendedTooltip>
             <name>ГруппаБанкКартинкаРасширеннаяПодсказка</name>
@@ -643,12 +651,20 @@
             <common>true</common>
           </userVisible>
           <title>
+            <key>ru</key>
+            <value>Банк ПУМБ</value>
+          </title>
+          <title>
             <key>uk</key>
-            <value>Группа банк пумб</value>
+            <value>Банк ПУМБ</value>
           </title>
           <toolTip>
+            <key>ru</key>
+            <value>Банк ПУМБ</value>
+          </toolTip>
+          <toolTip>
             <key>uk</key>
-            <value>Группа банк пумб</value>
+            <value>Банк ПУМБ</value>
           </toolTip>
           <extendedTooltip>
             <name>ГруппаБанкПумбРасширеннаяПодсказка</name>
@@ -788,12 +804,20 @@
             <common>true</common>
           </userVisible>
           <title>
+            <key>ru</key>
+            <value>Банк ПриватБанк</value>
+          </title>
+          <title>
             <key>uk</key>
-            <value>Группа банк приват</value>
+            <value>Банк ПриватБанк</value>
           </title>
           <toolTip>
+            <key>ru</key>
+            <value>Банк ПриватБанк</value>
+          </toolTip>
+          <toolTip>
             <key>uk</key>
-            <value>Группа банк приват</value>
+            <value>Банк ПриватБанк</value>
           </toolTip>
           <extendedTooltip>
             <name>ГруппаБанкПриватРасширеннаяПодсказка</name>
@@ -1066,13 +1090,13 @@
             <common>true</common>
           </userVisible>
           <title>
-            <key>uk</key>
-            <value>Группа банк моно</value>
+            <key>ru</key>
+            <value>Банк МОНО</value>
           </title>
-          <toolTip>
+          <title>
             <key>uk</key>
-            <value>Группа банк моно</value>
-          </toolTip>
+            <value>Банк МОНО</value>
+          </title>
           <extendedTooltip>
             <name>ГруппаБанкМоноРасширеннаяПодсказка</name>
             <id>107</id>
@@ -1730,6 +1754,10 @@
       <key>ru</key>
       <value>Расписание регламентного задания обмена</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Розклад регламентного завдання обміну</value>
+    </title>
     <id>2</id>
     <valueType/>
     <view>
@@ -1744,6 +1772,10 @@
     <title>
       <key>ru</key>
       <value>Интервал обмена</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Інтервал обміну</value>
     </title>
     <id>3</id>
     <valueType>
@@ -1796,6 +1828,10 @@
     <toolTip>
       <key>ru</key>
       <value>Выполнить обмен</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Виконати обмін</value>
     </toolTip>
     <use>
       <common>true</common>

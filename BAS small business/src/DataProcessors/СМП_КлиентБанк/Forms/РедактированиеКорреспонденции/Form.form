@@ -200,6 +200,10 @@
         <key>ru</key>
         <value>Настройки входящих</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Налаштування вхідних</value>
+      </title>
       <horizontalStretch>false</horizontalStretch>
       <extendedTooltip>
         <name>ГруппаНастройкиВходящихExtendedTooltip</name>
@@ -368,6 +372,10 @@
         <key>ru</key>
         <value>Настройки исходящих</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Налаштування вихідних</value>
+      </title>
       <horizontalStretch>false</horizontalStretch>
       <extendedTooltip>
         <name>ГруппаНастройкиИсходящихExtendedTooltip</name>
@@ -525,6 +533,10 @@
       <key>ru</key>
       <value>Команд</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Команд</value>
+    </title>
     <extendedTooltip>
       <name>ГруппаКомандExtendedTooltip</name>
       <id>124</id>
@@ -582,6 +594,10 @@
       <key>ru</key>
       <value>Назначение платежа (загружено из файла, не редактируется)</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Призначення платежу (завантажене з файлу, не редагується)</value>
+    </title>
     <id>2</id>
     <valueType>
       <types>String</types>
@@ -600,6 +616,10 @@
       <key>ru</key>
       <value>Корр. счету учета списания</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Кор. рахунок обліку списання</value>
+    </title>
     <id>3</id>
     <valueType>
       <types>String</types>
@@ -617,6 +637,10 @@
     <title>
       <key>ru</key>
       <value>Корр. счет учета зачисления</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Кор. рахунок обліку зарахування</value>
     </title>
     <id>5</id>
     <valueType>
@@ -703,6 +727,10 @@
       <key>ru</key>
       <value>ОК</value>
     </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>ОК</value>
+    </toolTip>
     <use>
       <common>true</common>
     </use>
@@ -721,12 +749,16 @@
     </title>
     <title>
       <key>uk</key>
-      <value>Скасування</value>
+      <value>Скасувати</value>
     </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
       <value>Отмена</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Скасувати</value>
     </toolTip>
     <use>
       <common>true</common>

@@ -5,6 +5,10 @@
     <key>ru</key>
     <value>Коннектор HTTP</value>
   </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Конектор HTTP</value>
+  </synonym>
   <comment>https://github.com/vbondarevsky/Connector</comment>
   <server>true</server>
   <serverCall>true</serverCall>

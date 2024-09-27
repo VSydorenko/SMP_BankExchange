@@ -51,7 +51,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Закрыт принудительно</value>
+      <value>Закртий примусово</value>
     </synonym>
   </enumValues>
   <enumValues uuid="eee092f7-d449-4b70-9f40-e1f82f1e6d0d">
@@ -73,7 +73,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>На подписи</value>
+      <value>На підписанні</value>
     </synonym>
   </enumValues>
   <enumValues uuid="23f631a5-2bd8-4a29-aa33-da31a2a34fd7">
@@ -95,7 +95,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Не получен</value>
+      <value>Не отриманий</value>
     </synonym>
   </enumValues>
   <enumValues uuid="4d038624-67a3-4a25-9c0a-3c6257dcc1ce">
@@ -106,7 +106,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Не начат</value>
+      <value>Не початий</value>
     </synonym>
   </enumValues>
   <enumValues uuid="cc9b91b8-61de-4030-a1e5-d2899275910d">
@@ -139,7 +139,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается аннулирование</value>
+      <value>Очікується анулювання</value>
     </synonym>
   </enumValues>
   <enumValues uuid="6c803153-5653-4261-9a2e-268b39c84e48">
@@ -150,7 +150,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается извещение о получении</value>
+      <value>Очікується сповіщення про отримання</value>
     </synonym>
   </enumValues>
   <enumValues uuid="90439737-467e-4f64-a74e-a2d153a8be1d">
@@ -161,7 +161,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается исправление</value>
+      <value>Очікується виправлення</value>
     </synonym>
   </enumValues>
   <enumValues uuid="38f0e68e-3794-43eb-9af0-e9bacbd41f1b">
@@ -183,7 +183,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается отправка извещения</value>
+      <value>Очікується відправка сповіщення</value>
     </synonym>
   </enumValues>
   <enumValues uuid="88ccbc21-0d0c-41ce-a119-a6b3247c02cd">
@@ -194,7 +194,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается подтверждение отправки</value>
+      <value>Очікується підтвердження відправки</value>
     </synonym>
   </enumValues>
   <enumValues uuid="8df5d83b-9d03-4c9b-9913-0427ba2f1a83">
@@ -205,7 +205,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается передача оператору</value>
+      <value>Очікується передача оператору</value>
     </synonym>
   </enumValues>
   <enumValues uuid="880db455-f254-49c5-ac13-4bdbdd6bb3ea">
@@ -216,7 +216,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается подтверждение</value>
+      <value>Очікується підтвердження</value>
     </synonym>
   </enumValues>
   <enumValues uuid="0ad23277-4725-4df8-b288-720c63f15d71">
@@ -227,7 +227,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается подтверждение оператора</value>
+      <value>Очікується підтвердження оператора</value>
     </synonym>
   </enumValues>
   <enumValues uuid="71fe3ccd-0231-4799-b25b-c8d90ead6096">
@@ -238,7 +238,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Закрыт с отклонением</value>
+      <value>Закритий з відулюченням</value>
     </synonym>
   </enumValues>
   <enumValues uuid="eda74729-84f8-4390-9e0b-dc213442b7fd">
@@ -359,7 +359,7 @@
     </synonym>
     <synonym>
       <key>uk</key>
-      <value>Ожидается согласие контрагента</value>
+      <value>Очікується погодження контрагента</value>
     </synonym>
   </enumValues>
   <enumValues uuid="d843ebd5-a755-4869-a013-2cc85eb047e6">

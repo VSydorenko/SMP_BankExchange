@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Файл обмена с клиентом банка</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Файл обмену з клієнт банком</value>
+  </title>
   <items xsi:type="form:FormField">
     <name>ТекстФайла</name>
     <id>2</id>
@@ -351,6 +355,10 @@
       <key>ru</key>
       <value>Текст файла</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Текст файла</value>
+    </title>
     <id>2</id>
     <valueType>
       <types>String</types>
@@ -387,6 +395,10 @@
       <key>ru</key>
       <value>Начальное представление форматировано</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Початкове представлення форматовано</value>
+    </title>
     <id>4</id>
     <valueType>
       <types>Boolean</types>
@@ -403,6 +415,10 @@
     <title>
       <key>ru</key>
       <value>Кодировка</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Кодування</value>
     </title>
     <id>5</id>
     <valueType>
@@ -424,10 +440,18 @@
       <key>ru</key>
       <value>Форматированный вид</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Форматований вигляд</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
       <value>Форматированный вид</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Форматований вигляд</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -446,10 +470,18 @@
       <key>ru</key>
       <value>Загрузить снова</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Завантажити знову</value>
+    </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
       <value>Загрузить снова</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Завантажити знову</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -467,10 +499,18 @@
       <key>ru</key>
       <value>Сохранить на диск</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Зберегти на диск</value>
+    </title>
     <id>3</id>
     <toolTip>
       <key>ru</key>
       <value>Сохранить на диск</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Зберегти на диск</value>
     </toolTip>
     <use>
       <common>true</common>

@@ -4,6 +4,10 @@
     <key>ru</key>
     <value>Настройка обмена с банком</value>
   </title>
+  <title>
+    <key>uk</key>
+    <value>Налаштування обміну з банком</value>
+  </title>
   <items xsi:type="form:FormGroup">
     <name>ГруппаВидыОбмена</name>
     <id>53</id>
@@ -64,6 +68,10 @@
                 <key>ru</key>
                 <value>Авто</value>
               </presentation>
+              <presentation>
+                <key>uk</key>
+                <value>Авто</value>
+              </presentation>
               <value xsi:type="core:StringValue">
                 <value>Авто</value>
               </value>
@@ -73,6 +81,10 @@
                 <key>ru</key>
                 <value>Windows</value>
               </presentation>
+              <presentation>
+                <key>uk</key>
+                <value>Windows</value>
+              </presentation>
               <value xsi:type="core:StringValue">
                 <value>Windows</value>
               </value>
@@ -80,6 +92,10 @@
             <choiceList>
               <presentation>
                 <key>ru</key>
+                <value>DOS</value>
+              </presentation>
+              <presentation>
+                <key>uk</key>
                 <value>DOS</value>
               </presentation>
               <value xsi:type="core:StringValue">
@@ -149,6 +165,10 @@
               <key>ru</key>
               <value>&lt;Другая кодировка></value>
             </inputHint>
+            <inputHint>
+              <key>uk</key>
+              <value>&lt;Інше кодуування></value>
+            </inputHint>
           </extInfo>
         </items>
         <visible>true</visible>
@@ -159,6 +179,10 @@
         <title>
           <key>ru</key>
           <value>Кодировка</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Кодування</value>
         </title>
         <extendedTooltip>
           <name>ГруппаКодировкаРасширеннаяПодсказка</name>
@@ -230,6 +254,10 @@
               <key>ru</key>
               <value>1.01     </value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>1.01</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>1.01</value>
             </value>
@@ -239,6 +267,10 @@
               <key>ru</key>
               <value>1.02</value>
             </presentation>
+            <presentation>
+              <key>uk</key>
+              <value>1.02</value>
+            </presentation>
             <value xsi:type="core:StringValue">
               <value>1.02</value>
             </value>
@@ -246,6 +278,10 @@
           <choiceList>
             <presentation>
               <key>ru</key>
+              <value>1.03</value>
+            </presentation>
+            <presentation>
+              <key>uk</key>
               <value>1.03</value>
             </presentation>
             <value xsi:type="core:StringValue">
@@ -549,6 +585,10 @@
         <key>ru</key>
         <value>Обмен через файл</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Обмін через файл</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаОбменЧерезФайлExtendedTooltip</name>
         <id>56</id>
@@ -682,6 +722,10 @@
         <key>ru</key>
         <value>Прямой обмен</value>
       </title>
+      <title>
+        <key>uk</key>
+        <value>Прямий обмін</value>
+      </title>
       <extendedTooltip>
         <name>ГруппаПрямойОбменExtendedTooltip</name>
         <id>73</id>
@@ -711,6 +755,10 @@
     <title>
       <key>ru</key>
       <value>Виды обмена</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Вид обміну</value>
     </title>
     <extendedTooltip>
       <name>ГруппаВидыОбменаExtendedTooltip</name>
@@ -785,6 +833,10 @@
           <key>ru</key>
           <value>Статья ДДС (приход)</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Стаття РГК (надходження)</value>
+        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -837,6 +889,10 @@
         <title>
           <key>ru</key>
           <value>Статья ДДС (расход)</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Стаття РГК (витрата)</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -891,6 +947,10 @@
           <key>ru</key>
           <value>Доступ</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Доступ</value>
+        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -939,6 +999,10 @@
           <inputHint>
             <key>ru</key>
             <value>Группа доступа к контрагентам</value>
+          </inputHint>
+          <inputHint>
+            <key>uk</key>
+            <value>Група доступу до контрагентів</value>
           </inputHint>
         </extInfo>
       </items>
@@ -1007,6 +1071,10 @@
             <key>ru</key>
             <value>Заполнять предыдущими значениями договор, операцию, статью ДДС.</value>
           </title>
+          <title>
+            <key>uk</key>
+            <value>Заповнювати попередніми значеннями договір, операцію, статтю ДДС.</value>
+          </title>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -1019,6 +1087,10 @@
           <toolTip>
             <key>ru</key>
             <value>Если флаг установлен, то будут автоматически определяться: договор, вид операции, статья ДДС и корреспондирующий счет учета. Будут подставлены значения, которые использовались при загрузке не менее чем в 50% случаев для указанного контрагена.</value>
+          </toolTip>
+          <toolTip>
+            <key>uk</key>
+            <value>Якщо прапорець установлений, то будуть автоматично визначатися: договір, вид операції, стаття ДДС та кореспондентський рахунок обліку. Будуть підставлені значення, які використовувалися при завантаженні не менше ніж у 50% випадків для вказаного контрагента.</value>
           </toolTip>
           <toolTipRepresentation>Button</toolTipRepresentation>
           <extendedTooltip>
@@ -1099,6 +1171,11 @@
             <value>Если флаг установлен, то для каждого платежа, для которого найден контрагент, будет выполнен поиск подходящего заказа, счета на оплату, платежного поручения и документа расчетов.
 Установить флаг можно, если сброшен флаг &quot;Заполнять долги автоматически&quot;.</value>
           </toolTip>
+          <toolTip>
+            <key>uk</key>
+            <value>Якщо прапорець установлений, то для кожного платежу, для якого знайдено контрагента, буде виконано пошук відповідного замовлення, рахунка на оплату, платіжного доручення та документа розрахунків.  
+Встановити прапорець можна, якщо скинуто прапорець &quot;Заповнювати борги автоматично&quot;.</value>
+          </toolTip>
           <toolTipRepresentation>Button</toolTipRepresentation>
           <handlers>
             <event>OnChange</event>
@@ -1142,6 +1219,10 @@
           <title>
             <key>ru</key>
             <value>Настроить соответствия назначений платежа и реквизитов документов</value>
+          </title>
+          <title>
+            <key>uk</key>
+            <value>Налаштувати відповідності призначень платежу та реквізитів документів</value>
           </title>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -1223,6 +1304,10 @@
               <key>ru</key>
               <value>&lt;по умолчанию></value>
             </inputHint>
+            <inputHint>
+              <key>uk</key>
+              <value>&lt;за замовчуванням></value>
+            </inputHint>
           </extInfo>
         </items>
         <visible>true</visible>
@@ -1233,6 +1318,10 @@
         <title>
           <key>ru</key>
           <value>Настройки заполнения колонок</value>
+        </title>
+        <title>
+          <key>uk</key>
+          <value>Налаштування заповнення стовпців</value>
         </title>
         <extendedTooltip>
           <name>ГруппаНастроекЗаполненияРасширеннаяПодсказка</name>
@@ -1407,6 +1496,10 @@
           <key>ru</key>
           <value>Настройки создания документов</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Налаштування створення документів</value>
+        </title>
         <toolTip>
           <key>ru</key>
           <value>Группа настроек заполнения</value>
@@ -1476,6 +1569,10 @@
     <title>
       <key>ru</key>
       <value>Загрузка</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Завантаження</value>
     </title>
     <extendedTooltip>
       <name>ЗначенияДляЗагружаемыхExtendedTooltip</name>
@@ -1646,6 +1743,10 @@
           <key>ru</key>
           <value>Файл выгрузки</value>
         </title>
+        <title>
+          <key>uk</key>
+          <value>Файл вивантаження</value>
+        </title>
         <extendedTooltip>
           <name>ГруппаФайлВыгрузкиРасширеннаяПодсказка</name>
           <id>129</id>
@@ -1689,6 +1790,14 @@
 сообщит пользователю, если вирус изменит
 платежные реквизиты.
 Используйте кнопку справа от файла выгрузки для формирования уникального имени файла.</value>
+        </toolTip>
+        <toolTip>
+          <key>uk</key>
+          <value>Після вивантаження програма  
+буде стежити за файлом і  
+повідомить користувача, якщо вірус змінить  
+платіжні реквізити.  
+Використовуйте кнопку праворуч від файлу вивантаження для формування унікального імені файлу</value>
         </toolTip>
         <toolTipRepresentation>Button</toolTipRepresentation>
         <extendedTooltip>
@@ -1764,6 +1873,10 @@
       <key>ru</key>
       <value>Выгрузка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Вивантаження</value>
+    </title>
     <toolTip>
       <key>ru</key>
       <value>Значения для загружаемых</value>
@@ -1800,6 +1913,10 @@
       <id>16</id>
       <title>
         <key>ru</key>
+        <value>ОК</value>
+      </title>
+      <title>
+        <key>uk</key>
         <value>ОК</value>
       </title>
       <visible>true</visible>
@@ -1921,6 +2038,10 @@
       <key>ru</key>
       <value>Кодировка</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Кодування</value>
+    </title>
     <id>2</id>
     <valueType>
       <types>String</types>
@@ -1940,6 +2061,10 @@
     <title>
       <key>ru</key>
       <value>Название программы</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Назва програми</value>
     </title>
     <id>3</id>
     <valueType>
@@ -2020,6 +2145,10 @@
       <key>ru</key>
       <value>Проводить загружаемые</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Проводити докумени, що завантажуються</value>
+    </title>
     <id>8</id>
     <valueType>
       <types>Boolean</types>
@@ -2036,6 +2165,10 @@
     <title>
       <key>ru</key>
       <value>Файл выгрузки</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Файл вивантаження</value>
     </title>
     <id>7</id>
     <valueType>
@@ -2055,6 +2188,10 @@
       <key>ru</key>
       <value>Файл загрузки</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Файл завантаження</value>
+    </title>
     <id>9</id>
     <valueType>
       <types>String</types>
@@ -2073,6 +2210,10 @@
       <key>ru</key>
       <value>Заполнять долги автоматически</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Заповнювати борги автоматично</value>
+    </title>
     <id>10</id>
     <valueType>
       <types>Boolean</types>
@@ -2089,6 +2230,10 @@
     <title>
       <key>ru</key>
       <value>Версия формата</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Версія формату</value>
     </title>
     <id>11</id>
     <valueType>
@@ -2108,6 +2253,10 @@
       <key>ru</key>
       <value>Сообщение прямого обмена</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Повідомлення прямого обміну</value>
+    </title>
     <id>12</id>
     <valueType>
       <types>String</types>
@@ -2125,6 +2274,10 @@
     <title>
       <key>ru</key>
       <value>Соглашение прямого обмена с банком</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Угода прямого обміну з банком</value>
     </title>
     <id>13</id>
     <valueType>
@@ -2157,6 +2310,10 @@
       <key>ru</key>
       <value>Анализировать историю выбора значений реквизитов</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Аналізувати історію вибору значень</value>
+    </title>
     <id>15</id>
     <valueType>
       <types>Boolean</types>
@@ -2173,6 +2330,10 @@
     <title>
       <key>ru</key>
       <value>Автоматически подставлять заказ, счет, ПП и док-т расчетов</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Автоматично підставляти замовлення, рахунок, ПД з документів розрахунку</value>
     </title>
     <id>16</id>
     <valueType>
@@ -2204,6 +2365,10 @@
       <key>ru</key>
       <value>Группа доступа</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Група доступу</value>
+    </title>
     <id>18</id>
     <valueType>
       <types>CatalogRef.ГруппыДоступаКонтрагентов</types>
@@ -2220,6 +2385,10 @@
     <title>
       <key>ru</key>
       <value>Кодировка произвольная</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Кодування довільна</value>
     </title>
     <id>19</id>
     <valueType>
@@ -2239,6 +2408,10 @@
       <key>ru</key>
       <value>Не удалять документы, которых нет в выписке</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Не видаляти документи яких нема у виписці</value>
+    </title>
     <id>20</id>
     <valueType>
       <types>Boolean</types>
@@ -2256,6 +2429,10 @@
       <key>ru</key>
       <value>Безопасность обмена с банком</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Безпека обмін з банком</value>
+    </title>
     <id>21</id>
     <valueType>
       <types>Boolean</types>
@@ -2272,6 +2449,10 @@
     <title>
       <key>ru</key>
       <value>Способ разнесения платежей</value>
+    </title>
+    <title>
+      <key>uk</key>
+      <value>Спосіб рознесення платежів</value>
     </title>
     <id>22</id>
     <valueType>
@@ -2312,9 +2493,17 @@
       <key>ru</key>
       <value>Ок</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Ок</value>
+    </title>
     <id>1</id>
     <toolTip>
       <key>ru</key>
+      <value>Ок</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
       <value>Ок</value>
     </toolTip>
     <use>
@@ -2333,10 +2522,18 @@
       <key>ru</key>
       <value>Открыть справочник соответствий назначений платежа и реквизитов документов</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Відкрити довідник відповідностей призначень платежів та реквізитів документів</value>
+    </title>
     <id>2</id>
     <toolTip>
       <key>ru</key>
       <value>Открыть справочник соответствий назначений платежа и реквизитов документов</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Відкрити довідник відповідностей призначень платежів та реквізитів документів</value>
     </toolTip>
     <use>
       <common>true</common>
@@ -2354,10 +2551,18 @@
       <key>ru</key>
       <value>Открыть список предыдущих значений</value>
     </title>
+    <title>
+      <key>uk</key>
+      <value>Відкрити список попередніх значень</value>
+    </title>
     <id>3</id>
     <toolTip>
       <key>ru</key>
       <value>Открыть список последних выбранных значений</value>
+    </toolTip>
+    <toolTip>
+      <key>uk</key>
+      <value>Відкрити список останніх обраних значень</value>
     </toolTip>
     <use>
       <common>true</common>
