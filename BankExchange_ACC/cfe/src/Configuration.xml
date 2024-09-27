@@ -30,14 +30,6 @@
 				<xr:ClassId>fb282519-d103-4dd3-bc12-cb271d631dfc</xr:ClassId>
 				<xr:ObjectId>c154dfc6-541a-4ac6-89fb-e97730eda354</xr:ObjectId>
 			</xr:ContainedObject>
-			<xr:PropertyState>
-				<xr:Property>CommandInterface</xr:Property>
-				<xr:State>Extended</xr:State>
-			</xr:PropertyState>
-			<xr:PropertyState>
-				<xr:Property>MainSectionCommandInterface</xr:Property>
-				<xr:State>Extended</xr:State>
-			</xr:PropertyState>
 		</InternalInfo>
 		<Properties>
 			<ObjectBelonging>Adopted</ObjectBelonging>
@@ -63,12 +55,30 @@
 			</UsePurposes>
 			<ScriptVariant>Russian</ScriptVariant>
 			<Vendor/>
-			<Version>1.0.3.8</Version>
+			<Version>1.0.3.11</Version>
 			<BriefInformation/>
 			<DetailedInformation/>
 			<Copyright/>
-			<VendorInformationAddress/>
-			<ConfigurationInformationAddress/>
+			<VendorInformationAddress>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>simplySOFT.com.ua</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>simplySOFT.com.ua</v8:content>
+				</v8:item>
+			</VendorInformationAddress>
+			<ConfigurationInformationAddress>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>https://simplysoft.com.ua/solution/bankexchanges/</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>https://simplysoft.com.ua/solution/bankexchanges/</v8:content>
+				</v8:item>
+			</ConfigurationInformationAddress>
 			<InterfaceCompatibilityMode>Taxi</InterfaceCompatibilityMode>
 		</Properties>
 		<ChildObjects>
