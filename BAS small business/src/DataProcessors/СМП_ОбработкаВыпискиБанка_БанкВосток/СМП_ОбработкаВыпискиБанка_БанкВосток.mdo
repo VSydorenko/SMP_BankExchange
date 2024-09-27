@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="2b0949c0-54f2-4f84-8131-3505fe9c4489">
+  <producedTypes>
+    <objectType typeId="50eb6bc1-558b-41ab-af07-ef0ccac857bf" valueTypeId="714630ab-c9f4-4a16-8bb6-c88893b76f8c"/>
+    <managerType typeId="0e16df01-0d51-44d3-8c55-8f2b2be31376" valueTypeId="00f0804b-b98d-4adb-9575-872341feca24"/>
+  </producedTypes>
+  <name>СМП_ОбработкаВыпискиБанка_БанкВосток</name>
+  <synonym>
+    <key>ru</key>
+    <value>Обработка выписки банка Банк Восток</value>
+  </synonym>
+  <synonym>
+    <key>uk</key>
+    <value>Обробка виписки банка Банк Восток</value>
+  </synonym>
+  <comment>Выгрузить во внешние (csv)</comment>
+  <useStandardCommands>true</useStandardCommands>
+  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_БанкВосток.Form.Форма</defaultForm>
+  <forms uuid="b4c49f3c-8e68-4988-8674-469110e80841">
+    <name>Форма</name>
+    <synonym>
+      <key>ru</key>
+      <value>Форма</value>
+    </synonym>
+    <synonym>
+      <key>uk</key>
+      <value>Форма</value>
+    </synonym>
+    <usePurposes>PersonalComputer</usePurposes>
+    <usePurposes>MobileDevice</usePurposes>
+  </forms>
+</mdclass:DataProcessor>
