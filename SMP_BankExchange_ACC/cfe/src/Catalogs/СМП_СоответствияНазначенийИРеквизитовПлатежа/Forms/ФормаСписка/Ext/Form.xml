@@ -38,6 +38,10 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Список</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Список</v8:content>
+				</v8:item>
 			</Title>
 			<AutoRefresh>false</AutoRefresh>
 			<AutoRefreshPeriod>60</AutoRefreshPeriod>
@@ -163,8 +167,12 @@
 		<Attribute name="Организация" id="2">
 			<Title>
 				<v8:item>
-					<v8:lang>uk</v8:lang>
+					<v8:lang>ru</v8:lang>
 					<v8:content>Организация</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Організація</v8:content>
 				</v8:item>
 			</Title>
 			<Type>
