@@ -29,7 +29,32 @@
   <defaultRunMode>ManagedApplication</defaultRunMode>
   <usePurposes>PersonalComputer</usePurposes>
   <scriptVariant>Russian</scriptVariant>
+  <vendor>simplySOFT.com.ua</vendor>
   <version>2.0.1.6</version>
+  <copyright>
+    <key>ru</key>
+    <value>Copyright © Volodymyr Sydorenko. All rights reserved</value>
+  </copyright>
+  <copyright>
+    <key>uk</key>
+    <value>Copyright © Volodymyr Sydorenko. All rights reserved</value>
+  </copyright>
+  <vendorInformationAddress>
+    <key>ru</key>
+    <value>simplySOFT.com.ua</value>
+  </vendorInformationAddress>
+  <vendorInformationAddress>
+    <key>uk</key>
+    <value>simplySOFT.com.ua</value>
+  </vendorInformationAddress>
+  <configurationInformationAddress>
+    <key>ru</key>
+    <value>https://simplysoft.com.ua/solution/bankexchanges/</value>
+  </configurationInformationAddress>
+  <configurationInformationAddress>
+    <key>uk</key>
+    <value>https://simplysoft.com.ua/solution/bankexchanges/</value>
+  </configurationInformationAddress>
   <interfaceCompatibilityMode>TaxiEnableVersion8_2</interfaceCompatibilityMode>
   <compatibilityMode>8.3.22</compatibilityMode>
   <languages uuid="144f8110-c4c6-4c8a-bb1b-df7d11dc72e2" extendedConfigurationObject="af1b61ff-d1b9-4053-ad85-8259b6626adc">
