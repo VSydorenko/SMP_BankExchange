@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Файл обмена с клиентом банка</v8:content>
+		</v8:item>
+	</Title>
+	<AutoTitle>false</AutoTitle>
+	<VerticalScroll>useIfNecessary</VerticalScroll>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>false</Autofill>
+		<ChildItems>
+			<Button name="ФормаЗакрыть" id="1">
+				<Type>CommandBarButton</Type>
+				<DefaultButton>true</DefaultButton>
+				<CommandName>Form.StandardCommand.Close</CommandName>
+				<ExtendedTooltip name="ФормаЗакрытьРасширеннаяПодсказка" id="10"/>
+			</Button>
+			<ButtonGroup name="ФормаГруппа1" id="9">
+				<Title>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Форма группа 1</v8:content>
+					</v8:item>
+				</Title>
+				<ExtendedTooltip name="ФормаГруппа1РасширеннаяПодсказка" id="11"/>
+				<ChildItems>
+					<Button name="ФормаФорматированныйВид" id="6">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Command.ФорматированныйВид</CommandName>
+						<ExtendedTooltip name="ФормаФорматированныйВидРасширеннаяПодсказка" id="12"/>
+					</Button>
+					<Button name="ФормаСохранитьНаДиск" id="16">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Command.СохранитьНаДиск</CommandName>
+						<ExtendedTooltip name="ФормаСохранитьНаДискРасширеннаяПодсказка" id="17"/>
+					</Button>
+				</ChildItems>
+			</ButtonGroup>
+		</ChildItems>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+		<Event name="OnClose">ПриЗакрытии</Event>
+	</Events>
+	<ChildItems>
+		<TextDocumentField name="ТекстФайла" id="2">
+			<DataPath>ТекстФайла</DataPath>
+			<Visible>false</Visible>
+			<ReadOnly>true</ReadOnly>
+			<TitleLocation>None</TitleLocation>
+			<ContextMenu name="ТекстФайлаКонтекстноеМеню" id="3"/>
+			<ExtendedTooltip name="ТекстФайлаРасширеннаяПодсказка" id="13"/>
+		</TextDocumentField>
+		<HTMLDocumentField name="РасскрашенныйТекст" id="4">
+			<DataPath>РасскрашенныйТекст</DataPath>
+			<TitleLocation>None</TitleLocation>
+			<ContextMenu name="РасскрашенныйТекстКонтекстноеМеню" id="5"/>
+			<ExtendedTooltip name="РасскрашенныйТекстРасширеннаяПодсказка" id="14"/>
+		</HTMLDocumentField>
+		<TextDocumentField name="НеРасскрашенныйТекст" id="7">
+			<DataPath>ТекстФайла</DataPath>
+			<TitleLocation>None</TitleLocation>
+			<ContextMenu name="НеРасскрашенныйТекстКонтекстноеМеню" id="8"/>
+			<ExtendedTooltip name="НеРасскрашенныйТекстРасширеннаяПодсказка" id="15"/>
+		</TextDocumentField>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="ТекстФайла" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Текст файла</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="РасскрашенныйТекст" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Расскрашенный текст</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="НачальноеПредставлениеФорматировано" id="4">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="Кодировка" id="1">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>10</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="ФорматированныйВид" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Форматированный вид</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Форматированный вид</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ФорматированныйВид</Action>
+			<Representation>TextPicture</Representation>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+		<Command name="СохранитьНаДиск" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Сохранить на диск</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Сохранить на диск</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>СохранитьНаДиск</Action>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+	</Commands>
+	<Parameters>
+		<Parameter name="Организация">
+			<Type>
+				<v8:Type>cfg:CatalogRef.Организации</v8:Type>
+			</Type>
+			<KeyParameter>true</KeyParameter>
+		</Parameter>
+		<Parameter name="Период">
+			<Type>
+				<v8:Type>xs:dateTime</v8:Type>
+				<v8:DateQualifiers>
+					<v8:DateFractions>DateTime</v8:DateFractions>
+				</v8:DateQualifiers>
+			</Type>
+			<KeyParameter>true</KeyParameter>
+		</Parameter>
+	</Parameters>
+</Form>

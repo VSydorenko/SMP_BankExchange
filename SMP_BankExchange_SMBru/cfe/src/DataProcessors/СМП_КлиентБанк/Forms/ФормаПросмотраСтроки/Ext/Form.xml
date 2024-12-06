@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<AutoTitle>false</AutoTitle>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>false</Autofill>
+		<ChildItems>
+			<Button name="Закрыть" id="15">
+				<Type>CommandBarButton</Type>
+				<DefaultButton>true</DefaultButton>
+				<CommandName>Form.StandardCommand.Close</CommandName>
+				<ExtendedTooltip name="ЗакрытьРасширеннаяПодсказка" id="16"/>
+			</Button>
+		</ChildItems>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+		<Event name="OnClose">ПриЗакрытии</Event>
+	</Events>
+	<ChildItems>
+		<Pages name="Страницы" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Страницы</v8:content>
+				</v8:item>
+			</Title>
+			<PagesRepresentation>TabsOnTop</PagesRepresentation>
+			<ExtendedTooltip name="СтраницыРасширеннаяПодсказка" id="2"/>
+			<ChildItems>
+				<Page name="ПечатнаяФормаПлатежа" id="3">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Печатная форма платежа</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Друкована форма платежу</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="ПечатнаяФормаПлатежаРасширеннаяПодсказка" id="4"/>
+					<ChildItems>
+						<SpreadSheetDocumentField name="ПечатнаяФорма" id="7">
+							<DataPath>ПечатнаяФорма</DataPath>
+							<TitleLocation>None</TitleLocation>
+							<Width>70</Width>
+							<Height>25</Height>
+							<VerticalScrollBar>true</VerticalScrollBar>
+							<HorizontalScrollBar>true</HorizontalScrollBar>
+							<ViewScalingMode>Normal</ViewScalingMode>
+							<ContextMenu name="ПечатнаяФормаКонтекстноеМеню" id="8"/>
+							<ExtendedTooltip name="ПечатнаяФормаРасширеннаяПодсказка" id="9"/>
+						</SpreadSheetDocumentField>
+					</ChildItems>
+				</Page>
+				<Page name="ТекстИзФайлаВыписки" id="5">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Текст из файла выписки</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Текст з файлу виписки</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="ТекстИзФайлаВыпискиРасширеннаяПодсказка" id="6"/>
+					<ChildItems>
+						<Button name="ФорматированныйВид" id="13">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.ФорматированныйВид</CommandName>
+							<ExtendedTooltip name="ФорматированныйВидРасширеннаяПодсказка" id="14"/>
+						</Button>
+						<HTMLDocumentField name="РасскрашенныйТекст" id="17">
+							<DataPath>РасскрашенныйТекст</DataPath>
+							<TitleLocation>None</TitleLocation>
+							<ContextMenu name="РасскрашенныйТекстКонтекстноеМеню" id="18"/>
+							<ExtendedTooltip name="РасскрашенныйТекстРасширеннаяПодсказка" id="19"/>
+						</HTMLDocumentField>
+						<TextDocumentField name="НеРасскрашенныйТекст" id="10">
+							<DataPath>ТекстФайла</DataPath>
+							<TitleLocation>None</TitleLocation>
+							<ContextMenu name="НеРасскрашенныйТекстКонтекстноеМеню" id="11"/>
+							<ExtendedTooltip name="НеРасскрашенныйТекстРасширеннаяПодсказка" id="12"/>
+						</TextDocumentField>
+					</ChildItems>
+				</Page>
+			</ChildItems>
+		</Pages>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.СМП_КлиентБанк</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="ПечатнаяФорма" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Печатная форма</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type xmlns:mxl="http://v8.1c.ru/8.2/data/spreadsheet">mxl:SpreadsheetDocument</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ТекстФайла" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Текст файла</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="РасскрашенныйТекст" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Расскрашенный текст</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="НачальноеПредставлениеФорматировано" id="5">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="ФорматированныйВид" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Форматированный вид</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Форматований вигляд</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Форматированный вид</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ФорматированныйВид</Action>
+			<Representation>TextPicture</Representation>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+	</Commands>
+</Form>

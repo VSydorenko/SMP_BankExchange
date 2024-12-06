@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<AutoTitle>false</AutoTitle>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>false</Autofill>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<Pages name="СтраницыРезультатЗавершения" id="18">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Страницы результат завершения</v8:content>
+				</v8:item>
+			</Title>
+			<PagesRepresentation>None</PagesRepresentation>
+			<ExtendedTooltip name="СтраницыРезультатЗавершенияРасширеннаяПодсказка" id="19"/>
+			<ChildItems>
+				<Page name="СтраницаБезПредупреждений" id="20">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Страница без предупреждений</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="СтраницаБезПредупрежденийРасширеннаяПодсказка" id="21"/>
+					<ChildItems>
+						<UsualGroup name="Группа2" id="11">
+							<HorizontalStretch>true</HorizontalStretch>
+							<Group>Horizontal</Group>
+							<VerticalAlign>Center</VerticalAlign>
+							<Behavior>Usual</Behavior>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="12"/>
+							<ChildItems>
+								<PictureDecoration name="Декорация3" id="13">
+									<Width>3</Width>
+									<Height>3</Height>
+									<VerticalStretch>false</VerticalStretch>
+									<FileDragMode>AsFile</FileDragMode>
+									<ContextMenu name="Декорация3КонтекстноеМеню" id="14"/>
+									<ExtendedTooltip name="Декорация3РасширеннаяПодсказка" id="15"/>
+								</PictureDecoration>
+								<LabelDecoration name="НадписьБезПредупреждений" id="1">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Загрузка платежных документов завершена</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Завантаження платіжних документів завершене</v8:content>
+										</v8:item>
+									</Title>
+									<GroupHorizontalAlign>Center</GroupHorizontalAlign>
+									<HorizontalAlign>Center</HorizontalAlign>
+									<ContextMenu name="НадписьБезПредупрежденийКонтекстноеМеню" id="2"/>
+									<ExtendedTooltip name="НадписьБезПредупрежденийРасширеннаяПодсказка" id="3"/>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+				<Page name="СтраницаСПредупреждениями" id="22">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Страница с предупреждениями</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="СтраницаСПредупреждениямиРасширеннаяПодсказка" id="23"/>
+					<ChildItems>
+						<UsualGroup name="Группа4" id="31">
+							<HorizontalStretch>true</HorizontalStretch>
+							<Group>Horizontal</Group>
+							<VerticalAlign>Center</VerticalAlign>
+							<Behavior>Usual</Behavior>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Группа4РасширеннаяПодсказка" id="32"/>
+							<ChildItems>
+								<PictureDecoration name="Декорация5" id="33">
+									<Width>3</Width>
+									<Height>3</Height>
+									<FileDragMode>AsFile</FileDragMode>
+									<ContextMenu name="Декорация5КонтекстноеМеню" id="34"/>
+									<ExtendedTooltip name="Декорация5РасширеннаяПодсказка" id="35"/>
+								</PictureDecoration>
+								<LabelDecoration name="НадписьСПредупрежедниями" id="36">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Height>3</Height>
+									<HorizontalStretch>true</HorizontalStretch>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Загрузка платежных документов завершена 
+с предупреждениями</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Завантаження платіжних документів завершене з попередженням</v8:content>
+										</v8:item>
+									</Title>
+									<HorizontalAlign>Center</HorizontalAlign>
+									<VerticalAlign>Center</VerticalAlign>
+									<ContextMenu name="НадписьСПредупрежедниямиКонтекстноеМеню" id="37"/>
+									<ExtendedTooltip name="НадписьСПредупрежедниямиРасширеннаяПодсказка" id="38"/>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+			</ChildItems>
+		</Pages>
+		<UsualGroup name="Группа3" id="24">
+			<Group>Horizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="Группа3РасширеннаяПодсказка" id="25"/>
+			<ChildItems>
+				<LabelDecoration name="Декорация4" id="28">
+					<AutoMaxWidth>false</AutoMaxWidth>
+					<Height>2</Height>
+					<HorizontalStretch>true</HorizontalStretch>
+					<TextColor>style:FormTextColor</TextColor>
+					<Title formatted="false">
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Открыть протокол загрузки</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Відкрити протокол завантаження</v8:content>
+						</v8:item>
+					</Title>
+					<Hyperlink>true</Hyperlink>
+					<HorizontalAlign>Center</HorizontalAlign>
+					<VerticalAlign>Top</VerticalAlign>
+					<ContextMenu name="Декорация4КонтекстноеМеню" id="29"/>
+					<ExtendedTooltip name="Декорация4РасширеннаяПодсказка" id="30"/>
+					<Events>
+						<Event name="Click">Декорация2Нажатие</Event>
+					</Events>
+				</LabelDecoration>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="Группа5" id="44">
+			<HorizontalStretch>true</HorizontalStretch>
+			<Group>Horizontal</Group>
+			<HorizontalAlign>Center</HorizontalAlign>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="Группа5РасширеннаяПодсказка" id="45"/>
+			<ChildItems>
+				<Button name="ОК1" id="46">
+					<Type>UsualButton</Type>
+					<DefaultItem>true</DefaultItem>
+					<Width>10</Width>
+					<CommandName>Form.StandardCommand.OK</CommandName>
+					<ExtendedTooltip name="ОК1РасширеннаяПодсказка" id="47"/>
+				</Button>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes/>
+	<Commands>
+		<Command name="ОК" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>ОК</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>ОК</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ОК</Action>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+	</Commands>
+</Form>

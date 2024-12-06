@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="eedd89a9-db18-4800-8293-7f01eea09e21">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка" category="Ref">
+				<xr:TypeId>818158ce-6b99-4946-9934-4f1623e914ea</xr:TypeId>
+				<xr:ValueId>b5f04851-04b6-4256-a2e4-4b70fa8ef1a8</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка" category="Manager">
+				<xr:TypeId>628a8d8b-1c2f-45bb-bbb6-2c7f669dd662</xr:TypeId>
+				<xr:ValueId>738382bc-bf5c-4fd7-b495-57bd386139a5</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка" category="List">
+				<xr:TypeId>e5cea625-e4c0-4cdd-bae4-ace523ef8922</xr:TypeId>
+				<xr:ValueId>b65c21f6-fef7-467f-8c01-43068f13f464</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>fd592794-76e4-4050-9ba3-40b2ad9dd294</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects>
+			<EnumValue uuid="67e0a002-7c34-42ca-9a7a-dfac29a06907">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>СоздатьНовогоПриЗагрузкеВыпискиВ1С</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>cb6ff22a-84b3-4846-842e-30935cae80ae</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="69c066bb-84e0-4a6c-814f-6fc507db2496">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>СоздатьНовогоСейчас</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>1837c319-750d-4fac-b183-39d539ae9d02</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="8e1b9c47-1279-4476-bdd5-d618df397659">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ИспользоватьСуществующего</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>1697c84c-5f83-42dc-a72f-65306eba38c1</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="3fee8fae-3830-4623-8c70-57a3ead3e00c">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>НеСоздаватьНовогоКонтрагента</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>4f870f17-a578-44ec-b301-2ccf2c10b569</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+		</ChildObjects>
+	</Enum>
+</MetaDataObject>

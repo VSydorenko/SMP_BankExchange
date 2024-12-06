@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<AutoTitle>false</AutoTitle>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>false</Autofill>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="ГруппаДанныеВыписок" id="37">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Данные выписок</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Horizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаДанныеВыписокРасширеннаяПодсказка" id="38"/>
+			<ChildItems>
+				<Table name="ВыпискиБанка" id="1">
+					<Header>false</Header>
+					<UseAlternationRowColor>true</UseAlternationRowColor>
+					<FileDragMode>AsFile</FileDragMode>
+					<DataPath>Список</DataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Выписки банка</v8:content>
+						</v8:item>
+					</Title>
+					<CommandSet>
+						<ExcludedCommand>CancelSearch</ExcludedCommand>
+						<ExcludedCommand>DynamicListStandardSettings</ExcludedCommand>
+						<ExcludedCommand>FindByCurrentValue</ExcludedCommand>
+						<ExcludedCommand>ListSettings</ExcludedCommand>
+						<ExcludedCommand>LoadDynamicListSettings</ExcludedCommand>
+						<ExcludedCommand>OutputList</ExcludedCommand>
+						<ExcludedCommand>Refresh</ExcludedCommand>
+						<ExcludedCommand>SaveDynamicListSettings</ExcludedCommand>
+						<ExcludedCommand>SearchHistory</ExcludedCommand>
+					</CommandSet>
+					<AutoRefresh>false</AutoRefresh>
+					<AutoRefreshPeriod>60</AutoRefreshPeriod>
+					<Period>
+						<v8:variant xsi:type="v8:StandardPeriodVariant">Custom</v8:variant>
+						<v8:startDate>0001-01-01T00:00:00</v8:startDate>
+						<v8:endDate>0001-01-01T00:00:00</v8:endDate>
+					</Period>
+					<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
+					<RestoreCurrentRow>false</RestoreCurrentRow>
+					<TopLevelParent xsi:nil="true"/>
+					<ShowRoot>true</ShowRoot>
+					<AllowRootChoice>false</AllowRootChoice>
+					<UpdateOnDataChange>Auto</UpdateOnDataChange>
+					<AllowGettingCurrentRowURL>true</AllowGettingCurrentRowURL>
+					<ContextMenu name="ВыпискиБанкаКонтекстноеМеню" id="2">
+						<ChildItems>
+							<Button name="ВыпискиБанкаКонтекстноеМенюОткрытьЭД" id="42">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.ОткрытьЭД</CommandName>
+								<ExtendedTooltip name="ВыпискиБанкаКонтекстноеМенюОткрытьЭДРасширеннаяПодсказка" id="43"/>
+							</Button>
+						</ChildItems>
+					</ContextMenu>
+					<AutoCommandBar name="ВыпискиБанкаКоманднаяПанель" id="3">
+						<Autofill>false</Autofill>
+					</AutoCommandBar>
+					<ExtendedTooltip name="ВыпискиБанкаРасширеннаяПодсказка" id="4"/>
+					<SearchStringAddition name="ВыпискиБанкаСтрокаПоиска" id="5">
+						<AdditionSource>
+							<Item>ВыпискиБанка</Item>
+							<Type>SearchStringRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ВыпискиБанкаСтрокаПоискаКонтекстноеМеню" id="8"/>
+						<ExtendedTooltip name="ВыпискиБанкаСтрокаПоискаРасширеннаяПодсказка" id="9"/>
+					</SearchStringAddition>
+					<ViewStatusAddition name="ВыпискиБанкаСостояниеПросмотра" id="10">
+						<AdditionSource>
+							<Item>ВыпискиБанка</Item>
+							<Type>ViewStatusRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ВыпискиБанкаСостояниеПросмотраКонтекстноеМеню" id="13"/>
+						<ExtendedTooltip name="ВыпискиБанкаСостояниеПросмотраРасширеннаяПодсказка" id="14"/>
+					</ViewStatusAddition>
+					<SearchControlAddition name="ВыпискиБанкаУправлениеПоиском" id="15">
+						<AdditionSource>
+							<Item>ВыпискиБанка</Item>
+							<Type>SearchControl</Type>
+						</AdditionSource>
+						<ContextMenu name="ВыпискиБанкаУправлениеПоискомКонтекстноеМеню" id="18"/>
+						<ExtendedTooltip name="ВыпискиБанкаУправлениеПоискомРасширеннаяПодсказка" id="19"/>
+					</SearchControlAddition>
+					<Events>
+						<Event name="OnActivateRow">ВыпискиБанкаПриАктивизацииСтроки</Event>
+					</Events>
+					<ChildItems>
+						<LabelField name="ВыпискиБанкаДатаВыписки" id="34">
+							<DataPath>~Список.ДатаВыписки</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Выписки банка дата выписки</v8:content>
+								</v8:item>
+							</Title>
+							<ShowInHeader>false</ShowInHeader>
+							<ContextMenu name="ВыпискиБанкаДатаВыпискиКонтекстноеМеню" id="35"/>
+							<ExtendedTooltip name="ВыпискиБанкаДатаВыпискиРасширеннаяПодсказка" id="36"/>
+						</LabelField>
+						<LabelField name="ВыпискиБанкаСсылка" id="44">
+							<DataPath>~Список.Ref~Список.Ссылка</DataPath>
+							<ContextMenu name="ВыпискиБанкаСсылкаКонтекстноеМеню" id="45"/>
+							<ExtendedTooltip name="ВыпискиБанкаСсылкаРасширеннаяПодсказка" id="46"/>
+						</LabelField>
+					</ChildItems>
+				</Table>
+				<SpreadSheetDocumentField name="ТабличныйДокумент" id="39">
+					<DataPath>ТабличныйДокумент</DataPath>
+					<TitleLocation>None</TitleLocation>
+					<VerticalScrollBar>true</VerticalScrollBar>
+					<HorizontalScrollBar>true</HorizontalScrollBar>
+					<ContextMenu name="ТабличныйДокументКонтекстноеМеню" id="40"/>
+					<ExtendedTooltip name="ТабличныйДокументРасширеннаяПодсказка" id="41"/>
+				</SpreadSheetDocumentField>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Список" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Список</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>cfg:DynamicList</v8:Type>
+			</Type>
+			<UseAlways>
+				<Field>~Список.Ref~Список.Ссылка</Field>
+				<Field>~Список.ДатаВыписки</Field>
+			</UseAlways>
+			<Settings xsi:type="DynamicList">
+				<ManualQuery>true</ManualQuery>
+				<DynamicDataRead>false</DynamicDataRead>
+				<QueryText>ВЫБРАТЬ
+	СообщениеОбменСБанками.Ссылка,
+	СообщениеОбменСБанками.ДатаНачала КАК ДатаВыписки
+ИЗ
+	Документ.СообщениеОбменСБанками КАК СообщениеОбменСБанками
+ГДЕ
+	СообщениеОбменСБанками.Ссылка В(&amp;МассивСсылок)</QueryText>
+				<ListSettings>
+					<dcsset:filter>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>dfcece9d-5077-440b-b6b3-45a5cb4538eb</dcsset:userSettingID>
+					</dcsset:filter>
+					<dcsset:order>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>88619765-ccb3-46c6-ac52-38e9c992ebd4</dcsset:userSettingID>
+					</dcsset:order>
+					<dcsset:conditionalAppearance>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>b75fecce-942b-4aed-abc9-e6a02e460fb3</dcsset:userSettingID>
+					</dcsset:conditionalAppearance>
+					<dcsset:itemsViewMode>Normal</dcsset:itemsViewMode>
+					<dcsset:itemsUserSettingID>911b6018-f537-43e8-a417-da56b22f9aec</dcsset:itemsUserSettingID>
+				</ListSettings>
+			</Settings>
+		</Attribute>
+		<Attribute name="ТабличныйДокумент" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Табличный документ</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type xmlns:mxl="http://v8.1c.ru/8.2/data/spreadsheet">mxl:SpreadsheetDocument</v8:Type>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="ОткрытьЭД" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть </v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть ЭД</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>StdPicture.Document</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ОткрытьЭД</Action>
+			<Representation>TextPicture</Representation>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+	</Commands>
+	<Parameters>
+		<Parameter name="ВыпискиБанка">
+			<Type>
+				<v8:Type>v8:ValueListType</v8:Type>
+			</Type>
+		</Parameter>
+		<Parameter name="НачалоПериода">
+			<Type>
+				<v8:Type>xs:dateTime</v8:Type>
+				<v8:DateQualifiers>
+					<v8:DateFractions>Date</v8:DateFractions>
+				</v8:DateQualifiers>
+			</Type>
+		</Parameter>
+		<Parameter name="КонецПериода">
+			<Type>
+				<v8:Type>xs:dateTime</v8:Type>
+				<v8:DateQualifiers>
+					<v8:DateFractions>Date</v8:DateFractions>
+				</v8:DateQualifiers>
+			</Type>
+		</Parameter>
+	</Parameters>
+</Form>

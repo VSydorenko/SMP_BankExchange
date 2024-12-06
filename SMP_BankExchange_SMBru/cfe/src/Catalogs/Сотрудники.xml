@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Catalog uuid="4640dbc8-6b6c-4a7e-bc57-6fa8bbf08bd9">
+		<InternalInfo>
+			<xr:GeneratedType name="CatalogObject.Сотрудники" category="Object">
+				<xr:TypeId>77caf865-1450-4ea2-be76-e5d0b75328c9</xr:TypeId>
+				<xr:ValueId>88747c5b-e8d7-4f9a-80a4-bbb6ccadeac8</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogRef.Сотрудники" category="Ref">
+				<xr:TypeId>cb1a0acf-8858-43e1-a5e6-b0c11a696053</xr:TypeId>
+				<xr:ValueId>b10f8928-3c7e-4a63-a352-35d0b4b8fc7b</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogSelection.Сотрудники" category="Selection">
+				<xr:TypeId>f49104c2-4bc9-4f0b-ace9-622570a025c5</xr:TypeId>
+				<xr:ValueId>344639cf-46a7-4f0a-ac45-7e347357ca50</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogList.Сотрудники" category="List">
+				<xr:TypeId>55eb177a-0329-4a90-bdde-e3c937a6b76f</xr:TypeId>
+				<xr:ValueId>a4d32629-fb80-4009-a891-14b4e7b0881c</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogManager.Сотрудники" category="Manager">
+				<xr:TypeId>5a5685c5-209a-4e9e-bf03-a2d961115549</xr:TypeId>
+				<xr:ValueId>845f9dfa-e873-4996-acd0-804429e78658</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>Сотрудники</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>bf83958f-c4c6-490c-a464-cdc8a40f83f9</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Catalog>
+</MetaDataObject>

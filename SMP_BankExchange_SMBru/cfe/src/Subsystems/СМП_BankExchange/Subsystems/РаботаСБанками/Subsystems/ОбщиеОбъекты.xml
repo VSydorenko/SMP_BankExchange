@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Subsystem uuid="2017258f-6fa8-471b-b707-76707859cae5">
+		<Properties>
+			<Name>ОбщиеОбъекты</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Общие объекты</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<IncludeHelpInContents>true</IncludeHelpInContents>
+			<IncludeInCommandInterface>false</IncludeInCommandInterface>
+			<UseOneCommand>false</UseOneCommand>
+			<Explanation/>
+			<Picture/>
+			<Content>
+				<xr:Item xsi:type="xr:MDObjectRef">Catalog.СМП_УчетныеЗаписиБанков</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.СМП_РаботаСБанкамиПриватБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.СМП_РаботаСБанкамиМОНОБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.СМП_РаботаСБанкамиСервер</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">ScheduledJob.СМП_ОбменСБанкамиAPI</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">InformationRegister.СМП_НомерПоследнейТранзакции</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">3b17e22f-3513-482e-acaf-76b8dc481990</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">2ef5fd2f-c64f-48f3-ad59-5f6a42032fb4</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">b392a90b-afbd-44c5-a841-6577a4507a76</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">f011e981-5a32-42da-9306-c80a342bd596</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">c3c0330e-844c-4e6a-8190-9aad7cffad5a</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Enum.СостоянияДокументовЭДО</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.ИзменитьНастройки</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.ОбновлениеВнешнихКомпонентССайта</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">InformationRegister.ИсторияРаботыСКлиентомБанка</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">InformationRegister.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.КлиентБанкЗаголовокВыгрузка</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.КлиентБанкЗаголовокЗагрузка</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_КлиентБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.СМП_BankExchange</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.КоннекторHTTP_BankExchange</xr:Item>
+			</Content>
+		</Properties>
+		<ChildObjects/>
+	</Subsystem>
+</MetaDataObject>
