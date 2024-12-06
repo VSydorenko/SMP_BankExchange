@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Контроль безопасности обмена с банком</v8:content>
+		</v8:item>
+	</Title>
+	<WindowOpeningMode>LockWholeInterface</WindowOpeningMode>
+	<AutoTitle>false</AutoTitle>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>false</Autofill>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnOpen">ПриОткрытии</Event>
+		<Event name="BeforeClose">ПередЗакрытием</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<Pages name="ГруппаПроверка" id="34">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Проверка</v8:content>
+				</v8:item>
+			</Title>
+			<PagesRepresentation>None</PagesRepresentation>
+			<ExtendedTooltip name="ГруппаПроверкаРасширеннаяПодсказка" id="35"/>
+			<ChildItems>
+				<Page name="ГруппаПроверкаПоКнопке" id="97">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Проверка по кнопке</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ExtendedTooltip name="ГруппаПроверкаПоКнопкеРасширеннаяПодсказка" id="98"/>
+					<ChildItems>
+						<PictureDecoration name="КартинкаВосклицательныйЗнак" id="99">
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Восклицательный знак</v8:content>
+								</v8:item>
+							</Title>
+							<FileDragMode>AsFile</FileDragMode>
+							<ContextMenu name="КартинкаВосклицательныйЗнакКонтекстноеМеню" id="100"/>
+							<ExtendedTooltip name="КартинкаВосклицательныйЗнакРасширеннаяПодсказка" id="101"/>
+						</PictureDecoration>
+						<UsualGroup name="ГруппаИнструкцияПроверкаПоКнопке" id="3">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Проверка по кнопке</v8:content>
+								</v8:item>
+							</Title>
+							<Group>Vertical</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>NormalSeparation</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаИнструкцияПроверкаПоКнопкеРасширеннаяПодсказка" id="4"/>
+							<ChildItems>
+								<LabelDecoration name="ДекорацияИнструкцияПроверкаПоКнопке1" id="86">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Файл выгружен на компьютер.
+Оставьте окно открытым до загрузки файла в Клиент-банк</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияИнструкцияПроверкаПоКнопке1КонтекстноеМеню" id="87"/>
+									<ExtendedTooltip name="ДекорацияИнструкцияПроверкаПоКнопке1РасширеннаяПодсказка" id="88"/>
+								</LabelDecoration>
+								<UsualGroup name="ГруппаИнструкцияПроверкаПоКнопке2" id="105">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Инструкция проверка по кнопке 2</v8:content>
+										</v8:item>
+									</Title>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>NormalSeparation</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаИнструкцияПроверкаПоКнопке2РасширеннаяПодсказка" id="106"/>
+									<ChildItems>
+										<LabelDecoration name="ДекорацияИнструкцияПроверкаПоКнопке2" id="102">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияПроверкаПоКнопке2КонтекстноеМеню" id="103"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияПроверкаПоКнопке2РасширеннаяПодсказка" id="104"/>
+										</LabelDecoration>
+										<LabelDecoration name="ДекорацияИнструкцияПроверкаПоКнопке5" id="174">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияПроверкаПоКнопке5КонтекстноеМеню" id="175"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияПроверкаПоКнопке5РасширеннаяПодсказка" id="176"/>
+										</LabelDecoration>
+									</ChildItems>
+								</UsualGroup>
+								<UsualGroup name="ГруппаИнструкцияПроверкаПоКнопкеПодсказка" id="110">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Подсказка</v8:content>
+										</v8:item>
+									</Title>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаИнструкцияПроверкаПоКнопкеПодсказкаРасширеннаяПодсказка" id="111"/>
+									<ChildItems>
+										<LabelDecoration name="ДекорацияИнструкцияПроверкаПоКнопке4" id="112">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<TextColor>style:BorderColor</TextColor>
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияПроверкаПоКнопке4КонтекстноеМеню" id="113"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияПроверкаПоКнопке4РасширеннаяПодсказка" id="114"/>
+										</LabelDecoration>
+									</ChildItems>
+								</UsualGroup>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+				<Page name="ГруппаПроверкаВыполняется" id="117">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Проверка выполняется</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ExtendedTooltip name="ГруппаПроверкаВыполняетсяРасширеннаяПодсказка" id="118"/>
+					<ChildItems>
+						<PictureDecoration name="КартинкаПроверкаВыполняется" id="126">
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Проверка выполняется</v8:content>
+								</v8:item>
+							</Title>
+							<FileDragMode>AsFile</FileDragMode>
+							<ContextMenu name="КартинкаПроверкаВыполняетсяКонтекстноеМеню" id="127"/>
+							<ExtendedTooltip name="КартинкаПроверкаВыполняетсяРасширеннаяПодсказка" id="128"/>
+						</PictureDecoration>
+						<UsualGroup name="ГруппаПроверкаВыполняетсяСообщение" id="129">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Текст сообщения</v8:content>
+								</v8:item>
+							</Title>
+							<Group>Vertical</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>NormalSeparation</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаПроверкаВыполняетсяСообщениеРасширеннаяПодсказка" id="130"/>
+							<ChildItems>
+								<LabelDecoration name="ДекорацияПроверкаВыполняетсяТекстСообщения1" id="131">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Файл выгружен на компьютер. Он соответствует данным программы</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаВыполняетсяТекстСообщения1КонтекстноеМеню" id="132"/>
+									<ExtendedTooltip name="ДекорацияПроверкаВыполняетсяТекстСообщения1РасширеннаяПодсказка" id="133"/>
+								</LabelDecoration>
+								<LabelDecoration name="ДекорацияПроверкаВыполняетсяТекстСообщения2" id="134">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<TextColor>style:BorderColor</TextColor>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Эта проверка гарантирует, что платежные реквизиты в файле
+не подменены вирусом</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаВыполняетсяТекстСообщения2КонтекстноеМеню" id="135"/>
+									<ExtendedTooltip name="ДекорацияПроверкаВыполняетсяТекстСообщения2РасширеннаяПодсказка" id="136"/>
+								</LabelDecoration>
+								<UsualGroup name="ГруппаИнструкцияУспешноОтступ1" id="121">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Инструкция (успешно) - отступ</v8:content>
+										</v8:item>
+									</Title>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>NormalSeparation</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаИнструкцияУспешноОтступ1РасширеннаяПодсказка" id="122"/>
+									<ChildItems>
+										<LabelDecoration name="ДекорацияИнструкцияПроверкаУспешна2" id="123">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<Title formatted="false">
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Оставьте окно открытым до загрузки в Клиент-банк</v8:content>
+												</v8:item>
+											</Title>
+											<ContextMenu name="ДекорацияИнструкцияПроверкаУспешна2КонтекстноеМеню" id="124"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияПроверкаУспешна2РасширеннаяПодсказка" id="125"/>
+										</LabelDecoration>
+									</ChildItems>
+								</UsualGroup>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+				<Page name="ГруппаПроверкаУспешна" id="23">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Проверка успешна</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ExtendedTooltip name="ГруппаПроверкаУспешнаРасширеннаяПодсказка" id="24"/>
+					<ChildItems>
+						<PictureDecoration name="КартинкаПроверкаУспешна" id="137">
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Проверка успешна</v8:content>
+								</v8:item>
+							</Title>
+							<FileDragMode>AsFile</FileDragMode>
+							<ContextMenu name="КартинкаПроверкаУспешнаКонтекстноеМеню" id="138"/>
+							<ExtendedTooltip name="КартинкаПроверкаУспешнаРасширеннаяПодсказка" id="139"/>
+						</PictureDecoration>
+						<UsualGroup name="ГруппаПроверкаУспешнаСообщение" id="115">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Инструкция (успешно) сообще</v8:content>
+								</v8:item>
+							</Title>
+							<Group>Vertical</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>NormalSeparation</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаПроверкаУспешнаСообщениеРасширеннаяПодсказка" id="116"/>
+							<ChildItems>
+								<LabelDecoration name="ДекорацияПроверкаУспешнаТекстСообщения1" id="140">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Файл на компьютере совпадает с данными программы</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаУспешнаТекстСообщения1КонтекстноеМеню" id="141"/>
+									<ExtendedTooltip name="ДекорацияПроверкаУспешнаТекстСообщения1РасширеннаяПодсказка" id="142"/>
+								</LabelDecoration>
+								<LabelDecoration name="ДекорацияПроверкаУспешнаТекстСообщения2" id="143">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<TextColor>style:BorderColor</TextColor>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Эта проверка гарантирует, что платежные реквизиты в файле
+не подменены вирусом</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаУспешнаТекстСообщения2КонтекстноеМеню" id="144"/>
+									<ExtendedTooltip name="ДекорацияПроверкаУспешнаТекстСообщения2РасширеннаяПодсказка" id="145"/>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+				<Page name="ГруппаФайлИзменен" id="36">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Файл изменен</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ExtendedTooltip name="ГруппаФайлИзмененРасширеннаяПодсказка" id="37"/>
+					<ChildItems>
+						<PictureDecoration name="КартинкаФайлИзменен" id="146">
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Файл изменен</v8:content>
+								</v8:item>
+							</Title>
+							<FileDragMode>AsFile</FileDragMode>
+							<ContextMenu name="КартинкаФайлИзмененКонтекстноеМеню" id="147"/>
+							<ExtendedTooltip name="КартинкаФайлИзмененРасширеннаяПодсказка" id="148"/>
+						</PictureDecoration>
+						<UsualGroup name="ГруппаФайлИзмененСообщение" id="149">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Файл изменен</v8:content>
+								</v8:item>
+							</Title>
+							<Group>Vertical</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>NormalSeparation</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаФайлИзмененСообщениеРасширеннаяПодсказка" id="150"/>
+							<ChildItems>
+								<LabelDecoration name="ДекорацияПроверкаУспешнаТекстСообщения3" id="151">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Содержимое файла на компьютере не совпадает с данными программы</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаУспешнаТекстСообщения3КонтекстноеМеню" id="152"/>
+									<ExtendedTooltip name="ДекорацияПроверкаУспешнаТекстСообщения3РасширеннаяПодсказка" id="153"/>
+								</LabelDecoration>
+								<LabelDecoration name="ДекорацияПроверкаУспешнаТекстСообщения4" id="154">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<TextColor>style:SpecialTextColor</TextColor>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Платежные реквизиты могли быть подменены вирусом</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаУспешнаТекстСообщения4КонтекстноеМеню" id="155"/>
+									<ExtendedTooltip name="ДекорацияПроверкаУспешнаТекстСообщения4РасширеннаяПодсказка" id="156"/>
+								</LabelDecoration>
+								<UsualGroup name="ГруппаФайлИзмененИнструкция" id="157">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Инструкция при изменении файла</v8:content>
+										</v8:item>
+									</Title>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>NormalSeparation</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаФайлИзмененИнструкцияРасширеннаяПодсказка" id="158"/>
+									<ChildItems>
+										<LabelDecoration name="ДекорацияИнструкцияФайлИзменен1" id="40">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияФайлИзменен1КонтекстноеМеню" id="41"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияФайлИзменен1РасширеннаяПодсказка" id="42"/>
+										</LabelDecoration>
+										<LabelDecoration name="ДекорацияИнструкцияФайлИзменен2" id="43">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияФайлИзменен2КонтекстноеМеню" id="44"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияФайлИзменен2РасширеннаяПодсказка" id="45"/>
+										</LabelDecoration>
+										<LabelDecoration name="ДекорацияИнструкцияФайлИзменен3" id="46">
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияФайлИзменен3КонтекстноеМеню" id="47"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияФайлИзменен3РасширеннаяПодсказка" id="48"/>
+										</LabelDecoration>
+									</ChildItems>
+								</UsualGroup>
+								<LabelDecoration name="ДекорацияПроверкаУспешнаТекстСообщения7" id="177">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>После закрытия окна файл будет удален</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаУспешнаТекстСообщения7КонтекстноеМеню" id="178"/>
+									<ExtendedTooltip name="ДекорацияПроверкаУспешнаТекстСообщения7РасширеннаяПодсказка" id="179"/>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+				<Page name="ГруппаФайлУдален" id="38">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Файл удален</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ExtendedTooltip name="ГруппаФайлУдаленРасширеннаяПодсказка" id="39"/>
+					<ChildItems>
+						<PictureDecoration name="КартинкаФайлУдален" id="159">
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Файл удален</v8:content>
+								</v8:item>
+							</Title>
+							<FileDragMode>AsFile</FileDragMode>
+							<ContextMenu name="КартинкаФайлУдаленКонтекстноеМеню" id="160"/>
+							<ExtendedTooltip name="КартинкаФайлУдаленРасширеннаяПодсказка" id="161"/>
+						</PictureDecoration>
+						<UsualGroup name="ГруппаФайлУдаленСообщение" id="162">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Файл удален</v8:content>
+								</v8:item>
+							</Title>
+							<Group>Vertical</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>NormalSeparation</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаФайлУдаленСообщениеРасширеннаяПодсказка" id="163"/>
+							<ChildItems>
+								<LabelDecoration name="ДекорацияПроверкаУспешнаТекстСообщения5" id="164">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Файл на компьютере был удален</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаУспешнаТекстСообщения5КонтекстноеМеню" id="165"/>
+									<ExtendedTooltip name="ДекорацияПроверкаУспешнаТекстСообщения5РасширеннаяПодсказка" id="166"/>
+								</LabelDecoration>
+								<LabelDecoration name="ДекорацияПроверкаУспешнаТекстСообщения6" id="167">
+									<AutoMaxWidth>false</AutoMaxWidth>
+									<TextColor>style:SpecialTextColor</TextColor>
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Платежные реквизиты могли быть подменены вирусом</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ДекорацияПроверкаУспешнаТекстСообщения6КонтекстноеМеню" id="168"/>
+									<ExtendedTooltip name="ДекорацияПроверкаУспешнаТекстСообщения6РасширеннаяПодсказка" id="169"/>
+								</LabelDecoration>
+								<UsualGroup name="ГруппаФайлУдаленИнструкция" id="170">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Инструкция при удалении файла</v8:content>
+										</v8:item>
+									</Title>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>NormalSeparation</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаФайлУдаленИнструкцияРасширеннаяПодсказка" id="171"/>
+									<ChildItems>
+										<LabelDecoration name="ДекорацияИнструкцияФайлУдален1" id="52">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияФайлУдален1КонтекстноеМеню" id="53"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияФайлУдален1РасширеннаяПодсказка" id="54"/>
+										</LabelDecoration>
+										<LabelDecoration name="ДекорацияИнструкцияФайлУдален2" id="58">
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияФайлУдален2КонтекстноеМеню" id="59"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияФайлУдален2РасширеннаяПодсказка" id="60"/>
+										</LabelDecoration>
+										<LabelDecoration name="ДекорацияИнструкцияФайлУдален3" id="66">
+											<AutoMaxWidth>false</AutoMaxWidth>
+											<Title formatted="true"/>
+											<ContextMenu name="ДекорацияИнструкцияФайлУдален3КонтекстноеМеню" id="67"/>
+											<ExtendedTooltip name="ДекорацияИнструкцияФайлУдален3РасширеннаяПодсказка" id="68"/>
+										</LabelDecoration>
+									</ChildItems>
+								</UsualGroup>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+			</ChildItems>
+		</Pages>
+		<CommandBar name="ГруппаКнопки" id="82">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Кнопки</v8:content>
+				</v8:item>
+			</Title>
+			<HorizontalLocation>Right</HorizontalLocation>
+			<ExtendedTooltip name="ГруппаКнопкиРасширеннаяПодсказка" id="83"/>
+			<ChildItems>
+				<Button name="Проверить" id="77">
+					<Type>CommandBarButton</Type>
+					<DefaultButton>true</DefaultButton>
+					<CommandName>Form.Command.Проверить</CommandName>
+					<ExtendedTooltip name="ПроверитьРасширеннаяПодсказка" id="78"/>
+				</Button>
+				<Button name="Закрыть" id="172">
+					<Type>CommandBarButton</Type>
+					<CommandName>Form.Command.Закрыть</CommandName>
+					<ExtendedTooltip name="ЗакрытьРасширеннаяПодсказка" id="173"/>
+				</Button>
+			</ChildItems>
+		</CommandBar>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.СМП_КлиентБанк</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="ЗнакСообщения" id="2">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаголовокСообщения" id="3">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ПодсказкаСообщения" id="4">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ТекстВыгрузкиСтрокой" id="8">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ПутьКФайлу" id="9">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="Кодировка" id="10">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="РасширениеРаботыСФайламиПодключено" id="11">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="АдресИсходныхДанных" id="12">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="Проверить" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Проверить</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Проверить</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>Проверить</Action>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+		<Command name="Закрыть" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Закрыть</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Закрыть</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>Пропустить</Action>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+	</Commands>
+	<Parameters>
+		<Parameter name="ПутьКФайлу">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Parameter>
+		<Parameter name="АдресИсходныхДанных">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Parameter>
+		<Parameter name="Кодировка">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Parameter>
+	</Parameters>
+</Form>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<ChartOfAccounts uuid="8c648aae-bfd4-4954-b2b3-654854615356">
+		<InternalInfo>
+			<xr:GeneratedType name="ChartOfAccountsObject.Управленческий" category="Object">
+				<xr:TypeId>03eb9e3d-27aa-47a6-8d97-f57a6a83b698</xr:TypeId>
+				<xr:ValueId>1caa6e9e-4154-4395-a898-75091a8c2418</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="ChartOfAccountsRef.Управленческий" category="Ref">
+				<xr:TypeId>1363cedc-ef19-4ed1-a51f-5577b22ab9ba</xr:TypeId>
+				<xr:ValueId>5114433b-175c-46cf-b07e-fee144a8e6c1</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="ChartOfAccountsSelection.Управленческий" category="Selection">
+				<xr:TypeId>2b1d4c8e-532a-499d-8662-ffbac2c5c059</xr:TypeId>
+				<xr:ValueId>fd3bdfc5-349f-477e-b6fb-1b2ed37c148f</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="ChartOfAccountsList.Управленческий" category="List">
+				<xr:TypeId>de52bbc8-31f8-45e9-b949-5b375230dbb2</xr:TypeId>
+				<xr:ValueId>6c09da29-30fd-484a-b2a5-56a6fbd4a5ad</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="ChartOfAccountsManager.Управленческий" category="Manager">
+				<xr:TypeId>775a3d04-ed95-4c02-9b23-93d6318c53c6</xr:TypeId>
+				<xr:ValueId>98782380-93a9-422e-9232-691ff9097571</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="ChartOfAccountsExtDimensionTypes.Управленческий" category="ExtDimensionTypes">
+				<xr:TypeId>2966bec9-563a-4579-aed2-0199c9e56e74</xr:TypeId>
+				<xr:ValueId>69844140-5701-482c-92fb-1ae5aab4bd2d</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="ChartOfAccountsExtDimensionTypesRow.Управленческий" category="ExtDimensionTypesRow">
+				<xr:TypeId>14563e20-a613-459c-9c6b-f879d7c1141c</xr:TypeId>
+				<xr:ValueId>7b40e200-909d-4be0-83fb-4c0e77b0c416</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>Управленческий</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>3b0c4744-6437-4ccc-bc96-9dd9bae7a7ae</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</ChartOfAccounts>
+</MetaDataObject>

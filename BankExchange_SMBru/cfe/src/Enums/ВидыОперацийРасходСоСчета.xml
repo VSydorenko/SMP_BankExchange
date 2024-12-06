@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="3c85ebf9-9f2f-4bef-be01-3868f39e4ee8">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ВидыОперацийРасходСоСчета" category="Ref">
+				<xr:TypeId>1848502d-fdaf-4b11-9892-6c435c0ad64c</xr:TypeId>
+				<xr:ValueId>62c9c600-63e7-4a10-8947-5fcac8d00d0f</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ВидыОперацийРасходСоСчета" category="Manager">
+				<xr:TypeId>a0befb6d-6d84-4289-bc2c-edfa80903fd2</xr:TypeId>
+				<xr:ValueId>c7d1c2ab-f1b2-41de-a518-f0bfc006e14b</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ВидыОперацийРасходСоСчета" category="List">
+				<xr:TypeId>6e24e0a7-eb50-4013-ae6d-feb38b616bf7</xr:TypeId>
+				<xr:ValueId>488fb784-867b-4431-9908-517ad45b34b8</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ВидыОперацийРасходСоСчета</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>fdfd6a3f-40ac-4442-b833-58c1baeedda1</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Enum>
+</MetaDataObject>

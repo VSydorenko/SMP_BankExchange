@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Обмен с банком</v8:content>
+		</v8:item>
+	</Title>
+	<AutoTitle>false</AutoTitle>
+	<CommandBarLocation>None</CommandBarLocation>
+	<VerticalScroll>useIfNecessary</VerticalScroll>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<Events>
+		<Event name="ChoiceProcessing">ОбработкаВыбора</Event>
+		<Event name="NotificationProcessing">ОбработкаОповещения</Event>
+		<Event name="NewWriteProcessing">ОбработкаЗаписиНового</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="ГруппаФильтр" id="217">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Фильтр</v8:content>
+				</v8:item>
+			</Title>
+			<Group>AlwaysHorizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаФильтрExtendedTooltip" id="225"/>
+			<ChildItems>
+				<UsualGroup name="ГруппаНадписьОтбораПоСчету" id="272">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Надпись отбора по счету</v8:content>
+						</v8:item>
+					</Title>
+					<Group>AlwaysHorizontal</Group>
+					<Behavior>Usual</Behavior>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаНадписьОтбораПоСчетуРасширеннаяПодсказка" id="273"/>
+					<ChildItems>
+						<LabelDecoration name="ФильтрПоСчету" id="214">
+							<AutoMaxWidth>false</AutoMaxWidth>
+							<Height>1</Height>
+							<HorizontalStretch>true</HorizontalStretch>
+							<Font ref="sys:DefaultGUIFont" height="10" kind="WindowsFont"/>
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Информация по счету...</v8:content>
+								</v8:item>
+							</Title>
+							<Hyperlink>true</Hyperlink>
+							<HorizontalAlign>Right</HorizontalAlign>
+							<ContextMenu name="ФильтрПоСчетуКонтекстноеМеню" id="215"/>
+							<ExtendedTooltip name="ФильтрПоСчетуExtendedTooltip" id="226"/>
+							<Events>
+								<Event name="Click">ФильтрПоСчетуНажатие</Event>
+							</Events>
+						</LabelDecoration>
+						<Button name="ПоВсемСчетам" id="216">
+							<Type>Hyperlink</Type>
+							<Representation>Picture</Representation>
+							<Width>1</Width>
+							<GroupVerticalAlign>Center</GroupVerticalAlign>
+							<CommandName>Form.Command.ПоВсемСчетам</CommandName>
+							<TextColor>web:Seagreen</TextColor>
+							<Font ref="sys:DefaultGUIFont" height="10" kind="WindowsFont"/>
+							<ExtendedTooltip name="ПоВсемСчетамExtendedTooltip" id="227"/>
+						</Button>
+					</ChildItems>
+				</UsualGroup>
+				<LabelDecoration name="Декорация1" id="223">
+					<HorizontalStretch>false</HorizontalStretch>
+					<ContextMenu name="Декорация1КонтекстноеМеню" id="224"/>
+					<ExtendedTooltip name="Декорация1ExtendedTooltip" id="228"/>
+				</LabelDecoration>
+				<Button name="Настройка" id="222">
+					<Type>UsualButton</Type>
+					<Representation>Text</Representation>
+					<CommandName>Form.Command.Настройка</CommandName>
+					<ExtendedTooltip name="НастройкаExtendedTooltip" id="229"/>
+				</Button>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="ГруппаФорматированияКоманд" id="93">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Форматирования команд</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Horizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаФорматированияКомандExtendedTooltip" id="230"/>
+			<ChildItems>
+				<LabelDecoration name="Декорация5" id="95">
+					<Width>1</Width>
+					<HorizontalStretch>false</HorizontalStretch>
+					<ContextMenu name="Декорация5КонтекстноеМеню" id="96"/>
+					<ExtendedTooltip name="Декорация5ExtendedTooltip" id="231"/>
+				</LabelDecoration>
+				<UsualGroup name="ГруппаКомандКлиентаБанка" id="94">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Команд клиента банка</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Vertical</Group>
+					<Behavior>Usual</Behavior>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаКомандКлиентаБанкаExtendedTooltip" id="232"/>
+					<ChildItems>
+						<Button name="ЗагрузитьИзФайла" id="87">
+							<Type>UsualButton</Type>
+							<Representation>PictureAndText</Representation>
+							<Width>41</Width>
+							<Height>2</Height>
+							<CommandName>Form.Command.ЗагрузитьИзФайла</CommandName>
+							<Font ref="sys:DefaultGUIFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="WindowsFont"/>
+							<Picture>
+								<xr:Ref>CommonPicture.КлиентБанкЗаголовокЗагрузка</xr:Ref>
+								<xr:LoadTransparent>true</xr:LoadTransparent>
+							</Picture>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Загрузить выписку из банка в 1С</v8:content>
+								</v8:item>
+							</Title>
+							<ExtendedTooltip name="ЗагрузитьИзФайлаExtendedTooltip" id="233"/>
+						</Button>
+						<LabelDecoration name="Декорация4" id="91">
+							<ContextMenu name="Декорация4КонтекстноеМеню" id="92"/>
+							<ExtendedTooltip name="Декорация4ExtendedTooltip" id="234"/>
+						</LabelDecoration>
+						<Button name="СохранитьНовыеПоручения" id="88">
+							<Type>UsualButton</Type>
+							<Representation>PictureAndText</Representation>
+							<Width>41</Width>
+							<Height>2</Height>
+							<CommandName>Form.Command.СохранитьНовыеПоручения</CommandName>
+							<Font ref="sys:DefaultGUIFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="WindowsFont"/>
+							<Picture>
+								<xr:Ref>CommonPicture.КлиентБанкЗаголовокВыгрузка</xr:Ref>
+								<xr:LoadTransparent>true</xr:LoadTransparent>
+							</Picture>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Выгрузить платежные поручения из 1С в банк</v8:content>
+								</v8:item>
+							</Title>
+							<ExtendedTooltip name="СохранитьНовыеПорученияExtendedTooltip" id="235"/>
+						</Button>
+						<LabelDecoration name="Декорация9" id="170">
+							<ContextMenu name="Декорация9КонтекстноеМеню" id="171"/>
+							<ExtendedTooltip name="Декорация9ExtendedTooltip" id="236"/>
+						</LabelDecoration>
+						<Button name="ИсторияЗагрузкиИВыгрузки" id="267">
+							<Type>Hyperlink</Type>
+							<Representation>Text</Representation>
+							<Width>31</Width>
+							<Height>2</Height>
+							<CommandName>Form.Command.ИсторияЗагрузкиИВыгрузки</CommandName>
+							<Font ref="sys:DefaultGUIFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="WindowsFont"/>
+							<ExtendedTooltip name="ИсторияЗагрузкиИВыгрузкиРасширеннаяПодсказка" id="268"/>
+						</Button>
+						<LabelDecoration name="Декорация12" id="269">
+							<ContextMenu name="Декорация12КонтекстноеМеню" id="270"/>
+							<ExtendedTooltip name="Декорация12РасширеннаяПодсказка" id="271"/>
+						</LabelDecoration>
+					</ChildItems>
+				</UsualGroup>
+				<UsualGroup name="Группа1" id="208">
+					<Group>Vertical</Group>
+					<Behavior>Usual</Behavior>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="Группа1ExtendedTooltip" id="237"/>
+					<ChildItems>
+						<LabelDecoration name="Декорация6" id="102">
+							<Width>3</Width>
+							<HorizontalStretch>false</HorizontalStretch>
+							<Font ref="style:NormalTextFont" height="7" kind="StyleItem"/>
+							<ContextMenu name="Декорация6КонтекстноеМеню" id="103"/>
+							<ExtendedTooltip name="Декорация6ExtendedTooltip" id="238"/>
+						</LabelDecoration>
+						<UsualGroup name="Группа3" id="211">
+							<Group>Horizontal</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Группа3ExtendedTooltip" id="239"/>
+							<ChildItems>
+								<LabelDecoration name="Декорация10" id="212">
+									<Width>3</Width>
+									<HorizontalStretch>false</HorizontalStretch>
+									<ContextMenu name="Декорация10КонтекстноеМеню" id="213"/>
+									<ExtendedTooltip name="Декорация10ExtendedTooltip" id="240"/>
+								</LabelDecoration>
+								<PictureDecoration name="Декорация2" id="209">
+									<Width>3</Width>
+									<Height>1</Height>
+									<FileDragMode>AsFile</FileDragMode>
+									<ContextMenu name="Декорация2КонтекстноеМеню" id="210"/>
+									<ExtendedTooltip name="Декорация2ExtendedTooltip" id="241"/>
+								</PictureDecoration>
+							</ChildItems>
+						</UsualGroup>
+						<LabelDecoration name="Декорация8" id="253">
+							<Height>4</Height>
+							<ContextMenu name="Декорация8КонтекстноеМеню" id="254"/>
+							<ExtendedTooltip name="Декорация8РасширеннаяПодсказка" id="255"/>
+						</LabelDecoration>
+						<UsualGroup name="Группа2" id="245">
+							<Group>Horizontal</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="246"/>
+							<ChildItems>
+								<LabelDecoration name="Декорация11" id="247">
+									<Width>3</Width>
+									<HorizontalStretch>false</HorizontalStretch>
+									<ContextMenu name="Декорация11КонтекстноеМеню" id="248"/>
+									<ExtendedTooltip name="Декорация11РасширеннаяПодсказка" id="249"/>
+								</LabelDecoration>
+								<PictureDecoration name="ДекорацияПредупреждение" id="250">
+									<Width>3</Width>
+									<Height>2</Height>
+									<FileDragMode>AsFile</FileDragMode>
+									<ContextMenu name="ДекорацияПредупреждениеКонтекстноеМеню" id="251"/>
+									<ExtendedTooltip name="ДекорацияПредупреждениеРасширеннаяПодсказка" id="252"/>
+								</PictureDecoration>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</UsualGroup>
+				<UsualGroup name="ГруппаДекорацииОписания" id="97">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Декорации описания</v8:content>
+						</v8:item>
+					</Title>
+					<HorizontalStretch>true</HorizontalStretch>
+					<Group>Vertical</Group>
+					<VerticalSpacing>OneAndHalf</VerticalSpacing>
+					<Behavior>Usual</Behavior>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаДекорацииОписанияExtendedTooltip" id="242"/>
+					<ChildItems>
+						<LabelDecoration name="Декорация7" id="106">
+							<Width>1</Width>
+							<HorizontalStretch>false</HorizontalStretch>
+							<Font ref="style:NormalTextFont" height="4" kind="StyleItem"/>
+							<ContextMenu name="Декорация7КонтекстноеМеню" id="107"/>
+							<ExtendedTooltip name="Декорация7ExtendedTooltip" id="243"/>
+						</LabelDecoration>
+						<LabelDecoration name="ДекорацияОписанияОбменСБанком" id="104" DisplayImportance="VeryHigh">
+							<HorizontalStretch>false</HorizontalStretch>
+							<VerticalStretch>false</VerticalStretch>
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Обмен с банком позволяет получать выписки по счетам из банка и передавать платежные поручения в банк. Взаимодействие с банком может выполняться через программу "Клиент-Банк" или по прямому каналу подключения к банку. Для использования прямого обмена необходимо включить обмен электронными документами с банками и создать настройку ЭДО с банком.</v8:content>
+								</v8:item>
+							</Title>
+							<VerticalAlign>Top</VerticalAlign>
+							<ContextMenu name="ДекорацияОписанияОбменСБанкомКонтекстноеМеню" id="105"/>
+							<ExtendedTooltip name="ДекорацияОписанияОбменСБанкомРасширеннаяПодсказка" id="244"/>
+						</LabelDecoration>
+						<LabelDecoration name="ДекорацияОписанияПредупрежденияОбменаСБанком" id="256" DisplayImportance="VeryHigh">
+							<HorizontalStretch>false</HorizontalStretch>
+							<VerticalStretch>false</VerticalStretch>
+							<Title formatted="false">
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Выбранный банковский счет определяет вариант обмена с банком.
+Если счет не указан, по умолчанию используется обмен через программу "Клиент-Банк", а после выбора файла выписки банковский счет будет определен автоматически. Если в выписке содержатся данные по нескольким счетам, то будет выбран 1-ый. Для загрузки данных по другим счетам, укажите нужный счет по ссылке вверху этого диалога.
+</v8:content>
+								</v8:item>
+							</Title>
+							<VerticalAlign>Top</VerticalAlign>
+							<ContextMenu name="ДекорацияОписанияПредупрежденияОбменаСБанкомКонтекстноеМеню" id="257"/>
+							<ExtendedTooltip name="ДекорацияОписанияПредупрежденияОбменаСБанкомРасширеннаяПодсказка" id="258"/>
+						</LabelDecoration>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+		<LabelDecoration name="Декорация3" id="259">
+			<Height>1</Height>
+			<VerticalStretch>true</VerticalStretch>
+			<ContextMenu name="Декорация3КонтекстноеМеню" id="260"/>
+			<ExtendedTooltip name="Декорация3РасширеннаяПодсказка" id="261"/>
+		</LabelDecoration>
+		<UsualGroup name="ДополнительнаяИнформация" id="262">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Дополнительная информация</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Horizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ДополнительнаяИнформацияРасширеннаяПодсказка" id="263"/>
+			<ChildItems>
+				<LabelDecoration name="ДекорацияИнформацияОПрямомОбменеСБанком" id="264">
+					<Title formatted="false">
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Подробнее о прямом обмене с банком</v8:content>
+						</v8:item>
+					</Title>
+					<Hyperlink>true</Hyperlink>
+					<ContextMenu name="ДекорацияИнформацияОПрямомОбменеСБанкомКонтекстноеМеню" id="265"/>
+					<ExtendedTooltip name="ДекорацияИнформацияОПрямомОбменеСБанкомРасширеннаяПодсказка" id="266"/>
+					<Events>
+						<Event name="Click">ДекорацияИнформацияОПрямомОбменеСБанкомНажатие</Event>
+					</Events>
+				</LabelDecoration>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="3">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.СМП_КлиентБанк</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="СоглашениеПрямогоОбменаСБанками" id="1">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="БанковскийСчетНомер" id="4">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>20</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="ЗагрузитьИзФайла" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить выписку из файла</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Завантажити виписку з файлу</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить списания по счету </v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗагрузитьИзФайла</Action>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+		<Command name="СохранитьНовыеПоручения" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Сохранить платежки в файл</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Зберегти доручення у файл</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Сохранить новые исходящие поручения в файл обмена с клиентом банка</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>СохранитьНовыеПоручения</Action>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+		<Command name="ПоВсемСчетам" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>По всем</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>По всіх</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>По всем банковским счетам</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>StdPicture.InputFieldClear</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ПоВсемСчетам</Action>
+			<Representation>TextPicture</Representation>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+		<Command name="Настройка" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Настройка</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Налаштування</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Настройка</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>Настройка</Action>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+		<Command name="ИсторияЗагрузкиИВыгрузки" id="5">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Протоколы и файлы загрузки/выгрузки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Протокол та файли завантаження/вивантаження</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>История загрузки и выгрузки</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ИсторияЗагрузкиИВыгрузки</Action>
+			<Representation>TextPicture</Representation>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+	</Commands>
+	<Parameters>
+		<Parameter name="ОткрытаИзПапокДокументов">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Parameter>
+		<Parameter name="ПараметрыПапокДокументов">
+			<Type/>
+		</Parameter>
+		<Parameter name="ОбменСБанком">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Parameter>
+	</Parameters>
+</Form>

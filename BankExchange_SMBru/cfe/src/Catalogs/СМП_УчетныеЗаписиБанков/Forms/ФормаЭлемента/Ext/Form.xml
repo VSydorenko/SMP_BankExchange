@@ -1,0 +1,632 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<UseForFoldersAndItems>Items</UseForFoldersAndItems>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<Events>
+		<Event name="AfterWriteAtServer">ПослеЗаписиНаСервере</Event>
+		<Event name="OnReadAtServer">ПриЧтенииНаСервере</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+		<Event name="BeforeWriteAtServer">ПередЗаписьюНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="ГруппаЛевоПраво" id="65">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Группа лево право</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Группа лево право</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Group>AlwaysHorizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаЛевоПравоРасширеннаяПодсказка" id="66"/>
+			<ChildItems>
+				<UsualGroup name="ГруппаЛево" id="67">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Группа лево</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Группа лево</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Group>Vertical</Group>
+					<Behavior>Usual</Behavior>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаЛевоРасширеннаяПодсказка" id="68"/>
+					<ChildItems>
+						<UsualGroup name="Группа1" id="76">
+							<Group>Vertical</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Группа1РасширеннаяПодсказка" id="77"/>
+							<ChildItems>
+								<UsualGroup name="ГруппаНаименованиеКод" id="71">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа наименование код</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа наименование код</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>AlwaysHorizontal</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаНаименованиеКодРасширеннаяПодсказка" id="72"/>
+									<ChildItems>
+										<InputField name="Наименование" id="4">
+											<DataPath>Объект.Description</DataPath>
+											<EditMode>EnterOnInput</EditMode>
+											<Width>25</Width>
+											<HorizontalStretch>false</HorizontalStretch>
+											<ContextMenu name="НаименованиеКонтекстноеМеню" id="5"/>
+											<ExtendedTooltip name="НаименованиеРасширеннаяПодсказка" id="6"/>
+										</InputField>
+										<InputField name="Код" id="1">
+											<DataPath>Объект.Code</DataPath>
+											<EditMode>EnterOnInput</EditMode>
+											<ContextMenu name="КодКонтекстноеМеню" id="2"/>
+											<ExtendedTooltip name="КодРасширеннаяПодсказка" id="3"/>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
+								<InputField name="Организация" id="7">
+									<DataPath>Объект.Организация</DataPath>
+									<EditMode>EnterOnInput</EditMode>
+									<ContextMenu name="ОрганизацияКонтекстноеМеню" id="8"/>
+									<ExtendedTooltip name="ОрганизацияРасширеннаяПодсказка" id="9"/>
+								</InputField>
+								<InputField name="БанковскийСчет" id="10">
+									<DataPath>Объект.БанковскийСчет</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Счет</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Рахунок</v8:content>
+										</v8:item>
+									</Title>
+									<EditMode>EnterOnInput</EditMode>
+									<ChoiceParameterLinks>
+										<xr:Link>
+											<xr:Name>Отбор.Владелец</xr:Name>
+											<xr:DataPath xsi:type="xs:string">Объект.Организация</xr:DataPath>
+											<xr:ValueChange>Clear</xr:ValueChange>
+										</xr:Link>
+									</ChoiceParameterLinks>
+									<ContextMenu name="БанковскийСчетКонтекстноеМеню" id="11"/>
+									<ExtendedTooltip name="БанковскийСчетРасширеннаяПодсказка" id="12"/>
+								</InputField>
+								<UsualGroup name="ГруппаБанкКартинка" id="52">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа банк картинка</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа банк картинка</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаБанкКартинкаРасширеннаяПодсказка" id="53"/>
+									<ChildItems>
+										<InputField name="Банк" id="13">
+											<DataPath>Объект.Банк</DataPath>
+											<EditMode>EnterOnInput</EditMode>
+											<ContextMenu name="БанкКонтекстноеМеню" id="14"/>
+											<ExtendedTooltip name="БанкРасширеннаяПодсказка" id="15"/>
+											<Events>
+												<Event name="OnChange">БанкПриИзменении</Event>
+												<Event name="ChoiceProcessing">БанкОбработкаВыбора</Event>
+											</Events>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
+								<InputField name="ПодключаемаяОбработка" id="57">
+									<DataPath>Объект.ПодключаемаяОбработка</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Обработка</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Обробка</v8:content>
+										</v8:item>
+									</Title>
+									<AutoMarkIncomplete>true</AutoMarkIncomplete>
+									<InputHint>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Внешняя подключаемая обработка</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Зовнішня обробка, що підключається</v8:content>
+										</v8:item>
+									</InputHint>
+									<ContextMenu name="ПодключаемаяОбработкаКонтекстноеМеню" id="58"/>
+									<ExtendedTooltip name="ПодключаемаяОбработкаРасширеннаяПодсказка" id="59"/>
+								</InputField>
+								<UsualGroup name="ГруппаБанкПумб" id="90">
+									<Title>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Группа банк пумб</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Группа банк пумб</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаБанкПумбРасширеннаяПодсказка" id="91"/>
+									<ChildItems>
+										<InputField name="ИД1" id="100">
+											<DataPath>Объект.ИД</DataPath>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="ИД1КонтекстноеМеню" id="101"/>
+											<ExtendedTooltip name="ИД1РасширеннаяПодсказка" id="102"/>
+										</InputField>
+										<InputField name="Токен1" id="103">
+											<DataPath>Объект.Токен</DataPath>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="Токен1КонтекстноеМеню" id="104"/>
+											<ExtendedTooltip name="Токен1РасширеннаяПодсказка" id="105"/>
+										</InputField>
+										<InputField name="Логин" id="111">
+											<DataPath>Объект.Логин</DataPath>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="ЛогинКонтекстноеМеню" id="112"/>
+											<ExtendedTooltip name="ЛогинРасширеннаяПодсказка" id="113"/>
+										</InputField>
+										<InputField name="Пароль" id="114">
+											<DataPath>Объект.Пароль</DataPath>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="ПарольКонтекстноеМеню" id="115"/>
+											<ExtendedTooltip name="ПарольРасширеннаяПодсказка" id="116"/>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
+								<UsualGroup name="ГруппаБанкПриват" id="98">
+									<Title>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Группа банк приват</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Группа банк приват</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаБанкПриватРасширеннаяПодсказка" id="99"/>
+									<ChildItems>
+										<InputField name="ИД" id="16">
+											<DataPath>Объект.ИД</DataPath>
+											<EditMode>EnterOnInput</EditMode>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="ИДКонтекстноеМеню" id="17"/>
+											<ExtendedTooltip name="ИДРасширеннаяПодсказка" id="18"/>
+										</InputField>
+										<InputField name="Токен" id="19">
+											<DataPath>Объект.Токен</DataPath>
+											<TitleLocation>Left</TitleLocation>
+											<EditMode>EnterOnInput</EditMode>
+											<Height>3</Height>
+											<AutoMaxHeight>false</AutoMaxHeight>
+											<MaxHeight>7</MaxHeight>
+											<MultiLine>true</MultiLine>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="ТокенКонтекстноеМеню" id="20"/>
+											<ExtendedTooltip name="ТокенРасширеннаяПодсказка" id="21"/>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
+								<UsualGroup name="ГруппаБанкМоно" id="106">
+									<Title>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Группа банк моно</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Группа банк моно</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаБанкМоноРасширеннаяПодсказка" id="107"/>
+									<ChildItems>
+										<LabelDecoration name="ДекорацияПолучитьТокенМоно" id="87">
+											<Title formatted="false">
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Получить токен для Monobank</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>uk</v8:lang>
+													<v8:content>Отримати токен для Monobank</v8:content>
+												</v8:item>
+											</Title>
+											<GroupHorizontalAlign>Right</GroupHorizontalAlign>
+											<Hyperlink>true</Hyperlink>
+											<ContextMenu name="ДекорацияПолучитьТокенМоноКонтекстноеМеню" id="88"/>
+											<ExtendedTooltip name="ДекорацияПолучитьТокенМоноРасширеннаяПодсказка" id="89"/>
+											<Events>
+												<Event name="Click">ДекорацияПолучитьТокенМоноНажатие</Event>
+											</Events>
+										</LabelDecoration>
+										<UsualGroup name="ГруппаМоноВебХук" id="85">
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Группа моно веб хук</v8:content>
+												</v8:item>
+											</Title>
+											<ToolTip>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Группа моно веб хук</v8:content>
+												</v8:item>
+											</ToolTip>
+											<Group>Vertical</Group>
+											<Behavior>Usual</Behavior>
+											<Representation>None</Representation>
+											<ShowTitle>false</ShowTitle>
+											<ExtendedTooltip name="ГруппаМоноВебХукРасширеннаяПодсказка" id="86"/>
+											<ChildItems>
+												<InputField name="Токен2" id="108">
+													<DataPath>Объект.Токен</DataPath>
+													<TitleLocation>Left</TitleLocation>
+													<MultiLine>true</MultiLine>
+													<AutoMarkIncomplete>true</AutoMarkIncomplete>
+													<ContextMenu name="Токен2КонтекстноеМеню" id="109"/>
+													<ExtendedTooltip name="Токен2РасширеннаяПодсказка" id="110"/>
+												</InputField>
+												<InputField name="АдресДляWebHook" id="80">
+													<DataPath>Объект.АдресДляWebHook</DataPath>
+													<Title>
+														<v8:item>
+															<v8:lang>ru</v8:lang>
+															<v8:content>WebHook</v8:content>
+														</v8:item>
+														<v8:item>
+															<v8:lang>uk</v8:lang>
+															<v8:content>WebHook</v8:content>
+														</v8:item>
+													</Title>
+													<ToolTipRepresentation>ShowBottom</ToolTipRepresentation>
+													<ContextMenu name="АдресДляWebHookКонтекстноеМеню" id="81"/>
+													<ExtendedTooltip name="АдресДляWebHookРасширеннаяПодсказка" id="82"/>
+												</InputField>
+												<Button name="МоноУстановитьВебХук" id="83">
+													<Type>UsualButton</Type>
+													<GroupHorizontalAlign>Right</GroupHorizontalAlign>
+													<CommandName>Form.Command.МоноУстановитьВебХук</CommandName>
+													<ExtendedTooltip name="МоноУстановитьВебХукРасширеннаяПодсказка" id="84"/>
+												</Button>
+											</ChildItems>
+										</UsualGroup>
+									</ChildItems>
+								</UsualGroup>
+								<UsualGroup name="ГруппаСозданиеНовыхКонтрагентов" id="63">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа создание новых контрагентов</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа создание новых контрагентов</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаСозданиеНовыхКонтрагентовРасширеннаяПодсказка" id="64"/>
+									<ChildItems>
+										<CheckBoxField name="СоздатьНовогоКонтрагентаПриЗагрузкеВыписки" id="34">
+											<DataPath>Объект.СоздатьНовогоКонтрагентаПриЗагрузкеВыписки</DataPath>
+											<TitleLocation>Right</TitleLocation>
+											<ToolTipRepresentation>Button</ToolTipRepresentation>
+											<CheckBoxType>Auto</CheckBoxType>
+											<ContextMenu name="СоздатьНовогоКонтрагентаПриЗагрузкеВыпискиКонтекстноеМеню" id="35"/>
+											<ExtendedTooltip name="СоздатьНовогоКонтрагентаПриЗагрузкеВыпискиРасширеннаяПодсказка" id="36"/>
+											<Events>
+												<Event name="OnChange">СоздатьНовогоКонтрагентаПриЗагрузкеВыпискиПриИзменении</Event>
+											</Events>
+										</CheckBoxField>
+										<InputField name="ГруппаДоступаДляНовыхКонтрагентов" id="49">
+											<DataPath>Объект.ГруппаДоступаДляНовыхКонтрагентов</DataPath>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Группа доступа</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>uk</v8:lang>
+													<v8:content>Група доступу</v8:content>
+												</v8:item>
+											</Title>
+											<GroupHorizontalAlign>Right</GroupHorizontalAlign>
+											<ChoiceFoldersAndItems>Folders</ChoiceFoldersAndItems>
+											<InputHint>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>для новых контрагентов</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>uk</v8:lang>
+													<v8:content>для нових контрагентів</v8:content>
+												</v8:item>
+											</InputHint>
+											<ContextMenu name="ГруппаДоступаДляНовыхКонтрагентовКонтекстноеМеню" id="50"/>
+											<ExtendedTooltip name="ГруппаДоступаДляНовыхКонтрагентовРасширеннаяПодсказка" id="51"/>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
+								<UsualGroup name="ГруппаРегламентноеЗадание" id="30">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа регламентное задание</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Группа регламентное задание</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>AlwaysHorizontal</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаРегламентноеЗаданиеРасширеннаяПодсказка" id="31"/>
+									<ChildItems>
+										<CheckBoxField name="ИспользоватьРегламентноеЗадание" id="22">
+											<DataPath>Объект.ИспользоватьРегламентныеЗадания</DataPath>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Обмен по расписанию</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>uk</v8:lang>
+													<v8:content>Обмін за розкладом</v8:content>
+												</v8:item>
+											</Title>
+											<TitleLocation>Right</TitleLocation>
+											<CheckBoxType>Auto</CheckBoxType>
+											<ContextMenu name="ИспользоватьРегламентноеЗаданиеКонтекстноеМеню" id="23"/>
+											<ExtendedTooltip name="ИспользоватьРегламентноеЗаданиеРасширеннаяПодсказка" id="24"/>
+											<Events>
+												<Event name="OnChange">ИспользоватьРегламентныеЗаданияПриИзменении</Event>
+											</Events>
+										</CheckBoxField>
+										<Button name="НастроитьРасписание" id="25">
+											<Type>Hyperlink</Type>
+											<CommandName>Form.Command.НастроитьРасписание</CommandName>
+											<Picture>
+												<xr:Ref>StdPicture.ScheduledJob</xr:Ref>
+												<xr:LoadTransparent>true</xr:LoadTransparent>
+											</Picture>
+											<ExtendedTooltip name="НастроитьРасписаниеРасширеннаяПодсказка" id="26"/>
+										</Button>
+										<Button name="ВыполнитьОбмен" id="32">
+											<Type>UsualButton</Type>
+											<Representation>PictureAndText</Representation>
+											<CommandName>Form.Command.ВыполнитьОбмен</CommandName>
+											<ExtendedTooltip name="ВыполнитьОбменРасширеннаяПодсказка" id="33"/>
+										</Button>
+									</ChildItems>
+								</UsualGroup>
+							</ChildItems>
+						</UsualGroup>
+						<UsualGroup name="Группа2" id="78">
+							<Group>Vertical</Group>
+							<Behavior>Usual</Behavior>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="79"/>
+						</UsualGroup>
+					</ChildItems>
+				</UsualGroup>
+				<UsualGroup name="ГруппаПраво" id="69">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Группа право</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Группа право</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Group>Vertical</Group>
+					<Behavior>Usual</Behavior>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаПравоРасширеннаяПодсказка" id="70"/>
+					<ChildItems>
+						<PictureDecoration name="ДекорацияРаботаСБанкамиПриватБанкАРІ" id="54">
+							<HorizontalStretch>false</HorizontalStretch>
+							<VerticalStretch>false</VerticalStretch>
+							<GroupHorizontalAlign>Left</GroupHorizontalAlign>
+							<PictureSize>Proportionally</PictureSize>
+							<Picture>
+								<xr:Ref>CommonPicture.СМП_РаботаСБанкамиПриватБанк</xr:Ref>
+								<xr:LoadTransparent>true</xr:LoadTransparent>
+							</Picture>
+							<ContextMenu name="ДекорацияРаботаСБанкамиПриватБанкАРІКонтекстноеМеню" id="55"/>
+							<ExtendedTooltip name="ДекорацияРаботаСБанкамиПриватБанкАРІРасширеннаяПодсказка" id="56"/>
+						</PictureDecoration>
+						<PictureDecoration name="ДекорацияРаботаСБанкамиМОНОБанкАРІ" id="60">
+							<Width>7</Width>
+							<MaxWidth>20</MaxWidth>
+							<Height>3</Height>
+							<MaxHeight>20</MaxHeight>
+							<HorizontalStretch>false</HorizontalStretch>
+							<VerticalStretch>false</VerticalStretch>
+							<GroupHorizontalAlign>Left</GroupHorizontalAlign>
+							<PictureSize>Proportionally</PictureSize>
+							<Picture>
+								<xr:Ref>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</xr:Ref>
+								<xr:LoadTransparent>true</xr:LoadTransparent>
+							</Picture>
+							<ContextMenu name="ДекорацияРаботаСБанкамиМОНОБанкАРІКонтекстноеМеню" id="61"/>
+							<ExtendedTooltip name="ДекорацияРаботаСБанкамиМОНОБанкАРІРасширеннаяПодсказка" id="62"/>
+						</PictureDecoration>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:CatalogObject.СМП_УчетныеЗаписиБанков</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+			<SavedData>true</SavedData>
+		</Attribute>
+		<Attribute name="РасписаниеРегламентногоЗаданияОбмена" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Расписание регламентного задания обмена</v8:content>
+				</v8:item>
+			</Title>
+			<Type/>
+		</Attribute>
+		<Attribute name="ИнтервалОбменаССайтом" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Интервал обмена</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="НастроитьРасписание" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Настроить расписание</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Налаштувати розклад</v8:content>
+				</v8:item>
+			</Title>
+			<Picture>
+				<xr:Ref>StdPicture.ScheduledJob</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>НастроитьРасписаниеОбмена</Action>
+			<ModifiesSavedData>true</ModifiesSavedData>
+			<CurrentRowUse>DontUse</CurrentRowUse>
+		</Command>
+		<Command name="ВыполнитьОбмен" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выполнить обмен</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Виконати обмін</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выполнить обмен</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>CommonPicture.ОбновлениеВнешнихКомпонентССайта</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ВыполнитьОбмен</Action>
+		</Command>
+		<Command name="МоноУстановитьВебХук" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Установить WebHook</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Встановити WebHook</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Установка адреса для Webhook</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Встановлення адреси для Webhook</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>МоноУстановитьВебХук</Action>
+		</Command>
+	</Commands>
+</Form>
