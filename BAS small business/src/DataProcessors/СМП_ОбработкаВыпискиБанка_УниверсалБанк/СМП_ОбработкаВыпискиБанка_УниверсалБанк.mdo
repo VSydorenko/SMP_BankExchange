@@ -22,10 +22,6 @@
       <key>ru</key>
       <value>Форма</value>
     </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Форма</value>
-    </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
