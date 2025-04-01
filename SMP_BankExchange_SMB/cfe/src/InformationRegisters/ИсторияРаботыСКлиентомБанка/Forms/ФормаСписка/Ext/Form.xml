@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<CommandBarLocation>None</CommandBarLocation>
+	<VerticalScroll>useIfNecessary</VerticalScroll>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<Events>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="Шапка" id="57">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Шапка</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Шапка</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Шапка</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Шапка</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Group>Horizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ШапкаРасширеннаяПодсказка" id="58"/>
+			<ChildItems>
+				<CommandBar name="КоманднаяПанельСпискаСлева" id="59">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Командная панель списка слева</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Командна панель списка зліва</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Командная панель списка справа</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Командна панель списка справа</v8:content>
+						</v8:item>
+					</ToolTip>
+					<ExtendedTooltip name="КоманднаяПанельСпискаСлеваРасширеннаяПодсказка" id="60"/>
+					<ChildItems>
+						<Button name="СписокЗакрыть1" id="65">
+							<Type>CommandBarButton</Type>
+							<DefaultButton>true</DefaultButton>
+							<CommandName>Form.StandardCommand.Close</CommandName>
+							<LocationInCommandBar>InCommandBarAndInAdditionalSubmenu</LocationInCommandBar>
+							<ExtendedTooltip name="СписокЗакрыть1РасширеннаяПодсказка" id="66"/>
+						</Button>
+					</ChildItems>
+				</CommandBar>
+				<LabelDecoration name="ДекорацияРезделитель1" id="67">
+					<HorizontalStretch>true</HorizontalStretch>
+					<ContextMenu name="ДекорацияРезделитель1КонтекстноеМеню" id="68"/>
+					<ExtendedTooltip name="ДекорацияРезделитель1РасширеннаяПодсказка" id="69"/>
+				</LabelDecoration>
+				<CommandBar name="КоманднаяПанельСпискаСправа" id="55">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Командная панель списка справа</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Командна панель списка справа</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Командная панель списка справа</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Командна панель списка справа</v8:content>
+						</v8:item>
+					</ToolTip>
+					<ExtendedTooltip name="КоманднаяПанельСпискаСправаРасширеннаяПодсказка" id="56"/>
+					<ChildItems>
+						<Button name="СписокИзменитьФорму" id="43">
+							<Type>CommandBarButton</Type>
+							<CommandName>Form.StandardCommand.CustomizeForm</CommandName>
+							<LocationInCommandBar>InAdditionalSubmenu</LocationInCommandBar>
+							<ExtendedTooltip name="СписокИзменитьФормуРасширеннаяПодсказка" id="44"/>
+						</Button>
+						<Button name="СписокСправка" id="45">
+							<Type>CommandBarButton</Type>
+							<CommandName>Form.StandardCommand.Help</CommandName>
+							<LocationInCommandBar>InCommandBarAndInAdditionalSubmenu</LocationInCommandBar>
+							<ExtendedTooltip name="СписокСправкаРасширеннаяПодсказка" id="46"/>
+						</Button>
+						<Button name="СписокЗакрыть" id="16">
+							<Type>CommandBarButton</Type>
+							<CommandName>Form.StandardCommand.Close</CommandName>
+							<LocationInCommandBar>InAdditionalSubmenu</LocationInCommandBar>
+							<ExtendedTooltip name="СписокЗакрытьExtendedTooltip" id="17"/>
+						</Button>
+					</ChildItems>
+				</CommandBar>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="Группа2" id="73">
+			<Group>Horizontal</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="74"/>
+			<ChildItems>
+				<Table name="Список" id="1">
+					<Representation>List</Representation>
+					<CommandBarLocation>Top</CommandBarLocation>
+					<DefaultItem>true</DefaultItem>
+					<HorizontalLines>false</HorizontalLines>
+					<UseAlternationRowColor>true</UseAlternationRowColor>
+					<InitialListView>Beginning</InitialListView>
+					<InitialTreeView>ExpandTopLevel</InitialTreeView>
+					<EnableStartDrag>true</EnableStartDrag>
+					<FileDragMode>AsFile</FileDragMode>
+					<DataPath>Список</DataPath>
+					<RowPictureDataPath>Список.ЗначениеКартинкиСтроки</RowPictureDataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>История обмена данными с клиентом банка</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Історія обміну даними з клієнтом банку</v8:content>
+						</v8:item>
+					</Title>
+					<CommandSet>
+						<ExcludedCommand>Change</ExcludedCommand>
+						<ExcludedCommand>Copy</ExcludedCommand>
+						<ExcludedCommand>Create</ExcludedCommand>
+						<ExcludedCommand>Delete</ExcludedCommand>
+						<ExcludedCommand>ListSettings</ExcludedCommand>
+						<ExcludedCommand>OutputList</ExcludedCommand>
+						<ExcludedCommand>SetDateInterval</ExcludedCommand>
+					</CommandSet>
+					<SearchStringLocation>None</SearchStringLocation>
+					<ViewStatusLocation>None</ViewStatusLocation>
+					<SearchControlLocation>None</SearchControlLocation>
+					<AutoRefresh>false</AutoRefresh>
+					<AutoRefreshPeriod>60</AutoRefreshPeriod>
+					<Period>
+						<v8:variant xsi:type="v8:StandardPeriodVariant">Custom</v8:variant>
+						<v8:startDate>0001-01-01T00:00:00</v8:startDate>
+						<v8:endDate>0001-01-01T00:00:00</v8:endDate>
+					</Period>
+					<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
+					<RestoreCurrentRow>false</RestoreCurrentRow>
+					<TopLevelParent xsi:nil="true"/>
+					<ShowRoot>true</ShowRoot>
+					<AllowRootChoice>false</AllowRootChoice>
+					<UpdateOnDataChange>Auto</UpdateOnDataChange>
+					<AllowGettingCurrentRowURL>true</AllowGettingCurrentRowURL>
+					<ContextMenu name="СписокКонтекстноеМеню" id="2"/>
+					<AutoCommandBar name="СписокКоманднаяПанель" id="3">
+						<Autofill>false</Autofill>
+					</AutoCommandBar>
+					<ExtendedTooltip name="СписокExtendedTooltip" id="18"/>
+					<SearchStringAddition name="СписокСтрокаПоиска" id="23">
+						<AdditionSource>
+							<Item>Список</Item>
+							<Type>SearchStringRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="СписокСтрокаПоискаКонтекстноеМеню" id="24"/>
+						<ExtendedTooltip name="СписокСтрокаПоискаРасширеннаяПодсказка" id="25"/>
+					</SearchStringAddition>
+					<ViewStatusAddition name="СписокСостояниеПросмотра" id="26">
+						<AdditionSource>
+							<Item>Список</Item>
+							<Type>ViewStatusRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="СписокСостояниеПросмотраКонтекстноеМеню" id="27"/>
+						<ExtendedTooltip name="СписокСостояниеПросмотраРасширеннаяПодсказка" id="28"/>
+					</ViewStatusAddition>
+					<SearchControlAddition name="СписокУправлениеПоиском" id="29">
+						<AdditionSource>
+							<Item>Список</Item>
+							<Type>SearchControl</Type>
+						</AdditionSource>
+						<ContextMenu name="СписокУправлениеПоискомКонтекстноеМеню" id="30"/>
+						<ExtendedTooltip name="СписокУправлениеПоискомРасширеннаяПодсказка" id="31"/>
+					</SearchControlAddition>
+					<Events>
+						<Event name="Selection">СписокВыбор</Event>
+					</Events>
+					<ChildItems>
+						<LabelField name="Период" id="4">
+							<DataPath>Список.Period</DataPath>
+							<DefaultItem>true</DefaultItem>
+							<Width>10</Width>
+							<ContextMenu name="ПериодКонтекстноеМеню" id="5"/>
+							<ExtendedTooltip name="ПериодExtendedTooltip" id="19"/>
+						</LabelField>
+						<LabelField name="КоличествоДокументовВВыписке" id="8">
+							<DataPath>Список.КоличествоДокументовВВыписке</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Кол-во док.</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>К-сть док.</v8:content>
+								</v8:item>
+							</Title>
+							<Width>10</Width>
+							<HorizontalStretch>false</HorizontalStretch>
+							<ContextMenu name="КоличествоДокументовВВыпискеКонтекстноеМеню" id="9"/>
+							<ExtendedTooltip name="КоличествоДокументовВВыпискеExtendedTooltip" id="20"/>
+						</LabelField>
+						<LabelField name="Протокол" id="12">
+							<DataPath>Список.Протокол</DataPath>
+							<CellHyperlink>true</CellHyperlink>
+							<Width>14</Width>
+							<Height>2</Height>
+							<ContextMenu name="ПротоколКонтекстноеМеню" id="13"/>
+							<ExtendedTooltip name="ПротоколExtendedTooltip" id="21"/>
+						</LabelField>
+						<ColumnGroup name="Группа1" id="32">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Файл обмена</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Файл обміну</v8:content>
+								</v8:item>
+							</Title>
+							<Group>Horizontal</Group>
+							<ShowInHeader>true</ShowInHeader>
+							<ExtendedTooltip name="Группа1РасширеннаяПодсказка" id="33"/>
+							<ChildItems>
+								<LabelField name="ФайлОбмена" id="14">
+									<DataPath>Список.ФайлОбмена</DataPath>
+									<CellHyperlink>true</CellHyperlink>
+									<ShowInHeader>false</ShowInHeader>
+									<HeaderPicture>
+										<xr:Ref>StdPicture.Write</xr:Ref>
+										<xr:LoadTransparent>true</xr:LoadTransparent>
+									</HeaderPicture>
+									<ShowInFooter>false</ShowInFooter>
+									<Width>13</Width>
+									<Height>2</Height>
+									<BackColor>#D6E3FC</BackColor>
+									<ContextMenu name="ФайлОбменаКонтекстноеМеню" id="15"/>
+									<ExtendedTooltip name="ФайлОбменаExtendedTooltip" id="22"/>
+								</LabelField>
+								<LabelField name="ФайлОбмена1" id="34">
+									<DataPath>Список.ФайлОбмена1</DataPath>
+									<CellHyperlink>true</CellHyperlink>
+									<ShowInHeader>false</ShowInHeader>
+									<ShowInFooter>false</ShowInFooter>
+									<BackColor>#D6E3FC</BackColor>
+									<ContextMenu name="ФайлОбмена1КонтекстноеМеню" id="35"/>
+									<ExtendedTooltip name="ФайлОбмена1РасширеннаяПодсказка" id="36"/>
+								</LabelField>
+							</ChildItems>
+						</ColumnGroup>
+						<LabelField name="БанковскийСчет" id="40">
+							<DataPath>Список.БанковскийСчет</DataPath>
+							<Width>17</Width>
+							<ContextMenu name="БанковскийСчетКонтекстноеМеню" id="41"/>
+							<ExtendedTooltip name="БанковскийСчетРасширеннаяПодсказка" id="42"/>
+						</LabelField>
+						<LabelField name="Организация" id="37">
+							<DataPath>Список.Организация</DataPath>
+							<ContextMenu name="ОрганизацияКонтекстноеМеню" id="38"/>
+							<ExtendedTooltip name="ОрганизацияРасширеннаяПодсказка" id="39"/>
+						</LabelField>
+					</ChildItems>
+				</Table>
+				<UsualGroup name="Отбор" id="53">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Отбор</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Відбір</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Отбор</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Відбір</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Width>12</Width>
+					<HorizontalStretch>false</HorizontalStretch>
+					<Group>Vertical</Group>
+					<Behavior>Usual</Behavior>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ОтборРасширеннаяПодсказка" id="54"/>
+					<ChildItems>
+						<LabelDecoration name="ДекорацияРезделитель2" id="70">
+							<Width>1</Width>
+							<Height>1</Height>
+							<HorizontalStretch>false</HorizontalStretch>
+							<ContextMenu name="ДекорацияРезделитель2КонтекстноеМеню" id="71"/>
+							<ExtendedTooltip name="ДекорацияРезделитель2РасширеннаяПодсказка" id="72"/>
+						</LabelDecoration>
+						<CheckBoxField name="ОтборТолькоВыгрузкаИз1С" id="50">
+							<DataPath>ОтборТолькоВыгрузкаИз1С</DataPath>
+							<TitleLocation>Right</TitleLocation>
+							<CheckBoxType>Auto</CheckBoxType>
+							<ContextMenu name="ОтборТолькоВыгрузкаИз1СКонтекстноеМеню" id="51"/>
+							<ExtendedTooltip name="ОтборТолькоВыгрузкаИз1СРасширеннаяПодсказка" id="52"/>
+							<Events>
+								<Event name="OnChange">ВыгрузкаИз1СПриИзменении</Event>
+							</Events>
+						</CheckBoxField>
+						<CheckBoxField name="ОтборТолькоЗагрузкаВ1С" id="47">
+							<DataPath>ОтборТолькоЗагрузкаВ1С</DataPath>
+							<TitleLocation>Right</TitleLocation>
+							<CheckBoxType>Auto</CheckBoxType>
+							<ContextMenu name="ОтборТолькоЗагрузкаВ1СКонтекстноеМеню" id="48"/>
+							<ExtendedTooltip name="ОтборТолькоЗагрузкаВ1СРасширеннаяПодсказка" id="49"/>
+							<Events>
+								<Event name="OnChange">ЗагрузкаВ1СПриИзменении</Event>
+							</Events>
+						</CheckBoxField>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Список" id="1">
+			<Type>
+				<v8:Type>cfg:DynamicList</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+			<UseAlways>
+				<Field>Список.Загрузка</Field>
+				<Field>Список.Организация</Field>
+			</UseAlways>
+			<Settings xsi:type="DynamicList">
+				<ManualQuery>true</ManualQuery>
+				<DynamicDataRead>true</DynamicDataRead>
+				<QueryText>ВЫБРАТЬ
+	РегистрСведенийИсторияРаботыСКлиентомБанка.Период,
+	РегистрСведенийИсторияРаботыСКлиентомБанка.Организация,
+	РегистрСведенийИсторияРаботыСКлиентомБанка.ИсходныйФайл,
+	РегистрСведенийИсторияРаботыСКлиентомБанка.ПротоколЗагрузки,
+	РегистрСведенийИсторияРаботыСКлиентомБанка.КоличествоДокументовВВыписке,
+	&amp;ПротоколТекст КАК Протокол,
+	&amp;ФайлОбменаТекст КАК ФайлОбмена,
+	ВЫБОР
+		КОГДА РегистрСведенийИсторияРаботыСКлиентомБанка.Загрузка
+			ТОГДА &amp;ФайлОбменаТекстЗагрузка
+		ИНАЧЕ &amp;ФайлОбменаТекстВыгрузка
+	КОНЕЦ КАК ФайлОбмена1,
+	ВЫБОР
+		КОГДА РегистрСведенийИсторияРаботыСКлиентомБанка.Загрузка
+			ТОГДА 0
+		ИНАЧЕ 1
+	КОНЕЦ КАК ЗначениеКартинкиСтроки,
+	РегистрСведенийИсторияРаботыСКлиентомБанка.БанковскийСчет,
+	РегистрСведенийИсторияРаботыСКлиентомБанка.Загрузка
+ИЗ
+	РегистрСведений.ИсторияРаботыСКлиентомБанка КАК РегистрСведенийИсторияРаботыСКлиентомБанка</QueryText>
+				<MainTable>InformationRegister.ИсторияРаботыСКлиентомБанка</MainTable>
+				<ListSettings>
+					<dcsset:filter>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>dfcece9d-5077-440b-b6b3-45a5cb4538eb</dcsset:userSettingID>
+					</dcsset:filter>
+					<dcsset:order>
+						<dcsset:item xsi:type="dcsset:OrderItemField">
+							<dcsset:field>Период</dcsset:field>
+							<dcsset:orderType>Desc</dcsset:orderType>
+						</dcsset:item>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>88619765-ccb3-46c6-ac52-38e9c992ebd4</dcsset:userSettingID>
+					</dcsset:order>
+					<dcsset:conditionalAppearance>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>b75fecce-942b-4aed-abc9-e6a02e460fb3</dcsset:userSettingID>
+					</dcsset:conditionalAppearance>
+					<dcsset:itemsViewMode>Normal</dcsset:itemsViewMode>
+					<dcsset:itemsUserSettingID>911b6018-f537-43e8-a417-da56b22f9aec</dcsset:itemsUserSettingID>
+				</ListSettings>
+			</Settings>
+		</Attribute>
+		<Attribute name="ОтборТолькоЗагрузкаВ1С" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузка в BAS</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Завантаження до BAS</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ОтборТолькоВыгрузкаИз1С" id="5">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выгрузка из BAS</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Вивантаження з BAS</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+	</Attributes>
+</Form>
