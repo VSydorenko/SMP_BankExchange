@@ -488,6 +488,55 @@
 										</Button>
 									</ChildItems>
 								</UsualGroup>
+								<UsualGroup name="ГруппаNovaPay" id="117">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>NovaPay</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>NovaPay</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Банк ПриватБанк</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Банк ПриватБанк</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>Vertical</Group>
+									<Behavior>Usual</Behavior>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаNovaPayРасширеннаяПодсказка" id="118"/>
+									<ChildItems>
+										<InputField name="Логин1" id="125">
+											<DataPath>Объект.Логин</DataPath>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="Логин1КонтекстноеМеню" id="126"/>
+											<ExtendedTooltip name="Логин1РасширеннаяПодсказка" id="127"/>
+										</InputField>
+										<InputField name="Пароль1" id="128">
+											<DataPath>Объект.Пароль</DataPath>
+											<PasswordMode>true</PasswordMode>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="Пароль1КонтекстноеМеню" id="129"/>
+											<ExtendedTooltip name="Пароль1РасширеннаяПодсказка" id="130"/>
+										</InputField>
+										<InputField name="ИД2" id="131">
+											<DataPath>Объект.ИД</DataPath>
+											<EditMode>EnterOnInput</EditMode>
+											<AutoMarkIncomplete>true</AutoMarkIncomplete>
+											<ContextMenu name="ИД2КонтекстноеМеню" id="132"/>
+											<ExtendedTooltip name="ИД2РасширеннаяПодсказка" id="133"/>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
 							</ChildItems>
 						</UsualGroup>
 						<UsualGroup name="Группа2" id="78">

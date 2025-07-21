@@ -113,6 +113,7 @@
 			<Role>ИспользованиеБанкаИКассы</Role>
 			<Role>ПолныеПрава</Role>
 			<CommonModule>КоннекторHTTP_BankExchange</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиNovaPayAPIСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиМонобанкAPIСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиПриватБанкAPIСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиПУМБAPIСервер</CommonModule>
@@ -124,6 +125,7 @@
 			<CommonModule>ЭлектронноеВзаимодействиеКлиентПереопределяемый</CommonModule>
 			<CommonModule>КлиентБанкВызовСервера</CommonModule>
 			<CommonModule>УправлениеНебольшойФирмойКлиент</CommonModule>
+			<XDTOPackage>NovaPay</XDTOPackage>
 			<ScheduledJob>СМП_ОбменСБанкамиAPI</ScheduledJob>
 			<Catalog>СМП_УчетныеЗаписиБанков</Catalog>
 			<Catalog>Банки</Catalog>

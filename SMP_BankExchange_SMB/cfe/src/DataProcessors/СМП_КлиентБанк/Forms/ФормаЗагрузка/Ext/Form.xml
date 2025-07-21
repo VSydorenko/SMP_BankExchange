@@ -107,6 +107,12 @@
 										<Event name="OnChange">БанковскийСчетПриИзменении</Event>
 									</Events>
 								</InputField>
+								<InputField name="ОТП" id="1006">
+									<DataPath>Объект.ОТП</DataPath>
+									<ExtendedEditMultipleValues>true</ExtendedEditMultipleValues>
+									<ContextMenu name="ОТПКонтекстноеМеню" id="1007"/>
+									<ExtendedTooltip name="ОТПРасширеннаяПодсказка" id="1008"/>
+								</InputField>
 								<UsualGroup name="КоманднаяПанель" id="523">
 									<Title>
 										<v8:item>
