@@ -32,6 +32,14 @@
 	КлиентОбъект.otp_password = ОТП;
 
 	Результат = WSПрокси.UserAuthentication(КлиентОбъект);
+	
+	Если Результат.result = "error" Тогда
+		
+		ПолучатьДанные = Ложь;
+		ВызватьИсключение Результат.error.title;
+		
+	КонецЕсли;
+	
 	principal = Результат.principal;
 		
 	КлиентТип = СвояФабрикаXDTO.Тип(URLПространстваИменСервиса, "GetPaymentsListRequest");
