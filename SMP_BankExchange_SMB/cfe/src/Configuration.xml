@@ -172,6 +172,7 @@
 			<InformationRegister>ИсторияРаботыСКлиентомБанка</InformationRegister>
 			<InformationRegister>ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</InformationRegister>
 			<InformationRegister>СМП_НомерПоследнейТранзакции</InformationRegister>
+			<InformationRegister>СМП_ДанныеАутентификации</InformationRegister>
 		</ChildObjects>
 	</Configuration>
 </MetaDataObject>
