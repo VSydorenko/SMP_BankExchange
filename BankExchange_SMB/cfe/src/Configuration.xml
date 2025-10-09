@@ -169,6 +169,7 @@
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_УкрГазБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_УкрСибБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_УниверсалБанк</DataProcessor>
+			<DataProcessor>СМП_ОбработкаВыпискиБанка_КредоБанк</DataProcessor>
 			<InformationRegister>ИсторияРаботыСКлиентомБанка</InformationRegister>
 			<InformationRegister>ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</InformationRegister>
 			<InformationRegister>СМП_НомерПоследнейТранзакции</InformationRegister>
