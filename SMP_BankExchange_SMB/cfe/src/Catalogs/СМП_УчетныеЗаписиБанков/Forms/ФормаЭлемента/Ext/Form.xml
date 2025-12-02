@@ -552,6 +552,22 @@
 											<ContextMenu name="ОТПКонтекстноеМеню" id="135"/>
 											<ExtendedTooltip name="ОТПРасширеннаяПодсказка" id="136"/>
 										</InputField>
+										<UsualGroup name="Группа3" id="137">
+											<ExtendedTooltip name="Группа3РасширеннаяПодсказка" id="138"/>
+											<ChildItems>
+												<InputField name="ИД2" id="139">
+													<DataPath>Объект.ИД</DataPath>
+													<ExtendedEditMultipleValues>true</ExtendedEditMultipleValues>
+													<ContextMenu name="ИД2КонтекстноеМеню" id="140"/>
+													<ExtendedTooltip name="ИД2РасширеннаяПодсказка" id="141"/>
+												</InputField>
+												<Button name="ПолучитьИДКлиента" id="142">
+													<Type>UsualButton</Type>
+													<CommandName>Form.Command.ПолучитьИДКлиента</CommandName>
+													<ExtendedTooltip name="ПолучитьИДКлиентаРасширеннаяПодсказка" id="143"/>
+												</Button>
+											</ChildItems>
+										</UsualGroup>
 									</ChildItems>
 								</UsualGroup>
 							</ChildItems>
@@ -756,6 +772,25 @@
 				</v8:item>
 			</ToolTip>
 			<Action>МоноУстановитьВебХук</Action>
+		</Command>
+		<Command name="ПолучитьИДКлиента" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Получить ИД клиента</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Получить ИД клиента</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Получить ИДКлиента</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ПолучитьИДКлиента</Action>
 		</Command>
 	</Commands>
 </Form>
