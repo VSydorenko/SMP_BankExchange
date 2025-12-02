@@ -21,6 +21,34 @@
 			<Comment/>
 			<ExtendedConfigurationObject>56692445-aa60-4350-9a1e-7e9333889ff6</ExtendedConfigurationObject>
 		</Properties>
-		<ChildObjects/>
+		<ChildObjects>
+			<EnumValue uuid="1033ccec-63cf-4d73-881e-23f532c0f58b">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ОтПокупателя</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>6b0bcc99-61d6-429e-a503-fb65b3098dc2</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="bc95cdef-dc1b-442a-9bc2-9b554096df82">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Прочее</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>1679d729-e492-485b-a416-04af7f2a056d</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="a85cfec4-21b5-4adf-a332-5314b5fb2954">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ОтПоставщика</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>ebeeddc4-6027-4d37-97b6-2d7a81e5ab93</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+		</ChildObjects>
 	</Enum>
 </MetaDataObject>

@@ -102,6 +102,11 @@
 			<Language>Русский</Language>
 			<Language>Украинский</Language>
 			<Subsystem>СМП_BankExchange</Subsystem>
+			<StyleItem>ТекстВторостепеннойНадписи</StyleItem>
+			<StyleItem>ЦветТекстаПравойПанелиОтборов</StyleItem>
+			<StyleItem>ПоясняющийТекст</StyleItem>
+			<StyleItem>ЦветСуммыПоступления</StyleItem>
+			<StyleItem>ИтогиФонГруппы</StyleItem>
 			<CommonPicture>СМП_BankExchange</CommonPicture>
 			<CommonPicture>СМП_РаботаСБанкамиМОНОБанк</CommonPicture>
 			<CommonPicture>СМП_РаботаСБанкамиПриватБанк</CommonPicture>
@@ -109,6 +114,9 @@
 			<CommonPicture>КлиентБанкЗаголовокВыгрузка</CommonPicture>
 			<CommonPicture>КлиентБанкЗаголовокЗагрузка</CommonPicture>
 			<CommonPicture>ОбновлениеВнешнихКомпонентССайта</CommonPicture>
+			<CommonPicture>ЗаполнитьПоОснованию</CommonPicture>
+			<CommonPicture>ДокументПозжеТекущегоИСвязанныеДокументы</CommonPicture>
+			<CommonPicture>Органайзер</CommonPicture>
 			<Role>ДобавлениеИзменениеБанковскихСчетов</Role>
 			<Role>ИспользованиеБанкаИКассы</Role>
 			<Role>ПолныеПрава</Role>
@@ -155,6 +163,7 @@
 			<Enum>ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</Enum>
 			<Enum>СостоянияВерсийЭД</Enum>
 			<Enum>СпособыЗачетаИРаспределенияПлатежей</Enum>
+			<Enum>ВариантыЗаполненияРасшифровкиПлатежа</Enum>
 			<DataProcessor>БанкИКасса</DataProcessor>
 			<DataProcessor>СМП_КлиентБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_АкордБанк</DataProcessor>
