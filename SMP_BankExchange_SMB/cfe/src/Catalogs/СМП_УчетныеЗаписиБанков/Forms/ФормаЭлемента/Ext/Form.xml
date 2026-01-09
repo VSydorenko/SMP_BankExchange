@@ -529,6 +529,23 @@
 											<ContextMenu name="Пароль1КонтекстноеМеню" id="129"/>
 											<ExtendedTooltip name="Пароль1РасширеннаяПодсказка" id="130"/>
 										</InputField>
+										<InputField name="TOTPsecret" id="144">
+											<DataPath>Объект.Токен</DataPath>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>TOTP-secret</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>uk</v8:lang>
+													<v8:content>TOTP-secret</v8:content>
+												</v8:item>
+											</Title>
+											<PasswordMode>true</PasswordMode>
+											<ExtendedEditMultipleValues>true</ExtendedEditMultipleValues>
+											<ContextMenu name="TOTPsecretКонтекстноеМеню" id="145"/>
+											<ExtendedTooltip name="TOTPsecretРасширеннаяПодсказка" id="146"/>
+										</InputField>
 										<InputField name="СрокДействияТокена" id="131">
 											<DataPath>СрокДействияТокена</DataPath>
 											<ReadOnly>true</ReadOnly>
