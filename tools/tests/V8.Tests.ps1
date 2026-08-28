@@ -53,3 +53,26 @@ Describe 'Assert-NoLicenseProblem' {
         }
     }
 }
+
+Describe 'New-ExtensionInfobase' -Tag 'Integration' {
+    It 'створює базу з розширенням, адресованим під заданим іменем' {
+        $ib = Join-Path $TestDrive 'ext-ib'
+        $stub = Join-Path $PSScriptRoot '../assets/empty-extension'
+
+        $ibSwitch = New-ExtensionInfobase -Path $ib -ExtensionName 'PROBE_EXT' -StubPath $stub
+        $ibSwitch | Should -Be ('/F "{0}"' -f $ib)
+
+        $dump = Join-Path $TestDrive 'ext-dump'
+        New-Item -ItemType Directory -Path $dump -Force | Out-Null
+        $res = Invoke-V8Designer -IbSwitch $ibSwitch -Arguments @(
+            '/DumpConfigToFiles "{0}" -Extension PROBE_EXT' -f $dump)
+        $res.ExitCode | Should -Be 0
+        Test-Path (Join-Path $dump 'Configuration.xml') | Should -BeTrue
+
+        $dumpMissing = Join-Path $TestDrive 'ext-dump-missing'
+        New-Item -ItemType Directory -Path $dumpMissing -Force | Out-Null
+        $resMissing = Invoke-V8Designer -IbSwitch $ibSwitch -Arguments @(
+            '/DumpConfigToFiles "{0}" -Extension NEVER_CREATED' -f $dumpMissing)
+        $resMissing.ExitCode | Should -Not -Be 0
+    }
+}

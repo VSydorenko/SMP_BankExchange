@@ -135,4 +135,28 @@ function New-V8FileInfobase {
     $Path
 }
 
-Export-ModuleMember -Function Get-V8Path, ConvertTo-V8IbSwitch, Invoke-V8Designer, New-V8FileInfobase
+function New-ExtensionInfobase {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$ExtensionName,
+        [Parameter(Mandatory)][string]$StubPath,
+        [string]$V8Path
+    )
+
+    if (-not $V8Path) { $V8Path = Get-V8Path }
+
+    New-V8FileInfobase -Path $Path -V8Path $V8Path | Out-Null
+    $ibSwitch = '/F "{0}"' -f $Path
+
+    $result = Invoke-V8Designer -IbSwitch $ibSwitch -V8Path $V8Path -Arguments @(
+        '/LoadConfigFromFiles "{0}" -Extension {1}' -f (Resolve-Path -LiteralPath $StubPath), $ExtensionName)
+
+    if ($result.ExitCode -ne 0) {
+        throw "Не вдалося створити розширення $ExtensionName у тимчасовій ІБ: $($result.Output)"
+    }
+
+    $ibSwitch
+}
+
+Export-ModuleMember -Function Get-V8Path, ConvertTo-V8IbSwitch, Invoke-V8Designer, New-V8FileInfobase, New-ExtensionInfobase
