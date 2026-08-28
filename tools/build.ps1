@@ -46,7 +46,7 @@ foreach ($p in $products) {
 
     if ($p -eq 'epf') {
         # Кожна обробка — окремий корінь: <Name>.xml поруч із текою <Name>.
-        $ibSwitch = '/F "{0}"' -f (New-V8FileInfobase -Path $buildIb)
+        $ibSwitch = '/F "{0}"' -f (New-V8FileInfobase -Path $buildIb -MustBeUnder (Join-Path $repoRoot 'build'))
         foreach ($desc in Get-ChildItem -LiteralPath (Join-Path $productPath 'src') -Filter '*.xml' -File) {
             $name = [System.IO.Path]::GetFileNameWithoutExtension($desc.Name)
             $target = Join-Path $outDir "$name.epf"
@@ -63,7 +63,8 @@ foreach ($p in $products) {
     $target = Join-Path $outDir "$($state.ExtensionName).cfe"
     Write-Host "→ $($state.ExtensionName).cfe"
 
-    $ibSwitch = New-ExtensionInfobase -Path $buildIb -ExtensionName $state.ExtensionName -StubPath $stubPath
+    $ibSwitch = New-ExtensionInfobase -Path $buildIb -ExtensionName $state.ExtensionName `
+        -StubPath $stubPath -MustBeUnder (Join-Path $repoRoot 'build')
     $load = Invoke-V8Designer -IbSwitch $ibSwitch -Arguments @(
         '/LoadConfigFromFiles "{0}" -Extension {1}' -f $src, $state.ExtensionName)
     if ($load.ExitCode -ne 0) { throw "Завантаження $($state.ExtensionName) не вдалося: $($load.Output)" }

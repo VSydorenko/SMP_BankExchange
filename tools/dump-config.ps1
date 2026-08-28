@@ -16,6 +16,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
+Import-Module (Join-Path $PSScriptRoot 'lib/PathSafety.psm1') -Force
 Import-Module (Join-Path $PSScriptRoot 'lib/V8.psm1') -Force
 
 $productPath = Join-Path $repoRoot $Product
@@ -37,6 +38,7 @@ if (-not $Apply) {
     return
 }
 
+Assert-SafeWorkPath -Path $target -MustBeUnder $productPath -Description "target вивантаження продукту $Product"
 if (Test-Path -LiteralPath $target) { Remove-Item -LiteralPath $target -Recurse -Force }
 New-Item -ItemType Directory -Path $target -Force | Out-Null
 

@@ -1,6 +1,10 @@
 #Requires -Version 7
 Set-StrictMode -Version Latest
 
+# Без -Force: те саме застереження, що й у StorageReport.psm1 для V8 — вкладений
+# Import-Module тут не повинен перезавантажувати вже наявний глобальний PathSafety.
+Import-Module "$PSScriptRoot/PathSafety.psm1"
+
 function Read-SyncState {
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$ProductPath)
@@ -11,6 +15,17 @@ function Read-SyncState {
     }
 
     $json = Get-Content -LiteralPath $file -Raw -Encoding UTF8 | ConvertFrom-Json
+
+    # storage.json пишеться вручну при підключенні продукту — sourcePath доходить
+    # звідси прямісінько до Remove-Item -Recurse -Force у storage-sync.ps1. Порожній чи
+    # такий, що містить "..", рядок мав би провалитись глибоко всередині -Apply, під час
+    # видалення; перевірка тут ловить його одразу при читанні й називає файл, що завинив.
+    # Join-Path на порожньому sourcePath повертає сам $ProductPath незмінним — саме тому
+    # Assert-SafeWorkPath отримує вже складений шлях, а не сирий фрагмент: перевірка
+    # "не дорівнює межі" має побачити результат так само, як його побачить Remove-Item.
+    Assert-SafeWorkPath -Path (Join-Path $ProductPath ([string]$json.sourcePath)) `
+        -MustBeUnder $ProductPath -Description "sourcePath у $file"
+
     [pscustomobject]@{
         StoragePath       = $json.storagePath
         ExtensionName     = $json.extensionName

@@ -18,6 +18,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
+# PathSafety — першою: V8.psm1 і SyncState.psm1 самі вкладено імпортують її (без -Force,
+# та сама обережність, що й довкола V8.psm1 у StorageReport.psm1 — див. коментар там).
+# Завантаживши її тут глобально й раніше за них, вкладені імпорти лише підтвердять, що
+# вона вже є, замість ризикувати повторним перезавантаженням у приватну область.
+Import-Module (Join-Path $PSScriptRoot 'lib/PathSafety.psm1') -Force
 Import-Module (Join-Path $PSScriptRoot 'lib/V8.psm1') -Force
 Import-Module (Join-Path $PSScriptRoot 'lib/StorageReport.psm1') -Force
 Import-Module (Join-Path $PSScriptRoot 'lib/Authors.psm1') -Force
@@ -64,7 +69,8 @@ if (Test-Path -LiteralPath $workDir) { Remove-Item -LiteralPath $workDir -Recurs
 New-Item -ItemType Directory -Path $workDir -Force | Out-Null
 
 Write-Host 'Створюю тимчасову ІБ і читаю історію сховища...'
-$ibSwitch = New-ExtensionInfobase -Path $ibPath -ExtensionName $state.ExtensionName -StubPath $stubPath
+$ibSwitch = New-ExtensionInfobase -Path $ibPath -ExtensionName $state.ExtensionName `
+    -StubPath $stubPath -MustBeUnder $workDir
 $all      = Get-StorageVersions -IbSwitch $ibSwitch -StoragePath $state.StoragePath `
                 -ExtensionName $state.ExtensionName -StorageUser $StorageUser -WorkDir $workDir
 
@@ -119,6 +125,11 @@ foreach ($v in $pending) {
     }
 
     # Вивантаження не видаляє зниклі об'єкти, тому тека очищається перед кожним прогоном.
+    # Assert-SafeWorkPath тут — друга лінія оборони поверх перевірки в Read-SyncState
+    # (state вже прочитаний раніше й не змінюється між ними, але видалення — це саме та
+    # операція, для якої I2 просить перевірку безпосередньо перед нею, а не лише один раз
+    # десь раніше в скрипті).
+    Assert-SafeWorkPath -Path $sourceDir -MustBeUnder $productPath -Description "sourceDir продукту $Product"
     if (Test-Path -LiteralPath $sourceDir) { Remove-Item -LiteralPath $sourceDir -Recurse -Force }
     New-Item -ItemType Directory -Path $sourceDir -Force | Out-Null
 

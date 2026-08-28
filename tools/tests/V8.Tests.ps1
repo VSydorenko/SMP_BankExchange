@@ -113,12 +113,29 @@ Describe 'Assert-NoLicenseProblem' {
     }
 }
 
+Describe 'New-V8FileInfobase (запобіжник шляху, без звернення до платформи)' {
+    It 'кидає виняток на шляху поза -MustBeUnder — до Get-V8Path, незалежно від того, чи встановлена платформа' {
+        $outside = Join-Path $TestDrive 'not-the-work-dir'
+        $boundary = Join-Path $TestDrive 'work-dir'
+        New-Item -ItemType Directory -Path $boundary -Force | Out-Null
+
+        { New-V8FileInfobase -Path $outside -MustBeUnder $boundary } | Should -Throw '*не є підтекою*'
+    }
+
+    It 'кидає виняток на порожньому Path' {
+        $boundary = Join-Path $TestDrive 'work-dir-2'
+        New-Item -ItemType Directory -Path $boundary -Force | Out-Null
+
+        { New-V8FileInfobase -Path '' -MustBeUnder $boundary } | Should -Throw
+    }
+}
+
 Describe 'New-ExtensionInfobase' -Tag 'Integration' {
     It 'створює базу з розширенням, адресованим під заданим іменем' {
         $ib = Join-Path $TestDrive 'ext-ib'
         $stub = Join-Path $PSScriptRoot '../assets/empty-extension'
 
-        $ibSwitch = New-ExtensionInfobase -Path $ib -ExtensionName 'PROBE_EXT' -StubPath $stub
+        $ibSwitch = New-ExtensionInfobase -Path $ib -ExtensionName 'PROBE_EXT' -StubPath $stub -MustBeUnder $TestDrive
         $ibSwitch | Should -Be ('/F "{0}"' -f $ib)
 
         $dump = Join-Path $TestDrive 'ext-dump'

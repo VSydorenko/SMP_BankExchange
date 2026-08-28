@@ -33,6 +33,32 @@ Describe 'Read-SyncState / Write-SyncState' {
         New-Item -ItemType Directory -Path $empty -Force | Out-Null
         { Read-SyncState -ProductPath $empty } | Should -Throw '*storage.json*'
     }
+
+    It 'кидає виняток на порожньому sourcePath — I2: сьогодні саме це мовчки стирає весь каталог продукту' {
+        # Відтворює репродукцію ревʼювера буквально: "sourcePath": "" у storage.json
+        # робить Join-Path $productPath "" рівним самому продукту, і -Apply стирав би
+        # увесь каталог, включно з негітованим v8project.local.yaml. Перевірка тут ловить
+        # це при читанні storage.json, до будь-якого Remove-Item.
+        @{
+            storagePath       = 'R:\Сховища\Тест'
+            extensionName     = 'Test_Extension'
+            lastSyncedVersion = 23
+            sourcePath        = ''
+        } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $script:Product 'storage.json') -Encoding UTF8
+
+        { Read-SyncState -ProductPath $script:Product } | Should -Throw '*sourcePath*'
+    }
+
+    It 'кидає виняток, якщо sourcePath містить ".."' {
+        @{
+            storagePath       = 'R:\Сховища\Тест'
+            extensionName     = 'Test_Extension'
+            lastSyncedVersion = 23
+            sourcePath        = '..\..\Windows'
+        } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $script:Product 'storage.json') -Encoding UTF8
+
+        { Read-SyncState -ProductPath $script:Product } | Should -Throw '*sourcePath*'
+    }
 }
 
 Describe 'Get-PendingVersions' {

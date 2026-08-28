@@ -1,6 +1,11 @@
 #Requires -Version 7
 Set-StrictMode -Version Latest
 
+# Без -Force: те саме застереження, що й довкола вкладеного імпорту V8.psm1 у
+# StorageReport.psm1 (див. коментар там) — не перезавантажувати вже наявний глобальний
+# PathSafety і не ховати його експорти від глобальної області.
+Import-Module "$PSScriptRoot/PathSafety.psm1"
+
 function Get-V8Path {
     [CmdletBinding()]
     param([string]$Version = '8.3.27.1644')
@@ -130,8 +135,16 @@ function New-V8FileInfobase {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$MustBeUnder,
         [string]$V8Path
     )
+
+    # $Path стирається без перевірки, що там взагалі інфобаза, а не щось важливе —
+    # -MustBeUnder змушує кожного викликача явно назвати межу, під якою $Path мусить
+    # лежати (build/, build/sync/<продукт>, $TestDrive у тестах), а не довіряти
+    # аргументу мовчки. Перевірка стоїть до Get-V8Path навмисно: небезпечний шлях має
+    # впасти одразу, незалежно від того, чи знайдена платформа на цій машині.
+    Assert-SafeWorkPath -Path $Path -MustBeUnder $MustBeUnder -Description 'Path інфобази'
 
     if (-not $V8Path) { $V8Path = Get-V8Path }
 
@@ -166,12 +179,13 @@ function New-ExtensionInfobase {
         [Parameter(Mandatory)][string]$Path,
         [Parameter(Mandatory)][string]$ExtensionName,
         [Parameter(Mandatory)][string]$StubPath,
+        [Parameter(Mandatory)][string]$MustBeUnder,
         [string]$V8Path
     )
 
     if (-not $V8Path) { $V8Path = Get-V8Path }
 
-    New-V8FileInfobase -Path $Path -V8Path $V8Path | Out-Null
+    New-V8FileInfobase -Path $Path -MustBeUnder $MustBeUnder -V8Path $V8Path | Out-Null
     $ibSwitch = '/F "{0}"' -f $Path
 
     $result = Invoke-V8Designer -IbSwitch $ibSwitch -V8Path $V8Path -Arguments @(
