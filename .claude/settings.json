@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git rev-list:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git bundle verify:*)",
+      "Bash(pwsh -NoProfile -File tools/tests/Run-Tests.ps1)",
+      "mcp__plugin_unica_unica__unica_project_map",
+      "mcp__plugin_unica_unica__unica_project_status",
+      "mcp__plugin_unica_unica__unica_cf_info",
+      "mcp__plugin_unica_unica__unica_cf_validate",
+      "mcp__plugin_unica_unica__unica_cfe_diff",
+      "mcp__plugin_unica_unica__unica_cfe_validate",
+      "mcp__plugin_unica_unica__unica_meta_info",
+      "mcp__plugin_unica_unica__unica_form_info",
+      "mcp__plugin_unica_unica__unica_form_validate",
+      "mcp__plugin_unica_unica__unica_dcs_info",
+      "mcp__plugin_unica_unica__unica_dcs_validate",
+      "mcp__plugin_unica_unica__unica_mxl_info",
+      "mcp__plugin_unica_unica__unica_mxl_validate",
+      "mcp__plugin_unica_unica__unica_mxl_decompile",
+      "mcp__plugin_unica_unica__unica_role_info",
+      "mcp__plugin_unica_unica__unica_role_validate",
+      "mcp__plugin_unica_unica__unica_subsystem_info",
+      "mcp__plugin_unica_unica__unica_subsystem_validate",
+      "mcp__plugin_unica_unica__unica_interface_validate",
+      "mcp__plugin_unica_unica__unica_xdto_info",
+      "mcp__plugin_unica_unica__unica_code_search",
+      "mcp__plugin_unica_unica__unica_code_outline",
+      "mcp__plugin_unica_unica__unica_code_definition",
+      "mcp__plugin_unica_unica__unica_code_graph",
+      "mcp__plugin_unica_unica__unica_code_diagnostics",
+      "mcp__plugin_unica_unica__unica_source_locate",
+      "mcp__plugin_unica_unica__unica_source_read",
+      "mcp__plugin_unica_unica__unica_source_resolve",
+      "mcp__plugin_unica_unica__unica_source_children",
+      "mcp__plugin_unica_unica__unica_source_resources",
+      "mcp__plugin_unica_unica__unica_documentation_search",
+      "mcp__plugin_unica_unica__unica_documentation_get",
+      "mcp__plugin_unica_unica__unica_standards_search",
+      "mcp__plugin_unica_unica__unica_standards_explain"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh release:*)"
+    ],
+    "deny": [
+      "Bash(gitsync:*)",
+      "Bash(oscript:*)"
+    ]
+  }
+}
