@@ -1,5 +1,16 @@
-DumpFilesIndex.txt
-ConfigDumpInfo.xml
-.superpowers/
-.build/
+# Вендорські конфігурації — не наш код, у публічний репозиторій не потрапляють.
+# Ігнорується вміст теки, а не сама тека, інакше README.md неможливо було б закомітити.
+**/cf/**
+!**/cf/README.md
+
+# Робочі каталоги
 build/
+.build/
+.superpowers/
+
+# Локальні перевизначення з підключеннями й логінами
+v8project.local.yaml
+
+# Побічні файли платформи
+ConfigDumpInfo.xml
+DumpFilesIndex.txt
