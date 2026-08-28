@@ -51,6 +51,31 @@ function ConvertTo-V8IbSwitch {
     throw "Не вдалося розпізнати рядок підключення: $Connection"
 }
 
+function Read-V8LocalConnection {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        throw "Не знайдено $Path — у ньому має бути підключення до дев-бази."
+    }
+
+    $local = Get-Content -LiteralPath $Path -Raw -Encoding UTF8
+    if ($local -notmatch "(?m)^\s*connection:\s*'(?<c>.+?)'\s*$") {
+        throw "У $Path немає рядка connection: '...'"
+    }
+    # $Matches належить лише останньому виконаному -match: значення connection треба
+    # забрати одразу, до того як наступний -match (для user) перепише $Matches.
+    $connection = $Matches['c']
+
+    $user = ''
+    if ($local -match "(?m)^\s*user:\s*'(?<u>.+?)'\s*$") { $user = $Matches['u'] }
+
+    [pscustomobject]@{
+        Connection = $connection
+        User       = $user
+    }
+}
+
 function Assert-NoLicenseProblem {
     [CmdletBinding()]
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Output)
@@ -159,4 +184,4 @@ function New-ExtensionInfobase {
     $ibSwitch
 }
 
-Export-ModuleMember -Function Get-V8Path, ConvertTo-V8IbSwitch, Invoke-V8Designer, New-V8FileInfobase, New-ExtensionInfobase
+Export-ModuleMember -Function Get-V8Path, ConvertTo-V8IbSwitch, Read-V8LocalConnection, Invoke-V8Designer, New-V8FileInfobase, New-ExtensionInfobase

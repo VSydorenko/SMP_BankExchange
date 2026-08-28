@@ -25,16 +25,9 @@ $state       = Read-SyncState -ProductPath $productPath
 $sourceDir   = Join-Path $productPath $state.SourcePath
 $localFile   = Join-Path $productPath 'v8project.local.yaml'
 
-if (-not (Test-Path -LiteralPath $localFile)) {
-    throw "Не знайдено $localFile — у ньому має бути підключення до дев-бази."
-}
-$local = Get-Content -LiteralPath $localFile -Raw -Encoding UTF8
-if ($local -notmatch "(?m)^\s*connection:\s*'(?<c>.+?)'\s*$") {
-    throw "У $localFile немає рядка connection: '...'"
-}
-$connection = $Matches['c']
-$user = ''
-if ($local -match "(?m)^\s*user:\s*'(?<u>.+?)'\s*$") { $user = $Matches['u'] }
+$local      = Read-V8LocalConnection -Path $localFile
+$connection = $local.Connection
+$user       = $local.User
 
 $ibSwitch = ConvertTo-V8IbSwitch -Connection $connection
 

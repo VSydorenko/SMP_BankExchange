@@ -28,6 +28,65 @@ Describe 'ConvertTo-V8IbSwitch' {
     }
 }
 
+Describe 'Read-V8LocalConnection' {
+    BeforeEach {
+        $script:LocalFile = Join-Path $TestDrive ([guid]::NewGuid().ToString('N') + '.yaml')
+    }
+
+    It 'читає і connection, і user з одного файлу правильно (ловить помилку порядку читання $Matches)' {
+        # $Matches — одна спільна змінна на обидва -match. Якщо реалізація дістає значення
+        # connection з $Matches ПІСЛЯ того, як виконався -match для user (а не одразу після
+        # свого власного -match), Connection повернеться порожнім/іншим, бо іменована група
+        # 'c' у $Matches до того моменту вже перезаписана групою 'u'. Значення тут навмисно
+        # різні й неспівпадаючі за формою, щоб таку підміну неможливо було не помітити.
+        Set-Content -LiteralPath $script:LocalFile -Encoding UTF8 -Value @(
+            'infobase:'
+            "  connection: 'Srvr=""SRV01"";Ref=""DEMO_BASE"";'"
+            "  user: 'probe-user'"
+        )
+
+        $result = Read-V8LocalConnection -Path $script:LocalFile
+
+        $result.Connection | Should -Be 'Srvr="SRV01";Ref="DEMO_BASE";'
+        $result.User       | Should -Be 'probe-user'
+    }
+
+    It 'кидає виняток з дією, якщо файл відсутній' {
+        $missing = Join-Path $TestDrive 'no-such.yaml'
+        { Read-V8LocalConnection -Path $missing } | Should -Throw '*Не знайдено*'
+    }
+
+    It 'кидає виняток, якщо рядка connection: немає' {
+        Set-Content -LiteralPath $script:LocalFile -Encoding UTF8 -Value @(
+            'infobase:'
+            "  user: 'probe-user'"
+        )
+
+        { Read-V8LocalConnection -Path $script:LocalFile } | Should -Throw '*connection*'
+    }
+
+    It 'кидає виняток, якщо рядок connection: не збігається з очікуваним форматом' {
+        Set-Content -LiteralPath $script:LocalFile -Encoding UTF8 -Value @(
+            'infobase:'
+            '  connection: без лапок'
+        )
+
+        { Read-V8LocalConnection -Path $script:LocalFile } | Should -Throw '*connection*'
+    }
+
+    It 'повертає порожній User, якщо рядка user: немає — не кидає виняток' {
+        Set-Content -LiteralPath $script:LocalFile -Encoding UTF8 -Value @(
+            'infobase:'
+            "  connection: 'File=""C:\bases\demo"";'"
+        )
+
+        $result = Read-V8LocalConnection -Path $script:LocalFile
+
+        $result.Connection | Should -Be 'File="C:\bases\demo";'
+        $result.User       | Should -Be ''
+    }
+}
+
 Describe 'Assert-NoLicenseProblem' {
     It 'пропускає чистий рядок без згадки ліцензії' {
         InModuleScope V8 {
