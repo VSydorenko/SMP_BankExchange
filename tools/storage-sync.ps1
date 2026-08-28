@@ -77,6 +77,12 @@ if (-not (Test-Path -LiteralPath $state.StoragePath)) {
 }
 
 # Робоча тека створюється з нуля на кожен запуск — щоб не тягнути стан попереднього.
+# Четверте рекурсивне видалення в цьому файлі (три інші — $sourceDir нижче,
+# New-V8FileInfobase і dump-config.ps1 — уже під Assert-SafeWorkPath): $workDir
+# складається з $repoRoot і $Product через Join-Path так само, як $sourceDir, і той
+# самий порожній/".."-сегмент у вхідних даних міг би вивести його за межі build/sync/.
+Assert-SafeWorkPath -Path $workDir -MustBeUnder (Join-Path $repoRoot 'build/sync') `
+    -Description "workDir продукту $Product"
 if (Test-Path -LiteralPath $workDir) { Remove-Item -LiteralPath $workDir -Recurse -Force }
 New-Item -ItemType Directory -Path $workDir -Force | Out-Null
 
