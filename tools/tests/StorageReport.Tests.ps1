@@ -174,3 +174,35 @@ Describe 'Read-StorageReport (невідома форма комірки поз�
         { Read-StorageReport -Path $fixture } | Should -Throw '*Неочікувана комірка*'
     }
 }
+
+Describe 'Get-StorageVersions (команда, побудована для платформи — I1: -IncludeCommentLinesWithDoubleSlash)' {
+    # Get-StorageVersions реально запускає 1cv8.exe (Invoke-V8Designer з V8.psm1) — тут
+    # платформа не потрібна: мокається сам Invoke-V8Designer у приватній області модуля
+    # StorageReport (де він з'являється як імпортована з V8.psm1 команда), щоб перевірити
+    # САМЕ побудовані аргументи команди /ConfigurationRepositoryReport, а не поведінку
+    # платформи. Мок не звертається до диска сховища — лише копіює вже наявну фікстуру
+    # туди, куди мала б записати звіт платформа, щоб Read-StorageReport усередині
+    # Get-StorageVersions відпрацював на реальному вмісті, а не впав на відсутньому файлі.
+    BeforeAll {
+        Mock -ModuleName StorageReport Invoke-V8Designer {
+            param($IbSwitch, $Arguments, $User, $Password, $V8Path)
+            $reportArg = $Arguments | Where-Object { $_ -like '/ConfigurationRepositoryReport*' }
+            if ($reportArg -match '/ConfigurationRepositoryReport "([^"]+)"') {
+                Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'fixtures/storage-report-sample.txt') `
+                    -Destination $Matches[1] -Force
+            }
+            [pscustomobject]@{ ExitCode = 0; Output = '' }
+        }
+    }
+
+    It 'вимагає -IncludeCommentLinesWithDoubleSlash — без цього ключа платформа сама обрізає коментар на "//" ще до того, як звіт потрапляє в цей інструмент (I1, підтверджено на v20/v31 BankExchange_SMB і v42 BankExchange_ACC)' {
+        $workDir = Join-Path $TestDrive 'get-storage-versions-workdir'
+
+        $null = Get-StorageVersions -IbSwitch '/F "X"' -StoragePath 'X' `
+            -ExtensionName 'EXT' -StorageUser 'gitbot' -WorkDir $workDir
+
+        Should -Invoke -ModuleName StorageReport Invoke-V8Designer -Times 1 -ParameterFilter {
+            ($Arguments -join ' ') -match '-IncludeCommentLinesWithDoubleSlash'
+        }
+    }
+}

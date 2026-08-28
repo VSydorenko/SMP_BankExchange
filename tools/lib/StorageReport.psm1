@@ -82,10 +82,14 @@ function Get-MxlStringCells {
 
     if ($null -ne $buffer) {
         # Комірку відкрив рядок {"#","..., але жоден наступний рядок так і не закрив її
-        # очікуваним патерном "}. Раніше залишок мовчки губився в кінці файлу — саме такий
-        # різновид втрати підозрювався для версій 31/42 (підозра не підтвердилась — див.
-        # Read-StorageReport, але сам клас дефекту лишався непокритим). Тепер це виняток
-        # з початком уже накопиченого тексту комірки, а не тихе зникнення.
+        # очікуваним патерном "}. Раніше залишок мовчки губився в кінці файлу — цей же клас
+        # утрати спершу підозрювався причиною обрізаних коментарів у версіях 31/42, але
+        # виявився ні до чого не причетним: справжня причина — платформа сама трактує "//"
+        # у тексті коментаря як межу рядкового коментаря в /ConfigurationRepositoryReport
+        # без -IncludeCommentLinesWithDoubleSlash (див. Get-StorageVersions і
+        # docs/architecture/storage-and-git.md, розділ "Обрізання коментарів на //"). Сам
+        # дефект незакритої комірки лишався непокритим незалежно від цього — тепер це
+        # виняток з початком уже накопиченого тексту комірки, а не тихе зникнення.
         $preview = $buffer
         if ($preview.Length -gt 200) { $preview = $preview.Substring(0, 200) + '…' }
         throw "MXL-звіт обірвався всередині незакритої комірки: '$preview'"
@@ -175,12 +179,15 @@ function Read-StorageReport {
         }
 
         # Жоден із відомих заголовків і жодне активне поле не претендує на цю комірку.
-        # Раніше вона мовчки губилась тут — саме цей клас утрати підозрювався причиною
-        # обрізаних коментарів у версіях 31/42 (не підтвердилось — втрата виявилась вище,
-        # в /ConfigurationRepositoryReport, див. docs/architecture/storage-and-git.md).
-        # Але сам дефект — тихе зникнення комірки в інструменті, що пише незамінну
-        # історію в git, — лишається дефектом незалежно від цього конкретного випадку:
-        # тепер невпізнана форма зупиняє розбір, а не мовчки минає його.
+        # Раніше вона мовчки губилась тут — цей же клас утрати спершу підозрювався причиною
+        # обрізаних коментарів у версіях 31/42, але це не підтвердилось: втрата виявилась
+        # вище, всередині самого /ConfigurationRepositoryReport (він трактує "//" у
+        # коментарі як межу рядкового коментаря без -IncludeCommentLinesWithDoubleSlash —
+        # діагностика й спосіб уникнути в Get-StorageVersions і
+        # docs/architecture/storage-and-git.md, розділ "Обрізання коментарів на //"). Але
+        # сам дефект — тихе зникнення комірки в інструменті, що пише незамінну історію в
+        # git, — лишається дефектом незалежно від цього конкретного випадку: тепер
+        # невпізнана форма зупиняє розбір, а не мовчки минає його.
         throw "Неочікувана комірка звіту сховища (немає активного поля для неї): '$cell'"
     }
     if ($current) { $result.Add($current) }
@@ -233,11 +240,22 @@ function Get-StorageVersions {
     $reportPath = Join-Path $WorkDir 'storage-report.mxl'
     if (Test-Path -LiteralPath $reportPath) { Remove-Item -LiteralPath $reportPath -Force }
 
+    # -IncludeCommentLinesWithDoubleSlash: без цього ключа /ConfigurationRepositoryReport
+    # сам трактує "//" у тексті коментаря як межу рядкового коментаря — усе від "//" до
+    # кінця рядка зникає з MXL ще до того, як звіт узагалі потрапляє в цей інструмент (не
+    # дефект парсера тут — підтверджено побайтово на "живих" звітах, докладно в
+    # docs/architecture/storage-and-git.md, розділ "Обрізання коментарів на //"). Ключ
+    # знайдено не експериментом з прапорцями, а читанням джерела oscript-library/gitsync
+    # (через залежність oscript-library/v8storage,
+    # МенеджерХранилищаКонфигурации.os:596) — той самий інструмент, який відтворив повний
+    # текст коментаря версії 20 BankExchange_SMB у коміті 0ccd83c ще до появи цього
+    # тулсету. Платформа підтримує ключ з 8.3.17 (gitsync вмикає його умовно за версією);
+    # тут це не потрібно — Get-V8Path працює лише з гілкою 8.3.27.x.
     $result = Invoke-V8Designer -IbSwitch $IbSwitch -Arguments @(
         '/ConfigurationRepositoryF "{0}"' -f $StoragePath
         '/ConfigurationRepositoryN "{0}"' -f $StorageUser
         '/ConfigurationRepositoryP ""'
-        '/ConfigurationRepositoryReport "{0}" -NBegin 1 -Extension {1}' -f $reportPath, $ExtensionName
+        '/ConfigurationRepositoryReport "{0}" -NBegin 1 -Extension {1} -IncludeCommentLinesWithDoubleSlash' -f $reportPath, $ExtensionName
     )
 
     if ($result.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $reportPath)) {
