@@ -92,7 +92,7 @@ function Read-StorageReport {
     }
     if ($current) { $result.Add($current) }
 
-    $result |
+    , @($result |
         ForEach-Object {
             $stamp = [datetime]::MinValue
             if ($_.Date -and $_.Time) {
@@ -110,7 +110,7 @@ function Read-StorageReport {
                 Timestamp     = $stamp
             }
         } |
-        Sort-Object Version
+        Sort-Object Version)
 }
 
 function Get-StorageVersions {

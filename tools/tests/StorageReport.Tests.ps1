@@ -46,3 +46,17 @@ Describe 'ConvertFrom-MxlText' {
         $lines[0] | Should -Be '{8,1,12,'
     }
 }
+
+Describe 'Read-StorageReport (звіт без версій)' {
+    BeforeAll { $script:EmptyFixture = Join-Path $PSScriptRoot 'fixtures/storage-report-empty.txt' }
+
+    It 'повертає порожній масив, а не $null' {
+        # Set-StrictMode тут відтворює умову виклику з боку Task 5 (storage-sync.ps1),
+        # який працює під Set-StrictMode -Version Latest: під ним $null.Count кидає
+        # виняток, тоді як без strict mode PowerShell тихо повертає 0.
+        Set-StrictMode -Version Latest
+        $versions = Read-StorageReport -Path $script:EmptyFixture
+        { $versions.Count } | Should -Not -Throw
+        $versions.Count | Should -Be 0
+    }
+}
