@@ -51,6 +51,15 @@ function ConvertTo-V8IbSwitch {
     throw "Не вдалося розпізнати рядок підключення: $Connection"
 }
 
+function Assert-NoLicenseProblem {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Output)
+
+    if ($Output -match '(?i)лиценз|ліценз|license|HASP') {
+        throw "Платформа повідомила про проблему з ліцензією, робота зупинена:`n$Output"
+    }
+}
+
 function Invoke-V8Designer {
     [CmdletBinding()]
     param(
@@ -87,9 +96,7 @@ function Invoke-V8Designer {
         Remove-Item -LiteralPath $log -Force -ErrorAction SilentlyContinue
     }
 
-    if ($output -match '(?i)лиценз|license|HASP') {
-        throw "Платформа повідомила про проблему з ліцензією, робота зупинена:`n$output"
-    }
+    Assert-NoLicenseProblem -Output $output
 
     [pscustomobject]@{ ExitCode = $proc.ExitCode; Output = $output }
 }
@@ -112,12 +119,19 @@ function New-V8FileInfobase {
     $argLine = 'CREATEINFOBASE File="{0}"; /DisableStartupDialogs /Out "{1}"' -f $Path, $log
     $proc = Start-Process -FilePath $V8Path -ArgumentList $argLine -Wait -NoNewWindow -PassThru
 
+    $msg = ''
+    if (Test-Path -LiteralPath $log) {
+        $raw = Get-Content -LiteralPath $log -Raw -Encoding UTF8
+        if ($raw) { $msg = $raw.Trim() }
+        Remove-Item -LiteralPath $log -Force -ErrorAction SilentlyContinue
+    }
+
+    Assert-NoLicenseProblem -Output $msg
+
     if ($proc.ExitCode -ne 0) {
-        $msg = if (Test-Path -LiteralPath $log) { Get-Content -LiteralPath $log -Raw -Encoding UTF8 } else { '' }
         throw "Не вдалося створити файлову ІБ у $Path : $msg"
     }
 
-    Remove-Item -LiteralPath $log -Force -ErrorAction SilentlyContinue
     $Path
 }
 

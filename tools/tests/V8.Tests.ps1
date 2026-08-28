@@ -27,3 +27,29 @@ Describe 'ConvertTo-V8IbSwitch' {
         { ConvertTo-V8IbSwitch -Connection '' } | Should -Throw
     }
 }
+
+Describe 'Assert-NoLicenseProblem' {
+    It 'пропускає чистий рядок без згадки ліцензії' {
+        InModuleScope V8 {
+            { Assert-NoLicenseProblem -Output 'Конфигурация обновлена успешно' } | Should -Not -Throw
+        }
+    }
+
+    It 'кидає виняток, якщо у виводі є HASP' {
+        InModuleScope V8 {
+            { Assert-NoLicenseProblem -Output 'Ошибка: HASP-ключ не найден' } | Should -Throw
+        }
+    }
+
+    It 'кидає виняток, якщо у виводі є "лиценз"' {
+        InModuleScope V8 {
+            { Assert-NoLicenseProblem -Output 'Не удалось получить лицензию' } | Should -Throw
+        }
+    }
+
+    It 'пропускає порожній рядок' {
+        InModuleScope V8 {
+            { Assert-NoLicenseProblem -Output '' } | Should -Not -Throw
+        }
+    }
+}
