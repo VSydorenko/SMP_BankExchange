@@ -47,6 +47,21 @@ Describe 'ConvertFrom-MxlText' {
     }
 }
 
+Describe 'Read-StorageReport (час без провідного нуля в годині)' {
+    BeforeAll {
+        $script:ShortHourFixture = Join-Path $PSScriptRoot 'fixtures/storage-report-short-hour.txt'
+        $script:ShortHourVersions = Read-StorageReport -Path $script:ShortHourFixture
+    }
+
+    It 'розбирає "Время создания:" без провідного нуля в годині (1:27:39)' {
+        $script:ShortHourVersions[0].Time | Should -Be '1:27:39'
+    }
+
+    It 'складає Timestamp коректно навіть без провідного нуля' {
+        $script:ShortHourVersions[0].Timestamp | Should -Be ([datetime]'2022-05-24T01:27:39')
+    }
+}
+
 Describe 'Read-StorageReport (звіт без версій)' {
     BeforeAll { $script:EmptyFixture = Join-Path $PSScriptRoot 'fixtures/storage-report-empty.txt' }
 

@@ -103,8 +103,11 @@ function Read-StorageReport {
         ForEach-Object {
             $stamp = [datetime]::MinValue
             if ($_.Date -and $_.Time) {
+                # Платформа не доповнює годину нулем у "Время создания:" (наприклад "1:27:39"),
+                # тому формат години — "H", не "HH": останній вимагає рівно дві цифри й падає
+                # на односимвольній годині.
                 $stamp = [datetime]::ParseExact(
-                    "$($_.Date) $($_.Time)", 'dd.MM.yyyy HH:mm:ss',
+                    "$($_.Date) $($_.Time)", 'dd.MM.yyyy H:mm:ss',
                     [cultureinfo]::InvariantCulture)
             }
             [pscustomobject]@{
