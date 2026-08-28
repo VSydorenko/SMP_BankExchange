@@ -12,6 +12,3 @@
 #   TakeHot_UNF_work       -> PrudnikovV           (v25, 34-38, 40)
 # Активні рядки навмисно прибрані після синхронізації: нова версія з тієї
 # самої бази має знову зупинити синхронізацію, бо за нею може стояти інша людина.
-Clarity_UNF_work=Yaroslav Holovatyi <yaroslav.holovatiy@gmail.com>
-Decoratorskyi_UNF_work=PrudnikovV <Prudnikovv@ukr.net>
-TakeHot_UNF_work=PrudnikovV <Prudnikovv@ukr.net>
