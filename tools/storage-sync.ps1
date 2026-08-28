@@ -86,7 +86,16 @@ $ibSwitch = New-ExtensionInfobase -Path $ibPath -ExtensionName $state.ExtensionN
 $all      = Get-StorageVersions -IbSwitch $ibSwitch -StoragePath $state.StoragePath `
                 -ExtensionName $state.ExtensionName -StorageUser $StorageUser -WorkDir $workDir
 
-Write-Host "У сховищі версій: $($all.Count), максимальна: $(($all | Select-Object -Last 1).Version)"
+# М1: раніше тут було "($all | Select-Object -Last 1).Version" — на порожньому $all
+# Select-Object повертає $null, і .Version на ньому падає під Set-StrictMode -Version
+# Latest на рядок раніше за дружню гілку "Нових версій немає" нижче. Measure-Object на
+# СПРАВДІ порожній колекції теж не рятує сам по собі: "(@() | Measure-Object -Maximum)"
+# не дає об'єкт із Maximum=$null, а не дає нічого, і ".Maximum" так само падає — тому
+# перевірка Count йде першою (той самий прийом, яким тепер захищений $max у
+# Get-PendingVersions, tools/lib/SyncState.psm1).
+$maxVersion = $null
+if ($all.Count -gt 0) { $maxVersion = ($all | Measure-Object -Property Version -Maximum).Maximum }
+Write-Host "У сховищі версій: $($all.Count), максимальна: $(if ($null -ne $maxVersion) { $maxVersion } else { 'немає' })"
 
 $pending = Get-PendingVersions -AllVersions $all -LastSynced $state.LastSyncedVersion
 # @(...) навколо Select-Object -First — інакше рівно один елемент, що лишився після обрізання
@@ -180,6 +189,12 @@ foreach ($v in $pending) {
     $env:GIT_COMMITTER_DATE = $stamp
     try {
         git -C $repoRoot add -A -- $Product
+        # M4: без цієї перевірки провалений "git add" мовчки лишає джерела поза індексом, а
+        # наступний "git commit --allow-empty" усе одно завершується успішно — порожній коміт,
+        # що просуває lastSyncedVersion, лишаючи джерела цієї версії поза git. --allow-empty
+        # нижче навмисний (сусідні версії сховища можуть дати однаковий дамп); тут же будь-який
+        # ненульовий код — завжди помилка git, а не легітимний стан.
+        if ($LASTEXITCODE -ne 0) { throw "git add завершився з кодом $LASTEXITCODE" }
 
         # Дві сусідні версії сховища можуть дати побайтово однаковий дамп (версія змінила щось
         # поза XML-вивантаженням) — тоді "git commit" без --allow-empty впав би з ненульовим

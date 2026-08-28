@@ -142,3 +142,41 @@ Describe 'storage-sync.ps1 -Apply: запобіжник чистоти робо�
         Join-Path $script:FakeRepo 'build/sync' $name | Should -Not -Exist
     }
 }
+
+Describe 'storage-sync.ps1 -Apply: M4 — "git add" перевіряється так само, як "git commit"' {
+    # Цикл по версіях (storage-sync.ps1:107+) вимагає реальної платформи й реального
+    # сховища задовго до "git add -A -- $Product" — тому цей рядок не можна дійти
+    # наскрізним прогоном скрипту в ізольованій фікстурі (як два тести вище). Замість
+    # цього тест доводить саму передумову фіксу: що провалений "git add" насправді
+    # виставляє ненульовий $LASTEXITCODE — той самий сигнал, який storage-sync.ps1:189
+    # тепер перевіряє одразу після виклику (дзеркалячи вже наявну перевірку "git commit"
+    # трьома рядками нижче). До фіксу цей код ігнорувався: --allow-empty на "git commit"
+    # означає, що провалений "git add" усе одно завершується успішним порожнім комітом,
+    # який просуває lastSyncedVersion, лишаючи джерела цієї версії поза git.
+    It '"git add -A" завершується ненульовим кодом, коли git реально не може виконати команду' {
+        $repo = Join-Path $TestDrive 'git-add-fail-repo'
+        New-Item -ItemType Directory -Path $repo -Force | Out-Null
+        git -C $repo init -q
+        git -C $repo config user.email 'test@example.invalid'
+        git -C $repo config user.name 'Test Bot'
+
+        New-Item -ItemType Directory -Path (Join-Path $repo 'Product') -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $repo 'Product/file.txt') -Value 'початковий вміст'
+        git -C $repo add -A | Out-Null
+        git -C $repo commit -q -m 'початковий коміт'
+
+        Set-Content -LiteralPath (Join-Path $repo 'Product/file.txt') -Value 'зміна, яку не вдасться заіндексувати'
+
+        # index.lock, що лишився від "завислого" git-процесу, — найнадійніший спосіб
+        # відтворити реальний провал "git add" без залежності від платформи чи сховища.
+        $lockFile = Join-Path $repo '.git/index.lock'
+        Set-Content -LiteralPath $lockFile -Value ''
+        try {
+            git -C $repo add -A -- Product 2>&1 | Out-Null
+            $LASTEXITCODE | Should -Not -Be 0
+        }
+        finally {
+            Remove-Item -LiteralPath $lockFile -Force -ErrorAction SilentlyContinue
+        }
+    }
+}

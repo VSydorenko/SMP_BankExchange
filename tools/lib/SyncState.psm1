@@ -56,7 +56,18 @@ function Get-PendingVersions {
         [Parameter(Mandatory)][int]$LastSynced
     )
 
-    $max = ($AllVersions | Measure-Object -Property Version -Maximum).Maximum
+    # M1 (розширено): на СПРАВДІ порожньому $AllVersions (сховище без жодної версії)
+    # "(@() | Measure-Object -Property Version -Maximum)" не повертає об'єкт із Maximum=$null,
+    # а не повертає нічого — і ".Maximum" на цьому "нічого" падає під
+    # Set-StrictMode -Version Latest з "властивість 'Maximum' не знайдено", а не тихо дає
+    # $null. Той самий клас дефекту, що й у storage-sync.ps1 на сусідньому рядку (обчислення
+    # максимальної версії для виводу) — і без цієї перевірки тут дружня гілка "Нових версій
+    # немає" у storage-sync.ps1 однаково лишалась би недосяжною для порожнього сховища:
+    # виняток стався б тут, на рядок раніше.
+    $max = $null
+    if ($AllVersions.Count -gt 0) {
+        $max = ($AllVersions | Measure-Object -Property Version -Maximum).Maximum
+    }
     if ($null -ne $max -and $LastSynced -gt $max) {
         throw "git попереду сховища: залито версію $LastSynced, а у сховищі максимум $max. " +
               "Синхронізацію зупинено, розберіться з розбіжністю вручну."

@@ -96,4 +96,16 @@ Describe 'Get-PendingVersions' {
         { Get-PendingVersions -AllVersions $script:All -LastSynced 99 } |
             Should -Throw '*попереду*'
     }
+
+    It 'M1: не падає на СПРАВДІ порожньому $AllVersions (сховище без жодної версії)' {
+        # На відміну від "повертає порожній масив, а не $null, коли все залито" вище,
+        # $All там ніколи не порожній сам по собі — фільтрація до порожнього набору
+        # відбувається вже ВСЕРЕДИНІ функції. Тут $AllVersions порожній із самого початку:
+        # "(@() | Measure-Object -Property Version -Maximum)" не дає об'єкт із Maximum=$null,
+        # а не дає нічого, і ".Maximum" на цьому падає під Set-StrictMode -Version Latest —
+        # рядком раніше за дружню гілку "Нових версій немає" у storage-sync.ps1.
+        Set-StrictMode -Version Latest
+        { Get-PendingVersions -AllVersions @() -LastSynced 0 } | Should -Not -Throw
+        (Get-PendingVersions -AllVersions @() -LastSynced 0).Count | Should -Be 0
+    }
 }

@@ -93,6 +93,37 @@ Describe 'Read-StorageReport (звіт без версій)' {
         { $versions.Count } | Should -Not -Throw
         $versions.Count | Should -Be 0
     }
+
+    It 'M1: обчислення максимальної версії (як у storage-sync.ps1) не падає на порожньому звіті' {
+        # storage-sync.ps1 не імпортується як модуль (це скрипт-точка входу, а не
+        # tools/lib/*.psm1) і не запускається у прогоні без реальної платформи чи
+        # сховища, тому цей рядок перевіряється тут — на тому самому $all, який
+        # storage-sync.ps1 отримує від Get-StorageVersions/Read-StorageReport для
+        # порожнього сховища. Раніше storage-sync.ps1:89 робив
+        # "($all | Select-Object -Last 1).Version", що під Set-StrictMode -Version
+        # Latest падає на .Version від $null на порожньому $all — на рядок раніше за
+        # дружню гілку "Нових версій немає".
+        #
+        # "Measure-Object -Property Version -Maximum" сам собою тут НЕ рятує: на справді
+        # порожньому вводі він не дає об'єкт із Maximum=$null, а не дає нічого, і
+        # ".Maximum" так само падає під strict mode — це підтверджує окремий It нижче.
+        # Тому справжній фікс (і в storage-sync.ps1, і в Get-PendingVersions) перевіряє
+        # Count першим.
+        Set-StrictMode -Version Latest
+        $versions = Read-StorageReport -Path $script:EmptyFixture
+
+        $maxVersion = $null
+        { if ($versions.Count -gt 0) { $maxVersion = ($versions | Measure-Object -Property Version -Maximum).Maximum } } |
+            Should -Not -Throw
+        $maxVersion | Should -BeNullOrEmpty
+    }
+
+    It 'Measure-Object -Maximum без перевірки Count все ще падає на СПРАВДІ порожньому вводі (документує, чому Count-перевірка обов''язкова)' {
+        Set-StrictMode -Version Latest
+        $versions = Read-StorageReport -Path $script:EmptyFixture
+
+        { ($versions | Measure-Object -Property Version -Maximum).Maximum } | Should -Throw
+    }
 }
 
 Describe 'Read-StorageReport (повна форма реального звіту: титул, мітка версії, розділи змінених об''єктів)' {
