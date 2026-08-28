@@ -81,6 +81,38 @@ function Read-V8LocalConnection {
     }
 }
 
+function Read-V8LocalStoragePath {
+    <#
+    .SYNOPSIS
+        Необов'язкове перевизначення storagePath із v8project.local.yaml.
+    .DESCRIPTION
+        storage.json — закомічений, і storagePath у ньому єдиний спільний для всієї
+        команди (docs/architecture/storage-and-git.md, "Пряме обмеження на локальні
+        шляхи розробників"): свідомий виняток із заборони на локальні шляхи, бо
+        синхронізація має бути самоналаштовуваною. Але в другого розробника з іншим
+        розташуванням дисків цей шлях може не існувати — редагувати заради цього
+        закомічений файл означало б або чужий diff, або локальний коміт поверх
+        спільного storage.json щоразу після pull.
+
+        v8project.local.yaml (gitignored) уже несе підключення до дев-бази цього ж
+        продукту на цій самій машині (Read-V8LocalConnection) — той самий файл, той
+        самий механізм, лише необов'язковий рядок storagePath: '...' на верхньому
+        рівні (поза infobase:). На відміну від Read-V8LocalConnection, де
+        connection: обов'язковий, тут відсутність файлу чи рядка — не помилка, а
+        законний стан "перевизначення немає": функція повертає порожній рядок, і
+        викликач лишає storagePath зі storage.json без змін.
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) { return '' }
+
+    $local = Get-Content -LiteralPath $Path -Raw -Encoding UTF8
+    if ($local -match "(?m)^\s*storagePath:\s*'(?<s>.+?)'\s*$") { return $Matches['s'] }
+
+    ''
+}
+
 function Assert-NoLicenseProblem {
     [CmdletBinding()]
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Output)
@@ -198,4 +230,4 @@ function New-ExtensionInfobase {
     $ibSwitch
 }
 
-Export-ModuleMember -Function Get-V8Path, ConvertTo-V8IbSwitch, Read-V8LocalConnection, Invoke-V8Designer, New-V8FileInfobase, New-ExtensionInfobase
+Export-ModuleMember -Function Get-V8Path, ConvertTo-V8IbSwitch, Read-V8LocalConnection, Read-V8LocalStoragePath, Invoke-V8Designer, New-V8FileInfobase, New-ExtensionInfobase

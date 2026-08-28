@@ -97,6 +97,31 @@ Describe 'storage-sync.ps1 -Apply: запобіжник чистоти робо�
         Join-Path $script:FakeRepo 'build/sync' $name | Should -Not -Exist
     }
 
+    It 'v8project.local.yaml перевизначає storagePath зі storage.json (I5)' {
+        # Обидва шляхи навмисно вигадані (не існують) — скрипт однаково впаде на
+        # "Каталог сховища не знайдено", але яка саме адреса потрапить у повідомлення,
+        # прямо доводить, який storagePath скрипт насправді використав: зі storage.json
+        # (не мало б перевизначитись) чи з v8project.local.yaml (мало б).
+        $name = 'Product_LocalOverride'
+        $productPath = New-FakeProduct -Name $name
+        $overridePath = Join-Path $TestDrive 'local-override-storage'
+        Set-Content -LiteralPath (Join-Path $productPath 'v8project.local.yaml') -Encoding UTF8 -Value @(
+            'infobase:'
+            "  connection: 'File=""C:\bases\demo"";'"
+            "storagePath: '$overridePath'"
+        )
+        git -C $script:FakeRepo add -A
+        git -C $script:FakeRepo commit -q -m 'фікстура: продукт із локальним перевизначенням storagePath'
+
+        $result = Invoke-StorageSync -Name $name
+
+        $result.ExitCode | Should -Not -Be 0
+        $result.Output   | Should -BeLike "*Каталог сховища не знайдено: $overridePath*"
+        # storage.json несе окремий, теж вигаданий шлях — повідомлення не повинно
+        # згадувати саме його, інакше перевизначення не спрацювало.
+        $result.Output   | Should -Not -BeLike '*no-such-storage*'
+    }
+
     It 'на брудній копії кидає саме повідомлення запобіжника' {
         $name = 'Product_Dirty'
         $productPath = New-FakeProduct -Name $name

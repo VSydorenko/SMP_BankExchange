@@ -87,6 +87,36 @@ Describe 'Read-V8LocalConnection' {
     }
 }
 
+Describe 'Read-V8LocalStoragePath' {
+    BeforeEach {
+        $script:LocalFile = Join-Path $TestDrive ([guid]::NewGuid().ToString('N') + '.yaml')
+    }
+
+    It 'повертає порожній рядок, а не кидає виняток, якщо файл відсутній — перевизначення просто немає' {
+        $missing = Join-Path $TestDrive 'no-such.yaml'
+        Read-V8LocalStoragePath -Path $missing | Should -Be ''
+    }
+
+    It 'повертає порожній рядок, якщо файл є, а рядка storagePath: немає' {
+        Set-Content -LiteralPath $script:LocalFile -Encoding UTF8 -Value @(
+            'infobase:'
+            "  connection: 'File=""C:\bases\demo"";'"
+        )
+
+        Read-V8LocalStoragePath -Path $script:LocalFile | Should -Be ''
+    }
+
+    It 'читає storagePath: з верхнього рівня, поза infobase:' {
+        Set-Content -LiteralPath $script:LocalFile -Encoding UTF8 -Value @(
+            'infobase:'
+            "  connection: 'File=""C:\bases\demo"";'"
+            "storagePath: 'D:\Сховища\ІншийРозробник'"
+        )
+
+        Read-V8LocalStoragePath -Path $script:LocalFile | Should -Be 'D:\Сховища\ІншийРозробник'
+    }
+}
+
 Describe 'Assert-NoLicenseProblem' {
     It 'пропускає чистий рядок без згадки ліцензії' {
         InModuleScope V8 {

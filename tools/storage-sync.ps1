@@ -34,6 +34,18 @@ if (-not (Test-Path -LiteralPath $productPath)) {
 }
 
 $state     = Read-SyncState -ProductPath $productPath
+
+# storagePath у storage.json — єдиний спільний для команди шлях (закомічений навмисно,
+# docs/architecture/storage-and-git.md, "Пряме обмеження на локальні шляхи розробників").
+# У другого розробника з іншим розташуванням дисків цей шлях може не існувати;
+# v8project.local.yaml (gitignored) може перевизначити його локально, не чіпаючи
+# закомічений файл.
+$localStoragePath = Read-V8LocalStoragePath -Path (Join-Path $productPath 'v8project.local.yaml')
+if ($localStoragePath) {
+    Write-Host "Локальне перевизначення сховища (v8project.local.yaml): $localStoragePath"
+    $state.StoragePath = $localStoragePath
+}
+
 $authors   = Read-AuthorMap -Path (Join-Path $repoRoot 'AUTHORS')
 $sourceDir = Join-Path $productPath $state.SourcePath
 $workDir   = Join-Path $repoRoot 'build/sync' $Product
