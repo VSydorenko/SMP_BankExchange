@@ -17,7 +17,24 @@ $script:LabelMap = @{
     'Время создания:'      = 'Time'
     'Версия конфигурации:' = 'ConfigVersion'
     'Комментарий:'         = 'Comment'
+    'Метка:'               = 'Label'
+    'Комментарий метки:'   = 'LabelComment'
 }
+
+# Три розділи, якими платформа доповнює запис версії, коли звіт побудований зі списком
+# змінених об'єктів: за кожним заголовком іде ЗМІННА кількість комірок-імен об'єктів —
+# не одна комірка-значення, як у $script:LabelMap, тому окрема мапа й окремий стан
+# розбору ($pendingList у Read-StorageReport).
+$script:ListLabelMap = @{
+    'Добавлены:' = 'Added'
+    'Изменены:'  = 'Modified'
+    'Удалены:'   = 'Deleted'
+}
+
+# Преамбула звіту цілком, до першої версії: коли й о котрій годині побудований сам звіт
+# (не версія). Значення свідомо не зберігається — це метадані запуску
+# /ConfigurationRepositoryReport, а не факт з історії версій сховища.
+$script:ReportHeaderLabels = @('Дата отчета:', 'Время отчета:')
 
 function ConvertFrom-MxlText {
     [CmdletBinding()]
@@ -63,6 +80,17 @@ function Get-MxlStringCells {
         }
     }
 
+    if ($null -ne $buffer) {
+        # Комірку відкрив рядок {"#","..., але жоден наступний рядок так і не закрив її
+        # очікуваним патерном "}. Раніше залишок мовчки губився в кінці файлу — саме такий
+        # різновид втрати підозрювався для версій 31/42 (підозра не підтвердилась — див.
+        # Read-StorageReport, але сам клас дефекту лишався непокритим). Тепер це виняток
+        # з початком уже накопиченого тексту комірки, а не тихе зникнення.
+        $preview = $buffer
+        if ($preview.Length -gt 200) { $preview = $preview.Substring(0, 200) + '…' }
+        throw "MXL-звіт обірвався всередині незакритої комірки: '$preview'"
+    }
+
     , $cells.ToArray()
 }
 
@@ -74,17 +102,54 @@ function Read-StorageReport {
     $result = [System.Collections.Generic.List[object]]::new()
     $current = $null
     $pending = $null
+    $pendingList = $null
+    $skipHeaderValue = $false
+    # Перед "Дата отчета:" MXL несе титульний рядок друкованої форми — оформлення
+    # табличного документа (стилі, GUID області друку) з вкраплення тексту заголовка
+    # звіту й шляху до сховища, усе як ОДНА комірка, без пари "мітка:"/"значення".
+    # Форма цього рядка залежить від верстки друкованої форми, тому замість того щоб
+    # розпізнавати його вміст, розбір просто ігнорує будь-які комірки до першого
+    # відомого заголовка — і перестає це робити одразу, як тільки такий заголовок
+    # зустрівся, щоб не проковтнути мовчки щось справді неочікуване всередині звіту.
+    $sawKnownLabel = $false
 
     foreach ($cell in $cells) {
+        if ($skipHeaderValue) {
+            # Значення "Дата отчета:"/"Время отчета:" з попередньої ітерації — свідомо
+            # відкидається, див. коментар біля $script:ReportHeaderLabels.
+            $skipHeaderValue = $false
+            continue
+        }
+
+        if ($script:ReportHeaderLabels -contains $cell) {
+            $sawKnownLabel = $true
+            $skipHeaderValue = $true
+            continue
+        }
+
         if ($script:LabelMap.ContainsKey($cell)) {
+            $sawKnownLabel = $true
             if ($cell -eq 'Версия:') {
                 if ($current) { $result.Add($current) }
                 $current = [ordered]@{
                     Version = 0; User = ''; Date = ''; Time = ''
-                    ConfigVersion = ''; Comment = ''
+                    ConfigVersion = ''; Comment = ''; Label = ''; LabelComment = ''
+                    Added = [System.Collections.Generic.List[string]]::new()
+                    Modified = [System.Collections.Generic.List[string]]::new()
+                    Deleted = [System.Collections.Generic.List[string]]::new()
                 }
             }
             $pending = $script:LabelMap[$cell]
+            $pendingList = $null
+            continue
+        }
+
+        if ($script:ListLabelMap.ContainsKey($cell)) {
+            if (-not $current) {
+                throw "Розділ '$cell' зустрівся до першої версії у звіті сховища — неочікувана форма звіту."
+            }
+            $pendingList = $script:ListLabelMap[$cell]
+            $pending = $null
             continue
         }
 
@@ -95,7 +160,28 @@ function Read-StorageReport {
                 $current[$pending] = $cell
             }
             $pending = $null
+            continue
         }
+
+        if ($pendingList -and $current) {
+            $current[$pendingList].Add($cell)
+            continue
+        }
+
+        if (-not $sawKnownLabel) {
+            # Титульний рядок звіту (див. коментар біля $sawKnownLabel вище) — до першого
+            # відомого заголовка все ще нічого не втрачено, бо жодна версія ще не почалась.
+            continue
+        }
+
+        # Жоден із відомих заголовків і жодне активне поле не претендує на цю комірку.
+        # Раніше вона мовчки губилась тут — саме цей клас утрати підозрювався причиною
+        # обрізаних коментарів у версіях 31/42 (не підтвердилось — втрата виявилась вище,
+        # в /ConfigurationRepositoryReport, див. docs/architecture/storage-and-git.md).
+        # Але сам дефект — тихе зникнення комірки в інструменті, що пише незамінну
+        # історію в git, — лишається дефектом незалежно від цього конкретного випадку:
+        # тепер невпізнана форма зупиняє розбір, а не мовчки минає його.
+        throw "Неочікувана комірка звіту сховища (немає активного поля для неї): '$cell'"
     }
     if ($current) { $result.Add($current) }
 
@@ -122,6 +208,11 @@ function Read-StorageReport {
                 Time          = $_.Time
                 ConfigVersion = $_.ConfigVersion
                 Comment       = $_.Comment
+                Label         = $_.Label
+                LabelComment  = $_.LabelComment
+                Added         = @($_.Added)
+                Modified      = @($_.Modified)
+                Deleted       = @($_.Deleted)
                 Timestamp     = $stamp
             }
         } |

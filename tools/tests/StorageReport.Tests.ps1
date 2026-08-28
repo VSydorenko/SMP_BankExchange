@@ -94,3 +94,52 @@ Describe 'Read-StorageReport (звіт без версій)' {
         $versions.Count | Should -Be 0
     }
 }
+
+Describe 'Read-StorageReport (повна форма реального звіту: титул, мітка версії, розділи змінених об''єктів)' {
+    # Фікстура відтворює форму, знайдену у справжніх звітах BankExchange_SMB/BankExchange_ACC
+    # під час діагностики I1 (обрізаних коментарів у версіях 31/42): титульний рядок
+    # табличного документа перед "Дата отчета:", пара "Метка:"/"Комментарий метки:" і три
+    # розділи "Добавлены:"/"Изменены:"/"Удалены:" зі змінною кількістю об'єктів. Раніше все
+    # це мовчки губилось (StorageReport.psm1:80-95 у версії до фіксу) — тепер розбирається
+    # явно, нічого не кидаючи як помилку.
+    BeforeAll {
+        $script:FullShapeFixture = Join-Path $PSScriptRoot 'fixtures/storage-report-full-shape.txt'
+        $script:FullShapeVersions = Read-StorageReport -Path $script:FullShapeFixture
+    }
+
+    It 'розбирає звіт, не спотикаючись об титульний рядок і "Дата отчета:"/"Время отчета:"' {
+        $script:FullShapeVersions.Count | Should -Be 1
+        $script:FullShapeVersions[0].Version | Should -Be 31
+    }
+
+    It 'зберігає посилання у коментарі цілим — не обрізає на "//"' {
+        $script:FullShapeVersions[0].Comment |
+            Should -Be 'Комітет з посиланням https://vsydorenko.worksection.com/project/43783/12712786/'
+    }
+
+    It 'не губить мітку версії й коментар до мітки' {
+        $script:FullShapeVersions[0].Label        | Should -Be 'v851'
+        $script:FullShapeVersions[0].LabelComment | Should -Be 'база не обновляється, поки не виправлять регістр'
+    }
+
+    It 'збирає розділи змінених об''єктів замість того, щоб їх губити' {
+        $script:FullShapeVersions[0].Added    | Should -Be @('Документ.ПлатежноеПоручение', 'Обработка.БанкИКасса')
+        $script:FullShapeVersions[0].Modified | Should -Be @('SMP_BankExchange_SMB')
+        $script:FullShapeVersions[0].Deleted  | Should -Be @('Обработка.Старий')
+    }
+}
+
+Describe 'Get-MxlStringCells (незакрита комірка)' {
+    It 'кидає виняток, якщо файл обривається всередині відкритої комірки, а не мовчки губить її' {
+        $fixture = Join-Path $PSScriptRoot 'fixtures/storage-report-unterminated-cell.txt'
+        { Get-MxlStringCells -Lines (ConvertFrom-MxlText -Path $fixture) } |
+            Should -Throw '*обірвався*'
+    }
+}
+
+Describe 'Read-StorageReport (невідома форма комірки поза структурою)' {
+    It 'кидає виняток замість того, щоб мовчки пропустити невпізнану комірку' {
+        $fixture = Join-Path $PSScriptRoot 'fixtures/storage-report-unknown-cell.txt'
+        { Read-StorageReport -Path $fixture } | Should -Throw '*Неочікувана комірка*'
+    }
+}
