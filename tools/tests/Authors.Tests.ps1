@@ -2,8 +2,8 @@ BeforeAll {
     Import-Module "$PSScriptRoot/../lib/Authors.psm1" -Force
     $script:MapFile = Join-Path $TestDrive 'AUTHORS'
     @(
-        "Володимир Сидоренко=Volodymyr Sydorenko <v.m.sydorenko@gmail.com>"
-        "Олександр (alexsvlight)=alexsvlight <alexsv2012@gmail.com>"
+        "Перший Тестовий=First Testovych <first.testovych@example.com>"
+        "Другий Тестовий (nick2)=nick2 <nick2@example.com>"
         "# коментар, який треба пропустити"
         ""
     ) | Set-Content -LiteralPath $script:MapFile -Encoding UTF8
@@ -12,13 +12,13 @@ BeforeAll {
 Describe 'Read-AuthorMap' {
     It 'читає записи у форматі Ім''я=Name <email>' {
         $map = Read-AuthorMap -Path $script:MapFile
-        $map['Володимир Сидоренко'].Name  | Should -Be 'Volodymyr Sydorenko'
-        $map['Володимир Сидоренко'].Email | Should -Be 'v.m.sydorenko@gmail.com'
+        $map['Перший Тестовий'].Name  | Should -Be 'First Testovych'
+        $map['Перший Тестовий'].Email | Should -Be 'first.testovych@example.com'
     }
 
     It 'витримує дужки в імені користувача сховища' {
         $map = Read-AuthorMap -Path $script:MapFile
-        $map['Олександр (alexsvlight)'].Name | Should -Be 'alexsvlight'
+        $map['Другий Тестовий (nick2)'].Name | Should -Be 'nick2'
     }
 
     It 'ігнорує коментарі й порожні рядки' {
@@ -29,13 +29,23 @@ Describe 'Read-AuthorMap' {
 Describe 'Resolve-Author' {
     It 'повертає git-автора для відомого користувача' {
         $map = Read-AuthorMap -Path $script:MapFile
-        (Resolve-Author -Map $map -StorageUser 'Володимир Сидоренко').Email |
-            Should -Be 'v.m.sydorenko@gmail.com'
+        (Resolve-Author -Map $map -StorageUser 'Перший Тестовий').Email |
+            Should -Be 'first.testovych@example.com'
     }
 
     It 'кидає виняток на невідомому користувачі' {
         $map = Read-AuthorMap -Path $script:MapFile
         { Resolve-Author -Map $map -StorageUser 'Хтось Новий' } | Should -Throw '*AUTHORS*'
+    }
+
+    It 'кидає виняток з поясненням причини, а не звинувачує AUTHORS, коли автор порожній' {
+        # Порожній User — ознака обрізаного/пошкодженого звіту сховища (Task 2), а не
+        # "автора немає в AUTHORS". Це різні проблеми з різними виправленнями, тому
+        # перевіряємо саме зміст повідомлення, а не сам факт винятку.
+        $map = Read-AuthorMap -Path $script:MapFile
+        $err = { Resolve-Author -Map $map -StorageUser '' } | Should -Throw -PassThru
+        $err.Exception.Message | Should -Match 'пошкодж'
+        $err.Exception.Message | Should -Not -Match 'AUTHORS'
     }
 }
 
@@ -43,7 +53,7 @@ Describe 'Get-UnknownAuthors' {
     It 'повертає лише тих, кого немає в мапі, без повторів' {
         $map = Read-AuthorMap -Path $script:MapFile
         Get-UnknownAuthors -Map $map -StorageUsers @(
-            'Володимир Сидоренко', 'Хтось Новий', 'Хтось Новий') |
+            'Перший Тестовий', 'Хтось Новий', 'Хтось Новий') |
             Should -Be @('Хтось Новий')
     }
 
@@ -54,8 +64,19 @@ Describe 'Get-UnknownAuthors' {
         # регресію, якщо унарну кому перед @(...) у реалізації прибрати.
         Set-StrictMode -Version Latest
         $map = Read-AuthorMap -Path $script:MapFile
-        $unknown = Get-UnknownAuthors -Map $map -StorageUsers @('Володимир Сидоренко')
+        $unknown = Get-UnknownAuthors -Map $map -StorageUsers @('Перший Тестовий')
         { $unknown.Count } | Should -Not -Throw
         $unknown.Count | Should -Be 0
+    }
+
+    It 'позначає порожній запис автора зрозумілим повідомленням замість порожнього рядка' {
+        # Порожній StorageUser не повинен ні впасти на байндингу параметра, ні мовчки
+        # зникнути в результаті як невидимий порожній рядок — оператор має побачити
+        # причину прямо в прев'ю-виводі storage-sync.ps1.
+        $map = Read-AuthorMap -Path $script:MapFile
+        $unknown = Get-UnknownAuthors -Map $map -StorageUsers @('Перший Тестовий', '')
+        $unknown.Count | Should -Be 1
+        $unknown[0] | Should -Not -BeNullOrEmpty
+        $unknown[0] | Should -Match 'пошкодж'
     }
 }
