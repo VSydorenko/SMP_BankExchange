@@ -62,6 +62,25 @@ Describe 'Read-StorageReport (час без провідного нуля в г�
     }
 }
 
+Describe 'Read-StorageReport (день, місяць, хвилина й секунда без провідного нуля)' {
+    BeforeAll {
+        $script:ShortComponentsFixture = Join-Path $PSScriptRoot 'fixtures/storage-report-short-components.txt'
+        $script:ShortComponentsVersions = Read-StorageReport -Path $script:ShortComponentsFixture
+    }
+
+    It 'розбирає "Дата создания:" без провідного нуля в дні й місяці (3.5.2022)' {
+        $script:ShortComponentsVersions[0].Date | Should -Be '3.5.2022'
+    }
+
+    It 'розбирає "Время создания:" без провідного нуля в хвилині й секунді (1:2:3)' {
+        $script:ShortComponentsVersions[0].Time | Should -Be '1:2:3'
+    }
+
+    It 'складає Timestamp коректно й зберігає день перед місяцем (не плутає їх місцями)' {
+        $script:ShortComponentsVersions[0].Timestamp | Should -Be ([datetime]'2022-05-03T01:02:03')
+    }
+}
+
 Describe 'Read-StorageReport (звіт без версій)' {
     BeforeAll { $script:EmptyFixture = Join-Path $PSScriptRoot 'fixtures/storage-report-empty.txt' }
 

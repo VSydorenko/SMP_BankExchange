@@ -144,6 +144,10 @@ foreach ($v in $pending) {
     $message.Add('')
     $message.Add("Storage-Version: $($v.Version)")
     if ($v.ConfigVersion) { $message.Add("Extension-Version: $($v.ConfigVersion)") }
+    # Сирий користувач сховища — окремо від author.Name (яке могло бути власницьким
+    # рішенням, а не стабільним фактом, як у разових мапінгів AUTHORS). Трейлер лишає факт
+    # доступним для перевірки й виправлення навіть якщо атрибуція виявиться неточною.
+    $message.Add("Storage-User: $($v.User)")
 
     $msgFile = Join-Path $workDir 'commit-message.txt'
     ($message -join "`n") | Set-Content -LiteralPath $msgFile -Encoding UTF8
