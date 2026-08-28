@@ -1,4 +1,22 @@
+# Політика тексту й кінця рядка (I3, фінальне ревʼю). Без неї сумісність
+# "storage-sync.ps1 -Apply" з git status --porcelain залежить від локального
+# core.autocrlf: на клоні з git-типовим core.autocrlf=false робоча копія лишається
+# LF, платформа 1С пише CRLF на /DumpConfigToFiles, і кожен прогін бачить ~900
+# "змінених" файлів на порожньому місці — clean-tree guard блокує -Apply без жодного
+# пояснення чому. Докладніше — docs/architecture/storage-and-git.md.
+* text=auto eol=crlf
+
+# Найбільша й найчутливіша до цього частина дерева — Designer platform XML і BSL,
+# які й пише /DumpConfigToFiles. Явно, а не покладаючись лише на автовизначення.
+*.xml text eol=crlf
+*.bsl text eol=crlf
+
 # Binary file extensions that should not be modified.
 *.bin binary
 *.axdt binary
 *.addin binary
+*.epf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
