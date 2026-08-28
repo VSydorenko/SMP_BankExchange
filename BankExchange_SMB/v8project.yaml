@@ -1,0 +1,11 @@
+format: DESIGNER
+builder: DESIGNER
+workPath: 'build'
+execution_timeout: 600000
+source-set:
+  - name: base
+    type: CONFIGURATION
+    path: 'cf/src'
+  - name: BankExchange_SMB
+    type: EXTENSION
+    path: 'cfe/src'
