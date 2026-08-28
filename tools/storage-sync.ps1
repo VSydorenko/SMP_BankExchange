@@ -31,7 +31,7 @@ if (-not (Test-Path -LiteralPath $productPath)) {
 $state     = Read-SyncState -ProductPath $productPath
 $authors   = Read-AuthorMap -Path (Join-Path $repoRoot 'AUTHORS')
 $sourceDir = Join-Path $productPath $state.SourcePath
-$workDir   = Join-Path $productPath 'build/sync'
+$workDir   = Join-Path $repoRoot 'build/sync' $Product
 $ibPath    = Join-Path $workDir 'ib'
 $stubPath  = Join-Path $PSScriptRoot 'assets/empty-extension'
 

@@ -13,6 +13,14 @@
 # екземпляр кожного модуля під тим самим іменем і ламав би InModuleScope в V8.Tests.ps1
 # помилкою "Multiple script or manifest modules named 'V8' are currently loaded" —
 # перевірено емпірично. Окремий процес повністю ізолює простір модулів.
+#
+# Робоча тека скрипта — <fake-repo>/build/sync/<Product>, а не <product>/build/sync:
+# в обох сценаріях нижче скрипт падає до створення цієї теки (запобіжник чистоти або
+# перевірка storagePath), тому сам факт релокації workDir не міняє жодного з очікувань
+# нижче. Але саме тому кожен It додатково перевіряє, що ця тека не з'явилась: без цього
+# тести проходили б, навіть якби порядок перевірок у скрипті зламали так, що workDir
+# створюється до запобіжника — оскільки негативна перевірка "*не чиста*" сама по собі
+# такого регресу не ловить.
 
 Describe 'storage-sync.ps1 -Apply: запобіжник чистоти робочої копії' {
     BeforeAll {
@@ -83,6 +91,10 @@ Describe 'storage-sync.ps1 -Apply: запобіжник чистоти робо�
         # кінцевий результат прогону.
         $result.ExitCode | Should -Not -Be 0
         $result.Output   | Should -Not -BeLike '*не чиста*'
+
+        # Скрипт падає на перевірці storagePath раніше, ніж встигає створити нову робочу
+        # теку в корені репозиторію — тож її не мало лишитись.
+        Join-Path $script:FakeRepo 'build/sync' $name | Should -Not -Exist
     }
 
     It 'на брудній копії кидає саме повідомлення запобіжника' {
@@ -99,5 +111,9 @@ Describe 'storage-sync.ps1 -Apply: запобіжник чистоти робо�
 
         $result.ExitCode | Should -Not -Be 0
         $result.Output   | Should -BeLike '*не чиста*'
+
+        # Запобіжник спрацював до створення робочої теки в корені репозиторію — її не
+        # мало з'явитись.
+        Join-Path $script:FakeRepo 'build/sync' $name | Should -Not -Exist
     }
 }
