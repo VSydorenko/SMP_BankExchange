@@ -504,7 +504,12 @@ function ConvertFrom-MxlText {
 
 function Get-MxlStringCells {
     [CmdletBinding()]
-    param([Parameter(Mandatory)][AllowEmptyCollection()][string[]]$Lines)
+    # [AllowEmptyString()] потрібен поруч з [AllowEmptyCollection()] — без нього
+    # [Parameter(Mandatory)] на [string[]] відкидає порожні рядки-елементи, а
+    # трейлінговий перенос рядка у звіті платформи завжди дає один такий елемент,
+    # тож без цього атрибута код нижче не запуститься взагалі. (Виправлено за
+    # результатами виконання — код у Task 2 Step 4 без цього не працює.)
+    param([Parameter(Mandatory)][AllowEmptyCollection()][AllowEmptyString()][string[]]$Lines)
 
     $cells = [System.Collections.Generic.List[string]]::new()
     $buffer = $null
@@ -945,8 +950,14 @@ MCP unica.cfe.init
 Додати в кінець `tools/tests/V8.Tests.ps1`:
 
 ```powershell
+# Виправлено за результатами виконання: твердження про `<Name>PROBE_EXT</Name>` у дампі
+# недосяжне — `-Extension` робить розширення адресованим під цим іменем, але не переписує
+# `<Name>` усередині Configuration.xml самого стаба. Замінено на те, що фактично
+# реалізовано: перевірка повернутого switch `/F "…"`, успішний дамп під правильним іменем
+# (код виходу 0, файл Configuration.xml існує) і неуспішний дамп під іменем, яке ніколи не
+# створювалось (код виходу не 0).
 Describe 'New-ExtensionInfobase' -Tag 'Integration' {
-    It 'створює базу з розширенням під заданим іменем' {
+    It 'створює базу з розширенням, адресованим під заданим іменем' {
         $ib = Join-Path $TestDrive 'ext-ib'
         $stub = Join-Path $PSScriptRoot '../assets/empty-extension'
 
@@ -958,9 +969,13 @@ Describe 'New-ExtensionInfobase' -Tag 'Integration' {
         $res = Invoke-V8Designer -IbSwitch $ibSwitch -Arguments @(
             '/DumpConfigToFiles "{0}" -Extension PROBE_EXT' -f $dump)
         $res.ExitCode | Should -Be 0
+        Test-Path (Join-Path $dump 'Configuration.xml') | Should -BeTrue
 
-        (Get-Content (Join-Path $dump 'Configuration.xml') -Raw -Encoding UTF8) |
-            Should -Match '<Name>PROBE_EXT</Name>'
+        $dumpMissing = Join-Path $TestDrive 'ext-dump-missing'
+        New-Item -ItemType Directory -Path $dumpMissing -Force | Out-Null
+        $resMissing = Invoke-V8Designer -IbSwitch $ibSwitch -Arguments @(
+            '/DumpConfigToFiles "{0}" -Extension NEVER_CREATED' -f $dumpMissing)
+        $resMissing.ExitCode | Should -Not -Be 0
     }
 }
 ```
@@ -1226,8 +1241,11 @@ Expected: `The bundle records a complete history` і перелік гілок.
 - [ ] **Step 2: Записати поточні номери версій**
 
 ```bash
+# Виправлено за результатами виконання: `grep -o '[0-9]\+' ... | head -1` повертає `1` для
+# всіх трьох файлів — це збіг з "1.0" у XML-декларації `<?xml version="1.0" ...?>`, яка йде
+# першим рядком файла й трапляється раніше за сам тег <VERSION>. Вираз має цілитись у тег.
 for f in "BAS for accounting" "BAS small business" "SMB"; do
-  echo -n "$f: "; grep -o '[0-9]\+' "$f/VERSION" | head -1
+  echo -n "$f: "; grep -oP '(?<=<VERSION>)\d+' "$f/VERSION"
 done
 ```
 
@@ -1356,7 +1374,9 @@ git commit -m "Реструктуризація: продукт у корені,
 - [ ] **Step 11: Перевірити, що історія пережила переїзд**
 
 ```bash
-git log --follow --oneline -- BankExchange_SMB/cfe/src/Configuration.mdo | tail -3
+# Виправлено за результатами виконання: у EDT-розкладці Configuration.mdo лежить у
+# підтеці Configuration/, а не прямо в src/ — без неї шлях не резолвиться взагалі.
+git log --follow --oneline -- BankExchange_SMB/cfe/src/Configuration/Configuration.mdo | tail -3
 ```
 
 Expected: коміти 2024 року — історія тягнеться крізь перейменування.
@@ -1388,6 +1408,21 @@ Expected: коміти 2024 року — історія тягнеться кр�
   "sourcePath": "cfe/src"
 }
 ```
+
+- [ ] **Step 1a: Закомітити `storage.json` окремо, до будь-якого `-Apply`** (додано за
+  результатами виконання — цього кроку бракувало в початковому плані)
+
+`storage-sync.ps1 -Apply` перед стартом перевіряє, що робоча копія продукту чиста
+(`git status --porcelain -- <Product>`) — і некомічений `storage.json` для неї виглядає так
+само, як недоприбраний слід перерваного попереднього прогону: перевірка не розрізняє «новий
+файл» і «брудно після збою», тож зупиняє запуск в обох випадках.
+
+```bash
+git add BankExchange_SMBru/storage.json
+git commit -m "storage.json: підключити BankExchange_SMBru до синхронізації сховища"
+```
+
+Далі `-Apply` сам оновлює `lastSyncedVersion` усередині кожного версійного коміту.
 
 - [ ] **Step 2: Прогнати попередній перегляд**
 
@@ -1448,6 +1483,15 @@ Expected: `sourceFormat: platform_xml`.
 
 Каталог сховища досі зветься `..._BP`, а розширення вже перейменоване на `SMP_BankExchange_ACC` — розбіжність історична й навмисна.
 
+- [ ] **Step 1a: Закомітити `storage.json` окремо, до `-Apply`** (додано за результатами
+  виконання — той самий запобіжник, що й у Task 7 Step 1a: некомічений `storage.json` робить
+  робочу копію «брудною» для guard'а перед `-Apply`)
+
+```bash
+git add BankExchange_ACC/storage.json
+git commit -m "storage.json: підключити BankExchange_ACC до синхронізації сховища"
+```
+
 - [ ] **Step 2: Перегляд і прогін ACC**
 
 Run: `pwsh -NoProfile -File tools/storage-sync.ps1 -Product BankExchange_ACC`
@@ -1465,6 +1509,14 @@ Expected: `Перенесено версій: 7`.
   "lastSyncedVersion": 23,
   "sourcePath": "cfe/src"
 }
+```
+
+- [ ] **Step 3a: Закомітити `storage.json` окремо, до `-Apply`** (додано за результатами
+  виконання, той самий запобіжник)
+
+```bash
+git add BankExchange_SMB/storage.json
+git commit -m "storage.json: підключити BankExchange_SMB до синхронізації сховища"
 ```
 
 - [ ] **Step 4: Перегляд SMB**
@@ -1596,8 +1648,12 @@ Task 10. Якщо Unica відмовляється читати воркспей
 - [ ] **Step 5: Перевірити діагностику BSL**
 
 ```
-MCP unica.code.diagnostics { "cwd": "<repo>/BankExchange_SMB", "mode": "analyze", "sourceDir": "<repo>/BankExchange_SMB/cfe/src" }
+MCP unica.code.diagnostics { "cwd": "<repo>/BankExchange_SMB", "action": "analyze", "sourceSet": "BankExchange_SMB" }
 ```
+
+(Виправлено за результатами виконання, Task 9: реальний інтерфейс `unica.code.diagnostics` у
+Unica 0.12.3 — параметри `action`/`sourceSet` за іменем набору джерел з мапи воркспейсу, а не
+`mode`/`sourceDir`/`path`, як тут спочатку планувалось.)
 
 Expected: звіт побудовано без падіння. Знайдені зауваження на цьому етапі не виправляються — це базовий зріз.
 
