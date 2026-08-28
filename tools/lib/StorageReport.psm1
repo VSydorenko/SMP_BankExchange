@@ -1,7 +1,14 @@
 #Requires -Version 7
 Set-StrictMode -Version Latest
 
-Import-Module "$PSScriptRoot/V8.psm1" -Force
+# Без -Force: якщо V8.psm1 уже завантажено в глобальній області (саме так робить
+# storage-sync.ps1 — імпортує V8, тоді StorageReport), вкладений Import-Module тут
+# не повинен перезавантажувати його. З -Force вкладений виклик вивантажує наявний
+# глобальний екземпляр V8 і підвантажує його заново в приватну область StorageReport,
+# і виклики на кшталт New-ExtensionInfobase перестають бути видимі з глобальної
+# області — саме так storage-sync.ps1 і падав. Перевірено регресійним тестом
+# tools/tests/ModuleImportOrder.Tests.ps1.
+Import-Module "$PSScriptRoot/V8.psm1"
 
 $script:LabelMap = @{
     'Версия:'              = 'Version'
