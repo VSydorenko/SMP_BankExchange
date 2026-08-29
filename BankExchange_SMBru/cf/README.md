@@ -8,8 +8,11 @@ Designer platform XML, у підкаталозі `src/`.
 Вивантажити:
 
 ```powershell
-pwsh tools/dump-config.ps1 -Product BankExchange_SMBru
+pwsh <корінь плагіна>/tools/dump-config.ps1 -RepoRoot . -Product BankExchange_SMBru
 ```
+
+Корінь плагіна показує команда `/plugin` у сесії Claude Code; типово це
+`~/.claude/plugins/cache/smp-v8storagekit/v8storagekit/<версія>`.
 
 Конфігурація потрібна тільки для операцій Unica, яким треба знати склад
 конфігурації-власника: `cfe.borrow`, `cfe.diff`, `cfe.validate`. Для правок коду
