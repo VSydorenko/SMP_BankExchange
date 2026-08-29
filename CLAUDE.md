@@ -57,24 +57,32 @@ BankExchange_SMB/
 
 ## Типові операції
 
-```powershell
-pwsh tools/storage-sync.ps1 -Product BankExchange_SMB          # перегляд нових версій сховища
-pwsh tools/storage-sync.ps1 -Product BankExchange_SMB -Apply   # перенести їх у git
-pwsh tools/dump-config.ps1  -Product BankExchange_SMB -Apply   # вивантажити базову конфігурацію
-pwsh tools/load-ext.ps1     -Product BankExchange_SMB -Apply   # розкотити вихідники в дев-базу
-pwsh tools/build.ps1        -Apply                             # зібрати .cfe та .epf
-pwsh tools/tests/Run-Tests.ps1                                 # тести інструментів
-```
+Конвеєр «сховище ↔ git» — плагін Claude Code `v8storagekit`
+(https://github.com/VSydorenko/SMP_V8StorageKit). Скіл `v8storagekit:storage-pipeline`
+знає, який скрипт і з якими параметрами запускати для трьох продуктів
+(`BankExchange_SMB`, `BankExchange_SMBru`, `BankExchange_ACC`) та для збірки `epf/`,
+тож у сесії достатньо сформулювати намір:
+
+| Намір | Що відбувається |
+|---|---|
+| «покажи нові версії сховища для BankExchange_SMB» | прев'ю `storage-sync` — нічого не змінює |
+| «перенеси нові версії сховища в git» | `storage-sync -Apply` — коміт на кожну версію сховища |
+| «вивантаж базову конфігурацію» | `dump-config -Apply` — довго, велике вивантаження на диск |
+| «розкоти розширення в дев-базу» | `load-ext -Apply` |
+| «збери cfe та epf» | `build -Apply` — сам знаходить усі чотири цілі (три продукти + `epf/`) |
+
+Вручну, без агента, ті самі скрипти запускаються з теки плагіна:
+
+    pwsh <корінь плагіна>/tools/storage-sync.ps1 -RepoRoot . -Product BankExchange_SMB
+
+Корінь плагіна показує команда `/plugin` у сесії Claude Code; типово це
+`~/.claude/plugins/cache/smp-v8storagekit/v8storagekit/<версія>`.
 
 ## Дозволи
 
-`.claude/settings.json` дозволяє без запиту лише читання: git-команди перегляду, прогін тестів
-і read-only інструменти Unica (`*.info`, `*.validate`, `code.*`, `source.*`, `project.*`).
-Дозволений рядок прогону тестів навмисно несе `-ExcludeTag Integration` (M8 фінального ревʼю):
-без цього тегу `Run-Tests.ps1` запускає й `New-ExtensionInfobase` у `V8.Tests.ps1` — тест, що
-реально викликає `1cv8.exe`, створює файлову інформаційну базу й завантажує в неї розширення,
-тобто вже не read-only. Повний прогін (як у "Типових операціях" вище, без параметрів) і надалі
-питає підтвердження.
+`.claude/settings.json` дозволяє без запиту лише читання: git-команди перегляду та read-only
+інструменти Unica (`*.info`, `*.validate`, `code.*`, `source.*`, `project.*`). Тести конвеєра
+живуть і ганяються в репозиторії плагіна `SMP_V8StorageKit` — у цьому репо їх більше немає.
 
 Свідомо **не** в дозволених — запуски `storage-sync`, `dump-config`, `load-ext`, `build`. Правила
 дозволів працюють за префіксом, тому дозвіл на попередній перегляд автоматично дозволив би й той
@@ -91,9 +99,9 @@ pwsh tools/tests/Run-Tests.ps1                                 # тести ін
 Обмеження, які визначають маршрут (перевірено на цій машині):
 
 - напрямок «база → git» (`dump`) в Unica на Windows **fail-closed** — вивантажує
-  Конфігуратор через `tools/`;
+  Конфігуратор через `dump-config.ps1` плагіна `v8storagekit`;
 - `make` для `.epf`/`.cfe` на Windows падає на публікації артефакту
-  (`Отказано в доступе, os error 5`) — збирає `tools/build.ps1`;
+  (`Отказано в доступе, os error 5`) — збирає `build.ps1` плагіна `v8storagekit`;
 - `cfe.borrow` і `cfe.diff` потребують вивантаженої `cf/src`;
 - `convert` (Designer ↔ EDT) — applied fail-closed, доступний тільки `dryRun`.
 
@@ -109,7 +117,7 @@ pwsh tools/tests/Run-Tests.ps1                                 # тести ін
   `/DumpConfigToFiles`, `/LoadConfigFromFiles`. Інакше — «Соединение основной
   конфигурации с хранилищем расширений конфигураций невозможно».
 - **Розширення має існувати в ІБ до звернення до сховища розширень.** У порожній базі
-  спершу `/LoadConfigFromFiles tools/assets/empty-extension -Extension <Ім'я>`; внутрішнє
+  спершу `/LoadConfigFromFiles <корінь плагіна>/tools/assets/empty-extension -Extension <Ім'я>`; внутрішнє
   ім'я стаба ролі не грає — розширення створюється під тим, що в ключі. Без цього —
   «расширение конфигурации с указанным именем не найдено».
 - **Запускати платформу тільки через `Start-Process` з готовим рядком аргументів.**
@@ -121,7 +129,7 @@ pwsh tools/tests/Run-Tests.ps1                                 # тести ін
   PowerShell напряму.
 - **Звіт сховища — це MXL**, не текст: бінарна сигнатура `MOXCEL`, далі BOM і рядки
   `{"#","значення"}`. Мітки й величини йдуть парами; коментар буває багаторядковим,
-  лапки всередині подвоєні. Розбирає `tools/lib/StorageReport.psm1`.
+  лапки всередині подвоєні. Розбирає `StorageReport.psm1` плагіна `v8storagekit`.
 - **`/DumpConfigToFiles` не видаляє зниклі об'єкти** — цільову теку треба очищати перед
   кожним вивантаженням, інакше в дереві накопичується сміття з попередніх версій.
 - **`$args` — автоматична змінна PowerShell.** Не називати так власні масиви аргументів.
