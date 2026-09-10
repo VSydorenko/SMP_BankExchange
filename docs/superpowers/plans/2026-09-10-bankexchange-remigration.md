@@ -70,19 +70,21 @@
   змістовно бреше**: вони посилались на `dump-config.ps1 -Product …`, якого вже немає.
   Оновлено на `kit dump -Workspace <ws> -Source base`.
 
-## Лишилось вирішити
+## Ревізія docs/ — виконано
 
-Ревізія `docs/` — за кількістю згадок про зниклі сутності (`storage.json`, `-Product`,
-старі теки):
+Критерій — кількість згадок про сутності, яких після переходу не існує (`storage.json`,
+`dump-config.ps1 -Product`, старі теки, `lastSyncedVersion`).
 
-| Файл | Згадок | Оцінка |
+Прибрано (історія їх зберігає — `git show legacy/gitsync-2025-02` і коміти вище):
+
+| Файл | Згадок | Чому |
 |---|---|---|
-| `architecture/storage-and-git.md` | 56 | описує контур 0.6.0 цілком; тепер це роль плагіна |
+| `architecture/storage-and-git.md` | 56 | описував контур 0.6.0 цілком; тепер це роль плагіна (`docs/storage-and-git.md` у самому v8storagekit) |
 | `superpowers/plans/2026-08-28-bankexchange-restart.md` | 183 | виконаний план минулого проходу |
-| `superpowers/plans/2026-08-29-v8storagekit.md` | 101 | розробка плагіна — переїхала в плагін |
+| `superpowers/plans/2026-08-29-v8storagekit.md` | 101 | розробка плагіна — переїхала в його репозиторій |
 | `superpowers/specs/2026-08-28-…-restart-design.md` | 32 | спека минулого проходу |
 | `superpowers/specs/2026-08-29-v8storagekit-design.md` | 22 | спека плагіна |
-| `superpowers/specs/2026-08-30-epf-consolidation-design.md` | 10 | виконана |
-| `architecture/overview.md` | 4 | чинний, дрібні правки |
-| `banks/README.md` | 3 | чинний, дрібні правки |
-| `architecture/data-processor-contract.md` | 2 | чинний, дрібні правки |
+| `superpowers/specs/2026-08-30-epf-consolidation-design.md` | 10 | консолідацію виконано, вона в `epf/` |
+
+Лишились чинними: `architecture/overview.md`, `architecture/data-processor-contract.md`,
+`banks/README.md` (2-4 згадки кожен — дрібні правки, не переписування) і цей звіт.
