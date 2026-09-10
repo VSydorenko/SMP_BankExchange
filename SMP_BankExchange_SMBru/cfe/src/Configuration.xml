@@ -1,107 +1,133 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="aaee27e8-47d2-4aed-9688-e474e54de358">
-  <name>SMP_BankExchange_SMBru</name>
-  <synonym>
-    <key>ru</key>
-    <value>BankExchange (SMB)</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>BankExchange (SMB)</value>
-  </synonym>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:ConfigurationExtension">
-    <defaultRunMode>Checked</defaultRunMode>
-    <usePurposes>Checked</usePurposes>
-    <interfaceCompatibilityMode>Checked</interfaceCompatibilityMode>
-  </extension>
-  <containedObjects classId="9cd510cd-abfc-11d4-9434-004095e12fc7" objectId="ff17a0c1-5e4b-455b-99fb-b1a05b799299"/>
-  <containedObjects classId="9fcd25a0-4822-11d4-9414-008048da11f9" objectId="26129288-c03a-456e-bb87-93cad40a29ae"/>
-  <containedObjects classId="e3687481-0a87-462c-a166-9f34594f9bba" objectId="c5d51a10-6dba-4907-bff1-ebde0aab0cba"/>
-  <containedObjects classId="9de14907-ec23-4a07-96f0-85521cb6b53b" objectId="11e19d11-ed4e-450f-9e78-7b214dc975ba"/>
-  <containedObjects classId="51f2d5d8-ea4d-4064-8892-82951750031e" objectId="4eabd46d-59a5-4a6f-8df2-cd2c3b2af81e"/>
-  <containedObjects classId="e68182ea-4237-4383-967f-90c1e3370bc7" objectId="ee70d5d5-363b-4df0-b5a2-fd92388b192c"/>
-  <containedObjects classId="fb282519-d103-4dd3-bc12-cb271d631dfc" objectId="73d8f40c-7d75-4756-bd83-683bd012b96c"/>
-  <keepMappingToExtendedConfigurationObjectsByIDs>true</keepMappingToExtendedConfigurationObjectsByIDs>
-  <namePrefix>СМП_</namePrefix>
-  <configurationExtensionCompatibilityMode>8.3.16</configurationExtensionCompatibilityMode>
-  <configurationExtensionPurpose>AddOn</configurationExtensionPurpose>
-  <defaultRunMode>ManagedApplication</defaultRunMode>
-  <usePurposes>PersonalComputer</usePurposes>
-  <scriptVariant>Russian</scriptVariant>
-  <version>2.0.1.5</version>
-  <interfaceCompatibilityMode>TaxiEnableVersion8_2</interfaceCompatibilityMode>
-  <compatibilityMode>8.3.22</compatibilityMode>
-  <languages uuid="144f8110-c4c6-4c8a-bb1b-df7d11dc72e2" extendedConfigurationObject="af1b61ff-d1b9-4053-ad85-8259b6626adc">
-    <name>Русский</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:LanguageExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <languageCode>Checked</languageCode>
-    </extension>
-    <languageCode>ru</languageCode>
-  </languages>
-  <languages uuid="4ff37317-5a59-4c51-936f-8abc847f216a" extendedConfigurationObject="09828569-141c-42f2-9af0-2d7b073917dd">
-    <name>Украинский</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:LanguageExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <languageCode>Checked</languageCode>
-    </extension>
-    <languageCode>uk</languageCode>
-  </languages>
-  <subsystems>Subsystem.СМП_BankExchange</subsystems>
-  <commonPictures>CommonPicture.СМП_BankExchange</commonPictures>
-  <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
-  <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
-  <commonPictures>CommonPicture.ИзменитьНастройки</commonPictures>
-  <commonPictures>CommonPicture.КлиентБанкЗаголовокВыгрузка</commonPictures>
-  <commonPictures>CommonPicture.КлиентБанкЗаголовокЗагрузка</commonPictures>
-  <commonPictures>CommonPicture.ОбновлениеВнешнихКомпонентССайта</commonPictures>
-  <roles>Role.ДобавлениеИзменениеБанковскихСчетов</roles>
-  <roles>Role.ИспользованиеБанкаИКассы</roles>
-  <roles>Role.ПолныеПрава</roles>
-  <commonModules>CommonModule.КоннекторHTTP_BankExchange</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиМонобанкAPIСервер</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиПУМБAPIСервер</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
-  <commonModules>CommonModule.КлиентБанкВызовСервера</commonModules>
-  <commonModules>CommonModule.УправлениеНебольшойФирмойКлиент</commonModules>
-  <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>
-  <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
-  <catalogs>Catalog.Банки</catalogs>
-  <catalogs>Catalog.БанковскиеСчета</catalogs>
-  <catalogs>Catalog.Валюты</catalogs>
-  <catalogs>Catalog.ВидыНалогов</catalogs>
-  <catalogs>Catalog.ГруппыДоступаКонтрагентов</catalogs>
-  <catalogs>Catalog.ДоговорыКонтрагентов</catalogs>
-  <catalogs>Catalog.ДополнительныеОтчетыИОбработки</catalogs>
-  <catalogs>Catalog.Кассы</catalogs>
-  <catalogs>Catalog.Контрагенты</catalogs>
-  <catalogs>Catalog.Организации</catalogs>
-  <catalogs>Catalog.Сотрудники</catalogs>
-  <catalogs>Catalog.СтатьиДвиженияДенежныхСредств</catalogs>
-  <documents>Document.ЗаказПокупателя</documents>
-  <documents>Document.ЗаказПоставщику</documents>
-  <documents>Document.ПлатежноеПоручение</documents>
-  <documents>Document.ПоступлениеНаСчет</documents>
-  <documents>Document.РасходСоСчета</documents>
-  <enums>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</enums>
-  <enums>Enum.ВариантыДетализацииИтоговБанкИКасса</enums>
-  <enums>Enum.ВариантыОтображенияИтоговБанкИКасса</enums>
-  <enums>Enum.ВидыКонтрагентов</enums>
-  <enums>Enum.ВидыОперацийПлатежноеПоручение</enums>
-  <enums>Enum.ВидыОперацийПоступлениеНаСчет</enums>
-  <enums>Enum.ВидыОперацийРасходСоСчета</enums>
-  <enums>Enum.ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</enums>
-  <enums>Enum.СпособыЗачетаИРаспределенияПлатежей</enums>
-  <enums>Enum.СостоянияДокументовЭДО</enums>
-  <enums>Enum.ВидыОперацийЭквайринга</enums>
-  <dataProcessors>DataProcessor.БанкИКасса</dataProcessors>
-  <dataProcessors>DataProcessor.СМП_КлиентБанк</dataProcessors>
-  <informationRegisters>InformationRegister.ИсторияРаботыСКлиентомБанка</informationRegisters>
-  <informationRegisters>InformationRegister.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</informationRegisters>
-  <informationRegisters>InformationRegister.СМП_НомерПоследнейТранзакции</informationRegisters>
-  <chartsOfAccounts>ChartOfAccounts.Управленческий</chartsOfAccounts>
-</mdclass:Configuration>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Configuration uuid="aaee27e8-47d2-4aed-9688-e474e54de358">
+		<InternalInfo>
+			<xr:ContainedObject>
+				<xr:ClassId>9cd510cd-abfc-11d4-9434-004095e12fc7</xr:ClassId>
+				<xr:ObjectId>ff17a0c1-5e4b-455b-99fb-b1a05b799299</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>9fcd25a0-4822-11d4-9414-008048da11f9</xr:ClassId>
+				<xr:ObjectId>26129288-c03a-456e-bb87-93cad40a29ae</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>e3687481-0a87-462c-a166-9f34594f9bba</xr:ClassId>
+				<xr:ObjectId>c5d51a10-6dba-4907-bff1-ebde0aab0cba</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>9de14907-ec23-4a07-96f0-85521cb6b53b</xr:ClassId>
+				<xr:ObjectId>11e19d11-ed4e-450f-9e78-7b214dc975ba</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>51f2d5d8-ea4d-4064-8892-82951750031e</xr:ClassId>
+				<xr:ObjectId>4eabd46d-59a5-4a6f-8df2-cd2c3b2af81e</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>e68182ea-4237-4383-967f-90c1e3370bc7</xr:ClassId>
+				<xr:ObjectId>ee70d5d5-363b-4df0-b5a2-fd92388b192c</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>fb282519-d103-4dd3-bc12-cb271d631dfc</xr:ClassId>
+				<xr:ObjectId>73d8f40c-7d75-4756-bd83-683bd012b96c</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:PropertyState>
+				<xr:Property>CommandInterface</xr:Property>
+				<xr:State>Extended</xr:State>
+			</xr:PropertyState>
+			<xr:PropertyState>
+				<xr:Property>MainSectionCommandInterface</xr:Property>
+				<xr:State>Extended</xr:State>
+			</xr:PropertyState>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>SMP_BankExchange_SMBru</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>BankExchange (SMB)</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>BankExchange (SMB)</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<ConfigurationExtensionPurpose>AddOn</ConfigurationExtensionPurpose>
+			<KeepMappingToExtendedConfigurationObjectsByIDs>true</KeepMappingToExtendedConfigurationObjectsByIDs>
+			<NamePrefix>СМП_</NamePrefix>
+			<ConfigurationExtensionCompatibilityMode>Version8_3_16</ConfigurationExtensionCompatibilityMode>
+			<DefaultRunMode>ManagedApplication</DefaultRunMode>
+			<UsePurposes>
+				<v8:Value xsi:type="app:ApplicationUsePurpose">PlatformApplication</v8:Value>
+			</UsePurposes>
+			<ScriptVariant>Russian</ScriptVariant>
+			<Vendor/>
+			<Version>2.0.1.5</Version>
+			<BriefInformation/>
+			<DetailedInformation/>
+			<Copyright/>
+			<VendorInformationAddress/>
+			<ConfigurationInformationAddress/>
+			<InterfaceCompatibilityMode>TaxiEnableVersion8_2</InterfaceCompatibilityMode>
+		</Properties>
+		<ChildObjects>
+			<Language>Русский</Language>
+			<Language>Украинский</Language>
+			<Subsystem>СМП_BankExchange</Subsystem>
+			<CommonPicture>СМП_BankExchange</CommonPicture>
+			<CommonPicture>СМП_РаботаСБанкамиМОНОБанк</CommonPicture>
+			<CommonPicture>СМП_РаботаСБанкамиПриватБанк</CommonPicture>
+			<CommonPicture>ИзменитьНастройки</CommonPicture>
+			<CommonPicture>КлиентБанкЗаголовокВыгрузка</CommonPicture>
+			<CommonPicture>КлиентБанкЗаголовокЗагрузка</CommonPicture>
+			<CommonPicture>ОбновлениеВнешнихКомпонентССайта</CommonPicture>
+			<Role>ДобавлениеИзменениеБанковскихСчетов</Role>
+			<Role>ИспользованиеБанкаИКассы</Role>
+			<Role>ПолныеПрава</Role>
+			<CommonModule>КоннекторHTTP_BankExchange</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиМонобанкAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиПриватБанкAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиПУМБAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиСервер</CommonModule>
+			<CommonModule>КлиентБанкВызовСервера</CommonModule>
+			<CommonModule>УправлениеНебольшойФирмойКлиент</CommonModule>
+			<ScheduledJob>СМП_ОбменСБанкамиAPI</ScheduledJob>
+			<Catalog>СМП_УчетныеЗаписиБанков</Catalog>
+			<Catalog>Банки</Catalog>
+			<Catalog>БанковскиеСчета</Catalog>
+			<Catalog>Валюты</Catalog>
+			<Catalog>ВидыНалогов</Catalog>
+			<Catalog>ГруппыДоступаКонтрагентов</Catalog>
+			<Catalog>ДоговорыКонтрагентов</Catalog>
+			<Catalog>ДополнительныеОтчетыИОбработки</Catalog>
+			<Catalog>Кассы</Catalog>
+			<Catalog>Контрагенты</Catalog>
+			<Catalog>Организации</Catalog>
+			<Catalog>Сотрудники</Catalog>
+			<Catalog>СтатьиДвиженияДенежныхСредств</Catalog>
+			<Document>ЗаказПокупателя</Document>
+			<Document>ЗаказПоставщику</Document>
+			<Document>ПлатежноеПоручение</Document>
+			<Document>ПоступлениеНаСчет</Document>
+			<Document>РасходСоСчета</Document>
+			<Enum>СМП_ПоддерживаемыеИнтеграцииСБанками</Enum>
+			<Enum>ВариантыДетализацииИтоговБанкИКасса</Enum>
+			<Enum>ВариантыОтображенияИтоговБанкИКасса</Enum>
+			<Enum>ВидыКонтрагентов</Enum>
+			<Enum>ВидыОперацийПлатежноеПоручение</Enum>
+			<Enum>ВидыОперацийПоступлениеНаСчет</Enum>
+			<Enum>ВидыОперацийРасходСоСчета</Enum>
+			<Enum>ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</Enum>
+			<Enum>СпособыЗачетаИРаспределенияПлатежей</Enum>
+			<Enum>СостоянияДокументовЭДО</Enum>
+			<Enum>ВидыОперацийЭквайринга</Enum>
+			<DataProcessor>БанкИКасса</DataProcessor>
+			<DataProcessor>СМП_КлиентБанк</DataProcessor>
+			<InformationRegister>ИсторияРаботыСКлиентомБанка</InformationRegister>
+			<InformationRegister>ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</InformationRegister>
+			<InformationRegister>СМП_НомерПоследнейТранзакции</InformationRegister>
+			<ChartOfAccounts>Управленческий</ChartOfAccounts>
+		</ChildObjects>
+	</Configuration>
+</MetaDataObject>

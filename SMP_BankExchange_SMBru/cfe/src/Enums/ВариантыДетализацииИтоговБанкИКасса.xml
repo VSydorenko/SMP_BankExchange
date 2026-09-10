@@ -1,13 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="ec6ad40d-37c8-4c0b-ac44-584e9304890f" extendedConfigurationObject="4765459e-f348-4a61-90e3-bc5e95d09c35">
-  <producedTypes>
-    <refType typeId="386268f4-b19e-44af-82fb-0fabb0303c90" valueTypeId="ca300ce9-cff4-4ca3-95af-e1d2a4f2a27c"/>
-    <listType typeId="75725f8c-ebd7-4df5-a14a-4c6cd9e80bdd" valueTypeId="af1629b3-3aac-426c-abfd-ad1ef9d4b6d0"/>
-    <managerType typeId="4a570e60-a4f4-4b75-9b05-46c60a46ad11" valueTypeId="650b1bab-b2c3-4947-a250-658e76f5bd79"/>
-  </producedTypes>
-  <name>ВариантыДетализацииИтоговБанкИКасса</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:EnumExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Enum>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="ec6ad40d-37c8-4c0b-ac44-584e9304890f">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ВариантыДетализацииИтоговБанкИКасса" category="Ref">
+				<xr:TypeId>386268f4-b19e-44af-82fb-0fabb0303c90</xr:TypeId>
+				<xr:ValueId>ca300ce9-cff4-4ca3-95af-e1d2a4f2a27c</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ВариантыДетализацииИтоговБанкИКасса" category="Manager">
+				<xr:TypeId>4a570e60-a4f4-4b75-9b05-46c60a46ad11</xr:TypeId>
+				<xr:ValueId>650b1bab-b2c3-4947-a250-658e76f5bd79</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ВариантыДетализацииИтоговБанкИКасса" category="List">
+				<xr:TypeId>75725f8c-ebd7-4df5-a14a-4c6cd9e80bdd</xr:TypeId>
+				<xr:ValueId>af1629b3-3aac-426c-abfd-ad1ef9d4b6d0</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ВариантыДетализацииИтоговБанкИКасса</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>4765459e-f348-4a61-90e3-bc5e95d09c35</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Enum>
+</MetaDataObject>

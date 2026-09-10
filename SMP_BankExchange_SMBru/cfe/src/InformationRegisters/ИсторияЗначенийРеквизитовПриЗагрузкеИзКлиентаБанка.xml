@@ -1,162 +1,170 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:InformationRegister xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="df05b257-7211-499d-9fca-01ebdfd51501" extendedConfigurationObject="7569f5b0-1e24-4a91-8b9a-e30c918fe45e">
-  <producedTypes>
-    <selectionType typeId="fa1e2302-372f-4bf4-9de9-f94748f6d4a6" valueTypeId="0f9cc071-9158-44dd-a483-5c04a12fbb30"/>
-    <listType typeId="718fa1b5-e321-4455-8c06-4841c143db12" valueTypeId="a826f7aa-7ad8-4c32-b66a-0afaa22838b0"/>
-    <managerType typeId="b22ac687-92d7-4b08-913d-ec7313dfb9c4" valueTypeId="63c8ba0a-0278-4054-ad3c-daff9aeef01b"/>
-    <recordSetType typeId="7892781b-af35-4423-bfc5-8b8a30de01c6" valueTypeId="5882657c-8e2e-439a-912c-03453696ce1c"/>
-    <recordKeyType typeId="aedffdc7-d579-43b9-ba45-53a339317cf3" valueTypeId="3138411f-63b1-4e80-b340-1d4a0f278c5f"/>
-    <recordType typeId="6a1bd84f-183c-4a19-b997-4d2bd5cef2c0" valueTypeId="74c40895-c03c-4212-9c07-26a5e987fbf5"/>
-    <recordManagerType typeId="2fd68190-5416-419c-aaab-f59c87ee449c" valueTypeId="60893d91-fcc1-47bb-b04d-09d828b864e5"/>
-  </producedTypes>
-  <name>ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:InformationRegisterExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-    <informationRegisterPeriodicity>Checked</informationRegisterPeriodicity>
-    <writeMode>Checked</writeMode>
-  </extension>
-  <resources uuid="f9df2566-5bbb-4a60-a5a5-bcc551f33e6d" extendedConfigurationObject="1e79fea5-1f33-460b-bdb1-0802430e813a">
-    <name>Договор</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>AnyRef</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </resources>
-  <resources uuid="800190cb-92d0-4a73-b1a4-ad30b77160fb" extendedConfigurationObject="55e27eaa-7819-495f-ba96-0715a98cd9b4">
-    <name>ВидОперации</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>AnyRef</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </resources>
-  <resources uuid="ae9c12ab-b841-4801-8390-bcda0d04becd" extendedConfigurationObject="7266313a-14e8-4bad-85e4-476d70e56956">
-    <name>СтатьяДДС</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>CatalogRef.СтатьиДвиженияДенежныхСредств</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </resources>
-  <resources uuid="177a7b8a-ffae-4757-8014-0f5c94ee81f7" extendedConfigurationObject="60092141-c790-4b4e-9ae9-8676d0af1b45">
-    <name>Корреспонденция</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>ChartOfAccountsRef.Управленческий</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </resources>
-  <resources uuid="a173e2db-708f-4911-af88-bf3367268ddd" extendedConfigurationObject="a786463d-f78c-4e66-87cf-3a4ba486d769">
-    <name>ДатаЗагрузкиЧислом</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>Number</type>
-        </types>
-        <numberQualifiers>
-          <precision>8</precision>
-        </numberQualifiers>
-      </typeExtension>
-    </extension>
-    <type/>
-  </resources>
-  <dimensions uuid="d164aa04-7134-4e28-aec9-f3a451200af9" extendedConfigurationObject="58d155c5-8b01-47f0-9062-2fe55a97c760">
-    <name>Контрагент</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>CatalogRef.Контрагенты</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </dimensions>
-  <dimensions uuid="85f1fac1-2543-4e24-af63-c9dee197ea49" extendedConfigurationObject="3776a492-52cf-4d94-852f-5b78294feb68">
-    <name>БанковскийСчетОрганизации</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>CatalogRef.БанковскиеСчета</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </dimensions>
-  <dimensions uuid="c7f9201e-5182-4ce2-8f15-ced0e7e49c93" extendedConfigurationObject="5c4a18ee-93a7-46a8-83ee-73f9a926f098">
-    <name>БанковскийСчетКонтрагента</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>CatalogRef.БанковскиеСчета</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </dimensions>
-  <dimensions uuid="fd1b753a-c247-4336-a998-1dae2e69d09b" extendedConfigurationObject="953675a0-c5f6-468f-ae4e-6e16beb7ce9c">
-    <name>Документ</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>AnyRef</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </dimensions>
-  <dimensions uuid="1937742e-093f-4c51-a32d-461589edba80" extendedConfigurationObject="8390350a-9117-4eb4-a887-0d5761505632">
-    <name>Исходящий</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>Boolean</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </dimensions>
-</mdclass:InformationRegister>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<InformationRegister uuid="df05b257-7211-499d-9fca-01ebdfd51501">
+		<InternalInfo>
+			<xr:GeneratedType name="InformationRegisterRecord.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка" category="Record">
+				<xr:TypeId>6a1bd84f-183c-4a19-b997-4d2bd5cef2c0</xr:TypeId>
+				<xr:ValueId>74c40895-c03c-4212-9c07-26a5e987fbf5</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="InformationRegisterManager.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка" category="Manager">
+				<xr:TypeId>b22ac687-92d7-4b08-913d-ec7313dfb9c4</xr:TypeId>
+				<xr:ValueId>63c8ba0a-0278-4054-ad3c-daff9aeef01b</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="InformationRegisterSelection.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка" category="Selection">
+				<xr:TypeId>fa1e2302-372f-4bf4-9de9-f94748f6d4a6</xr:TypeId>
+				<xr:ValueId>0f9cc071-9158-44dd-a483-5c04a12fbb30</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="InformationRegisterList.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка" category="List">
+				<xr:TypeId>718fa1b5-e321-4455-8c06-4841c143db12</xr:TypeId>
+				<xr:ValueId>a826f7aa-7ad8-4c32-b66a-0afaa22838b0</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="InformationRegisterRecordSet.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка" category="RecordSet">
+				<xr:TypeId>7892781b-af35-4423-bfc5-8b8a30de01c6</xr:TypeId>
+				<xr:ValueId>5882657c-8e2e-439a-912c-03453696ce1c</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="InformationRegisterRecordKey.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка" category="RecordKey">
+				<xr:TypeId>aedffdc7-d579-43b9-ba45-53a339317cf3</xr:TypeId>
+				<xr:ValueId>3138411f-63b1-4e80-b340-1d4a0f278c5f</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="InformationRegisterRecordManager.ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка" category="RecordManager">
+				<xr:TypeId>2fd68190-5416-419c-aaab-f59c87ee449c</xr:TypeId>
+				<xr:ValueId>60893d91-fcc1-47bb-b04d-09d828b864e5</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>7569f5b0-1e24-4a91-8b9a-e30c918fe45e</ExtendedConfigurationObject>
+			<InformationRegisterPeriodicity>Nonperiodical</InformationRegisterPeriodicity>
+			<WriteMode>Independent</WriteMode>
+		</Properties>
+		<ChildObjects>
+			<Resource uuid="f9df2566-5bbb-4a60-a5a5-bcc551f33e6d">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Договор</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>1e79fea5-1f33-460b-bdb1-0802430e813a</ExtendedConfigurationObject>
+					<Type>
+						<v8:TypeSet>cfg:AnyRef</v8:TypeSet>
+					</Type>
+				</Properties>
+			</Resource>
+			<Resource uuid="800190cb-92d0-4a73-b1a4-ad30b77160fb">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ВидОперации</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>55e27eaa-7819-495f-ba96-0715a98cd9b4</ExtendedConfigurationObject>
+					<Type>
+						<v8:TypeSet>cfg:AnyRef</v8:TypeSet>
+					</Type>
+				</Properties>
+			</Resource>
+			<Resource uuid="ae9c12ab-b841-4801-8390-bcda0d04becd">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>СтатьяДДС</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>7266313a-14e8-4bad-85e4-476d70e56956</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.СтатьиДвиженияДенежныхСредств</v8:Type>
+					</Type>
+				</Properties>
+			</Resource>
+			<Resource uuid="177a7b8a-ffae-4757-8014-0f5c94ee81f7">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Корреспонденция</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>60092141-c790-4b4e-9ae9-8676d0af1b45</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:ChartOfAccountsRef.Управленческий</v8:Type>
+					</Type>
+				</Properties>
+			</Resource>
+			<Resource uuid="a173e2db-708f-4911-af88-bf3367268ddd">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ДатаЗагрузкиЧислом</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>a786463d-f78c-4e66-87cf-3a4ba486d769</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>8</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Properties>
+			</Resource>
+			<Dimension uuid="d164aa04-7134-4e28-aec9-f3a451200af9">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Контрагент</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>58d155c5-8b01-47f0-9062-2fe55a97c760</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.Контрагенты</v8:Type>
+					</Type>
+				</Properties>
+			</Dimension>
+			<Dimension uuid="85f1fac1-2543-4e24-af63-c9dee197ea49">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>БанковскийСчетОрганизации</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>3776a492-52cf-4d94-852f-5b78294feb68</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.БанковскиеСчета</v8:Type>
+					</Type>
+				</Properties>
+			</Dimension>
+			<Dimension uuid="c7f9201e-5182-4ce2-8f15-ced0e7e49c93">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>БанковскийСчетКонтрагента</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>5c4a18ee-93a7-46a8-83ee-73f9a926f098</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.БанковскиеСчета</v8:Type>
+					</Type>
+				</Properties>
+			</Dimension>
+			<Dimension uuid="fd1b753a-c247-4336-a998-1dae2e69d09b">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Документ</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>953675a0-c5f6-468f-ae4e-6e16beb7ce9c</ExtendedConfigurationObject>
+					<Type>
+						<v8:TypeSet>cfg:AnyRef</v8:TypeSet>
+					</Type>
+				</Properties>
+			</Dimension>
+			<Dimension uuid="1937742e-093f-4c51-a32d-461589edba80">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Исходящий</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>8390350a-9117-4eb4-a887-0d5761505632</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Properties>
+			</Dimension>
+		</ChildObjects>
+	</InformationRegister>
+</MetaDataObject>

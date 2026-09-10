@@ -1,15 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="10b0accb-b3c6-44f0-9b62-2ea1aabec4a8" extendedConfigurationObject="dd096f26-1cbd-44c2-a139-9c8c10b07fb9">
-  <producedTypes>
-    <objectType typeId="f3754454-d1db-48af-ad7a-3b89d35e38e7" valueTypeId="84541e7f-dab3-4e6e-992d-9987003bac13"/>
-    <refType typeId="a8e5319e-7625-4e4f-88c5-f1bada65effe" valueTypeId="0006d817-6fd5-408f-bec2-b3499b141e93"/>
-    <selectionType typeId="033e8afd-3d3d-47a2-8667-9351b2305b0e" valueTypeId="375a98b9-1bf1-4c6a-88d5-f07feb859154"/>
-    <listType typeId="90e36ef3-df37-431d-a51b-8480b46a4859" valueTypeId="7ca9a70e-1ad8-4dbb-9a4b-443433a99b24"/>
-    <managerType typeId="97a54eec-eae4-40ce-af57-0bf21bc1cedb" valueTypeId="259cf580-7578-4a66-a2b7-12e30f15adb1"/>
-  </producedTypes>
-  <name>Валюты</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:CatalogExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Catalog>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Catalog uuid="10b0accb-b3c6-44f0-9b62-2ea1aabec4a8">
+		<InternalInfo>
+			<xr:GeneratedType name="CatalogObject.Валюты" category="Object">
+				<xr:TypeId>f3754454-d1db-48af-ad7a-3b89d35e38e7</xr:TypeId>
+				<xr:ValueId>84541e7f-dab3-4e6e-992d-9987003bac13</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogRef.Валюты" category="Ref">
+				<xr:TypeId>a8e5319e-7625-4e4f-88c5-f1bada65effe</xr:TypeId>
+				<xr:ValueId>0006d817-6fd5-408f-bec2-b3499b141e93</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogSelection.Валюты" category="Selection">
+				<xr:TypeId>033e8afd-3d3d-47a2-8667-9351b2305b0e</xr:TypeId>
+				<xr:ValueId>375a98b9-1bf1-4c6a-88d5-f07feb859154</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogList.Валюты" category="List">
+				<xr:TypeId>90e36ef3-df37-431d-a51b-8480b46a4859</xr:TypeId>
+				<xr:ValueId>7ca9a70e-1ad8-4dbb-9a4b-443433a99b24</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogManager.Валюты" category="Manager">
+				<xr:TypeId>97a54eec-eae4-40ce-af57-0bf21bc1cedb</xr:TypeId>
+				<xr:ValueId>259cf580-7578-4a66-a2b7-12e30f15adb1</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>Валюты</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>dd096f26-1cbd-44c2-a139-9c8c10b07fb9</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Catalog>
+</MetaDataObject>
