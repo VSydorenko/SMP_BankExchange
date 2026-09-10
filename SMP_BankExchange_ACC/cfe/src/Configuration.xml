@@ -1,87 +1,141 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="2523ef5a-c0f5-4557-bbd5-f1c27b279fae">
-  <name>SMP_BankExchange_ACC</name>
-  <synonym>
-    <key>ru</key>
-    <value>BankExchange (BAS Бухгалтерия)</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>BankExchange (BAS Бухгалтерія)</value>
-  </synonym>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:ConfigurationExtension">
-    <defaultRunMode>Checked</defaultRunMode>
-    <usePurposes>Checked</usePurposes>
-    <interfaceCompatibilityMode>Checked</interfaceCompatibilityMode>
-  </extension>
-  <containedObjects classId="9cd510cd-abfc-11d4-9434-004095e12fc7" objectId="cd4fa6ca-60bd-4e1e-82a0-057f5d07c347"/>
-  <containedObjects classId="9fcd25a0-4822-11d4-9414-008048da11f9" objectId="c9777744-ac7e-45d4-8c22-8597bad0bfd0"/>
-  <containedObjects classId="e3687481-0a87-462c-a166-9f34594f9bba" objectId="65f44994-4413-42ba-a3c3-4e6e51fa0591"/>
-  <containedObjects classId="9de14907-ec23-4a07-96f0-85521cb6b53b" objectId="f9ab582c-19c8-48b1-9d96-3ee91494f6c0"/>
-  <containedObjects classId="51f2d5d8-ea4d-4064-8892-82951750031e" objectId="04f58339-046e-4afa-924c-52feb9818ed9"/>
-  <containedObjects classId="e68182ea-4237-4383-967f-90c1e3370bc7" objectId="9f1ff42f-2f60-4e48-bce9-5f147d67feed"/>
-  <containedObjects classId="fb282519-d103-4dd3-bc12-cb271d631dfc" objectId="c154dfc6-541a-4ac6-89fb-e97730eda354"/>
-  <keepMappingToExtendedConfigurationObjectsByIDs>true</keepMappingToExtendedConfigurationObjectsByIDs>
-  <namePrefix>СМП_</namePrefix>
-  <configurationExtensionCompatibilityMode>8.3.12</configurationExtensionCompatibilityMode>
-  <configurationExtensionPurpose>Customization</configurationExtensionPurpose>
-  <defaultRunMode>ManagedApplication</defaultRunMode>
-  <usePurposes>PersonalComputer</usePurposes>
-  <scriptVariant>Russian</scriptVariant>
-  <version>1.0.3.8</version>
-  <compatibilityMode>8.3.22</compatibilityMode>
-  <languages uuid="41622829-6ab0-4279-ae25-1b23544d5487" extendedConfigurationObject="bc55f866-e0a2-4a5a-b32c-cd8ea2cfcf9a">
-    <name>Русский</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:LanguageExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <languageCode>Checked</languageCode>
-    </extension>
-    <languageCode>ru</languageCode>
-  </languages>
-  <languages uuid="27568a7a-a1a3-40fc-b98b-9f9b18ac91ca" extendedConfigurationObject="8d3c79b9-b0c9-424d-91d7-f23dd920a4f8">
-    <name>Украинский</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:LanguageExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <languageCode>Checked</languageCode>
-    </extension>
-    <languageCode>uk</languageCode>
-  </languages>
-  <subsystems>Subsystem.СМП_BankExchange</subsystems>
-  <commonPictures>CommonPicture.СМП_BankExchange</commonPictures>
-  <commonPictures>CommonPicture.СМП_РаботаСБанкамиМОНОБанк</commonPictures>
-  <commonPictures>CommonPicture.СМП_РаботаСБанкамиПриватБанк</commonPictures>
-  <roles>Role.ДобавлениеИзменениеДанныхБухгалтерии</roles>
-  <roles>Role.ПолныеПрава</roles>
-  <commonModules>CommonModule.КоннекторHTTP_BankExchange</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиПриватБанкAPIСервер</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиПУМБAPIСервер</commonModules>
-  <commonModules>CommonModule.СМП_РаботаСБанкамиСервер</commonModules>
-  <commonModules>CommonModule.РегламентныеЗаданияПереопределяемый</commonModules>
-  <scheduledJobs>ScheduledJob.СМП_ОбменСБанкамиAPI</scheduledJobs>
-  <catalogs>Catalog.СМП_СоответствияНазначенийИРеквизитовПлатежа</catalogs>
-  <catalogs>Catalog.СМП_УчетныеЗаписиБанков</catalogs>
-  <catalogs>Catalog.БанковскиеСчета</catalogs>
-  <catalogs>Catalog.ДоговорыКонтрагентов</catalogs>
-  <catalogs>Catalog.ДополнительныеОтчетыИОбработки</catalogs>
-  <catalogs>Catalog.Контрагенты</catalogs>
-  <catalogs>Catalog.Организации</catalogs>
-  <catalogs>Catalog.СтатьиДвиженияДенежныхСредств</catalogs>
-  <documents>Document.ПлатежноеПоручение</documents>
-  <documents>Document.ПлатежныйОрдерПоступлениеДенежныхСредств</documents>
-  <documents>Document.ПлатежныйОрдерСписаниеДенежныхСредств</documents>
-  <documents>Document.ПоступлениеНаРасчетныйСчет</documents>
-  <documents>Document.СписаниеСРасчетногоСчета</documents>
-  <documentJournals>DocumentJournal.Деньги</documentJournals>
-  <enums>Enum.СМП_ПоддерживаемыеИнтеграцииСБанками</enums>
-  <enums>Enum.ВедениеВзаиморасчетовПоДоговорам</enums>
-  <enums>Enum.ВидыОперацийПоступлениеДенежныхСредств</enums>
-  <enums>Enum.ВидыОперацийСписаниеДенежныхСредств</enums>
-  <enums>Enum.СтавкиНДС</enums>
-  <dataProcessors>DataProcessor.КлиентБанк</dataProcessors>
-  <informationRegisters>InformationRegister.СМП_НомерПоследнейТранзакции</informationRegisters>
-  <chartsOfCharacteristicTypes>ChartOfCharacteristicTypes.ВидыСубконтоХозрасчетные</chartsOfCharacteristicTypes>
-  <chartsOfAccounts>ChartOfAccounts.Хозрасчетный</chartsOfAccounts>
-</mdclass:Configuration>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Configuration uuid="2523ef5a-c0f5-4557-bbd5-f1c27b279fae">
+		<InternalInfo>
+			<xr:ContainedObject>
+				<xr:ClassId>9cd510cd-abfc-11d4-9434-004095e12fc7</xr:ClassId>
+				<xr:ObjectId>cd4fa6ca-60bd-4e1e-82a0-057f5d07c347</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>9fcd25a0-4822-11d4-9414-008048da11f9</xr:ClassId>
+				<xr:ObjectId>c9777744-ac7e-45d4-8c22-8597bad0bfd0</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>e3687481-0a87-462c-a166-9f34594f9bba</xr:ClassId>
+				<xr:ObjectId>65f44994-4413-42ba-a3c3-4e6e51fa0591</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>9de14907-ec23-4a07-96f0-85521cb6b53b</xr:ClassId>
+				<xr:ObjectId>f9ab582c-19c8-48b1-9d96-3ee91494f6c0</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>51f2d5d8-ea4d-4064-8892-82951750031e</xr:ClassId>
+				<xr:ObjectId>04f58339-046e-4afa-924c-52feb9818ed9</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>e68182ea-4237-4383-967f-90c1e3370bc7</xr:ClassId>
+				<xr:ObjectId>9f1ff42f-2f60-4e48-bce9-5f147d67feed</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:ContainedObject>
+				<xr:ClassId>fb282519-d103-4dd3-bc12-cb271d631dfc</xr:ClassId>
+				<xr:ObjectId>c154dfc6-541a-4ac6-89fb-e97730eda354</xr:ObjectId>
+			</xr:ContainedObject>
+			<xr:PropertyState>
+				<xr:Property>CommandInterface</xr:Property>
+				<xr:State>Extended</xr:State>
+			</xr:PropertyState>
+			<xr:PropertyState>
+				<xr:Property>MainSectionCommandInterface</xr:Property>
+				<xr:State>Extended</xr:State>
+			</xr:PropertyState>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>SMP_BankExchange_ACC</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>BankExchange (BAS Бухгалтерия)</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>BankExchange (BAS Бухгалтерія)</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<ConfigurationExtensionPurpose>Customization</ConfigurationExtensionPurpose>
+			<KeepMappingToExtendedConfigurationObjectsByIDs>true</KeepMappingToExtendedConfigurationObjectsByIDs>
+			<NamePrefix>СМП_</NamePrefix>
+			<ConfigurationExtensionCompatibilityMode>Version8_3_12</ConfigurationExtensionCompatibilityMode>
+			<DefaultRunMode>ManagedApplication</DefaultRunMode>
+			<UsePurposes>
+				<v8:Value xsi:type="app:ApplicationUsePurpose">PlatformApplication</v8:Value>
+			</UsePurposes>
+			<ScriptVariant>Russian</ScriptVariant>
+			<Vendor>simplySOFT.com.ua</Vendor>
+			<Version>1.0.3.13</Version>
+			<BriefInformation/>
+			<DetailedInformation/>
+			<Copyright>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Copyright © Volodymyr Sydorenko. All rights reserved</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Copyright © Volodymyr Sydorenko. All rights reserved</v8:content>
+				</v8:item>
+			</Copyright>
+			<VendorInformationAddress>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>simplySOFT.com.ua</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>simplySOFT.com.ua</v8:content>
+				</v8:item>
+			</VendorInformationAddress>
+			<ConfigurationInformationAddress>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>https://simplysoft.com.ua/solution/bankexchanges/</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>https://simplysoft.com.ua/solution/bankexchanges/</v8:content>
+				</v8:item>
+			</ConfigurationInformationAddress>
+			<InterfaceCompatibilityMode>Taxi</InterfaceCompatibilityMode>
+		</Properties>
+		<ChildObjects>
+			<Language>Русский</Language>
+			<Language>Украинский</Language>
+			<Subsystem>СМП_BankExchange</Subsystem>
+			<CommonPicture>СМП_BankExchange</CommonPicture>
+			<CommonPicture>СМП_РаботаСБанкамиМОНОБанк</CommonPicture>
+			<CommonPicture>СМП_РаботаСБанкамиПриватБанк</CommonPicture>
+			<Role>ДобавлениеИзменениеДанныхБухгалтерии</Role>
+			<Role>ПолныеПрава</Role>
+			<CommonModule>КоннекторHTTP_BankExchange</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиПриватБанкAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиПУМБAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиСервер</CommonModule>
+			<CommonModule>РегламентныеЗаданияПереопределяемый</CommonModule>
+			<ScheduledJob>СМП_ОбменСБанкамиAPI</ScheduledJob>
+			<Catalog>СМП_СоответствияНазначенийИРеквизитовПлатежа</Catalog>
+			<Catalog>СМП_УчетныеЗаписиБанков</Catalog>
+			<Catalog>БанковскиеСчета</Catalog>
+			<Catalog>ДоговорыКонтрагентов</Catalog>
+			<Catalog>ДополнительныеОтчетыИОбработки</Catalog>
+			<Catalog>Контрагенты</Catalog>
+			<Catalog>Организации</Catalog>
+			<Catalog>СтатьиДвиженияДенежныхСредств</Catalog>
+			<Document>ПлатежноеПоручение</Document>
+			<Document>ПлатежныйОрдерПоступлениеДенежныхСредств</Document>
+			<Document>ПлатежныйОрдерСписаниеДенежныхСредств</Document>
+			<Document>ПоступлениеНаРасчетныйСчет</Document>
+			<Document>СписаниеСРасчетногоСчета</Document>
+			<DocumentJournal>Деньги</DocumentJournal>
+			<Enum>СМП_ПоддерживаемыеИнтеграцииСБанками</Enum>
+			<Enum>ВедениеВзаиморасчетовПоДоговорам</Enum>
+			<Enum>ВидыОперацийПоступлениеДенежныхСредств</Enum>
+			<Enum>ВидыОперацийСписаниеДенежныхСредств</Enum>
+			<Enum>СтавкиНДС</Enum>
+			<DataProcessor>КлиентБанк</DataProcessor>
+			<InformationRegister>СМП_НомерПоследнейТранзакции</InformationRegister>
+			<ChartOfCharacteristicTypes>ВидыСубконтоХозрасчетные</ChartOfCharacteristicTypes>
+			<ChartOfAccounts>Хозрасчетный</ChartOfAccounts>
+		</ChildObjects>
+	</Configuration>
+</MetaDataObject>

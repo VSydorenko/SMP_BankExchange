@@ -1,21 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:DocumentJournal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="d7371644-f71f-4273-a2fc-9cbb6a8ae64c" extendedConfigurationObject="b29c1a93-3bd7-4be3-a92f-d4f4babd6b51">
-  <producedTypes>
-    <selectionType typeId="62e12b34-4db3-47c8-9f48-29feabaf649f" valueTypeId="954a6e88-f41f-49bd-872e-7229ae33f782"/>
-    <listType typeId="250d8b86-22c5-41dd-bdca-3967fdc164cc" valueTypeId="aee2244a-780b-4630-a350-6b3b391a714a"/>
-    <managerType typeId="d57867f9-1c5d-4fae-8a69-0766d6a355c5" valueTypeId="de7fd0b1-2e37-4e32-8116-aeed7e96aca4"/>
-  </producedTypes>
-  <name>Деньги</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:DocumentJournalExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-  <forms uuid="4f222555-86af-46eb-a45c-fc44d253ed70" extendedConfigurationObject="d8d67f03-a8af-48bb-8c6a-8997827eb677">
-    <name>БанковскиеВыписки</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFormExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <form>Extended</form>
-    </extension>
-  </forms>
-</mdclass:DocumentJournal>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<DocumentJournal uuid="d7371644-f71f-4273-a2fc-9cbb6a8ae64c">
+		<InternalInfo>
+			<xr:GeneratedType name="DocumentJournalSelection.Деньги" category="Selection">
+				<xr:TypeId>62e12b34-4db3-47c8-9f48-29feabaf649f</xr:TypeId>
+				<xr:ValueId>954a6e88-f41f-49bd-872e-7229ae33f782</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentJournalList.Деньги" category="List">
+				<xr:TypeId>250d8b86-22c5-41dd-bdca-3967fdc164cc</xr:TypeId>
+				<xr:ValueId>aee2244a-780b-4630-a350-6b3b391a714a</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentJournalManager.Деньги" category="Manager">
+				<xr:TypeId>d57867f9-1c5d-4fae-8a69-0766d6a355c5</xr:TypeId>
+				<xr:ValueId>de7fd0b1-2e37-4e32-8116-aeed7e96aca4</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>Деньги</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>b29c1a93-3bd7-4be3-a92f-d4f4babd6b51</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects>
+			<Form>БанковскиеВыписки</Form>
+		</ChildObjects>
+	</DocumentJournal>
+</MetaDataObject>

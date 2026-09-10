@@ -1,15 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="7f886103-51c6-43e3-9f2f-898227eb19d3" extendedConfigurationObject="1c4519b8-4da1-4a6c-ab02-f813d7150cf3">
-  <producedTypes>
-    <objectType typeId="7048d726-36e0-4ad0-8e99-d4ce902a9ffa" valueTypeId="93cf58c1-0bfd-4447-a52a-c2f34f83ab2d"/>
-    <refType typeId="4e9ba8a5-d95d-4318-a7f5-69a6b685fe15" valueTypeId="f35a1a9c-0b58-4563-ad76-7c6bd0793c8c"/>
-    <selectionType typeId="8463e995-8207-4adc-a3de-7172d0a8471c" valueTypeId="ee508f74-a6d3-493b-8fdd-5c4fdafd024c"/>
-    <listType typeId="2490cdd0-902d-4e03-bf20-1aa1ccb68eb4" valueTypeId="100b411c-64d1-4d7c-98c3-ed2077f62f91"/>
-    <managerType typeId="32495235-e1d1-45a5-a8fd-9cdbec67a8bd" valueTypeId="c00d556b-d4ba-4744-834f-f32faf3d9ce4"/>
-  </producedTypes>
-  <name>БанковскиеСчета</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:CatalogExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Catalog>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Catalog uuid="7f886103-51c6-43e3-9f2f-898227eb19d3">
+		<InternalInfo>
+			<xr:GeneratedType name="CatalogObject.БанковскиеСчета" category="Object">
+				<xr:TypeId>7048d726-36e0-4ad0-8e99-d4ce902a9ffa</xr:TypeId>
+				<xr:ValueId>93cf58c1-0bfd-4447-a52a-c2f34f83ab2d</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogRef.БанковскиеСчета" category="Ref">
+				<xr:TypeId>4e9ba8a5-d95d-4318-a7f5-69a6b685fe15</xr:TypeId>
+				<xr:ValueId>f35a1a9c-0b58-4563-ad76-7c6bd0793c8c</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogSelection.БанковскиеСчета" category="Selection">
+				<xr:TypeId>8463e995-8207-4adc-a3de-7172d0a8471c</xr:TypeId>
+				<xr:ValueId>ee508f74-a6d3-493b-8fdd-5c4fdafd024c</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogList.БанковскиеСчета" category="List">
+				<xr:TypeId>2490cdd0-902d-4e03-bf20-1aa1ccb68eb4</xr:TypeId>
+				<xr:ValueId>100b411c-64d1-4d7c-98c3-ed2077f62f91</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogManager.БанковскиеСчета" category="Manager">
+				<xr:TypeId>32495235-e1d1-45a5-a8fd-9cdbec67a8bd</xr:TypeId>
+				<xr:ValueId>c00d556b-d4ba-4744-834f-f32faf3d9ce4</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>БанковскиеСчета</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>1c4519b8-4da1-4a6c-ab02-f813d7150cf3</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Catalog>
+</MetaDataObject>

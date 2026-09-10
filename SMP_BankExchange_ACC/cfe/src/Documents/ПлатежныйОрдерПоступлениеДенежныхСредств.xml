@@ -1,15 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="2a8b723d-c7e5-4c0c-b516-8bb6564dbc88" extendedConfigurationObject="d2ae4aee-94fe-4d92-976e-b939d3475235">
-  <producedTypes>
-    <objectType typeId="2ed46756-c1e9-4734-97f8-468bb7afedd0" valueTypeId="642df3d6-852f-4bea-8238-09e68d1c0423"/>
-    <refType typeId="8855d0c2-27e5-4e67-963b-3aefb8aeaa76" valueTypeId="e9f52fdc-51da-4235-9e86-72fef7bf3763"/>
-    <selectionType typeId="124c2ea4-bdad-4159-ba0d-bc5340c83817" valueTypeId="695c07ca-9524-4f53-bcc8-45c3b99da86c"/>
-    <listType typeId="f3be7a39-1cd1-48ff-9096-5dfed61eddad" valueTypeId="1549818c-71a3-4781-bebd-ceb873ced27a"/>
-    <managerType typeId="54ed86bc-f80e-45fc-bcb0-ecd9fa9e92b4" valueTypeId="08db8429-9b96-4f8e-9cc5-9f403b248b4a"/>
-  </producedTypes>
-  <name>ПлатежныйОрдерПоступлениеДенежныхСредств</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:DocumentExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Document>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Document uuid="2a8b723d-c7e5-4c0c-b516-8bb6564dbc88">
+		<InternalInfo>
+			<xr:GeneratedType name="DocumentObject.ПлатежныйОрдерПоступлениеДенежныхСредств" category="Object">
+				<xr:TypeId>2ed46756-c1e9-4734-97f8-468bb7afedd0</xr:TypeId>
+				<xr:ValueId>642df3d6-852f-4bea-8238-09e68d1c0423</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentRef.ПлатежныйОрдерПоступлениеДенежныхСредств" category="Ref">
+				<xr:TypeId>8855d0c2-27e5-4e67-963b-3aefb8aeaa76</xr:TypeId>
+				<xr:ValueId>e9f52fdc-51da-4235-9e86-72fef7bf3763</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentSelection.ПлатежныйОрдерПоступлениеДенежныхСредств" category="Selection">
+				<xr:TypeId>124c2ea4-bdad-4159-ba0d-bc5340c83817</xr:TypeId>
+				<xr:ValueId>695c07ca-9524-4f53-bcc8-45c3b99da86c</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentList.ПлатежныйОрдерПоступлениеДенежныхСредств" category="List">
+				<xr:TypeId>f3be7a39-1cd1-48ff-9096-5dfed61eddad</xr:TypeId>
+				<xr:ValueId>1549818c-71a3-4781-bebd-ceb873ced27a</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentManager.ПлатежныйОрдерПоступлениеДенежныхСредств" category="Manager">
+				<xr:TypeId>54ed86bc-f80e-45fc-bcb0-ecd9fa9e92b4</xr:TypeId>
+				<xr:ValueId>08db8429-9b96-4f8e-9cc5-9f403b248b4a</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ПлатежныйОрдерПоступлениеДенежныхСредств</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>d2ae4aee-94fe-4d92-976e-b939d3475235</ExtendedConfigurationObject>
+			<RegisterRecords/>
+		</Properties>
+		<ChildObjects/>
+	</Document>
+</MetaDataObject>
