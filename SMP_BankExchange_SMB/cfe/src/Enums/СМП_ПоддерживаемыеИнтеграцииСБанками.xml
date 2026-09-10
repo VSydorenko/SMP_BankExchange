@@ -1,79 +1,183 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="d1a633db-016a-4ebc-a2c4-2c1e0c422a8f">
-  <producedTypes>
-    <refType typeId="60646e4c-9062-4568-8eb9-10aca484b601" valueTypeId="ea6f4eaa-50c5-4086-9cf7-8dfc9ccf4b73"/>
-    <listType typeId="52b1d63f-c28f-4df2-b030-0f93efcd49b7" valueTypeId="1ffc4a85-867b-4e3f-b964-234c82c2f2e3"/>
-    <managerType typeId="b334380c-0ad6-4aa5-aa58-dc8eb2c6045d" valueTypeId="250fbfef-6281-4990-9ed3-d5b79b20382e"/>
-  </producedTypes>
-  <name>СМП_ПоддерживаемыеИнтеграцииСБанками</name>
-  <synonym>
-    <key>ru</key>
-    <value>Поддерживаемые интеграции с банками</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>Банк</value>
-  </synonym>
-  <standardAttributes>
-    <dataHistory>Use</dataHistory>
-    <name>Order</name>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-  </standardAttributes>
-  <standardAttributes>
-    <dataHistory>Use</dataHistory>
-    <name>Ref</name>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-  </standardAttributes>
-  <quickChoice>true</quickChoice>
-  <choiceMode>BothWays</choiceMode>
-  <enumValues uuid="965d66e5-5506-4acb-8bdd-58c2a0393365">
-    <name>ПриватБанк</name>
-    <synonym>
-      <key>ru</key>
-      <value>ПриватБанк</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>ПриватБанк</value>
-    </synonym>
-  </enumValues>
-  <enumValues uuid="fe323534-644a-4ead-b7a7-bec445c71e01">
-    <name>МОНОБанк</name>
-    <synonym>
-      <key>ru</key>
-      <value>monobank</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>monobank</value>
-    </synonym>
-  </enumValues>
-  <enumValues uuid="014ea5e4-4878-4c3d-b295-c335a45f7f66">
-    <name>ПодключаемаяОбработка</name>
-    <synonym>
-      <key>ru</key>
-      <value>Подключаемая обработка</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Зовнішня обробка</value>
-    </synonym>
-  </enumValues>
-  <enumValues uuid="aab4fc1e-2d6d-4132-8577-6cb580946a4c">
-    <name>ПУМБ</name>
-    <synonym>
-      <key>ru</key>
-      <value>ПУМБ</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>ПУМБ</value>
-    </synonym>
-  </enumValues>
-</mdclass:Enum>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="d1a633db-016a-4ebc-a2c4-2c1e0c422a8f">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.СМП_ПоддерживаемыеИнтеграцииСБанками" category="Ref">
+				<xr:TypeId>60646e4c-9062-4568-8eb9-10aca484b601</xr:TypeId>
+				<xr:ValueId>ea6f4eaa-50c5-4086-9cf7-8dfc9ccf4b73</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.СМП_ПоддерживаемыеИнтеграцииСБанками" category="Manager">
+				<xr:TypeId>b334380c-0ad6-4aa5-aa58-dc8eb2c6045d</xr:TypeId>
+				<xr:ValueId>250fbfef-6281-4990-9ed3-d5b79b20382e</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.СМП_ПоддерживаемыеИнтеграцииСБанками" category="List">
+				<xr:TypeId>52b1d63f-c28f-4df2-b030-0f93efcd49b7</xr:TypeId>
+				<xr:ValueId>1ffc4a85-867b-4e3f-b964-234c82c2f2e3</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<Name>СМП_ПоддерживаемыеИнтеграцииСБанками</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Поддерживаемые интеграции с банками</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Банк</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<UseStandardCommands>false</UseStandardCommands>
+			<StandardAttributes>
+				<xr:StandardAttribute name="Order">
+					<xr:LinkByType/>
+					<xr:FillChecking>DontCheck</xr:FillChecking>
+					<xr:MultiLine>false</xr:MultiLine>
+					<xr:FillFromFillingValue>false</xr:FillFromFillingValue>
+					<xr:CreateOnInput>Auto</xr:CreateOnInput>
+					<xr:TypeReductionMode>TransformValues</xr:TypeReductionMode>
+					<xr:MaxValue xsi:nil="true"/>
+					<xr:ToolTip/>
+					<xr:ExtendedEdit>false</xr:ExtendedEdit>
+					<xr:Format/>
+					<xr:ChoiceForm/>
+					<xr:QuickChoice>Auto</xr:QuickChoice>
+					<xr:ChoiceHistoryOnInput>Auto</xr:ChoiceHistoryOnInput>
+					<xr:EditFormat/>
+					<xr:PasswordMode>false</xr:PasswordMode>
+					<xr:DataHistory>Use</xr:DataHistory>
+					<xr:MarkNegatives>false</xr:MarkNegatives>
+					<xr:MinValue xsi:nil="true"/>
+					<xr:Synonym/>
+					<xr:Comment/>
+					<xr:FullTextSearch>Use</xr:FullTextSearch>
+					<xr:ChoiceParameterLinks/>
+					<xr:FillValue xsi:nil="true"/>
+					<xr:Mask/>
+					<xr:ChoiceParameters/>
+				</xr:StandardAttribute>
+				<xr:StandardAttribute name="Ref">
+					<xr:LinkByType/>
+					<xr:FillChecking>DontCheck</xr:FillChecking>
+					<xr:MultiLine>false</xr:MultiLine>
+					<xr:FillFromFillingValue>false</xr:FillFromFillingValue>
+					<xr:CreateOnInput>Auto</xr:CreateOnInput>
+					<xr:TypeReductionMode>TransformValues</xr:TypeReductionMode>
+					<xr:MaxValue xsi:nil="true"/>
+					<xr:ToolTip/>
+					<xr:ExtendedEdit>false</xr:ExtendedEdit>
+					<xr:Format/>
+					<xr:ChoiceForm/>
+					<xr:QuickChoice>Auto</xr:QuickChoice>
+					<xr:ChoiceHistoryOnInput>Auto</xr:ChoiceHistoryOnInput>
+					<xr:EditFormat/>
+					<xr:PasswordMode>false</xr:PasswordMode>
+					<xr:DataHistory>Use</xr:DataHistory>
+					<xr:MarkNegatives>false</xr:MarkNegatives>
+					<xr:MinValue xsi:nil="true"/>
+					<xr:Synonym/>
+					<xr:Comment/>
+					<xr:FullTextSearch>Use</xr:FullTextSearch>
+					<xr:ChoiceParameterLinks/>
+					<xr:FillValue xsi:nil="true"/>
+					<xr:Mask/>
+					<xr:ChoiceParameters/>
+				</xr:StandardAttribute>
+			</StandardAttributes>
+			<Characteristics/>
+			<QuickChoice>true</QuickChoice>
+			<ChoiceMode>BothWays</ChoiceMode>
+			<DefaultListForm/>
+			<DefaultChoiceForm/>
+			<AuxiliaryListForm/>
+			<AuxiliaryChoiceForm/>
+			<ListPresentation/>
+			<ExtendedListPresentation/>
+			<Explanation/>
+			<ChoiceHistoryOnInput>Auto</ChoiceHistoryOnInput>
+		</Properties>
+		<ChildObjects>
+			<EnumValue uuid="965d66e5-5506-4acb-8bdd-58c2a0393365">
+				<Properties>
+					<Name>ПриватБанк</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>ПриватБанк</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>ПриватБанк</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="fe323534-644a-4ead-b7a7-bec445c71e01">
+				<Properties>
+					<Name>МОНОБанк</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>monobank</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>monobank</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="014ea5e4-4878-4c3d-b295-c335a45f7f66">
+				<Properties>
+					<Name>ПодключаемаяОбработка</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Подключаемая обработка</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Зовнішня обробка</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="aab4fc1e-2d6d-4132-8577-6cb580946a4c">
+				<Properties>
+					<Name>ПУМБ</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>ПУМБ</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>ПУМБ</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="8f0175e9-bfa2-4cda-a440-96b7643e459c">
+				<Properties>
+					<Name>NovaPay</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NovaPay</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>NovaPay</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+		</ChildObjects>
+	</Enum>
+</MetaDataObject>

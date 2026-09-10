@@ -1,6 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cmi:CommandInterface xmlns:cmi="http://g5.1c.ru/v8/dt/cmi">
-  <subsystemsOrder>
-    <subsystems>1f28b128-01bf-0000-28b1-281fbf010000</subsystems>
-  </subsystemsOrder>
-</cmi:CommandInterface>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CommandInterface xmlns="http://v8.1c.ru/8.3/xcf/extrnprops" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<SubsystemsOrder>
+		<Subsystem/>
+		<Subsystem/>
+		<Subsystem>1f28b128-01bf-0000-28b1-281fbf010000</Subsystem>
+		<Subsystem/>
+		<Subsystem/>
+		<Subsystem/>
+		<Subsystem/>
+		<Subsystem/>
+	</SubsystemsOrder>
+</CommandInterface>

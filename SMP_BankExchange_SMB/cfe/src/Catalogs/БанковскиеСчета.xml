@@ -1,43 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="7982136f-fc36-4a1a-9edb-edce5fc770b5" extendedConfigurationObject="46bd4919-eaaa-4d20-9448-1c15fffa60a4">
-  <producedTypes>
-    <objectType typeId="5a77b8d7-8206-4474-9d62-d51d5ae383f8" valueTypeId="4044ecde-880f-4f74-bc6f-65f567456a93"/>
-    <refType typeId="5f88afaa-96a0-44a7-a4d9-ef10c322a999" valueTypeId="469b8af5-1646-4129-9660-734bd0305071"/>
-    <selectionType typeId="5c1da6ca-8936-40b0-93c4-9cee2d3705d5" valueTypeId="3f90d831-6dcc-43f6-879e-7bf09ccf7b2a"/>
-    <listType typeId="e28d8626-e304-4ca8-944b-4c5739c302b3" valueTypeId="8753f85a-9049-4b5e-9329-6c00ad07c435"/>
-    <managerType typeId="2de4cca5-0608-496a-a74d-7e4add0d508b" valueTypeId="48ad57a1-6bbf-489e-90d2-9c99a6d636bb"/>
-  </producedTypes>
-  <name>БанковскиеСчета</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:CatalogExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-  <attributes uuid="18567ab3-2749-48c5-90af-56d2e1ea125c" extendedConfigurationObject="eb87f954-3763-41dd-a083-2e503d5e70e9">
-    <name>Банк</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>CatalogRef.Банки</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </attributes>
-  <attributes uuid="2d406480-075c-456f-b760-915f39d90a5f" extendedConfigurationObject="f50e07b0-e273-4808-9a28-4f22f4711157">
-    <name>БанкРасчетов</name>
-    <objectBelonging>Adopted</objectBelonging>
-    <extension xsi:type="mdclassExtension:BasicFeatureExtension">
-      <extendedConfigurationObject>Checked</extendedConfigurationObject>
-      <typeExtension>
-        <types>
-          <state>Checked</state>
-          <type>CatalogRef.Банки</type>
-        </types>
-      </typeExtension>
-    </extension>
-    <type/>
-  </attributes>
-</mdclass:Catalog>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Catalog uuid="7982136f-fc36-4a1a-9edb-edce5fc770b5">
+		<InternalInfo>
+			<xr:GeneratedType name="CatalogObject.БанковскиеСчета" category="Object">
+				<xr:TypeId>5a77b8d7-8206-4474-9d62-d51d5ae383f8</xr:TypeId>
+				<xr:ValueId>4044ecde-880f-4f74-bc6f-65f567456a93</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogRef.БанковскиеСчета" category="Ref">
+				<xr:TypeId>5f88afaa-96a0-44a7-a4d9-ef10c322a999</xr:TypeId>
+				<xr:ValueId>469b8af5-1646-4129-9660-734bd0305071</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogSelection.БанковскиеСчета" category="Selection">
+				<xr:TypeId>5c1da6ca-8936-40b0-93c4-9cee2d3705d5</xr:TypeId>
+				<xr:ValueId>3f90d831-6dcc-43f6-879e-7bf09ccf7b2a</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogList.БанковскиеСчета" category="List">
+				<xr:TypeId>e28d8626-e304-4ca8-944b-4c5739c302b3</xr:TypeId>
+				<xr:ValueId>8753f85a-9049-4b5e-9329-6c00ad07c435</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogManager.БанковскиеСчета" category="Manager">
+				<xr:TypeId>2de4cca5-0608-496a-a74d-7e4add0d508b</xr:TypeId>
+				<xr:ValueId>48ad57a1-6bbf-489e-90d2-9c99a6d636bb</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>БанковскиеСчета</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>46bd4919-eaaa-4d20-9448-1c15fffa60a4</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects>
+			<Attribute uuid="18567ab3-2749-48c5-90af-56d2e1ea125c">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Банк</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>eb87f954-3763-41dd-a083-2e503d5e70e9</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.Банки</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="2d406480-075c-456f-b760-915f39d90a5f">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>БанкРасчетов</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>f50e07b0-e273-4808-9a28-4f22f4711157</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.Банки</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+		</ChildObjects>
+	</Catalog>
+</MetaDataObject>

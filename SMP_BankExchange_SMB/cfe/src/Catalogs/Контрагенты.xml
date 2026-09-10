@@ -1,15 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="c3cdf1c6-f066-4c43-868a-0f30e25b9708" extendedConfigurationObject="d31edcfb-c254-4df6-813c-45d97556c9a4">
-  <producedTypes>
-    <objectType typeId="87fd8402-daf8-4b26-a048-7a9e12bdb861" valueTypeId="de5319c3-560c-4f0e-b913-f61ba1a26e85"/>
-    <refType typeId="f223ff08-4d1a-413b-a324-59c423eae3e9" valueTypeId="0c70c5c0-0f89-4664-bbb0-cb3fa62479ff"/>
-    <selectionType typeId="076982d3-6e1c-46e4-8786-a7d0b58fdb9c" valueTypeId="c54ce351-30da-4867-b95a-36624bc439d1"/>
-    <listType typeId="80f00278-7f65-40b8-9c20-ad526176947e" valueTypeId="287dbb72-96f9-4f79-8ec8-967c04d11d05"/>
-    <managerType typeId="041daa39-ed08-4323-a580-aba1234418ef" valueTypeId="e25d834e-fd25-4392-8e7e-b7d5224d2ea5"/>
-  </producedTypes>
-  <name>Контрагенты</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:CatalogExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Catalog>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Catalog uuid="c3cdf1c6-f066-4c43-868a-0f30e25b9708">
+		<InternalInfo>
+			<xr:GeneratedType name="CatalogObject.Контрагенты" category="Object">
+				<xr:TypeId>87fd8402-daf8-4b26-a048-7a9e12bdb861</xr:TypeId>
+				<xr:ValueId>de5319c3-560c-4f0e-b913-f61ba1a26e85</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogRef.Контрагенты" category="Ref">
+				<xr:TypeId>f223ff08-4d1a-413b-a324-59c423eae3e9</xr:TypeId>
+				<xr:ValueId>0c70c5c0-0f89-4664-bbb0-cb3fa62479ff</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogSelection.Контрагенты" category="Selection">
+				<xr:TypeId>076982d3-6e1c-46e4-8786-a7d0b58fdb9c</xr:TypeId>
+				<xr:ValueId>c54ce351-30da-4867-b95a-36624bc439d1</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogList.Контрагенты" category="List">
+				<xr:TypeId>80f00278-7f65-40b8-9c20-ad526176947e</xr:TypeId>
+				<xr:ValueId>287dbb72-96f9-4f79-8ec8-967c04d11d05</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogManager.Контрагенты" category="Manager">
+				<xr:TypeId>041daa39-ed08-4323-a580-aba1234418ef</xr:TypeId>
+				<xr:ValueId>e25d834e-fd25-4392-8e7e-b7d5224d2ea5</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>Контрагенты</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>d31edcfb-c254-4df6-813c-45d97556c9a4</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Catalog>
+</MetaDataObject>

@@ -1,15 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="bf1d0a20-65f2-45f0-916a-47c4f73f9777" extendedConfigurationObject="122f9628-1dc8-4c27-9883-60c9b12afd14">
-  <producedTypes>
-    <objectType typeId="e3b87a9a-7753-4df0-8802-fc8f9f99aade" valueTypeId="cb41bce5-d5b1-448b-b874-84a606c4bf38"/>
-    <refType typeId="27c2eb34-ed66-4b14-bcf9-b9f5f3a24f1a" valueTypeId="d5728807-1338-4375-b29e-339e8acbf649"/>
-    <selectionType typeId="425d41bd-9a38-4365-a94a-e49255a3b29e" valueTypeId="f0c05af8-eac5-4007-8464-c1a64ce19b22"/>
-    <listType typeId="963b1222-1a57-4286-b643-832a6fcbb37a" valueTypeId="ecc8ef55-f9ee-4b43-ad37-fc6741a3a2dd"/>
-    <managerType typeId="df34f41e-659e-437c-b74a-e5d8aaf29fce" valueTypeId="ed9ccea3-9ccf-4083-b93c-2f36fa6603e8"/>
-  </producedTypes>
-  <name>ПоступлениеНаСчет</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:DocumentExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Document>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Document uuid="bf1d0a20-65f2-45f0-916a-47c4f73f9777">
+		<InternalInfo>
+			<xr:GeneratedType name="DocumentObject.ПоступлениеНаСчет" category="Object">
+				<xr:TypeId>e3b87a9a-7753-4df0-8802-fc8f9f99aade</xr:TypeId>
+				<xr:ValueId>cb41bce5-d5b1-448b-b874-84a606c4bf38</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentRef.ПоступлениеНаСчет" category="Ref">
+				<xr:TypeId>27c2eb34-ed66-4b14-bcf9-b9f5f3a24f1a</xr:TypeId>
+				<xr:ValueId>d5728807-1338-4375-b29e-339e8acbf649</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentSelection.ПоступлениеНаСчет" category="Selection">
+				<xr:TypeId>425d41bd-9a38-4365-a94a-e49255a3b29e</xr:TypeId>
+				<xr:ValueId>f0c05af8-eac5-4007-8464-c1a64ce19b22</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentList.ПоступлениеНаСчет" category="List">
+				<xr:TypeId>963b1222-1a57-4286-b643-832a6fcbb37a</xr:TypeId>
+				<xr:ValueId>ecc8ef55-f9ee-4b43-ad37-fc6741a3a2dd</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentManager.ПоступлениеНаСчет" category="Manager">
+				<xr:TypeId>df34f41e-659e-437c-b74a-e5d8aaf29fce</xr:TypeId>
+				<xr:ValueId>ed9ccea3-9ccf-4083-b93c-2f36fa6603e8</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ПоступлениеНаСчет</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>122f9628-1dc8-4c27-9883-60c9b12afd14</ExtendedConfigurationObject>
+			<RegisterRecords/>
+		</Properties>
+		<ChildObjects>
+			<Form>ФормаДокумента</Form>
+		</ChildObjects>
+	</Document>
+</MetaDataObject>

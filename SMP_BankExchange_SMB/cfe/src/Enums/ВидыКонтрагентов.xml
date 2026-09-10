@@ -1,13 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Enum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="d9dc4482-6da1-417a-9471-7dd07a7ce45c" extendedConfigurationObject="b6b4b04e-11e1-4863-abd0-935b3b246198">
-  <producedTypes>
-    <refType typeId="114f7cbb-5f80-4a3a-97f6-3743f1ac2c3d" valueTypeId="17d1fca1-75b2-4a29-aae2-b281a1a5dbd0"/>
-    <listType typeId="d6bf9d27-312d-41fb-92ab-02504ee11575" valueTypeId="1a061e01-8bb0-4d74-b539-8e5fcf0ea5c7"/>
-    <managerType typeId="9c9b4e10-a8a2-495d-95cc-469cbfb10114" valueTypeId="80fce1e4-f57b-4fa1-811d-3a37cd176b8a"/>
-  </producedTypes>
-  <name>ВидыКонтрагентов</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:EnumExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Enum>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="d9dc4482-6da1-417a-9471-7dd07a7ce45c">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ВидыКонтрагентов" category="Ref">
+				<xr:TypeId>114f7cbb-5f80-4a3a-97f6-3743f1ac2c3d</xr:TypeId>
+				<xr:ValueId>17d1fca1-75b2-4a29-aae2-b281a1a5dbd0</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ВидыКонтрагентов" category="Manager">
+				<xr:TypeId>9c9b4e10-a8a2-495d-95cc-469cbfb10114</xr:TypeId>
+				<xr:ValueId>80fce1e4-f57b-4fa1-811d-3a37cd176b8a</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ВидыКонтрагентов" category="List">
+				<xr:TypeId>d6bf9d27-312d-41fb-92ab-02504ee11575</xr:TypeId>
+				<xr:ValueId>1a061e01-8bb0-4d74-b539-8e5fcf0ea5c7</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ВидыКонтрагентов</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>b6b4b04e-11e1-4863-abd0-935b3b246198</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Enum>
+</MetaDataObject>

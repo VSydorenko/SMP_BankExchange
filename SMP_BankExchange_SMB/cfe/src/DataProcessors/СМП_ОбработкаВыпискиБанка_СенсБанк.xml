@@ -1,32 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="284ab721-bb7a-4d0f-aaa5-731a37db4f10">
-  <producedTypes>
-    <objectType typeId="fa44be6f-0c19-4d74-9561-8627ed936c8d" valueTypeId="89e5a252-fbb1-46d7-8403-53d8441284f7"/>
-    <managerType typeId="c059d46e-8930-42f1-aa28-3a82aa7b6aa5" valueTypeId="966094eb-efe4-4bad-b8a4-5ff904316345"/>
-  </producedTypes>
-  <name>СМП_ОбработкаВыпискиБанка_СенсБанк</name>
-  <synonym>
-    <key>ru</key>
-    <value>Обработка выписки банка Сенс Банк</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>Обробка виписки банка Сенс Банк</value>
-  </synonym>
-  <comment>Выгрузить во внешние (csv)</comment>
-  <useStandardCommands>true</useStandardCommands>
-  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк.Form.Форма</defaultForm>
-  <forms uuid="11d4b18a-4933-4da8-aa59-a0d69730e5ff">
-    <name>Форма</name>
-    <synonym>
-      <key>ru</key>
-      <value>Форма</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Форма</value>
-    </synonym>
-    <usePurposes>PersonalComputer</usePurposes>
-    <usePurposes>MobileDevice</usePurposes>
-  </forms>
-</mdclass:DataProcessor>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<DataProcessor uuid="284ab721-bb7a-4d0f-aaa5-731a37db4f10">
+		<InternalInfo>
+			<xr:GeneratedType name="DataProcessorObject.СМП_ОбработкаВыпискиБанка_СенсБанк" category="Object">
+				<xr:TypeId>fa44be6f-0c19-4d74-9561-8627ed936c8d</xr:TypeId>
+				<xr:ValueId>89e5a252-fbb1-46d7-8403-53d8441284f7</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DataProcessorManager.СМП_ОбработкаВыпискиБанка_СенсБанк" category="Manager">
+				<xr:TypeId>c059d46e-8930-42f1-aa28-3a82aa7b6aa5</xr:TypeId>
+				<xr:ValueId>966094eb-efe4-4bad-b8a4-5ff904316345</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<Name>СМП_ОбработкаВыпискиБанка_СенсБанк</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обработка выписки банка Сенс Банк</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Обробка виписки банка Сенс Банк</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment>Выгрузить во внешние (csv)</Comment>
+			<UseStandardCommands>true</UseStandardCommands>
+			<DefaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк.Form.Форма</DefaultForm>
+			<AuxiliaryForm/>
+			<IncludeHelpInContents>false</IncludeHelpInContents>
+			<ExtendedPresentation/>
+			<Explanation/>
+		</Properties>
+		<ChildObjects>
+			<Form>Форма</Form>
+		</ChildObjects>
+	</DataProcessor>
+</MetaDataObject>

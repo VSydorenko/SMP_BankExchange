@@ -1,15 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" xmlns:mdclassExtension="http://g5.1c.ru/v8/dt/metadata/mdclass/extension" uuid="ea0b4fe3-4371-405f-88a0-f785d17c934d" extendedConfigurationObject="6ea99190-7a64-4745-85dc-646d18445bb4">
-  <producedTypes>
-    <objectType typeId="c5d7ddf4-1fa8-400c-8cca-c0d21fe375c6" valueTypeId="f1d4831c-c5d2-4c79-a706-f2d76f622c6f"/>
-    <refType typeId="7ac0262d-0a3c-4c9b-8d23-4ff7fc90fe8b" valueTypeId="6f9c36fb-37ee-44bc-85d8-99da83b0f554"/>
-    <selectionType typeId="a40e9a11-0cd9-4389-8e65-5320a890fa34" valueTypeId="cc9bca98-ba5d-4b2a-93d8-0815ff2ada85"/>
-    <listType typeId="9b477cad-4152-40b9-9eb4-fe9f99dd496f" valueTypeId="c52e2a3b-466b-470e-97be-17e66f3e84af"/>
-    <managerType typeId="83db3420-87a1-4bdd-9915-6704e2197b4f" valueTypeId="77a9eabd-3251-4b9b-9f6d-1d972d128467"/>
-  </producedTypes>
-  <name>РасходСоСчета</name>
-  <objectBelonging>Adopted</objectBelonging>
-  <extension xsi:type="mdclassExtension:DocumentExtension">
-    <extendedConfigurationObject>Checked</extendedConfigurationObject>
-  </extension>
-</mdclass:Document>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Document uuid="ea0b4fe3-4371-405f-88a0-f785d17c934d">
+		<InternalInfo>
+			<xr:GeneratedType name="DocumentObject.РасходСоСчета" category="Object">
+				<xr:TypeId>c5d7ddf4-1fa8-400c-8cca-c0d21fe375c6</xr:TypeId>
+				<xr:ValueId>f1d4831c-c5d2-4c79-a706-f2d76f622c6f</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentRef.РасходСоСчета" category="Ref">
+				<xr:TypeId>7ac0262d-0a3c-4c9b-8d23-4ff7fc90fe8b</xr:TypeId>
+				<xr:ValueId>6f9c36fb-37ee-44bc-85d8-99da83b0f554</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentSelection.РасходСоСчета" category="Selection">
+				<xr:TypeId>a40e9a11-0cd9-4389-8e65-5320a890fa34</xr:TypeId>
+				<xr:ValueId>cc9bca98-ba5d-4b2a-93d8-0815ff2ada85</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentList.РасходСоСчета" category="List">
+				<xr:TypeId>9b477cad-4152-40b9-9eb4-fe9f99dd496f</xr:TypeId>
+				<xr:ValueId>c52e2a3b-466b-470e-97be-17e66f3e84af</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DocumentManager.РасходСоСчета" category="Manager">
+				<xr:TypeId>83db3420-87a1-4bdd-9915-6704e2197b4f</xr:TypeId>
+				<xr:ValueId>77a9eabd-3251-4b9b-9f6d-1d972d128467</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>РасходСоСчета</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>6ea99190-7a64-4745-85dc-646d18445bb4</ExtendedConfigurationObject>
+			<RegisterRecords/>
+		</Properties>
+		<ChildObjects/>
+	</Document>
+</MetaDataObject>

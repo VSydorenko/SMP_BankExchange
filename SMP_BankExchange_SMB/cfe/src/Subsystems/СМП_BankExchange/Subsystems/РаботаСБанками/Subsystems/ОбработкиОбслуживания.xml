@@ -1,26 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:Subsystem xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="560ebb06-8de0-4eb1-942d-6a8069406eb4">
-  <name>ОбработкиОбслуживания</name>
-  <synonym>
-    <key>ru</key>
-    <value>Обработки обслуживания</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>Обробка обслуговування</value>
-  </synonym>
-  <comment>Нужно выгружать во внешние обработки и подключать как элементы справочника</comment>
-  <includeHelpInContents>true</includeHelpInContents>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_Сбербанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк</content>
-  <content>DataProcessor.СМП_ОбработкаВыпискиБанка_УниверсалБанк</content>
-  <parentSubsystem>Subsystem.СМП_BankExchange.Subsystem.РаботаСБанками</parentSubsystem>
-</mdclass:Subsystem>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Subsystem uuid="560ebb06-8de0-4eb1-942d-6a8069406eb4">
+		<Properties>
+			<Name>ОбработкиОбслуживания</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обработки обслуживания</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Обробка обслуговування</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment>Нужно выгружать во внешние обработки и подключать как элементы справочника</Comment>
+			<IncludeHelpInContents>true</IncludeHelpInContents>
+			<IncludeInCommandInterface>false</IncludeInCommandInterface>
+			<UseOneCommand>false</UseOneCommand>
+			<Explanation/>
+			<Picture/>
+			<Content>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_АкордБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_ОТП</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_ОщадБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_Пивденный</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_ПроКредитБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_Сбербанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_СенсБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_УкрГазБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_УкрСибБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбработкаВыпискиБанка_УниверсалБанк</xr:Item>
+			</Content>
+		</Properties>
+		<ChildObjects/>
+	</Subsystem>
+</MetaDataObject>

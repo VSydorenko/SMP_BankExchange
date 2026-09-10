@@ -1,32 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdclass:DataProcessor xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="ea51ab4a-d931-4d3c-9a58-df21eef9faab">
-  <producedTypes>
-    <objectType typeId="67b9207b-82ca-403c-8ec4-8ef6d2214a89" valueTypeId="caa24207-0b28-41f8-aaea-ecc5988aeb64"/>
-    <managerType typeId="eb34e7cc-6703-4f8c-a672-ba57327de701" valueTypeId="ebfd6f90-2e12-4177-8dee-f43ea2cba191"/>
-  </producedTypes>
-  <name>СМП_ОбработкаВыпискиБанка_РайффайзенБанк</name>
-  <synonym>
-    <key>ru</key>
-    <value>Обработка выписки банка Райффайзен Банк</value>
-  </synonym>
-  <synonym>
-    <key>uk</key>
-    <value>Обробка виписки банка Райффайзен Банк</value>
-  </synonym>
-  <comment>Выгрузить во внешние (csv)</comment>
-  <useStandardCommands>true</useStandardCommands>
-  <defaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк.Form.Форма</defaultForm>
-  <forms uuid="14718963-a725-4ad4-ab7b-5f50bf1996db">
-    <name>Форма</name>
-    <synonym>
-      <key>ru</key>
-      <value>Форма</value>
-    </synonym>
-    <synonym>
-      <key>uk</key>
-      <value>Форма</value>
-    </synonym>
-    <usePurposes>PersonalComputer</usePurposes>
-    <usePurposes>MobileDevice</usePurposes>
-  </forms>
-</mdclass:DataProcessor>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<DataProcessor uuid="ea51ab4a-d931-4d3c-9a58-df21eef9faab">
+		<InternalInfo>
+			<xr:GeneratedType name="DataProcessorObject.СМП_ОбработкаВыпискиБанка_РайффайзенБанк" category="Object">
+				<xr:TypeId>67b9207b-82ca-403c-8ec4-8ef6d2214a89</xr:TypeId>
+				<xr:ValueId>caa24207-0b28-41f8-aaea-ecc5988aeb64</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DataProcessorManager.СМП_ОбработкаВыпискиБанка_РайффайзенБанк" category="Manager">
+				<xr:TypeId>eb34e7cc-6703-4f8c-a672-ba57327de701</xr:TypeId>
+				<xr:ValueId>ebfd6f90-2e12-4177-8dee-f43ea2cba191</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<Name>СМП_ОбработкаВыпискиБанка_РайффайзенБанк</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обработка выписки банка Райффайзен Банк</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Обробка виписки банка Райффайзен Банк</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment>Выгрузить во внешние (csv)</Comment>
+			<UseStandardCommands>true</UseStandardCommands>
+			<DefaultForm>DataProcessor.СМП_ОбработкаВыпискиБанка_РайффайзенБанк.Form.Форма</DefaultForm>
+			<AuxiliaryForm/>
+			<IncludeHelpInContents>false</IncludeHelpInContents>
+			<ExtendedPresentation/>
+			<Explanation/>
+		</Properties>
+		<ChildObjects>
+			<Form>Форма</Form>
+		</ChildObjects>
+	</DataProcessor>
+</MetaDataObject>
