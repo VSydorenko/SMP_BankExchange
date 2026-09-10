@@ -1,7 +1,11 @@
 format: DESIGNER
 builder: DESIGNER
 workPath: 'build'
-execution_timeout: 600000
+# Повне завантаження конфігурації в базу агента — довга разова операція:
+# base SMBru (58994 файли) не вкладається в шаблонні 600000 мс (10 хв), а SMB
+# (24687) з'їдає 4 хв із них. 10 хвилин тут не межа безпеки, а випадкове
+# значення шаблону, тому підняте до години. Виміряно 2026-09-10.
+execution_timeout: 3600000
 infobase:
   connection: 'File=build/ib'
 source-set:
