@@ -1,0 +1,8 @@
+format: DESIGNER
+builder: DESIGNER
+workPath: 'build'
+execution_timeout: 600000
+source-set:
+  - name: bank_formats
+    type: EXTERNAL_DATA_PROCESSORS
+    path: 'src'
