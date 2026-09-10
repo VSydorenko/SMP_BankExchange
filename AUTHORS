@@ -1,0 +1,14 @@
+﻿Володимир Сидоренко=Volodymyr Sydorenko <v.m.sydorenko@gmail.com>
+Ярослав Головатий=Yaroslav Holovatyi <yaroslav.holovatiy@gmail.com>
+Володимир Прудніков=PrudnikovV <Prudnikovv@ukr.net>
+Василь Прокоф'єв=evil beaver <va.prokophev@gmail.com>
+Олександр (alexsvlight)=alexsvlight <alexsv2012@gmail.com>
+
+# Разові зіставлення для версій 24-40 сховища SMP_BankExchange_SMB.
+# Рішення власника від 2026-08-28: це його знання про те, хто працював
+# у якій клієнтській базі в той період, а НЕ стабільний зв'язок.
+#   Clarity_UNF_work       -> Yaroslav Holovatyi   (v39)
+#   Decoratorskyi_UNF_work -> PrudnikovV           (v24)
+#   TakeHot_UNF_work       -> PrudnikovV           (v25, 34-38, 40)
+# Активні рядки навмисно прибрані після синхронізації: нова версія з тієї
+# самої бази має знову зупинити синхронізацію, бо за нею може стояти інша людина.

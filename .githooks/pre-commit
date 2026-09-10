@@ -1,0 +1,17 @@
+#!/bin/sh
+# v8storagekit — захист гілок storage/* (spec §3.3, шар 2).
+# storage/<джерело> — дзеркало сховища конфігурацій 1С. Його пише лише `kit sync`, і лише
+# він виставляє V8KIT_SYNC=1. Будь-який інший коміт сюди — помилка людини або агента:
+# історія дзеркала мусить лишатись рівно історією сховища.
+# Установлює скіл onboarding: копія в .githooks/ + `git config core.hooksPath .githooks`.
+branch=$(git symbolic-ref -q HEAD) || exit 0
+case "$branch" in
+  refs/heads/storage/*)
+    if [ "$V8KIT_SYNC" != "1" ]; then
+      echo "v8storagekit: гілка '${branch#refs/heads/}' — дзеркало сховища, її пише лише 'kit sync'." >&2
+      echo "  Коміт відхилено (pre-commit). Працюйте у гілці задачі від головної гілки." >&2
+      exit 1
+    fi
+    ;;
+esac
+exit 0

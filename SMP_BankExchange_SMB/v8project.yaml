@@ -1,0 +1,13 @@
+format: DESIGNER
+builder: DESIGNER
+workPath: 'build'
+execution_timeout: 600000
+infobase:
+  connection: 'File=build/ib'
+source-set:
+  - name: base
+    type: CONFIGURATION
+    path: 'cf/src'
+  - name: SMP_BankExchange_SMB
+    type: EXTENSION
+    path: 'cfe/src'

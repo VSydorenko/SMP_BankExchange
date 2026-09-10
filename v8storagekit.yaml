@@ -1,0 +1,48 @@
+# v8storagekit.yaml — маніфест конвеєра «сховище ↔ git» (плагін v8storagekit).
+# Структуру (шляхи, типи) не описує — вона у v8project.yaml кожного воркспейсу;
+# тут лише truth кожного джерела й те, чого Unica не знає.
+version: 1
+product: SMP_BankExchange
+
+workspaces:
+  # BAS small business — УНФ, українська версія
+  - path: SMP_BankExchange_SMB
+    sources:
+      base:
+        truth: vendor
+        dump: { from: devUNF }
+      SMP_BankExchange_SMB:
+        truth: storage
+        storage:
+          path: 'R:\СховищаРозширень_1С\СМП_BankExchange_SMB'
+          user: gitbot
+
+  # BAS for accounting — українська бухгалтерія.
+  # Тека сховища зветься _BP, розширення — _ACC: розбіжність історична й очікувана.
+  - path: SMP_BankExchange_ACC
+    sources:
+      base:
+        truth: vendor
+        dump: { from: devACC }
+      SMP_BankExchange_ACC:
+        truth: storage
+        storage:
+          path: 'R:\СховищаРозширень_1С\СМП_BankExchange_BP'
+          user: gitbot
+
+  # УНФ, російська версія
+  - path: SMP_BankExchange_SMBru
+    sources:
+      base:
+        truth: vendor
+        dump: { from: devUNFru }
+      SMP_BankExchange_SMBru:
+        truth: storage
+        storage:
+          path: 'R:\СховищаРозширень_1С\СМП_BankExchange_SMBru'
+          user: gitbot
+
+  # Обробки читання форматів виписок: зовнішнього джерела немає, пишуть люди й агент
+  - path: epf
+    sources:
+      bank_formats: { truth: git }

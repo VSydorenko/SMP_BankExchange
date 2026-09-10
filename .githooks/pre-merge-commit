@@ -1,0 +1,15 @@
+#!/bin/sh
+# v8storagekit — захист гілок storage/* від злиття (spec §3.3, шар 2).
+# storage/* зливають У main чи в гілку задачі, а не навпаки: merge-коміт на дзеркалі
+# ламає інваріант «один коміт = одна версія сховища» (§3.2), і check його зловить.
+branch=$(git symbolic-ref -q HEAD) || exit 0
+case "$branch" in
+  refs/heads/storage/*)
+    if [ "$V8KIT_SYNC" != "1" ]; then
+      echo "v8storagekit: у гілку '${branch#refs/heads/}' нічого не зливають — це дзеркало сховища." >&2
+      echo "  Злиття відхилено (pre-merge-commit). Скасуйте його: git merge --abort" >&2
+      exit 1
+    fi
+    ;;
+esac
+exit 0
