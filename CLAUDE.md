@@ -97,3 +97,40 @@ PR — `v8storagekit:finish`. Реплей у головну гілку не й�
 хук `SessionStart` запускає `.claude/hooks/session-start.ps1`. Команди kit — з підтвердженням:
 правила дозволів працюють за префіксом, тому дозвіл на прев'ю автоматично дозволив би й той
 самий рядок із `-Apply`.
+
+## Історія до переходу на v8storagekit (межа 2025-02)
+
+Репозиторій до лютого 2025 вивантажувався зі сховищ старим інструментом (gitsync),
+і вихідники лежали в **EDT-форматі** за іншими шляхами. 2026-09-10 перехід повторено
+від останньої чистої gitsync-точки: шляхи перенесено `kit rename-edt`, вміст замінено
+дампом зі сховища. Тому історія **безперервна** — але деякі запити потребують прапорця.
+
+Межа: тег `legacy/gitsync-2025-02` (коміт `dca2f8a`, 2025-02-24).
+
+Відповідність шляхів через межу:
+
+| Було (EDT, до межі) | Стало (Designer) |
+|---|---|
+| `BAS small business/src/` | `SMP_BankExchange_SMB/cfe/src/` |
+| `BAS for accounting/src/` | `SMP_BankExchange_ACC/cfe/src/` |
+| `SMB/src/` | `SMP_BankExchange_SMBru/cfe/src/` |
+| `ExtDataProcessors/<Банк>/src/` | `epf/src/` |
+| `<Об'єкт>/<Об'єкт>.mdo` | `<Об'єкт>.xml` |
+| `<Об'єкт>/Forms/<Форма>/Form.form` | `<Об'єкт>/Forms/<Форма>/Ext/Form.xml` |
+| `<Об'єкт>/ManagerModule.bsl` | `<Об'єкт>/Ext/ManagerModule.bsl` |
+| `<Роль>/Rights.rights` | `<Роль>/Ext/Rights.xml` |
+
+Як діставати історію:
+
+```bash
+git log --follow -- <шлях>          # ОБОВ'ЯЗКОВО --follow: без нього видно лише коміти після межі
+git blame -w -- <шлях>              # -w знімає розбіжності в пробілах; для BSL працює через межу
+git show legacy/gitsync-2025-02:'BAS small business/src/<шлях>'   # прочитати файл до межі
+```
+
+Перевірено на `SMP_BankExchange_SMB/.../СМП_КлиентБанк/Ext/ObjectModule.bsl`:
+`--follow` дає 4 коміти проти 2 без нього, а `blame -w` приписує **2657 із 2661 рядка**
+комітам 2024 року, тобто з-за межі.
+
+Коміти конверсії перелічені в `.git-blame-ignore-revs` — увімкнути одноразово:
+`git config blame.ignoreRevsFile .git-blame-ignore-revs`.
