@@ -130,6 +130,22 @@
 					<Comment/>
 				</Properties>
 			</EnumValue>
+			<EnumValue uuid="fe5ced5a-6555-46cd-a6fa-43bec3d0d091">
+				<Properties>
+					<Name>МОНОБанкЮр</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>monobank (юрлица)</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>monobank (юрособи)</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
 			<EnumValue uuid="014ea5e4-4878-4c3d-b295-c335a45f7f66">
 				<Properties>
 					<Name>ПодключаемаяОбработка</Name>
