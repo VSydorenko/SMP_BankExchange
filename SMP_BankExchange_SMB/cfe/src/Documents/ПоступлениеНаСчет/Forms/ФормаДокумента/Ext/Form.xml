@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<AutoTime>CurrentOrLast</AutoTime>
+	<UsePostingMode>Auto</UsePostingMode>
+	<RepostOnWrite>true</RepostOnWrite>
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
 		<Autofill>false</Autofill>
 		<ChildItems>
@@ -188,7 +191,7 @@
 							</v8:item>
 						</Title>
 						<Picture>
-							<xr:Ref>CommonPicture.Органайзер</xr:Ref>
+							<xr:Ref>0:e595bd93-6a5e-4fde-ad22-0e3522545cec</xr:Ref>
 							<xr:LoadTransparent>false</xr:LoadTransparent>
 						</Picture>
 						<Representation>Picture</Representation>
@@ -341,7 +344,6 @@
 			</ToolTip>
 			<HorizontalStretch>true</HorizontalStretch>
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ШапкаExtendedTooltip" id="703"/>
@@ -369,7 +371,6 @@
 					</ToolTip>
 					<HorizontalStretch>true</HorizontalStretch>
 					<Group>Vertical</Group>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<United>false</United>
 					<ShowTitle>false</ShowTitle>
@@ -397,7 +398,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаБанковскийСчетРасширеннаяПодсказка" id="1281"/>
@@ -467,7 +467,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаКонтрагентРасширеннаяПодсказка" id="1292"/>
@@ -651,7 +650,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаДоговорЗаймаРасширеннаяПодсказка" id="1108"/>
@@ -719,7 +717,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаДоговорКредитаРасширеннаяПодсказка" id="1115"/>
@@ -762,7 +759,7 @@
 									<Representation>Picture</Representation>
 									<CommandName>0</CommandName>
 									<Picture>
-										<xr:Ref>CommonPicture.ЗаполнитьПоОснованию</xr:Ref>
+										<xr:Ref>0:581a42fd-e8d7-4921-bd03-76e1f3e45417</xr:Ref>
 										<xr:LoadTransparent>false</xr:LoadTransparent>
 									</Picture>
 									<ExtendedTooltip name="ЗаполнитьПоДоговоруКредитаРасширеннаяПодсказка" id="1120"/>
@@ -884,7 +881,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="СуммаВалютаExtendedTooltip" id="710"/>
@@ -986,7 +982,6 @@
 					</ToolTip>
 					<HorizontalStretch>false</HorizontalStretch>
 					<Group>Vertical</Group>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<United>false</United>
 					<ShowTitle>false</ShowTitle>
@@ -1015,7 +1010,6 @@
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
 							<HorizontalSpacing>OneAndHalf</HorizontalSpacing>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаНомерДатаExtendedTooltip" id="705"/>
@@ -1083,7 +1077,6 @@
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
 							<HorizontalSpacing>OneAndHalf</HorizontalSpacing>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаНомерДатаВходящиеРасширеннаяПодсказка" id="2196"/>
@@ -1206,7 +1199,6 @@
 			</Title>
 			<HorizontalStretch>true</HorizontalStretch>
 			<Group>Vertical</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ChildItemsWidth>Equal</ChildItemsWidth>
 			<ShowTitle>false</ShowTitle>
@@ -1296,7 +1288,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="КомандныеПанелиРасчетовСКонтрагентомРасширеннаяПодсказка" id="1349"/>
@@ -1323,7 +1314,6 @@
 										</v8:item>
 									</ToolTip>
 									<Group>AlwaysHorizontal</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ExtendedTooltip name="ГруппаПомощникИВариантЗаполненияРасширеннаяПодсказка" id="2105"/>
@@ -1350,7 +1340,6 @@
 												</v8:item>
 											</ToolTip>
 											<Group>AlwaysHorizontal</Group>
-											<Behavior>Usual</Behavior>
 											<Representation>None</Representation>
 											<ShowTitle>false</ShowTitle>
 											<ExtendedTooltip name="ГруппаВариантЗаполненияРасшифровкиРасширеннаяПодсказка" id="2043"/>
@@ -1434,7 +1423,6 @@
 											</ToolTip>
 											<GroupHorizontalAlign>Right</GroupHorizontalAlign>
 											<Group>AlwaysHorizontal</Group>
-											<Behavior>Usual</Behavior>
 											<Representation>None</Representation>
 											<ShowTitle>false</ShowTitle>
 											<ExtendedTooltip name="ГруппаКомандыТаблицыДляПросмотраРасширеннаяПодсказка" id="2078"/>
@@ -1973,11 +1961,6 @@
 														</InputField>
 													</ChildItems>
 												</ColumnGroup>
-												<InputField name="РасшифровкаПлатежаПризнакСпособаРасчета" id="2364">
-													<EditMode>EnterOnInput</EditMode>
-													<ContextMenu name="РасшифровкаПлатежаПризнакСпособаРасчетаКонтекстноеМеню" id="2365"/>
-													<ExtendedTooltip name="РасшифровкаПлатежаПризнакСпособаРасчетаРасширеннаяПодсказка" id="2366"/>
-												</InputField>
 												<InputField name="РасшифровкаПлатежаСуммаПлатежа" id="135" DisplayImportance="VeryHigh">
 													<HorizontalAlign>Right</HorizontalAlign>
 													<EditMode>EnterOnInput</EditMode>
@@ -2227,6 +2210,11 @@
 														</InputField>
 													</ChildItems>
 												</ColumnGroup>
+												<InputField name="РасшифровкаПлатежаПризнакСпособаРасчета" id="2364">
+													<EditMode>EnterOnInput</EditMode>
+													<ContextMenu name="РасшифровкаПлатежаПризнакСпособаРасчетаКонтекстноеМеню" id="2365"/>
+													<ExtendedTooltip name="РасшифровкаПлатежаПризнакСпособаРасчетаРасширеннаяПодсказка" id="2366"/>
+												</InputField>
 											</ChildItems>
 										</Table>
 										<UsualGroup name="ГруппаЗачетПредоплатыПоСтроке" id="2226">
@@ -2251,7 +2239,6 @@
 												</v8:item>
 											</ToolTip>
 											<Group>AlwaysHorizontal</Group>
-											<Behavior>Usual</Behavior>
 											<Representation>None</Representation>
 											<ShowTitle>false</ShowTitle>
 											<ExtendedTooltip name="ГруппаЗачетПредоплатыПоСтрокеРасширеннаяПодсказка" id="2227"/>
@@ -2266,7 +2253,7 @@
 													<PictureSize>Proportionally</PictureSize>
 													<Hyperlink>true</Hyperlink>
 													<ValuesPicture>
-														<xr:Ref>CommonPicture.ДокументПозжеТекущегоИСвязанныеДокументы</xr:Ref>
+														<xr:Ref>0:71dfe71e-3bb3-4c83-8ae9-5591a99bcac5</xr:Ref>
 														<xr:LoadTransparent>false</xr:LoadTransparent>
 													</ValuesPicture>
 													<Border width="1">
@@ -2332,7 +2319,7 @@
 											<AutoMaxWidth>false</AutoMaxWidth>
 											<HorizontalStretch>true</HorizontalStretch>
 											<VerticalStretch>true</VerticalStretch>
-											<TextColor>style:ЦветТекстаПравойПанелиОтборов</TextColor>
+											<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 											<Font ref="style:ExtraLargeTextFont" kind="StyleItem"/>
 											<Title formatted="false">
 												<v8:item>
@@ -2565,7 +2552,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Vertical</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ПокупкаВалютыЛеваяКолонкаРасширеннаяПодсказка" id="2229"/>
@@ -2600,7 +2586,6 @@
 										</v8:item>
 									</ToolTip>
 									<Group>Horizontal</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ThroughAlign>Use</ThroughAlign>
@@ -2642,7 +2627,6 @@
 										</v8:item>
 									</ToolTip>
 									<Group>AlwaysHorizontal</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ExtendedTooltip name="СуммаУчетаВалютаExtendedTooltip" id="819"/>
@@ -2685,7 +2669,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Vertical</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ПокупкаВалютыПраваяКолонкаРасширеннаяПодсказка" id="2231"/>
@@ -2724,7 +2707,7 @@
 								<LabelDecoration name="ДекорацияКурсЦБ" id="2235">
 									<Height>2</Height>
 									<VerticalStretch>false</VerticalStretch>
-									<TextColor>style:ПоясняющийТекст</TextColor>
+									<TextColor>0:eb38297c-5760-4056-bddc-ada973d9b364</TextColor>
 									<Title formatted="false">
 										<v8:item>
 											<v8:lang>ru</v8:lang>
@@ -2741,7 +2724,7 @@
 									<ExtendedTooltip name="ДекорацияКурсЦБРасширеннаяПодсказка" id="2237"/>
 								</LabelDecoration>
 								<LabelDecoration name="ДекорацияКурсоваяРазница" id="2238">
-									<TextColor>style:ПоясняющийТекст</TextColor>
+									<TextColor>0:eb38297c-5760-4056-bddc-ada973d9b364</TextColor>
 									<Title formatted="false">
 										<v8:item>
 											<v8:lang>ru</v8:lang>
@@ -3127,7 +3110,7 @@
 											<Width>17</Width>
 											<AutoMaxWidth>false</AutoMaxWidth>
 											<MaxWidth>17</MaxWidth>
-											<TextColor>style:ЦветСуммыПоступления</TextColor>
+											<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 											<ContextMenu name="ЭквайринговыеОперацииСуммаРасчетовКонтекстноеМеню" id="1057"/>
 											<ExtendedTooltip name="ЭквайринговыеОперацииСуммаРасчетовРасширеннаяПодсказка" id="1058"/>
 										</InputField>
@@ -3316,6 +3299,14 @@
 										</InputField>
 									</ChildItems>
 								</ColumnGroup>
+								<InputField name="ЭквайринговыеОперацииВидОплаты" id="2383">
+									<UserVisible>
+										<xr:Common>false</xr:Common>
+									</UserVisible>
+									<EditMode>EnterOnInput</EditMode>
+									<ContextMenu name="ЭквайринговыеОперацииВидОплатыКонтекстноеМеню" id="2386"/>
+									<ExtendedTooltip name="ЭквайринговыеОперацииВидОплатыРасширеннаяПодсказка" id="2387"/>
+								</InputField>
 							</ChildItems>
 						</Table>
 						<UsualGroup name="ГруппаНастройкиУчета" id="1083">
@@ -3340,7 +3331,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаНастройкиУчетаРасширеннаяПодсказка" id="1084"/>
@@ -3574,7 +3564,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Vertical</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаРасчетыСАгентомРасширеннаяПодсказка" id="1866"/>
@@ -3879,11 +3868,79 @@
 					<ChildItems>
 						<UsualGroup name="ГруппаДополнительноЛево" id="1861">
 							<Group>Vertical</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаДополнительноЛевоРасширеннаяПодсказка" id="1862"/>
 							<ChildItems>
+								<UsualGroup name="НомерЧекаОтправка" id="2370">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Номер чека отправка</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Номер чека відправка</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Дополнительно</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>Додатково</v8:content>
+										</v8:item>
+									</ToolTip>
+									<Group>Horizontal</Group>
+									<Representation>None</Representation>
+									<United>false</United>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="НомерЧекаОтправкаРасширеннаяПодсказка" id="2371"/>
+									<ChildItems>
+										<UsualGroup name="ГруппаНомерЧекаЛеваяКолонка" id="2372">
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Левая колонка</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>uk</v8:lang>
+													<v8:content>Ліва колонка</v8:content>
+												</v8:item>
+											</Title>
+											<Group>Vertical</Group>
+											<VerticalSpacing>Single</VerticalSpacing>
+											<Representation>None</Representation>
+											<ShowTitle>false</ShowTitle>
+											<ExtendedTooltip name="ГруппаНомерЧекаЛеваяКолонкаРасширеннаяПодсказка" id="2373"/>
+											<ChildItems>
+												<InputField name="НомерСменыККМ" id="2374">
+													<ReadOnly>true</ReadOnly>
+													<Width>10</Width>
+													<HorizontalStretch>false</HorizontalStretch>
+													<ContextMenu name="НомерСменыККМКонтекстноеМеню" id="2375"/>
+													<ExtendedTooltip name="НомерСменыККМРасширеннаяПодсказка" id="2376"/>
+												</InputField>
+												<InputField name="НомерЧекаККМ" id="2377">
+													<ReadOnly>true</ReadOnly>
+													<Width>10</Width>
+													<HorizontalStretch>false</HorizontalStretch>
+													<ContextMenu name="НомерЧекаККМКонтекстноеМеню" id="2378"/>
+													<ExtendedTooltip name="НомерЧекаККМРасширеннаяПодсказка" id="2379"/>
+												</InputField>
+												<InputField name="НомерЧекаCashalot" id="2380">
+													<ReadOnly>true</ReadOnly>
+													<Width>10</Width>
+													<HorizontalStretch>false</HorizontalStretch>
+													<ContextMenu name="НомерЧекаCashalotКонтекстноеМеню" id="2381"/>
+													<ExtendedTooltip name="НомерЧекаCashalotРасширеннаяПодсказка" id="2382"/>
+												</InputField>
+											</ChildItems>
+										</UsualGroup>
+									</ChildItems>
+								</UsualGroup>
 								<UsualGroup name="ГруппаДополнительныеРеквизиты" id="2250">
 									<Title>
 										<v8:item>
@@ -3906,7 +3963,6 @@
 										</v8:item>
 									</ToolTip>
 									<Group>Vertical</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ExtendedTooltip name="ГруппаДополнительныеРеквизитыРасширеннаяПодсказка" id="2251"/>
@@ -3958,7 +4014,6 @@
 										</InputField>
 										<UsualGroup name="ГруппаВхНомерДата" id="605">
 											<Group>Horizontal</Group>
-											<Behavior>Usual</Behavior>
 											<Representation>None</Representation>
 											<ShowTitle>false</ShowTitle>
 											<ExtendedTooltip name="ГруппаВхНомерДатаExtendedTooltip" id="901"/>
@@ -4018,7 +4073,6 @@
 												</v8:item>
 											</ToolTip>
 											<Group>Vertical</Group>
-											<Behavior>Usual</Behavior>
 											<Representation>None</Representation>
 											<ShowTitle>false</ShowTitle>
 											<ExtendedTooltip name="ГруппаАвторИДокументИсточникРасширеннаяПодсказка" id="1305"/>
@@ -4079,7 +4133,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Vertical</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ДополнительноПравоРасширеннаяПодсказка" id="1860"/>
@@ -4119,7 +4172,6 @@
 			<Height>4</Height>
 			<HorizontalStretch>true</HorizontalStretch>
 			<VerticalStretch>false</VerticalStretch>
-			<Behavior>Usual</Behavior>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ПодвалExtendedTooltip" id="900"/>
 			<ChildItems>
@@ -4137,7 +4189,6 @@
 					<Width>48</Width>
 					<HorizontalStretch>false</HorizontalStretch>
 					<Group>Vertical</Group>
-					<Behavior>Usual</Behavior>
 					<ShowTitle>false</ShowTitle>
 					<ExtendedTooltip name="КомментарийСсылкиРасширеннаяПодсказка" id="1342"/>
 					<ChildItems>
@@ -4187,7 +4238,6 @@
 							<GroupVerticalAlign>Center</GroupVerticalAlign>
 							<HorizontalAlign>Left</HorizontalAlign>
 							<VerticalAlign>Center</VerticalAlign>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаСсылкиРасширеннаяПодсказка" id="1787"/>
@@ -4269,10 +4319,9 @@
 					<Group>Vertical</Group>
 					<HorizontalAlign>Right</HorizontalAlign>
 					<VerticalAlign>Top</VerticalAlign>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<ShowTitle>false</ShowTitle>
-					<BackColor>style:ИтогиФонГруппы</BackColor>
+					<BackColor>0:8ec6065a-1951-46db-b52c-b56d6762333b</BackColor>
 					<ExtendedTooltip name="ИтогиРасширеннаяПодсказка" id="778"/>
 					<ChildItems>
 						<InputField name="СуммаНДС" id="625">
@@ -4550,7 +4599,7 @@
 				<dcsset:appearance>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>ЦветТекста</dcscor:parameter>
-						<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+						<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 					</dcscor:item>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>Текст</dcscor:parameter>
@@ -4598,7 +4647,7 @@
 				<dcsset:appearance>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>ЦветТекста</dcscor:parameter>
-						<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+						<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 					</dcscor:item>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>Текст</dcscor:parameter>
@@ -4646,7 +4695,7 @@
 				<dcsset:appearance>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>ЦветТекста</dcscor:parameter>
-						<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+						<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 					</dcscor:item>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>Текст</dcscor:parameter>
@@ -4678,7 +4727,7 @@
 				<dcsset:appearance>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>ЦветТекста</dcscor:parameter>
-						<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+						<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 					</dcscor:item>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>Текст</dcscor:parameter>
@@ -4731,7 +4780,7 @@
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:use>false</dcscor:use>
 						<dcscor:parameter>ЦветТекста</dcscor:parameter>
-						<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+						<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 					</dcscor:item>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>ОтметкаНезаполненного</dcscor:parameter>
@@ -4768,7 +4817,7 @@
 				<dcsset:appearance>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>ЦветТекста</dcscor:parameter>
-						<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+						<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 					</dcscor:item>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>Текст</dcscor:parameter>
@@ -4809,6 +4858,9 @@
 		</Command>
 	</Commands>
 	<BaseForm version="2.20">
+		<AutoTime>CurrentOrLast</AutoTime>
+		<UsePostingMode>Auto</UsePostingMode>
+		<RepostOnWrite>true</RepostOnWrite>
 		<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
 			<Autofill>false</Autofill>
 			<ChildItems>
@@ -4997,7 +5049,7 @@
 								</v8:item>
 							</Title>
 							<Picture>
-								<xr:Ref>CommonPicture.Органайзер</xr:Ref>
+								<xr:Ref>0:e595bd93-6a5e-4fde-ad22-0e3522545cec</xr:Ref>
 								<xr:LoadTransparent>false</xr:LoadTransparent>
 							</Picture>
 							<Representation>Picture</Representation>
@@ -5147,10 +5199,9 @@
 				</ToolTip>
 				<HorizontalStretch>true</HorizontalStretch>
 				<Group>Horizontal</Group>
-				<Behavior>Usual</Behavior>
 				<Representation>None</Representation>
 				<ShowTitle>false</ShowTitle>
-				<ExtendedTooltip name="ШапкаExtendedTooltip" id="703"/>
+				<ExtendedTooltip name="ШапкаРасширеннаяПодсказка" id="703"/>
 				<ChildItems>
 					<UsualGroup name="ЛеваяКолонка" id="77">
 						<Title>
@@ -5175,11 +5226,10 @@
 						</ToolTip>
 						<HorizontalStretch>true</HorizontalStretch>
 						<Group>Vertical</Group>
-						<Behavior>Usual</Behavior>
 						<Representation>None</Representation>
 						<United>false</United>
 						<ShowTitle>false</ShowTitle>
-						<ExtendedTooltip name="ЛеваяКолонкаExtendedTooltip" id="704"/>
+						<ExtendedTooltip name="ЛеваяКолонкаРасширеннаяПодсказка" id="704"/>
 						<ChildItems>
 							<UsualGroup name="ГруппаБанковскийСчет" id="1280">
 								<Title>
@@ -5203,7 +5253,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаБанковскийСчетРасширеннаяПодсказка" id="1281"/>
@@ -5226,7 +5275,7 @@
 										<Wrap>false</Wrap>
 										<QuickChoice>true</QuickChoice>
 										<ContextMenu name="БанковскийСчетКонтекстноеМеню" id="1286"/>
-										<ExtendedTooltip name="БанковскийСчетExtendedTooltip" id="1287"/>
+										<ExtendedTooltip name="БанковскийСчетРасширеннаяПодсказка" id="1287"/>
 									</InputField>
 									<LabelDecoration name="ОстатокДенежныхСредств" id="1288">
 										<AutoMaxWidth>false</AutoMaxWidth>
@@ -5270,7 +5319,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаКонтрагентРасширеннаяПодсказка" id="1292"/>
@@ -5281,7 +5329,7 @@
 										<MaxWidth>20</MaxWidth>
 										<Wrap>false</Wrap>
 										<ContextMenu name="КонтрагентКонтекстноеМеню" id="1294"/>
-										<ExtendedTooltip name="КонтрагентExtendedTooltip" id="1295"/>
+										<ExtendedTooltip name="КонтрагентРасширеннаяПодсказка" id="1295"/>
 									</InputField>
 									<LabelDecoration name="ОстатокВзаиморасчетов" id="1296">
 										<AutoMaxWidth>false</AutoMaxWidth>
@@ -5387,7 +5435,7 @@
 							<InputField name="Подотчетник" id="30">
 								<Wrap>false</Wrap>
 								<ContextMenu name="ПодотчетникКонтекстноеМеню" id="31"/>
-								<ExtendedTooltip name="ПодотчетникExtendedTooltip" id="720"/>
+								<ExtendedTooltip name="ПодотчетникРасширеннаяПодсказка" id="720"/>
 							</InputField>
 							<InputField name="Документ" id="594">
 								<Title>
@@ -5403,7 +5451,7 @@
 								<MaxWidth>33</MaxWidth>
 								<Wrap>false</Wrap>
 								<ContextMenu name="ДокументКонтекстноеМеню" id="595"/>
-								<ExtendedTooltip name="ДокументExtendedTooltip" id="788"/>
+								<ExtendedTooltip name="ДокументРасширеннаяПодсказка" id="788"/>
 							</InputField>
 							<InputField name="СчетПлательщика" id="1838">
 								<SkipOnInput>true</SkipOnInput>
@@ -5454,7 +5502,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>AlwaysHorizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаДоговорЗаймаРасширеннаяПодсказка" id="1108"/>
@@ -5522,7 +5569,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>AlwaysHorizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаДоговорКредитаРасширеннаяПодсказка" id="1115"/>
@@ -5565,7 +5611,7 @@
 										<Representation>Picture</Representation>
 										<CommandName>0</CommandName>
 										<Picture>
-											<xr:Ref>CommonPicture.ЗаполнитьПоОснованию</xr:Ref>
+											<xr:Ref>0:581a42fd-e8d7-4921-bd03-76e1f3e45417</xr:Ref>
 											<xr:LoadTransparent>false</xr:LoadTransparent>
 										</Picture>
 										<ExtendedTooltip name="ЗаполнитьПоДоговоруКредитаРасширеннаяПодсказка" id="1120"/>
@@ -5634,7 +5680,7 @@
 								<MaxWidth>29</MaxWidth>
 								<Wrap>false</Wrap>
 								<ContextMenu name="ВидНалогаКонтекстноеМеню" id="651"/>
-								<ExtendedTooltip name="ВидНалогаExtendedTooltip" id="875"/>
+								<ExtendedTooltip name="ВидНалогаРасширеннаяПодсказка" id="875"/>
 							</InputField>
 							<InputField name="СтатьяДекларацииПоЕдиномуНалогу" id="2358">
 								<ContextMenu name="СтатьяДекларацииПоЕдиномуНалогуКонтекстноеМеню" id="2359"/>
@@ -5663,7 +5709,7 @@
 										</Button>
 									</ChildItems>
 								</ContextMenu>
-								<ExtendedTooltip name="СтатьяExtendedTooltip" id="1329"/>
+								<ExtendedTooltip name="СтатьяРасширеннаяПодсказка" id="1329"/>
 							</InputField>
 							<UsualGroup name="СуммаВалюта" id="80">
 								<Title>
@@ -5687,10 +5733,9 @@
 									</v8:item>
 								</ToolTip>
 								<Group>AlwaysHorizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
-								<ExtendedTooltip name="СуммаВалютаExtendedTooltip" id="710"/>
+								<ExtendedTooltip name="СуммаВалютаРасширеннаяПодсказка" id="710"/>
 								<ChildItems>
 									<InputField name="СуммаДокумента" id="23">
 										<TitleLocation>Left</TitleLocation>
@@ -5698,7 +5743,7 @@
 										<MaxWidth>13</MaxWidth>
 										<Wrap>false</Wrap>
 										<ContextMenu name="СуммаДокументаКонтекстноеМеню" id="24"/>
-										<ExtendedTooltip name="СуммаДокументаExtendedTooltip" id="711"/>
+										<ExtendedTooltip name="СуммаДокументаРасширеннаяПодсказка" id="711"/>
 									</InputField>
 									<InputField name="СтавкаНДСРасчетыСАгентом" id="2021">
 										<Visible>false</Visible>
@@ -5751,7 +5796,7 @@
 										<MaxWidth>5</MaxWidth>
 										<HorizontalStretch>false</HorizontalStretch>
 										<ContextMenu name="ВалютаДенежныхСредствКонтекстноеМеню" id="22"/>
-										<ExtendedTooltip name="ВалютаДенежныхСредствExtendedTooltip" id="712"/>
+										<ExtendedTooltip name="ВалютаДенежныхСредствРасширеннаяПодсказка" id="712"/>
 									</LabelField>
 									<LabelField name="Курс" id="1720">
 										<UserVisible>
@@ -5789,11 +5834,10 @@
 						</ToolTip>
 						<HorizontalStretch>false</HorizontalStretch>
 						<Group>Vertical</Group>
-						<Behavior>Usual</Behavior>
 						<Representation>None</Representation>
 						<United>false</United>
 						<ShowTitle>false</ShowTitle>
-						<ExtendedTooltip name="ПраваяКолонкаExtendedTooltip" id="716"/>
+						<ExtendedTooltip name="ПраваяКолонкаРасширеннаяПодсказка" id="716"/>
 						<ChildItems>
 							<UsualGroup name="ГруппаНомерДата" id="78">
 								<Title>
@@ -5818,10 +5862,9 @@
 								</ToolTip>
 								<Group>AlwaysHorizontal</Group>
 								<HorizontalSpacing>OneAndHalf</HorizontalSpacing>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
-								<ExtendedTooltip name="ГруппаНомерДатаExtendedTooltip" id="705"/>
+								<ExtendedTooltip name="ГруппаНомерДатаРасширеннаяПодсказка" id="705"/>
 								<ChildItems>
 									<InputField name="Номер" id="3">
 										<SkipOnInput>true</SkipOnInput>
@@ -5840,7 +5883,7 @@
 											</v8:item>
 										</InputHint>
 										<ContextMenu name="НомерКонтекстноеМеню" id="4"/>
-										<ExtendedTooltip name="НомерExtendedTooltip" id="706"/>
+										<ExtendedTooltip name="НомерРасширеннаяПодсказка" id="706"/>
 									</InputField>
 									<InputField name="Дата" id="5">
 										<SkipOnInput>true</SkipOnInput>
@@ -5859,7 +5902,7 @@
 										<MaxWidth>12</MaxWidth>
 										<Wrap>false</Wrap>
 										<ContextMenu name="ДатаКонтекстноеМеню" id="6"/>
-										<ExtendedTooltip name="ДатаExtendedTooltip" id="707"/>
+										<ExtendedTooltip name="ДатаРасширеннаяПодсказка" id="707"/>
 									</InputField>
 								</ChildItems>
 							</UsualGroup>
@@ -5886,7 +5929,6 @@
 								</ToolTip>
 								<Group>AlwaysHorizontal</Group>
 								<HorizontalSpacing>OneAndHalf</HorizontalSpacing>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаНомерДатаВходящиеРасширеннаяПодсказка" id="2196"/>
@@ -5907,7 +5949,7 @@
 										<HorizontalStretch>false</HorizontalStretch>
 										<Wrap>false</Wrap>
 										<ContextMenu name="НомерВходящегоДокументаКонтекстноеМеню" id="607"/>
-										<ExtendedTooltip name="НомерВходящегоДокументаExtendedTooltip" id="902"/>
+										<ExtendedTooltip name="НомерВходящегоДокументаРасширеннаяПодсказка" id="902"/>
 									</InputField>
 									<InputField name="ДатаВходящегоДокумента" id="608">
 										<Title>
@@ -5926,7 +5968,7 @@
 										<HorizontalStretch>true</HorizontalStretch>
 										<Wrap>false</Wrap>
 										<ContextMenu name="ДатаВходящегоДокументаКонтекстноеМеню" id="609"/>
-										<ExtendedTooltip name="ДатаВходящегоДокументаExtendedTooltip" id="903"/>
+										<ExtendedTooltip name="ДатаВходящегоДокументаРасширеннаяПодсказка" id="903"/>
 									</InputField>
 								</ChildItems>
 							</UsualGroup>
@@ -5965,7 +6007,7 @@
 								</ChoiceList>
 								<ChoiceListButton>false</ChoiceListButton>
 								<ContextMenu name="ВидОперацииКонтекстноеМеню" id="8"/>
-								<ExtendedTooltip name="ВидОперацииExtendedTooltip" id="717"/>
+								<ExtendedTooltip name="ВидОперацииРасширеннаяПодсказка" id="717"/>
 							</InputField>
 							<InputField name="Организация" id="11">
 								<SkipOnInput>true</SkipOnInput>
@@ -5974,7 +6016,7 @@
 								<Wrap>false</Wrap>
 								<ListChoiceMode>true</ListChoiceMode>
 								<ContextMenu name="ОрганизацияКонтекстноеМеню" id="12"/>
-								<ExtendedTooltip name="ОрганизацияExtendedTooltip" id="708"/>
+								<ExtendedTooltip name="ОрганизацияРасширеннаяПодсказка" id="708"/>
 							</InputField>
 							<InputField name="НаправлениеДеятельности" id="652">
 								<ToolTip>
@@ -6009,7 +6051,6 @@
 				</Title>
 				<HorizontalStretch>true</HorizontalStretch>
 				<Group>Vertical</Group>
-				<Behavior>Usual</Behavior>
 				<Representation>None</Representation>
 				<ChildItemsWidth>Equal</ChildItemsWidth>
 				<ShowTitle>false</ShowTitle>
@@ -6075,7 +6116,7 @@
 								<v8:content>Розрахунки з контрагентом</v8:content>
 							</v8:item>
 						</ToolTip>
-						<ExtendedTooltip name="РасчетыСКонтрагентомExtendedTooltip" id="1347"/>
+						<ExtendedTooltip name="РасчетыСКонтрагентомРасширеннаяПодсказка" id="1347"/>
 						<ChildItems>
 							<UsualGroup name="КомандныеПанелиРасчетовСКонтрагентом" id="1348">
 								<Title>
@@ -6099,7 +6140,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>AlwaysHorizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="КомандныеПанелиРасчетовСКонтрагентомРасширеннаяПодсказка" id="1349"/>
@@ -6126,7 +6166,6 @@
 											</v8:item>
 										</ToolTip>
 										<Group>AlwaysHorizontal</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
 										<ExtendedTooltip name="ГруппаПомощникИВариантЗаполненияРасширеннаяПодсказка" id="2105"/>
@@ -6153,7 +6192,6 @@
 													</v8:item>
 												</ToolTip>
 												<Group>AlwaysHorizontal</Group>
-												<Behavior>Usual</Behavior>
 												<Representation>None</Representation>
 												<ShowTitle>false</ShowTitle>
 												<ExtendedTooltip name="ГруппаВариантЗаполненияРасшифровкиРасширеннаяПодсказка" id="2043"/>
@@ -6237,7 +6275,6 @@
 												</ToolTip>
 												<GroupHorizontalAlign>Right</GroupHorizontalAlign>
 												<Group>AlwaysHorizontal</Group>
-												<Behavior>Usual</Behavior>
 												<Representation>None</Representation>
 												<ShowTitle>false</ShowTitle>
 												<ExtendedTooltip name="ГруппаКомандыТаблицыДляПросмотраРасширеннаяПодсказка" id="2078"/>
@@ -6577,7 +6614,7 @@
 													</ChildItems>
 												</ContextMenu>
 												<AutoCommandBar name="РасшифровкаПлатежаКоманднаяПанель" id="52"/>
-												<ExtendedTooltip name="РасшифровкаПлатежаExtendedTooltip" id="762"/>
+												<ExtendedTooltip name="РасшифровкаПлатежаРасширеннаяПодсказка" id="762"/>
 												<SearchStringAddition name="РасшифровкаПлатежаСтрокаПоиска" id="912">
 													<AdditionSource>
 														<Item>РасшифровкаПлатежа</Item>
@@ -6610,7 +6647,7 @@
 														<HorizontalStretch>false</HorizontalStretch>
 														<Wrap>false</Wrap>
 														<ContextMenu name="РасшифровкаПлатежаНомерСтрокиКонтекстноеМеню" id="120"/>
-														<ExtendedTooltip name="РасшифровкаПлатежаНомерСтрокиExtendedTooltip" id="763"/>
+														<ExtendedTooltip name="РасшифровкаПлатежаНомерСтрокиРасширеннаяПодсказка" id="763"/>
 													</InputField>
 													<ColumnGroup name="РасшифровкаПлатежаДоговорИСтатьяДДС" id="2154">
 														<Title>
@@ -6643,7 +6680,7 @@
 																<Width>21</Width>
 																<Wrap>false</Wrap>
 																<ContextMenu name="РасшифровкаПлатежаДоговорКонтекстноеМеню" id="124"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаДоговорExtendedTooltip" id="764"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаДоговорРасширеннаяПодсказка" id="764"/>
 															</InputField>
 															<InputField name="РасшифровкаПлатежаСтатьяДДС" id="1844">
 																<EditMode>EnterOnInput</EditMode>
@@ -6658,7 +6695,7 @@
 													<InputField name="РасшифровкаПлатежаСтатьяДекларацииПоЕдиномуНалогу" id="2361">
 														<EditMode>EnterOnInput</EditMode>
 														<ContextMenu name="РасшифровкаПлатежаСтатьяДекларацииПоЕдиномуНалогуКонтекстноеМеню" id="2362"/>
-														<ExtendedTooltip name="РасшифровкаПлатежаСтатьяДекларацииПоЕдиномуНалогуРасширеннаяПодсказка" id="2363"/>
+														<ExtendedTooltip name="РасшифровкаПлатежаСтатьяДекларацииПоЕдиномуНалогуРасширеннаяПодсказка" id="2367"/>
 													</InputField>
 													<InputField name="РасшифровкаПлатежаСпособЗачета" id="2156">
 														<Title>
@@ -6718,7 +6755,7 @@
 																<EditMode>EnterOnInput</EditMode>
 																<CheckBoxType>Auto</CheckBoxType>
 																<ContextMenu name="РасшифровкаПлатежаПризнакАвансаКонтекстноеМеню" id="126"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаПризнакАвансаExtendedTooltip" id="765"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаПризнакАвансаРасширеннаяПодсказка" id="765"/>
 															</CheckBoxField>
 														</ChildItems>
 													</ColumnGroup>
@@ -6753,7 +6790,7 @@
 																<Width>30</Width>
 																<Wrap>false</Wrap>
 																<ContextMenu name="РасшифровкаПлатежаЗаказКонтекстноеМеню" id="122"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаЗаказExtendedTooltip" id="773"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаЗаказРасширеннаяПодсказка" id="773"/>
 															</InputField>
 															<InputField name="РасшифровкаПлатежаДокумент" id="127">
 																<Title>
@@ -6772,15 +6809,10 @@
 																<Width>32</Width>
 																<Wrap>false</Wrap>
 																<ContextMenu name="РасшифровкаПлатежаДокументКонтекстноеМеню" id="128"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаДокументExtendedTooltip" id="766"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаДокументРасширеннаяПодсказка" id="766"/>
 															</InputField>
 														</ChildItems>
 													</ColumnGroup>
-													<InputField name="РасшифровкаПлатежаПризнакСпособаРасчета" id="2364">
-														<EditMode>EnterOnInput</EditMode>
-														<ContextMenu name="РасшифровкаПлатежаПризнакСпособаРасчетаКонтекстноеМеню" id="2365"/>
-														<ExtendedTooltip name="РасшифровкаПлатежаПризнакСпособаРасчетаРасширеннаяПодсказка" id="2366"/>
-													</InputField>
 													<InputField name="РасшифровкаПлатежаСуммаПлатежа" id="135" DisplayImportance="VeryHigh">
 														<HorizontalAlign>Right</HorizontalAlign>
 														<EditMode>EnterOnInput</EditMode>
@@ -6788,7 +6820,7 @@
 														<Width>12</Width>
 														<Wrap>false</Wrap>
 														<ContextMenu name="РасшифровкаПлатежаСуммаПлатежаКонтекстноеМеню" id="136"/>
-														<ExtendedTooltip name="РасшифровкаПлатежаСуммаПлатежаExtendedTooltip" id="770"/>
+														<ExtendedTooltip name="РасшифровкаПлатежаСуммаПлатежаРасширеннаяПодсказка" id="770"/>
 													</InputField>
 													<ColumnGroup name="РасшифровкаПлатежаСуммаИКурсРасчетов" id="2161">
 														<Title>
@@ -6846,7 +6878,7 @@
 																		<Width>13</Width>
 																		<Wrap>false</Wrap>
 																		<ContextMenu name="РасшифровкаПлатежаСуммаРасчетовКонтекстноеМеню" id="130"/>
-																		<ExtendedTooltip name="РасшифровкаПлатежаСуммаРасчетовExtendedTooltip" id="767"/>
+																		<ExtendedTooltip name="РасшифровкаПлатежаСуммаРасчетовРасширеннаяПодсказка" id="767"/>
 																	</InputField>
 																	<LabelField name="РасшифровкаПлатежаДоговорВалютаРасчетовСимвольноеПредставление" id="1819">
 																		<EditMode>EnterOnInput</EditMode>
@@ -6876,7 +6908,7 @@
 																<Width>8</Width>
 																<Wrap>false</Wrap>
 																<ContextMenu name="РасшифровкаПлатежаКурсКонтекстноеМеню" id="132"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаКурсExtendedTooltip" id="768"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаКурсРасширеннаяПодсказка" id="768"/>
 															</InputField>
 														</ChildItems>
 													</ColumnGroup>
@@ -6898,7 +6930,7 @@
 														<Width>9</Width>
 														<Wrap>false</Wrap>
 														<ContextMenu name="РасшифровкаПлатежаКратностьКонтекстноеМеню" id="134"/>
-														<ExtendedTooltip name="РасшифровкаПлатежаКратностьExtendedTooltip" id="769"/>
+														<ExtendedTooltip name="РасшифровкаПлатежаКратностьРасширеннаяПодсказка" id="769"/>
 													</InputField>
 													<ColumnGroup name="РасшифровкаПлатежаНДС" id="2163">
 														<Title>
@@ -6933,7 +6965,7 @@
 																<Width>10</Width>
 																<Wrap>false</Wrap>
 																<ContextMenu name="РасшифровкаПлатежаСуммаНДСКонтекстноеМеню" id="140"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаСуммаНДСExtendedTooltip" id="772"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаСуммаНДСРасширеннаяПодсказка" id="772"/>
 															</InputField>
 															<InputField name="РасшифровкаПлатежаСтавкаНДС" id="137">
 																<SkipOnInput>true</SkipOnInput>
@@ -6945,7 +6977,7 @@
 																<Wrap>false</Wrap>
 																<QuickChoice>true</QuickChoice>
 																<ContextMenu name="РасшифровкаПлатежаСтавкаНДСКонтекстноеМеню" id="138"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаСтавкаНДСExtendedTooltip" id="771"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаСтавкаНДСРасширеннаяПодсказка" id="771"/>
 															</InputField>
 														</ChildItems>
 													</ColumnGroup>
@@ -6980,7 +7012,7 @@
 																<Width>37</Width>
 																<Wrap>false</Wrap>
 																<ContextMenu name="РасшифровкаПлатежаСчетНаОплатуКонтекстноеМеню" id="144"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаСчетНаОплатуExtendedTooltip" id="774"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаСчетНаОплатуРасширеннаяПодсказка" id="774"/>
 															</InputField>
 															<InputField name="РасшифровкаПлатежаДокументПланирования" id="498">
 																<EditMode>EnterOnInput</EditMode>
@@ -6988,7 +7020,7 @@
 																<ShowInFooter>false</ShowInFooter>
 																<Width>37</Width>
 																<ContextMenu name="РасшифровкаПлатежаДокументПланированияКонтекстноеМеню" id="499"/>
-																<ExtendedTooltip name="РасшифровкаПлатежаДокументПланированияExtendedTooltip" id="775"/>
+																<ExtendedTooltip name="РасшифровкаПлатежаДокументПланированияРасширеннаяПодсказка" id="775"/>
 															</InputField>
 														</ChildItems>
 													</ColumnGroup>
@@ -7030,6 +7062,11 @@
 															</InputField>
 														</ChildItems>
 													</ColumnGroup>
+													<InputField name="РасшифровкаПлатежаПризнакСпособаРасчета" id="2368">
+														<EditMode>EnterOnInput</EditMode>
+														<ContextMenu name="РасшифровкаПлатежаПризнакСпособаРасчетаКонтекстноеМеню" id="2369"/>
+														<ExtendedTooltip name="РасшифровкаПлатежаПризнакСпособаРасчетаРасширеннаяПодсказка" id="2366"/>
+													</InputField>
 												</ChildItems>
 											</Table>
 											<UsualGroup name="ГруппаЗачетПредоплатыПоСтроке" id="2226">
@@ -7054,7 +7091,6 @@
 													</v8:item>
 												</ToolTip>
 												<Group>AlwaysHorizontal</Group>
-												<Behavior>Usual</Behavior>
 												<Representation>None</Representation>
 												<ShowTitle>false</ShowTitle>
 												<ExtendedTooltip name="ГруппаЗачетПредоплатыПоСтрокеРасширеннаяПодсказка" id="2227"/>
@@ -7069,7 +7105,7 @@
 														<PictureSize>Proportionally</PictureSize>
 														<Hyperlink>true</Hyperlink>
 														<ValuesPicture>
-															<xr:Ref>CommonPicture.ДокументПозжеТекущегоИСвязанныеДокументы</xr:Ref>
+															<xr:Ref>0:71dfe71e-3bb3-4c83-8ae9-5591a99bcac5</xr:Ref>
 															<xr:LoadTransparent>false</xr:LoadTransparent>
 														</ValuesPicture>
 														<Border width="1">
@@ -7135,7 +7171,7 @@
 												<AutoMaxWidth>false</AutoMaxWidth>
 												<HorizontalStretch>true</HorizontalStretch>
 												<VerticalStretch>true</VerticalStretch>
-												<TextColor>style:ЦветТекстаПравойПанелиОтборов</TextColor>
+												<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 												<Font ref="style:ExtraLargeTextFont" kind="StyleItem"/>
 												<Title formatted="false">
 													<v8:item>
@@ -7179,7 +7215,7 @@
 								<v8:content>Розрахунки з підзвітником</v8:content>
 							</v8:item>
 						</ToolTip>
-						<ExtendedTooltip name="РасчетыСПодотчетникомExtendedTooltip" id="785"/>
+						<ExtendedTooltip name="РасчетыСПодотчетникомРасширеннаяПодсказка" id="785"/>
 						<ChildItems>
 							<Table name="РасчетыСПодотчетникомРасшифровкаПлатежа" id="2292">
 								<SkipOnInput>false</SkipOnInput>
@@ -7344,7 +7380,7 @@
 						</ToolTip>
 						<HorizontalStretch>false</HorizontalStretch>
 						<Group>HorizontalIfPossible</Group>
-						<ExtendedTooltip name="ПокупкаВалютыExtendedTooltip" id="812"/>
+						<ExtendedTooltip name="ПокупкаВалютыРасширеннаяПодсказка" id="812"/>
 						<ChildItems>
 							<UsualGroup name="ПокупкаВалютыЛеваяКолонка" id="2228">
 								<Title>
@@ -7368,7 +7404,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>Vertical</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ПокупкаВалютыЛеваяКолонкаРасширеннаяПодсказка" id="2229"/>
@@ -7403,23 +7438,22 @@
 											</v8:item>
 										</ToolTip>
 										<Group>Horizontal</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
 										<ThroughAlign>Use</ThroughAlign>
-										<ExtendedTooltip name="ПокупкаВалютыКурсКратностьExtendedTooltip" id="816"/>
+										<ExtendedTooltip name="ПокупкаВалютыКурсКратностьРасширеннаяПодсказка" id="816"/>
 										<ChildItems>
 											<InputField name="ПокупкаВалютыКурс" id="246">
 												<DropListButton>true</DropListButton>
 												<ChoiceButton>false</ChoiceButton>
 												<ContextMenu name="ПокупкаВалютыКурсКонтекстноеМеню" id="247"/>
-												<ExtendedTooltip name="ПокупкаВалютыКурсExtendedTooltip" id="817"/>
+												<ExtendedTooltip name="ПокупкаВалютыКурсРасширеннаяПодсказка" id="817"/>
 											</InputField>
 											<InputField name="ПокупкаВалютыКратность" id="248">
 												<HorizontalAlign>Right</HorizontalAlign>
 												<GroupHorizontalAlign>Right</GroupHorizontalAlign>
 												<ContextMenu name="ПокупкаВалютыКратностьКонтекстноеМеню" id="249"/>
-												<ExtendedTooltip name="ПокупкаВалютыКратностьExtendedTooltip" id="818"/>
+												<ExtendedTooltip name="ПокупкаВалютыКратностьРасширеннаяПодсказка" id="818"/>
 											</InputField>
 										</ChildItems>
 									</UsualGroup>
@@ -7445,22 +7479,21 @@
 											</v8:item>
 										</ToolTip>
 										<Group>AlwaysHorizontal</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
-										<ExtendedTooltip name="СуммаУчетаВалютаExtendedTooltip" id="819"/>
+										<ExtendedTooltip name="СуммаУчетаВалютаРасширеннаяПодсказка" id="819"/>
 										<ChildItems>
 											<InputField name="ПокупкаВалютыСуммаУчета" id="250">
 												<AutoMaxWidth>false</AutoMaxWidth>
 												<ContextMenu name="ПокупкаВалютыСуммаУчетаКонтекстноеМеню" id="251"/>
-												<ExtendedTooltip name="ПокупкаВалютыСуммаУчетаExtendedTooltip" id="820"/>
+												<ExtendedTooltip name="ПокупкаВалютыСуммаУчетаРасширеннаяПодсказка" id="820"/>
 											</InputField>
 											<LabelField name="ВалютаУчета" id="282">
 												<TitleLocation>None</TitleLocation>
 												<AutoMaxWidth>false</AutoMaxWidth>
 												<MaxWidth>4</MaxWidth>
 												<ContextMenu name="ВалютаУчетаКонтекстноеМеню" id="283"/>
-												<ExtendedTooltip name="ВалютаУчетаExtendedTooltip" id="821"/>
+												<ExtendedTooltip name="ВалютаУчетаРасширеннаяПодсказка" id="821"/>
 											</LabelField>
 										</ChildItems>
 									</UsualGroup>
@@ -7488,7 +7521,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>Vertical</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ПокупкаВалютыПраваяКолонкаРасширеннаяПодсказка" id="2231"/>
@@ -7527,7 +7559,7 @@
 									<LabelDecoration name="ДекорацияКурсЦБ" id="2235">
 										<Height>2</Height>
 										<VerticalStretch>false</VerticalStretch>
-										<TextColor>style:ПоясняющийТекст</TextColor>
+										<TextColor>0:eb38297c-5760-4056-bddc-ada973d9b364</TextColor>
 										<Title formatted="false">
 											<v8:item>
 												<v8:lang>ru</v8:lang>
@@ -7544,7 +7576,7 @@
 										<ExtendedTooltip name="ДекорацияКурсЦБРасширеннаяПодсказка" id="2237"/>
 									</LabelDecoration>
 									<LabelDecoration name="ДекорацияКурсоваяРазница" id="2238">
-										<TextColor>style:ПоясняющийТекст</TextColor>
+										<TextColor>0:eb38297c-5760-4056-bddc-ada973d9b364</TextColor>
 										<Title formatted="false">
 											<v8:item>
 												<v8:lang>ru</v8:lang>
@@ -7583,7 +7615,7 @@
 								<v8:content>Розрахунки інші</v8:content>
 							</v8:item>
 						</ToolTip>
-						<ExtendedTooltip name="РасчетыПрочиеExtendedTooltip" id="845"/>
+						<ExtendedTooltip name="РасчетыПрочиеРасширеннаяПодсказка" id="845"/>
 						<ChildItems>
 							<Table name="РасшифровкаПлатежаПрочиеРасчеты" id="1133">
 								<AutoInsertNewRow>true</AutoInsertNewRow>
@@ -7930,7 +7962,7 @@
 												<Width>17</Width>
 												<AutoMaxWidth>false</AutoMaxWidth>
 												<MaxWidth>17</MaxWidth>
-												<TextColor>style:ЦветСуммыПоступления</TextColor>
+												<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 												<ContextMenu name="ЭквайринговыеОперацииСуммаРасчетовКонтекстноеМеню" id="1057"/>
 												<ExtendedTooltip name="ЭквайринговыеОперацииСуммаРасчетовРасширеннаяПодсказка" id="1058"/>
 											</InputField>
@@ -8119,6 +8151,14 @@
 											</InputField>
 										</ChildItems>
 									</ColumnGroup>
+									<InputField name="ЭквайринговыеОперацииВидОплаты" id="2363">
+										<UserVisible>
+											<xr:Common>false</xr:Common>
+										</UserVisible>
+										<EditMode>EnterOnInput</EditMode>
+										<ContextMenu name="ЭквайринговыеОперацииВидОплатыКонтекстноеМеню" id="2364"/>
+										<ExtendedTooltip name="ЭквайринговыеОперацииВидОплатыРасширеннаяПодсказка" id="2365"/>
+									</InputField>
 								</ChildItems>
 							</Table>
 							<UsualGroup name="ГруппаНастройкиУчета" id="1083">
@@ -8143,7 +8183,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаНастройкиУчетаРасширеннаяПодсказка" id="1084"/>
@@ -8377,7 +8416,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>Vertical</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаРасчетыСАгентомРасширеннаяПодсказка" id="1866"/>
@@ -8677,11 +8715,79 @@
 						<ChildItems>
 							<UsualGroup name="ГруппаДополнительноЛево" id="1861">
 								<Group>Vertical</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаДополнительноЛевоРасширеннаяПодсказка" id="1862"/>
 								<ChildItems>
+									<UsualGroup name="НомерЧекаОтправка" id="2370">
+										<Title>
+											<v8:item>
+												<v8:lang>ru</v8:lang>
+												<v8:content>Номер чека отправка</v8:content>
+											</v8:item>
+											<v8:item>
+												<v8:lang>uk</v8:lang>
+												<v8:content>Номер чека відправка</v8:content>
+											</v8:item>
+										</Title>
+										<ToolTip>
+											<v8:item>
+												<v8:lang>ru</v8:lang>
+												<v8:content>Дополнительно</v8:content>
+											</v8:item>
+											<v8:item>
+												<v8:lang>uk</v8:lang>
+												<v8:content>Додатково</v8:content>
+											</v8:item>
+										</ToolTip>
+										<Group>Horizontal</Group>
+										<Representation>None</Representation>
+										<United>false</United>
+										<ShowTitle>false</ShowTitle>
+										<ExtendedTooltip name="НомерЧекаОтправкаРасширеннаяПодсказка" id="2371"/>
+										<ChildItems>
+											<UsualGroup name="ГруппаНомерЧекаЛеваяКолонка" id="2372">
+												<Title>
+													<v8:item>
+														<v8:lang>ru</v8:lang>
+														<v8:content>Левая колонка</v8:content>
+													</v8:item>
+													<v8:item>
+														<v8:lang>uk</v8:lang>
+														<v8:content>Ліва колонка</v8:content>
+													</v8:item>
+												</Title>
+												<Group>Vertical</Group>
+												<VerticalSpacing>Single</VerticalSpacing>
+												<Representation>None</Representation>
+												<ShowTitle>false</ShowTitle>
+												<ExtendedTooltip name="ГруппаНомерЧекаЛеваяКолонкаРасширеннаяПодсказка" id="2373"/>
+												<ChildItems>
+													<InputField name="НомерСменыККМ" id="2374">
+														<ReadOnly>true</ReadOnly>
+														<Width>10</Width>
+														<HorizontalStretch>false</HorizontalStretch>
+														<ContextMenu name="НомерСменыККМКонтекстноеМеню" id="2375"/>
+														<ExtendedTooltip name="НомерСменыККМРасширеннаяПодсказка" id="2376"/>
+													</InputField>
+													<InputField name="НомерЧекаККМ" id="2377">
+														<ReadOnly>true</ReadOnly>
+														<Width>10</Width>
+														<HorizontalStretch>false</HorizontalStretch>
+														<ContextMenu name="НомерЧекаККМКонтекстноеМеню" id="2378"/>
+														<ExtendedTooltip name="НомерЧекаККМРасширеннаяПодсказка" id="2379"/>
+													</InputField>
+													<InputField name="НомерЧекаCashalot" id="2380">
+														<ReadOnly>true</ReadOnly>
+														<Width>10</Width>
+														<HorizontalStretch>false</HorizontalStretch>
+														<ContextMenu name="НомерЧекаCashalotКонтекстноеМеню" id="2381"/>
+														<ExtendedTooltip name="НомерЧекаCashalotРасширеннаяПодсказка" id="2382"/>
+													</InputField>
+												</ChildItems>
+											</UsualGroup>
+										</ChildItems>
+									</UsualGroup>
 									<UsualGroup name="ГруппаДополнительныеРеквизиты" id="2250">
 										<Title>
 											<v8:item>
@@ -8704,7 +8810,6 @@
 											</v8:item>
 										</ToolTip>
 										<Group>Vertical</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
 										<ExtendedTooltip name="ГруппаДополнительныеРеквизитыРасширеннаяПодсказка" id="2251"/>
@@ -8747,19 +8852,18 @@
 											</InputField>
 											<InputField name="НалогообложениеНДС" id="700">
 												<ContextMenu name="НалогообложениеНДСКонтекстноеМеню" id="701"/>
-												<ExtendedTooltip name="НалогообложениеНДСExtendedTooltip" id="726"/>
+												<ExtendedTooltip name="НалогообложениеНДСРасширеннаяПодсказка" id="726"/>
 											</InputField>
 											<InputField name="СчетКонтрагента" id="236">
 												<SkipOnInput>true</SkipOnInput>
 												<ContextMenu name="СчетКонтрагентаКонтекстноеМеню" id="237"/>
-												<ExtendedTooltip name="СчетКонтрагентаExtendedTooltip" id="719"/>
+												<ExtendedTooltip name="СчетКонтрагентаРасширеннаяПодсказка" id="719"/>
 											</InputField>
 											<UsualGroup name="ГруппаВхНомерДата" id="605">
 												<Group>Horizontal</Group>
-												<Behavior>Usual</Behavior>
 												<Representation>None</Representation>
 												<ShowTitle>false</ShowTitle>
-												<ExtendedTooltip name="ГруппаВхНомерДатаExtendedTooltip" id="901"/>
+												<ExtendedTooltip name="ГруппаВхНомерДатаРасширеннаяПодсказка" id="901"/>
 												<ChildItems>
 													<InputField name="БанковскаяОперация" id="1824">
 														<Title>
@@ -8816,7 +8920,6 @@
 													</v8:item>
 												</ToolTip>
 												<Group>Vertical</Group>
-												<Behavior>Usual</Behavior>
 												<Representation>None</Representation>
 												<ShowTitle>false</ShowTitle>
 												<ExtendedTooltip name="ГруппаАвторИДокументИсточникРасширеннаяПодсказка" id="1305"/>
@@ -8877,7 +8980,6 @@
 									</v8:item>
 								</ToolTip>
 								<Group>Vertical</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ДополнительноПравоРасширеннаяПодсказка" id="1860"/>
@@ -8917,9 +9019,8 @@
 				<Height>4</Height>
 				<HorizontalStretch>true</HorizontalStretch>
 				<VerticalStretch>false</VerticalStretch>
-				<Behavior>Usual</Behavior>
 				<ShowTitle>false</ShowTitle>
-				<ExtendedTooltip name="ПодвалExtendedTooltip" id="900"/>
+				<ExtendedTooltip name="ПодвалРасширеннаяПодсказка" id="900"/>
 				<ChildItems>
 					<UsualGroup name="КомментарийСсылки" id="1341">
 						<Title>
@@ -8935,7 +9036,6 @@
 						<Width>48</Width>
 						<HorizontalStretch>false</HorizontalStretch>
 						<Group>Vertical</Group>
-						<Behavior>Usual</Behavior>
 						<ShowTitle>false</ShowTitle>
 						<ExtendedTooltip name="КомментарийСсылкиРасширеннаяПодсказка" id="1342"/>
 						<ChildItems>
@@ -8985,12 +9085,13 @@
 								<GroupVerticalAlign>Center</GroupVerticalAlign>
 								<HorizontalAlign>Left</HorizontalAlign>
 								<VerticalAlign>Center</VerticalAlign>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаСсылкиРасширеннаяПодсказка" id="1787"/>
 								<ChildItems>
 									<LabelDecoration name="ДокументОснованиеНадпись" id="1791">
+										<AutoMaxWidth>false</AutoMaxWidth>
+										<MaxWidth>61</MaxWidth>
 										<Height>2</Height>
 										<Title formatted="true">
 											<v8:item>
@@ -9067,10 +9168,9 @@
 						<Group>Vertical</Group>
 						<HorizontalAlign>Right</HorizontalAlign>
 						<VerticalAlign>Top</VerticalAlign>
-						<Behavior>Usual</Behavior>
 						<Representation>None</Representation>
 						<ShowTitle>false</ShowTitle>
-						<BackColor>style:ИтогиФонГруппы</BackColor>
+						<BackColor>0:8ec6065a-1951-46db-b52c-b56d6762333b</BackColor>
 						<ExtendedTooltip name="ИтогиРасширеннаяПодсказка" id="778"/>
 						<ChildItems>
 							<InputField name="СуммаНДС" id="625">
@@ -9097,7 +9197,7 @@
 								<TextEdit>false</TextEdit>
 								<ChoiceListButton>false</ChoiceListButton>
 								<ContextMenu name="СуммаНДСКонтекстноеМеню" id="626"/>
-								<ExtendedTooltip name="СуммаНДСExtendedTooltip" id="783"/>
+								<ExtendedTooltip name="СуммаНДСРасширеннаяПодсказка" id="783"/>
 							</InputField>
 							<InputField name="СуммаРасчетов" id="1011">
 								<Title>
@@ -9149,7 +9249,7 @@
 								<TextEdit>false</TextEdit>
 								<ChoiceListButton>false</ChoiceListButton>
 								<ContextMenu name="СуммаПлатежаКонтекстноеМеню" id="149"/>
-								<ExtendedTooltip name="СуммаПлатежаExtendedTooltip" id="780"/>
+								<ExtendedTooltip name="СуммаПлатежаРасширеннаяПодсказка" id="780"/>
 							</InputField>
 							<InputField name="СуммаУдержаноАгентом" id="1986">
 								<Visible>false</Visible>
@@ -9348,7 +9448,7 @@
 					<dcsset:appearance>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 						</dcscor:item>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>Текст</dcscor:parameter>
@@ -9396,7 +9496,7 @@
 					<dcsset:appearance>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 						</dcscor:item>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>Текст</dcscor:parameter>
@@ -9444,7 +9544,7 @@
 					<dcsset:appearance>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 						</dcscor:item>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>Текст</dcscor:parameter>
@@ -9476,7 +9576,7 @@
 					<dcsset:appearance>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 						</dcscor:item>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>Текст</dcscor:parameter>
@@ -9529,7 +9629,7 @@
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:use>false</dcscor:use>
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 						</dcscor:item>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ОтметкаНезаполненного</dcscor:parameter>
@@ -9566,7 +9666,7 @@
 					<dcsset:appearance>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">style:ТекстВторостепеннойНадписи</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">0:3d0faf32-941b-476d-814c-7c1743c86441</dcscor:value>
 						</dcscor:item>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>Текст</dcscor:parameter>

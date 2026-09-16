@@ -100,7 +100,7 @@
 											<Width>10</Width>
 											<HorizontalStretch>false</HorizontalStretch>
 											<Picture>
-												<xr:Ref>0:a541f07a-cd5d-47b2-babc-5b80e2099a2e</xr:Ref>
+												<xr:Ref>0:ba1a9908-9f5d-4c9b-82d3-d77030e4f94d</xr:Ref>
 												<xr:LoadTransparent>false</xr:LoadTransparent>
 											</Picture>
 											<ExtendedTooltip name="СписокСоздатьПоступлениеРасширеннаяПодсказка" id="1286"/>
@@ -155,7 +155,7 @@
 												</v8:item>
 											</ToolTip>
 											<Picture>
-												<xr:Ref>0:09ae94e7-0bd0-48f9-bf34-ec7a1958c175</xr:Ref>
+												<xr:Ref>0:787bb1e4-ae57-4815-88bf-ce760e7b99c3</xr:Ref>
 												<xr:LoadTransparent>false</xr:LoadTransparent>
 											</Picture>
 											<ExtendedTooltip name="СписокСоздатьРасходРасширеннаяПодсказка" id="1288"/>
@@ -388,7 +388,7 @@
 											<Representation>Picture</Representation>
 											<CommandName>0</CommandName>
 											<Picture>
-												<xr:Ref>0:2420ee86-97a4-41dc-9594-87d52d64efb3</xr:Ref>
+												<xr:Ref>0:fd836523-2fb9-4bbe-9aa4-76f655b4bad2</xr:Ref>
 												<xr:LoadTransparent>false</xr:LoadTransparent>
 											</Picture>
 											<ExtendedTooltip name="ФормаСоздатьПоШаблонуДокументДвиженияДСРасширеннаяПодсказка" id="1533"/>
@@ -472,7 +472,6 @@
 								</v8:item>
 							</Title>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаСписокИПанельРасширеннаяПодсказка" id="643"/>
@@ -698,7 +697,7 @@
 																					<ShowInFooter>false</ShowInFooter>
 																					<Width>1</Width>
 																					<ValuesPicture>
-																						<xr:Ref>0:9b6f8c9e-684f-45f8-ac36-e669fd0b0da4</xr:Ref>
+																						<xr:Ref>0:49c595ff-2565-4648-9fef-ad181aca5751</xr:Ref>
 																						<xr:LoadTransparent>false</xr:LoadTransparent>
 																					</ValuesPicture>
 																					<FileDragMode>AsFile</FileDragMode>
@@ -776,7 +775,7 @@
 																							<v8:content>ЧДЦ=2</v8:content>
 																						</v8:item>
 																					</Format>
-																					<TextColor>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</TextColor>
+																					<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 																					<ContextMenu name="СуммаДокументаКонтекстноеМеню" id="678"/>
 																					<ExtendedTooltip name="СуммаДокументаРасширеннаяПодсказка" id="679"/>
 																				</LabelField>
@@ -784,7 +783,7 @@
 																					<ShowInHeader>false</ShowInHeader>
 																					<ShowInFooter>false</ShowInFooter>
 																					<Width>1</Width>
-																					<TextColor>0:c7a6d570-1b18-4061-a08f-f0503c1a4fef</TextColor>
+																					<TextColor>0:32ed27a7-73b5-4b89-b8a5-a9b96e0c5828</TextColor>
 																					<ContextMenu name="СуммаПеремещенияКонтекстноеМеню" id="1241"/>
 																					<ExtendedTooltip name="СуммаПеремещенияРасширеннаяПодсказка" id="1242"/>
 																				</LabelField>
@@ -815,7 +814,7 @@
 																							<v8:content>ЧДЦ=2</v8:content>
 																						</v8:item>
 																					</Format>
-																					<TextColor>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</TextColor>
+																					<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 																					<ContextMenu name="СписокСуммаПриходКонтекстноеМеню" id="23"/>
 																					<ExtendedTooltip name="СписокСуммаПриходExtendedTooltip" id="582"/>
 																				</LabelField>
@@ -1057,7 +1056,7 @@
 																						</v8:item>
 																					</Title>
 																					<Width>45</Width>
-																					<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																					<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																					<Font ref="sys:DefaultGUIFont" faceName="Arial" height="10" bold="false" italic="true" underline="false" strikeout="false" kind="WindowsFont"/>
 																					<ContextMenu name="СписокНазначениеПлатежаКонтекстноеМеню" id="613"/>
 																					<ExtendedTooltip name="СписокНазначениеПлатежаРасширеннаяПодсказка" id="614"/>
@@ -1222,7 +1221,6 @@
 														</v8:item>
 													</Title>
 													<Group>Vertical</Group>
-													<Behavior>Usual</Behavior>
 													<Representation>None</Representation>
 													<ShowTitle>false</ShowTitle>
 													<ExtendedTooltip name="ГруппаНазначениеПлатежаРасширеннаяПодсказка" id="1228"/>
@@ -1277,7 +1275,6 @@
 									</Title>
 									<HorizontalStretch>false</HorizontalStretch>
 									<Group>Horizontal</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ExtendedTooltip name="ПраваяПанельРасширеннаяПодсказка" id="1343"/>
@@ -1344,7 +1341,7 @@
 																	<v8:content>Період</v8:content>
 																</v8:item>
 															</Title>
-															<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+															<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 															<TitleFont ref="style:NormalTextFont" height="13" kind="StyleItem"/>
 															<TitleLocation>None</TitleLocation>
 															<ToolTip>
@@ -1358,7 +1355,7 @@
 																</v8:item>
 															</ToolTip>
 															<Hiperlink>true</Hiperlink>
-															<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+															<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 															<Font ref="style:NormalTextFont" height="11" kind="StyleItem"/>
 															<ContextMenu name="ПредставлениеПериодаКонтекстноеМеню" id="1360"/>
 															<ExtendedTooltip name="ПредставлениеПериодаРасширеннаяПодсказка" id="1361"/>
@@ -1385,7 +1382,6 @@
 																</v8:item>
 															</ToolTip>
 															<Group>Vertical</Group>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ГруппаОтборыРасширеннаяПодсказка" id="2024"/>
@@ -1412,7 +1408,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборХозОперацияРасширеннаяПодсказка" id="1950"/>
@@ -1452,7 +1447,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборКонтрагентРасширеннаяПодсказка" id="1363"/>
@@ -1500,7 +1494,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборСчетИКассаРасширеннаяПодсказка" id="1445"/>
@@ -1556,7 +1549,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборВалютаРасширеннаяПодсказка" id="1462"/>
@@ -1593,7 +1585,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборАвторРасширеннаяПодсказка" id="1923"/>
@@ -1629,7 +1620,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборОрганизацияРасширеннаяПодсказка" id="1378"/>
@@ -1676,7 +1666,6 @@
 																</v8:item>
 															</Title>
 															<Group>Vertical</Group>
-															<Behavior>Usual</Behavior>
 															<Representation>NormalSeparation</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ОтборыОбщиеРасширеннаяПодсказка" id="1146"/>
@@ -1693,7 +1682,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>AlwaysHorizontal</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаЛеваяКолонкаОбщихОтборовРасширеннаяПодсказка" id="2012"/>
@@ -1729,7 +1717,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>AlwaysHorizontal</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаЦентральнаяКолонкаОбщихОтборовРасширеннаяПодсказка" id="2014"/>
@@ -1798,7 +1785,6 @@
 																</v8:item>
 															</Title>
 															<Group>AlwaysHorizontal</Group>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ОтборыОбщиеЛеваяКолонкаРасширеннаяПодсказка" id="1144"/>
@@ -1832,17 +1818,16 @@
 																	<ChildItems>
 																		<UsualGroup name="Группа6" id="1314">
 																			<Group>Horizontal</Group>
-																			<Behavior>Usual</Behavior>
 																			<Representation>None</Representation>
 																			<ShowTitle>false</ShowTitle>
 																			<ExtendedTooltip name="Группа6РасширеннаяПодсказка" id="1315"/>
 																			<ChildItems>
 																				<LabelField name="Дата1" id="1316">
-																					<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																					<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																					<TitleFont ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																					<TitleLocation>None</TitleLocation>
 																					<Hiperlink>true</Hiperlink>
-																					<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																					<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																					<Font ref="style:LargeTextFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																					<ContextMenu name="Дата1КонтекстноеМеню" id="1317"/>
 																					<ExtendedTooltip name="Дата1РасширеннаяПодсказка" id="1318">
@@ -1886,15 +1871,14 @@
 																				</v8:item>
 																			</Title>
 																			<Group>Vertical</Group>
-																			<Behavior>Usual</Behavior>
 																			<Representation>None</Representation>
 																			<ShowTitle>false</ShowTitle>
 																			<ExtendedTooltip name="ГруппаДатаИСчетКассаРасширеннаяПодсказка" id="1261"/>
 																			<ChildItems>
 																				<LabelField name="НомерБанковскогоСчета" id="533">
-																					<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																					<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																					<TitleLocation>None</TitleLocation>
-																					<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																					<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																					<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																					<ContextMenu name="НомерБанковскогоСчетаКонтекстноеМеню" id="534"/>
 																					<ExtendedTooltip name="НомерБанковскогоСчетаРасширеннаяПодсказка" id="597"/>
@@ -1919,7 +1903,6 @@
 																		<UsualGroup name="Группа4" id="1304">
 																			<HorizontalStretch>true</HorizontalStretch>
 																			<Group>Horizontal</Group>
-																			<Behavior>Usual</Behavior>
 																			<Representation>None</Representation>
 																			<ShowTitle>false</ShowTitle>
 																			<ExtendedTooltip name="Группа4РасширеннаяПодсказка" id="1305"/>
@@ -1936,18 +1919,18 @@
 																							<v8:content>Відомість в</v8:content>
 																						</v8:item>
 																					</Title>
-																					<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																					<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																					<TitleFont ref="style:LargeTextFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																					<TitleLocation>Left</TitleLocation>
 																					<Hiperlink>true</Hiperlink>
-																					<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																					<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																					<Font ref="style:LargeTextFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																					<ContextMenu name="ОтборВалютаВедомостиКонтекстноеМеню" id="1325"/>
 																					<ExtendedTooltip name="ОтборВалютаВедомостиРасширеннаяПодсказка" id="1326"/>
 																				</LabelField>
 																				<LabelDecoration name="ДекорацияВедомостьПоВалюте" id="1321">
 																					<AutoMaxWidth>false</AutoMaxWidth>
-																					<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																					<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																					<Font ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																					<Title formatted="false">
 																						<v8:item>
@@ -2001,7 +1984,6 @@
 																	<ChildItems>
 																		<UsualGroup name="Группа7" id="1329">
 																			<Group>Horizontal</Group>
-																			<Behavior>Usual</Behavior>
 																			<Representation>None</Representation>
 																			<ShowTitle>false</ShowTitle>
 																			<ExtendedTooltip name="Группа7РасширеннаяПодсказка" id="1330"/>
@@ -2018,18 +2000,18 @@
 																							<v8:content>Залишки в</v8:content>
 																						</v8:item>
 																					</Title>
-																					<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																					<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																					<TitleFont ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																					<TitleLocation>Left</TitleLocation>
 																					<Hiperlink>true</Hiperlink>
-																					<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																					<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																					<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																					<ContextMenu name="ОтборВалютаОстатковКонтекстноеМеню" id="1332"/>
 																					<ExtendedTooltip name="ОтборВалютаОстатковРасширеннаяПодсказка" id="1333"/>
 																				</LabelField>
 																				<LabelDecoration name="ДекорацияОстатокВВалюте" id="1334">
 																					<Width>24</Width>
-																					<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																					<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																					<Font ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																					<Title formatted="false">
 																						<v8:item>
@@ -2068,7 +2050,6 @@
 																		</UsualGroup>
 																		<UsualGroup name="Группа1" id="1497">
 																			<Group>Vertical</Group>
-																			<Behavior>Usual</Behavior>
 																			<Representation>None</Representation>
 																			<ShowTitle>false</ShowTitle>
 																			<ExtendedTooltip name="Группа1РасширеннаяПодсказка" id="1498"/>
@@ -2085,7 +2066,7 @@
 																							<v8:content>Курс на 01.01.2001</v8:content>
 																						</v8:item>
 																					</Title>
-																					<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																					<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																					<TitleFont ref="style:NormalTextFont" kind="StyleItem"/>
 																					<TitleLocation>Left</TitleLocation>
 																					<ToolTipRepresentation>None</ToolTipRepresentation>
@@ -2093,7 +2074,7 @@
 																					<VerticalAlign>Center</VerticalAlign>
 																					<Width>14</Width>
 																					<MaxWidth>9</MaxWidth>
-																					<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																					<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																					<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																					<ContextMenu name="ОтборКурсКонтекстноеМеню" id="1340"/>
 																					<ExtendedTooltip name="ОтборКурсРасширеннаяПодсказка" id="1341"/>
@@ -2119,7 +2100,7 @@
 																			<Visible>false</Visible>
 																			<Width>23</Width>
 																			<HorizontalStretch>false</HorizontalStretch>
-																			<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																			<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																			<Font ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																			<Title formatted="false">
 																				<v8:item>
@@ -2152,7 +2133,6 @@
 																</v8:item>
 															</Title>
 															<Group>Vertical</Group>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ГруппаЭлементыИтоговРасширеннаяПодсказка" id="1270"/>
@@ -2169,7 +2149,7 @@
 																			<v8:content>Початок дня</v8:content>
 																		</v8:item>
 																	</Title>
-																	<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																	<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																	<TitleLocation>Left</TitleLocation>
 																	<ToolTipRepresentation>None</ToolTipRepresentation>
 																	<Width>16</Width>
@@ -2185,7 +2165,7 @@
 																		</v8:item>
 																	</EditFormat>
 																	<TextEdit>false</TextEdit>
-																	<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																	<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																	<BorderColor>style:FormBackColor</BorderColor>
 																	<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																	<ContextMenu name="ИнформацияСуммаВалНачальныйОстатокКонтекстноеМеню" id="539"/>
@@ -2216,7 +2196,7 @@
 																			<v8:content>Надійшло</v8:content>
 																		</v8:item>
 																	</Title>
-																	<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																	<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																	<TitleLocation>Left</TitleLocation>
 																	<Width>16</Width>
 																	<ChoiceButton>false</ChoiceButton>
@@ -2230,13 +2210,13 @@
 																			<v8:content>ЧДЦ=2</v8:content>
 																		</v8:item>
 																	</EditFormat>
-																	<TextColor>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</TextColor>
+																	<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 																	<BorderColor>style:FormBackColor</BorderColor>
 																	<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																	<ContextMenu name="ИнформацияСуммаВалПриходКонтекстноеМеню" id="544"/>
 																	<ExtendedTooltip name="ИнформацияСуммаВалПриходРасширеннаяПодсказка" id="603">
 																		<HorizontalStretch>true</HorizontalStretch>
-																		<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																		<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																		<Title formatted="true">
 																			<v8:item>
 																				<v8:lang>ru</v8:lang>
@@ -2262,7 +2242,7 @@
 																			<v8:content>Списано</v8:content>
 																		</v8:item>
 																	</Title>
-																	<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																	<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																	<TitleLocation>Left</TitleLocation>
 																	<Width>16</Width>
 																	<ChoiceButton>false</ChoiceButton>
@@ -2282,7 +2262,7 @@
 																	<ContextMenu name="ИнформацияСуммаВалРасходКонтекстноеМеню" id="549"/>
 																	<ExtendedTooltip name="ИнформацияСуммаВалРасходРасширеннаяПодсказка" id="606">
 																		<HorizontalStretch>true</HorizontalStretch>
-																		<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																		<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																		<Title formatted="true">
 																			<v8:item>
 																				<v8:lang>ru</v8:lang>
@@ -2300,7 +2280,6 @@
 																	<Width>25</Width>
 																	<HorizontalStretch>false</HorizontalStretch>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="Группа8РасширеннаяПодсказка" id="1500"/>
@@ -2317,7 +2296,7 @@
 																					<v8:content>Залишок</v8:content>
 																				</v8:item>
 																			</Title>
-																			<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																			<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																			<TitleFont ref="style:NormalTextFont" kind="StyleItem"/>
 																			<TitleLocation>Left</TitleLocation>
 																			<ToolTipRepresentation>None</ToolTipRepresentation>
@@ -2325,12 +2304,12 @@
 																			<VerticalAlign>Center</VerticalAlign>
 																			<MaxWidth>14</MaxWidth>
 																			<HorizontalStretch>true</HorizontalStretch>
-																			<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																			<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																			<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																			<ContextMenu name="ИнформацияСуммаВалКонечныйОстатокКонтекстноеМеню" id="554"/>
 																			<ExtendedTooltip name="ИнформацияСуммаВалКонечныйОстатокРасширеннаяПодсказка" id="609">
 																				<HorizontalStretch>true</HorizontalStretch>
-																				<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																				<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																				<Font ref="sys:DefaultGUIFont" height="4" kind="WindowsFont"/>
 																				<Title formatted="true">
 																					<v8:item>
@@ -2351,7 +2330,7 @@
 																	<Visible>false</Visible>
 																	<ReadOnly>true</ReadOnly>
 																	<TitleLocation>None</TitleLocation>
-																	<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																	<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																	<BorderColor>style:FormBackColor</BorderColor>
 																	<Font ref="style:LargeTextFont" height="13" kind="StyleItem"/>
 																	<ContextMenu name="ИнформацияСуммаВалПриходПеремещениеКонтекстноеМеню" id="1278"/>
@@ -2361,7 +2340,7 @@
 																	<Visible>false</Visible>
 																	<ReadOnly>true</ReadOnly>
 																	<TitleLocation>None</TitleLocation>
-																	<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																	<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																	<BorderColor>style:FormBackColor</BorderColor>
 																	<Font ref="style:LargeTextFont" height="13" kind="StyleItem"/>
 																	<ContextMenu name="ИнформацияСуммаВалРасходПеремещениеКонтекстноеМеню" id="1281"/>
@@ -2385,7 +2364,7 @@
 															<HorizontalStretch>false</HorizontalStretch>
 															<VerticalStretch>false</VerticalStretch>
 															<FileDragMode>AsFile</FileDragMode>
-															<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+															<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 															<BorderColor>style:FormBackColor</BorderColor>
 															<Font ref="style:NormalTextFont" kind="StyleItem"/>
 															<Title>
@@ -2483,13 +2462,12 @@
 															<Group>Horizontal</Group>
 															<HorizontalAlign>Right</HorizontalAlign>
 															<VerticalAlign>Bottom</VerticalAlign>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ГруппаОтступРасширеннаяПодсказка" id="2036"/>
 															<ChildItems>
 																<LabelDecoration name="СвернутьОтборы" id="1387">
-																	<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																	<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																	<Title formatted="false">
 																		<v8:item>
 																			<v8:lang>ru</v8:lang>
@@ -2723,7 +2701,6 @@
 								</v8:item>
 							</Title>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаСписокИПраваяПанельППРасширеннаяПодсказка" id="1545"/>
@@ -2740,7 +2717,6 @@
 										</v8:item>
 									</Title>
 									<Group>Vertical</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ExtendedTooltip name="ГруппаПлатежныеПорученияРасширеннаяПодсказка" id="1721"/>
@@ -3132,7 +3108,6 @@
 												</v8:item>
 											</ToolTip>
 											<Group>Vertical</Group>
-											<Behavior>Usual</Behavior>
 											<Representation>None</Representation>
 											<ShowTitle>false</ShowTitle>
 											<ExtendedTooltip name="ГруппаНазначениеПлатежаППРасширеннаяПодсказка" id="1723"/>
@@ -3194,7 +3169,6 @@
 									</ToolTip>
 									<HorizontalStretch>false</HorizontalStretch>
 									<Group>Horizontal</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ExtendedTooltip name="ПраваяПанельППРасширеннаяПодсказка" id="1547"/>
@@ -3272,7 +3246,7 @@
 																	<v8:content>Період</v8:content>
 																</v8:item>
 															</Title>
-															<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+															<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 															<TitleFont ref="style:NormalTextFont" height="13" kind="StyleItem"/>
 															<TitleLocation>None</TitleLocation>
 															<ToolTip>
@@ -3286,7 +3260,7 @@
 																</v8:item>
 															</ToolTip>
 															<Hiperlink>true</Hiperlink>
-															<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+															<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 															<Font ref="style:NormalTextFont" height="11" kind="StyleItem"/>
 															<ContextMenu name="ПредставлениеПериодаППКонтекстноеМеню" id="1564"/>
 															<ExtendedTooltip name="ПредставлениеПериодаППРасширеннаяПодсказка" id="1565"/>
@@ -3312,7 +3286,6 @@
 																	<v8:content>Група відбори ПП</v8:content>
 																</v8:item>
 															</ToolTip>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ГруппаОтборыППРасширеннаяПодсказка" id="2028"/>
@@ -3339,7 +3312,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборВидОперацииППРасширеннаяПодсказка" id="1567"/>
@@ -3379,7 +3351,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборКонтрагентППРасширеннаяПодсказка" id="1572"/>
@@ -3427,7 +3398,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборСчетИКассаППРасширеннаяПодсказка" id="1577"/>
@@ -3479,7 +3449,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборВалютаППРасширеннаяПодсказка" id="1582"/>
@@ -3517,7 +3486,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборАвторППРасширеннаяПодсказка" id="1928"/>
@@ -3554,7 +3522,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборОрганизацияППРасширеннаяПодсказка" id="1587"/>
@@ -3602,7 +3569,6 @@
 																</v8:item>
 															</Title>
 															<Group>Horizontal</Group>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ГруппаВедомостьИНастройкаРасширеннаяПодсказка" id="1455"/>
@@ -3610,7 +3576,7 @@
 																<Button name="ВедомостьПерейти" id="664">
 																	<Type>Hyperlink</Type>
 																	<CommandName>0</CommandName>
-																	<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																	<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																	<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																	<Title>
 																		<v8:item>
@@ -3636,7 +3602,7 @@
 															<Width>23</Width>
 															<HorizontalStretch>true</HorizontalStretch>
 															<VerticalStretch>true</VerticalStretch>
-															<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+															<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 															<Title formatted="false">
 																<v8:item>
 																	<v8:lang>ru</v8:lang>
@@ -3801,7 +3767,6 @@
 								</v8:item>
 							</Title>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаСписокИПраваяПанельРасширеннаяПодсказка" id="1111"/>
@@ -4084,7 +4049,6 @@
 									</ToolTip>
 									<HorizontalStretch>false</HorizontalStretch>
 									<Group>Horizontal</Group>
-									<Behavior>Usual</Behavior>
 									<Representation>None</Representation>
 									<ShowTitle>false</ShowTitle>
 									<ExtendedTooltip name="ПраваяПанельЭРасширеннаяПодсказка" id="1814"/>
@@ -4172,7 +4136,7 @@
 																	<v8:content>Період</v8:content>
 																</v8:item>
 															</Title>
-															<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+															<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 															<TitleFont ref="style:NormalTextFont" height="13" kind="StyleItem"/>
 															<TitleLocation>None</TitleLocation>
 															<ToolTip>
@@ -4186,7 +4150,7 @@
 																</v8:item>
 															</ToolTip>
 															<Hiperlink>true</Hiperlink>
-															<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+															<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 															<Font ref="style:NormalTextFont" height="11" kind="StyleItem"/>
 															<ContextMenu name="ПредставлениеПериодаЭКонтекстноеМеню" id="1831"/>
 															<ExtendedTooltip name="ПредставлениеПериодаЭРасширеннаяПодсказка" id="1832"/>
@@ -4213,7 +4177,6 @@
 																</v8:item>
 															</ToolTip>
 															<Group>Vertical</Group>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ГруппаОтборыЭРасширеннаяПодсказка" id="2032"/>
@@ -4230,7 +4193,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборОрганизацияЭРасширеннаяПодсказка" id="1854"/>
@@ -4268,7 +4230,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборАвторЭРасширеннаяПодсказка" id="1933"/>
@@ -4315,7 +4276,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборЭквайринговыйТерминалЭРасширеннаяПодсказка" id="1844"/>
@@ -4352,7 +4312,6 @@
 																		</v8:item>
 																	</Title>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборКонтрагентЭРасширеннаяПодсказка" id="1869"/>
@@ -4409,7 +4368,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборБанкЭквайрерЭРасширеннаяПодсказка" id="1839"/>
@@ -4458,7 +4416,6 @@
 																		</v8:item>
 																	</ToolTip>
 																	<Group>Vertical</Group>
-																	<Behavior>Usual</Behavior>
 																	<Representation>None</Representation>
 																	<ShowTitle>false</ShowTitle>
 																	<ExtendedTooltip name="ГруппаОтборВидОперацииЭРасширеннаяПодсказка" id="1834"/>
@@ -4478,7 +4435,7 @@
 																					<xr:CheckState>0</xr:CheckState>
 																					<xr:Value xsi:type="FormChoiceListDesTimeValue">
 																						<Presentation/>
-																						<Value xsi:type="xr:DesignTimeRef">67ad8c2d-7635-487f-9d2f-1824a26f4d10.cd7a5f9e-cfab-4084-9ac7-b819d043b6ed</Value>
+																						<Value xsi:type="xr:DesignTimeRef">6e1264f4-f6ad-485a-8886-2cda6f0c5b43.c0a44c81-d82a-4db2-924b-1c7f2e63c006</Value>
 																					</xr:Value>
 																				</xr:Item>
 																				<xr:Item>
@@ -4486,7 +4443,7 @@
 																					<xr:CheckState>0</xr:CheckState>
 																					<xr:Value xsi:type="FormChoiceListDesTimeValue">
 																						<Presentation/>
-																						<Value xsi:type="xr:DesignTimeRef">67ad8c2d-7635-487f-9d2f-1824a26f4d10.30ad20e6-9a90-47ce-ab4e-653aea775d2d</Value>
+																						<Value xsi:type="xr:DesignTimeRef">6e1264f4-f6ad-485a-8886-2cda6f0c5b43.024b4d08-6e93-4994-9303-4b08c78f7eda</Value>
 																					</xr:Value>
 																				</xr:Item>
 																			</ChoiceList>
@@ -4527,7 +4484,6 @@
 																</v8:item>
 															</Title>
 															<Group>Horizontal</Group>
-															<Behavior>Usual</Behavior>
 															<Representation>None</Representation>
 															<ShowTitle>false</ShowTitle>
 															<ExtendedTooltip name="ГруппаВедомостьИНастройкаЭРасширеннаяПодсказка" id="1859"/>
@@ -4535,7 +4491,7 @@
 																<Button name="ВедомостьПерейтиКОтчетуПоЭквайрингу" id="1860">
 																	<Type>Hyperlink</Type>
 																	<CommandName>0</CommandName>
-																	<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																	<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																	<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																	<ExtendedTooltip name="ВедомостьПерейтиКОтчетуПоЭквайрингуРасширеннаяПодсказка" id="1861">
 																		<HorizontalStretch>true</HorizontalStretch>
@@ -4551,7 +4507,7 @@
 															<Width>23</Width>
 															<HorizontalStretch>true</HorizontalStretch>
 															<VerticalStretch>true</VerticalStretch>
-															<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+															<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 															<Title formatted="false">
 																<v8:item>
 																	<v8:lang>ru</v8:lang>
@@ -4845,7 +4801,7 @@
 												<Width>10</Width>
 												<HorizontalStretch>false</HorizontalStretch>
 												<Picture>
-													<xr:Ref>0:a541f07a-cd5d-47b2-babc-5b80e2099a2e</xr:Ref>
+													<xr:Ref>0:ba1a9908-9f5d-4c9b-82d3-d77030e4f94d</xr:Ref>
 													<xr:LoadTransparent>false</xr:LoadTransparent>
 												</Picture>
 												<ExtendedTooltip name="СписокСоздатьПоступлениеРасширеннаяПодсказка" id="1286"/>
@@ -4900,7 +4856,7 @@
 													</v8:item>
 												</ToolTip>
 												<Picture>
-													<xr:Ref>0:09ae94e7-0bd0-48f9-bf34-ec7a1958c175</xr:Ref>
+													<xr:Ref>0:787bb1e4-ae57-4815-88bf-ce760e7b99c3</xr:Ref>
 													<xr:LoadTransparent>false</xr:LoadTransparent>
 												</Picture>
 												<ExtendedTooltip name="СписокСоздатьРасходРасширеннаяПодсказка" id="1288"/>
@@ -5133,7 +5089,7 @@
 												<Representation>Picture</Representation>
 												<CommandName>0</CommandName>
 												<Picture>
-													<xr:Ref>0:2420ee86-97a4-41dc-9594-87d52d64efb3</xr:Ref>
+													<xr:Ref>0:fd836523-2fb9-4bbe-9aa4-76f655b4bad2</xr:Ref>
 													<xr:LoadTransparent>false</xr:LoadTransparent>
 												</Picture>
 												<ExtendedTooltip name="ФормаСоздатьПоШаблонуДокументДвиженияДСРасширеннаяПодсказка" id="1533"/>
@@ -5217,7 +5173,6 @@
 									</v8:item>
 								</Title>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаСписокИПанельРасширеннаяПодсказка" id="643"/>
@@ -5306,7 +5261,7 @@
 														<AutoCommandBar name="БанковскиеВыпискиКоманднаяПанель" id="3">
 															<Autofill>false</Autofill>
 														</AutoCommandBar>
-														<ExtendedTooltip name="БанковскиеВыпискиExtendedTooltip" id="580"/>
+														<ExtendedTooltip name="БанковскиеВыпискиРасширеннаяПодсказка" id="580"/>
 														<SearchStringAddition name="БанковскиеВыпискиСтрокаПоиска" id="633">
 															<AdditionSource>
 																<Item>БанковскиеВыписки</Item>
@@ -5391,7 +5346,7 @@
 																							</v8:item>
 																						</Format>
 																						<ContextMenu name="СписокДатаКонтекстноеМеню" id="5"/>
-																						<ExtendedTooltip name="СписокДатаExtendedTooltip" id="581"/>
+																						<ExtendedTooltip name="СписокДатаРасширеннаяПодсказка" id="581"/>
 																					</LabelField>
 																					<LabelField name="ФразаБанкКасса" id="1539">
 																						<Title>
@@ -5443,7 +5398,7 @@
 																						<ShowInFooter>false</ShowInFooter>
 																						<Width>1</Width>
 																						<ValuesPicture>
-																							<xr:Ref>0:9b6f8c9e-684f-45f8-ac36-e669fd0b0da4</xr:Ref>
+																							<xr:Ref>0:49c595ff-2565-4648-9fef-ad181aca5751</xr:Ref>
 																							<xr:LoadTransparent>false</xr:LoadTransparent>
 																						</ValuesPicture>
 																						<FileDragMode>AsFile</FileDragMode>
@@ -5521,7 +5476,7 @@
 																								<v8:content>ЧДЦ=2</v8:content>
 																							</v8:item>
 																						</Format>
-																						<TextColor>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</TextColor>
+																						<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 																						<ContextMenu name="СуммаДокументаКонтекстноеМеню" id="678"/>
 																						<ExtendedTooltip name="СуммаДокументаРасширеннаяПодсказка" id="679"/>
 																					</LabelField>
@@ -5529,7 +5484,7 @@
 																						<ShowInHeader>false</ShowInHeader>
 																						<ShowInFooter>false</ShowInFooter>
 																						<Width>1</Width>
-																						<TextColor>0:c7a6d570-1b18-4061-a08f-f0503c1a4fef</TextColor>
+																						<TextColor>0:32ed27a7-73b5-4b89-b8a5-a9b96e0c5828</TextColor>
 																						<ContextMenu name="СуммаПеремещенияКонтекстноеМеню" id="1241"/>
 																						<ExtendedTooltip name="СуммаПеремещенияРасширеннаяПодсказка" id="1242"/>
 																					</LabelField>
@@ -5560,9 +5515,9 @@
 																								<v8:content>ЧДЦ=2</v8:content>
 																							</v8:item>
 																						</Format>
-																						<TextColor>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</TextColor>
+																						<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 																						<ContextMenu name="СписокСуммаПриходКонтекстноеМеню" id="23"/>
-																						<ExtendedTooltip name="СписокСуммаПриходExtendedTooltip" id="582"/>
+																						<ExtendedTooltip name="СписокСуммаПриходРасширеннаяПодсказка" id="582"/>
 																					</LabelField>
 																					<LabelField name="СписокСуммаРасход" id="88" DisplayImportance="VeryHigh">
 																						<UserVisible>
@@ -5594,7 +5549,7 @@
 																						</Format>
 																						<TextColor>style:SpecialTextColor</TextColor>
 																						<ContextMenu name="СписокСуммаРасходКонтекстноеМеню" id="89"/>
-																						<ExtendedTooltip name="СписокСуммаРасходExtendedTooltip" id="583"/>
+																						<ExtendedTooltip name="СписокСуммаРасходРасширеннаяПодсказка" id="583"/>
 																					</LabelField>
 																					<LabelField name="СписокВалюта" id="24" DisplayImportance="VeryHigh">
 																						<Title>
@@ -5612,7 +5567,7 @@
 																						<Width>1</Width>
 																						<HorizontalStretch>false</HorizontalStretch>
 																						<ContextMenu name="СписокВалютаКонтекстноеМеню" id="25"/>
-																						<ExtendedTooltip name="СписокВалютаExtendedTooltip" id="584"/>
+																						<ExtendedTooltip name="СписокВалютаРасширеннаяПодсказка" id="584"/>
 																					</LabelField>
 																				</ChildItems>
 																			</ColumnGroup>
@@ -5629,7 +5584,7 @@
 																				</Title>
 																				<Width>20</Width>
 																				<Group>InCell</Group>
-																				<ExtendedTooltip name="СписокКонтрагентПодотчетникExtendedTooltip" id="587"/>
+																				<ExtendedTooltip name="СписокКонтрагентПодотчетникРасширеннаяПодсказка" id="587"/>
 																				<ChildItems>
 																					<LabelField name="Аналитика" id="1466">
 																						<Title>
@@ -5653,7 +5608,7 @@
 																						<ShowInHeader>false</ShowInHeader>
 																						<Width>1</Width>
 																						<ContextMenu name="СписокКонтрагентКонтекстноеМеню" id="19"/>
-																						<ExtendedTooltip name="СписокКонтрагентExtendedTooltip" id="588"/>
+																						<ExtendedTooltip name="СписокКонтрагентРасширеннаяПодсказка" id="588"/>
 																					</LabelField>
 																					<LabelField name="СписокПодотчетник" id="20">
 																						<UserVisible>
@@ -5672,7 +5627,7 @@
 																						<ShowInHeader>false</ShowInHeader>
 																						<Width>1</Width>
 																						<ContextMenu name="СписокПодотчетникКонтекстноеМеню" id="21"/>
-																						<ExtendedTooltip name="СписокПодотчетникExtendedTooltip" id="589"/>
+																						<ExtendedTooltip name="СписокПодотчетникРасширеннаяПодсказка" id="589"/>
 																					</LabelField>
 																					<LabelField name="СписокКорреспонденция" id="666">
 																						<UserVisible>
@@ -5733,7 +5688,7 @@
 																						<ShowInFooter>false</ShowInFooter>
 																						<Width>1</Width>
 																						<ContextMenu name="СписокБанковскийСчетКонтекстноеМеню" id="15"/>
-																						<ExtendedTooltip name="СписокБанковскийСчетExtendedTooltip" id="591"/>
+																						<ExtendedTooltip name="СписокБанковскийСчетРасширеннаяПодсказка" id="591"/>
 																					</LabelField>
 																					<LabelField name="Касса" id="1231">
 																						<UserVisible>
@@ -5802,7 +5757,7 @@
 																							</v8:item>
 																						</Title>
 																						<Width>45</Width>
-																						<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																						<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																						<Font ref="sys:DefaultGUIFont" faceName="Arial" height="10" bold="false" italic="true" underline="false" strikeout="false" kind="WindowsFont"/>
 																						<ContextMenu name="СписокНазначениеПлатежаКонтекстноеМеню" id="613"/>
 																						<ExtendedTooltip name="СписокНазначениеПлатежаРасширеннаяПодсказка" id="614"/>
@@ -5824,7 +5779,7 @@
 																					</v8:item>
 																				</Title>
 																				<ContextMenu name="СписокОрганизацияКонтекстноеМеню" id="11"/>
-																				<ExtendedTooltip name="СписокОрганизацияExtendedTooltip" id="590"/>
+																				<ExtendedTooltip name="СписокОрганизацияРасширеннаяПодсказка" id="590"/>
 																			</LabelField>
 																			<LabelField name="СписокКомментарий" id="26">
 																				<Title>
@@ -5838,7 +5793,7 @@
 																					</v8:item>
 																				</Title>
 																				<ContextMenu name="СписокКомментарийКонтекстноеМеню" id="27"/>
-																				<ExtendedTooltip name="СписокКомментарийExtendedTooltip" id="594"/>
+																				<ExtendedTooltip name="СписокКомментарийРасширеннаяПодсказка" id="594"/>
 																			</LabelField>
 																			<LabelField name="СписокНомер" id="6">
 																				<Title>
@@ -5854,7 +5809,7 @@
 																				<Width>12</Width>
 																				<HorizontalStretch>false</HorizontalStretch>
 																				<ContextMenu name="СписокНомерКонтекстноеМеню" id="7"/>
-																				<ExtendedTooltip name="СписокНомерExtendedTooltip" id="585"/>
+																				<ExtendedTooltip name="СписокНомерРасширеннаяПодсказка" id="585"/>
 																			</LabelField>
 																			<LabelField name="СписокТип" id="8">
 																				<UserVisible>
@@ -5871,7 +5826,7 @@
 																					</v8:item>
 																				</Title>
 																				<ContextMenu name="СписокТипКонтекстноеМеню" id="9"/>
-																				<ExtendedTooltip name="СписокТипExtendedTooltip" id="586"/>
+																				<ExtendedTooltip name="СписокТипРасширеннаяПодсказка" id="586"/>
 																			</LabelField>
 																			<LabelField name="СписокВидОперации" id="12">
 																				<UserVisible>
@@ -5888,7 +5843,7 @@
 																					</v8:item>
 																				</Title>
 																				<ContextMenu name="СписокВидОперацииКонтекстноеМеню" id="13"/>
-																				<ExtendedTooltip name="СписокВидОперацииExtendedTooltip" id="592"/>
+																				<ExtendedTooltip name="СписокВидОперацииРасширеннаяПодсказка" id="592"/>
 																			</LabelField>
 																			<LabelField name="СписокСтатья" id="16">
 																				<UserVisible>
@@ -5905,7 +5860,7 @@
 																					</v8:item>
 																				</Title>
 																				<ContextMenu name="СписокСтатьяКонтекстноеМеню" id="17"/>
-																				<ExtendedTooltip name="СписокСтатьяExtendedTooltip" id="593"/>
+																				<ExtendedTooltip name="СписокСтатьяРасширеннаяПодсказка" id="593"/>
 																			</LabelField>
 																			<LabelField name="СписокАвтор" id="669">
 																				<ContextMenu name="СписокАвторКонтекстноеМеню" id="670"/>
@@ -5967,7 +5922,6 @@
 															</v8:item>
 														</Title>
 														<Group>Vertical</Group>
-														<Behavior>Usual</Behavior>
 														<Representation>None</Representation>
 														<ShowTitle>false</ShowTitle>
 														<ExtendedTooltip name="ГруппаНазначениеПлатежаРасширеннаяПодсказка" id="1228"/>
@@ -6022,7 +5976,6 @@
 										</Title>
 										<HorizontalStretch>false</HorizontalStretch>
 										<Group>Horizontal</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
 										<ExtendedTooltip name="ПраваяПанельРасширеннаяПодсказка" id="1343"/>
@@ -6089,7 +6042,7 @@
 																		<v8:content>Період</v8:content>
 																	</v8:item>
 																</Title>
-																<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																<TitleFont ref="style:NormalTextFont" height="13" kind="StyleItem"/>
 																<TitleLocation>None</TitleLocation>
 																<ToolTip>
@@ -6103,7 +6056,7 @@
 																	</v8:item>
 																</ToolTip>
 																<Hiperlink>true</Hiperlink>
-																<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																<Font ref="style:NormalTextFont" height="11" kind="StyleItem"/>
 																<ContextMenu name="ПредставлениеПериодаКонтекстноеМеню" id="1360"/>
 																<ExtendedTooltip name="ПредставлениеПериодаРасширеннаяПодсказка" id="1361"/>
@@ -6130,7 +6083,6 @@
 																	</v8:item>
 																</ToolTip>
 																<Group>Vertical</Group>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ГруппаОтборыРасширеннаяПодсказка" id="2024"/>
@@ -6157,7 +6109,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборХозОперацияРасширеннаяПодсказка" id="1950"/>
@@ -6197,7 +6148,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборКонтрагентРасширеннаяПодсказка" id="1363"/>
@@ -6245,7 +6195,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборСчетИКассаРасширеннаяПодсказка" id="1445"/>
@@ -6301,7 +6250,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборВалютаРасширеннаяПодсказка" id="1462"/>
@@ -6338,7 +6286,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборАвторРасширеннаяПодсказка" id="1923"/>
@@ -6374,7 +6321,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборОрганизацияРасширеннаяПодсказка" id="1378"/>
@@ -6421,7 +6367,6 @@
 																	</v8:item>
 																</Title>
 																<Group>Vertical</Group>
-																<Behavior>Usual</Behavior>
 																<Representation>NormalSeparation</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ОтборыОбщиеРасширеннаяПодсказка" id="1146"/>
@@ -6438,7 +6383,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>AlwaysHorizontal</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаЛеваяКолонкаОбщихОтборовРасширеннаяПодсказка" id="2012"/>
@@ -6474,7 +6418,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>AlwaysHorizontal</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаЦентральнаяКолонкаОбщихОтборовРасширеннаяПодсказка" id="2014"/>
@@ -6543,7 +6486,6 @@
 																	</v8:item>
 																</Title>
 																<Group>AlwaysHorizontal</Group>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ОтборыОбщиеЛеваяКолонкаРасширеннаяПодсказка" id="1144"/>
@@ -6577,17 +6519,16 @@
 																		<ChildItems>
 																			<UsualGroup name="Группа6" id="1314">
 																				<Group>Horizontal</Group>
-																				<Behavior>Usual</Behavior>
 																				<Representation>None</Representation>
 																				<ShowTitle>false</ShowTitle>
 																				<ExtendedTooltip name="Группа6РасширеннаяПодсказка" id="1315"/>
 																				<ChildItems>
 																					<LabelField name="Дата1" id="1316">
-																						<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																						<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																						<TitleFont ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																						<TitleLocation>None</TitleLocation>
 																						<Hiperlink>true</Hiperlink>
-																						<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																						<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																						<Font ref="style:LargeTextFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																						<ContextMenu name="Дата1КонтекстноеМеню" id="1317"/>
 																						<ExtendedTooltip name="Дата1РасширеннаяПодсказка" id="1318">
@@ -6631,15 +6572,14 @@
 																					</v8:item>
 																				</Title>
 																				<Group>Vertical</Group>
-																				<Behavior>Usual</Behavior>
 																				<Representation>None</Representation>
 																				<ShowTitle>false</ShowTitle>
 																				<ExtendedTooltip name="ГруппаДатаИСчетКассаРасширеннаяПодсказка" id="1261"/>
 																				<ChildItems>
 																					<LabelField name="НомерБанковскогоСчета" id="533">
-																						<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																						<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																						<TitleLocation>None</TitleLocation>
-																						<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																						<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																						<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																						<ContextMenu name="НомерБанковскогоСчетаКонтекстноеМеню" id="534"/>
 																						<ExtendedTooltip name="НомерБанковскогоСчетаРасширеннаяПодсказка" id="597"/>
@@ -6664,7 +6604,6 @@
 																			<UsualGroup name="Группа4" id="1304">
 																				<HorizontalStretch>true</HorizontalStretch>
 																				<Group>Horizontal</Group>
-																				<Behavior>Usual</Behavior>
 																				<Representation>None</Representation>
 																				<ShowTitle>false</ShowTitle>
 																				<ExtendedTooltip name="Группа4РасширеннаяПодсказка" id="1305"/>
@@ -6681,18 +6620,18 @@
 																								<v8:content>Відомість в</v8:content>
 																							</v8:item>
 																						</Title>
-																						<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																						<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																						<TitleFont ref="style:LargeTextFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																						<TitleLocation>Left</TitleLocation>
 																						<Hiperlink>true</Hiperlink>
-																						<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																						<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																						<Font ref="style:LargeTextFont" height="10" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																						<ContextMenu name="ОтборВалютаВедомостиКонтекстноеМеню" id="1325"/>
 																						<ExtendedTooltip name="ОтборВалютаВедомостиРасширеннаяПодсказка" id="1326"/>
 																					</LabelField>
 																					<LabelDecoration name="ДекорацияВедомостьПоВалюте" id="1321">
 																						<AutoMaxWidth>false</AutoMaxWidth>
-																						<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																						<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																						<Font ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																						<Title formatted="false">
 																							<v8:item>
@@ -6746,7 +6685,6 @@
 																		<ChildItems>
 																			<UsualGroup name="Группа7" id="1329">
 																				<Group>Horizontal</Group>
-																				<Behavior>Usual</Behavior>
 																				<Representation>None</Representation>
 																				<ShowTitle>false</ShowTitle>
 																				<ExtendedTooltip name="Группа7РасширеннаяПодсказка" id="1330"/>
@@ -6763,18 +6701,18 @@
 																								<v8:content>Залишки в</v8:content>
 																							</v8:item>
 																						</Title>
-																						<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																						<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																						<TitleFont ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																						<TitleLocation>Left</TitleLocation>
 																						<Hiperlink>true</Hiperlink>
-																						<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																						<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																						<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																						<ContextMenu name="ОтборВалютаОстатковКонтекстноеМеню" id="1332"/>
 																						<ExtendedTooltip name="ОтборВалютаОстатковРасширеннаяПодсказка" id="1333"/>
 																					</LabelField>
 																					<LabelDecoration name="ДекорацияОстатокВВалюте" id="1334">
 																						<Width>24</Width>
-																						<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																						<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																						<Font ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																						<Title formatted="false">
 																							<v8:item>
@@ -6813,7 +6751,6 @@
 																			</UsualGroup>
 																			<UsualGroup name="Группа1" id="1497">
 																				<Group>Vertical</Group>
-																				<Behavior>Usual</Behavior>
 																				<Representation>None</Representation>
 																				<ShowTitle>false</ShowTitle>
 																				<ExtendedTooltip name="Группа1РасширеннаяПодсказка" id="1498"/>
@@ -6830,7 +6767,7 @@
 																								<v8:content>Курс на 01.01.2001</v8:content>
 																							</v8:item>
 																						</Title>
-																						<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																						<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																						<TitleFont ref="style:NormalTextFont" kind="StyleItem"/>
 																						<TitleLocation>Left</TitleLocation>
 																						<ToolTipRepresentation>None</ToolTipRepresentation>
@@ -6838,7 +6775,7 @@
 																						<VerticalAlign>Center</VerticalAlign>
 																						<Width>14</Width>
 																						<MaxWidth>9</MaxWidth>
-																						<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																						<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																						<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																						<ContextMenu name="ОтборКурсКонтекстноеМеню" id="1340"/>
 																						<ExtendedTooltip name="ОтборКурсРасширеннаяПодсказка" id="1341"/>
@@ -6864,7 +6801,7 @@
 																				<Visible>false</Visible>
 																				<Width>23</Width>
 																				<HorizontalStretch>false</HorizontalStretch>
-																				<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																				<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																				<Font ref="style:NormalTextFont" bold="true" italic="false" underline="false" strikeout="false" kind="StyleItem"/>
 																				<Title formatted="false">
 																					<v8:item>
@@ -6897,7 +6834,6 @@
 																	</v8:item>
 																</Title>
 																<Group>Vertical</Group>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ГруппаЭлементыИтоговРасширеннаяПодсказка" id="1270"/>
@@ -6914,7 +6850,7 @@
 																				<v8:content>Початок дня</v8:content>
 																			</v8:item>
 																		</Title>
-																		<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																		<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																		<TitleLocation>Left</TitleLocation>
 																		<ToolTipRepresentation>None</ToolTipRepresentation>
 																		<Width>16</Width>
@@ -6930,7 +6866,7 @@
 																			</v8:item>
 																		</EditFormat>
 																		<TextEdit>false</TextEdit>
-																		<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																		<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																		<BorderColor>style:FormBackColor</BorderColor>
 																		<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																		<ContextMenu name="ИнформацияСуммаВалНачальныйОстатокКонтекстноеМеню" id="539"/>
@@ -6961,7 +6897,7 @@
 																				<v8:content>Надійшло</v8:content>
 																			</v8:item>
 																		</Title>
-																		<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																		<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																		<TitleLocation>Left</TitleLocation>
 																		<Width>16</Width>
 																		<ChoiceButton>false</ChoiceButton>
@@ -6975,21 +6911,21 @@
 																				<v8:content>ЧДЦ=2</v8:content>
 																			</v8:item>
 																		</EditFormat>
-																		<TextColor>0:b43ef832-0be2-470f-b529-a86c1aeffbcd</TextColor>
+																		<TextColor>0:12292e9f-c6ef-4882-8376-1696cbc37e82</TextColor>
 																		<BorderColor>style:FormBackColor</BorderColor>
 																		<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																		<ContextMenu name="ИнформацияСуммаВалПриходКонтекстноеМеню" id="544"/>
 																		<ExtendedTooltip name="ИнформацияСуммаВалПриходРасширеннаяПодсказка" id="603">
 																			<HorizontalStretch>true</HorizontalStretch>
-																			<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																			<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																			<Title formatted="true">
-																				<v8:item>
-																					<v8:lang>ru</v8:lang>
-																					<v8:content>&lt;i&gt;Поступило:&lt;/&gt;</v8:content>
-																				</v8:item>
 																				<v8:item>
 																					<v8:lang>uk</v8:lang>
 																					<v8:content>&lt;i&gt;Надійшло:&lt;/&gt;</v8:content>
+																				</v8:item>
+																				<v8:item>
+																					<v8:lang>ru</v8:lang>
+																					<v8:content>&lt;i&gt;Поступило:&lt;/&gt;</v8:content>
 																				</v8:item>
 																			</Title>
 																			<VerticalAlign>Center</VerticalAlign>
@@ -7007,7 +6943,7 @@
 																				<v8:content>Списано</v8:content>
 																			</v8:item>
 																		</Title>
-																		<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																		<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																		<TitleLocation>Left</TitleLocation>
 																		<Width>16</Width>
 																		<ChoiceButton>false</ChoiceButton>
@@ -7027,14 +6963,14 @@
 																		<ContextMenu name="ИнформацияСуммаВалРасходКонтекстноеМеню" id="549"/>
 																		<ExtendedTooltip name="ИнформацияСуммаВалРасходРасширеннаяПодсказка" id="606">
 																			<HorizontalStretch>true</HorizontalStretch>
-																			<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																			<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																			<Title formatted="true">
 																				<v8:item>
-																					<v8:lang>ru</v8:lang>
+																					<v8:lang>uk</v8:lang>
 																					<v8:content>&lt;i&gt;Списано:&lt;/&gt;</v8:content>
 																				</v8:item>
 																				<v8:item>
-																					<v8:lang>uk</v8:lang>
+																					<v8:lang>ru</v8:lang>
 																					<v8:content>&lt;i&gt;Списано:&lt;/&gt;</v8:content>
 																				</v8:item>
 																			</Title>
@@ -7045,7 +6981,6 @@
 																		<Width>25</Width>
 																		<HorizontalStretch>false</HorizontalStretch>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="Группа8РасширеннаяПодсказка" id="1500"/>
@@ -7062,7 +6997,7 @@
 																						<v8:content>Залишок</v8:content>
 																					</v8:item>
 																				</Title>
-																				<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																				<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																				<TitleFont ref="style:NormalTextFont" kind="StyleItem"/>
 																				<TitleLocation>Left</TitleLocation>
 																				<ToolTipRepresentation>None</ToolTipRepresentation>
@@ -7070,20 +7005,20 @@
 																				<VerticalAlign>Center</VerticalAlign>
 																				<MaxWidth>14</MaxWidth>
 																				<HorizontalStretch>true</HorizontalStretch>
-																				<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																				<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																				<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																				<ContextMenu name="ИнформацияСуммаВалКонечныйОстатокКонтекстноеМеню" id="554"/>
 																				<ExtendedTooltip name="ИнформацияСуммаВалКонечныйОстатокРасширеннаяПодсказка" id="609">
 																					<HorizontalStretch>true</HorizontalStretch>
-																					<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																					<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																					<Font ref="sys:DefaultGUIFont" height="4" kind="WindowsFont"/>
 																					<Title formatted="true">
 																						<v8:item>
-																							<v8:lang>ru</v8:lang>
+																							<v8:lang>uk</v8:lang>
 																							<v8:content>&lt;i&gt;&lt;u&gt;                                                                   &lt;/&gt;&lt;/&gt;&lt;i&gt;&lt;u&gt;           &lt;/&gt;&lt;/&gt;&lt;i&gt;&lt;u&gt;                                                                   &lt;/&gt;&lt;/&gt;&lt;i&gt;&lt;u&gt;                                                 &lt;/&gt;&lt;/&gt;</v8:content>
 																						</v8:item>
 																						<v8:item>
-																							<v8:lang>uk</v8:lang>
+																							<v8:lang>ru</v8:lang>
 																							<v8:content>&lt;i&gt;&lt;u&gt;                                                                   &lt;/&gt;&lt;/&gt;&lt;i&gt;&lt;u&gt;           &lt;/&gt;&lt;/&gt;&lt;i&gt;&lt;u&gt;                                                                   &lt;/&gt;&lt;/&gt;&lt;i&gt;&lt;u&gt;                                                 &lt;/&gt;&lt;/&gt;</v8:content>
 																						</v8:item>
 																					</Title>
@@ -7096,7 +7031,7 @@
 																		<Visible>false</Visible>
 																		<ReadOnly>true</ReadOnly>
 																		<TitleLocation>None</TitleLocation>
-																		<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																		<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																		<BorderColor>style:FormBackColor</BorderColor>
 																		<Font ref="style:LargeTextFont" height="13" kind="StyleItem"/>
 																		<ContextMenu name="ИнформацияСуммаВалПриходПеремещениеКонтекстноеМеню" id="1278"/>
@@ -7106,7 +7041,7 @@
 																		<Visible>false</Visible>
 																		<ReadOnly>true</ReadOnly>
 																		<TitleLocation>None</TitleLocation>
-																		<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																		<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																		<BorderColor>style:FormBackColor</BorderColor>
 																		<Font ref="style:LargeTextFont" height="13" kind="StyleItem"/>
 																		<ContextMenu name="ИнформацияСуммаВалРасходПеремещениеКонтекстноеМеню" id="1281"/>
@@ -7130,7 +7065,7 @@
 																<HorizontalStretch>false</HorizontalStretch>
 																<VerticalStretch>false</VerticalStretch>
 																<FileDragMode>AsFile</FileDragMode>
-																<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																<BorderColor>style:FormBackColor</BorderColor>
 																<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																<Title>
@@ -7228,13 +7163,12 @@
 																<Group>Horizontal</Group>
 																<HorizontalAlign>Right</HorizontalAlign>
 																<VerticalAlign>Bottom</VerticalAlign>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ГруппаОтступРасширеннаяПодсказка" id="2036"/>
 																<ChildItems>
 																	<LabelDecoration name="СвернутьОтборы" id="1387">
-																		<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																		<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																		<Title formatted="false">
 																			<v8:item>
 																				<v8:lang>ru</v8:lang>
@@ -7372,7 +7306,7 @@
 												<v8:content>Вивантажити в банк</v8:content>
 											</v8:item>
 										</Title>
-										<ExtendedTooltip name="ФормаВыгрузитьВКлиентБанкExtendedTooltip" id="968"/>
+										<ExtendedTooltip name="ФормаВыгрузитьВКлиентБанкРасширеннаяПодсказка" id="968"/>
 									</Button>
 									<ButtonGroup name="ГруппаГлобальныеКоманды" id="969">
 										<Title>
@@ -7468,7 +7402,6 @@
 									</v8:item>
 								</Title>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаСписокИПраваяПанельППРасширеннаяПодсказка" id="1545"/>
@@ -7485,7 +7418,6 @@
 											</v8:item>
 										</Title>
 										<Group>Vertical</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
 										<ExtendedTooltip name="ГруппаПлатежныеПорученияРасширеннаяПодсказка" id="1721"/>
@@ -7877,7 +7809,6 @@
 													</v8:item>
 												</ToolTip>
 												<Group>Vertical</Group>
-												<Behavior>Usual</Behavior>
 												<Representation>None</Representation>
 												<ShowTitle>false</ShowTitle>
 												<ExtendedTooltip name="ГруппаНазначениеПлатежаППРасширеннаяПодсказка" id="1723"/>
@@ -7939,7 +7870,6 @@
 										</ToolTip>
 										<HorizontalStretch>false</HorizontalStretch>
 										<Group>Horizontal</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
 										<ExtendedTooltip name="ПраваяПанельППРасширеннаяПодсказка" id="1547"/>
@@ -8017,7 +7947,7 @@
 																		<v8:content>Період</v8:content>
 																	</v8:item>
 																</Title>
-																<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																<TitleFont ref="style:NormalTextFont" height="13" kind="StyleItem"/>
 																<TitleLocation>None</TitleLocation>
 																<ToolTip>
@@ -8031,7 +7961,7 @@
 																	</v8:item>
 																</ToolTip>
 																<Hiperlink>true</Hiperlink>
-																<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																<Font ref="style:NormalTextFont" height="11" kind="StyleItem"/>
 																<ContextMenu name="ПредставлениеПериодаППКонтекстноеМеню" id="1564"/>
 																<ExtendedTooltip name="ПредставлениеПериодаППРасширеннаяПодсказка" id="1565"/>
@@ -8057,7 +7987,6 @@
 																		<v8:content>Група відбори ПП</v8:content>
 																	</v8:item>
 																</ToolTip>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ГруппаОтборыППРасширеннаяПодсказка" id="2028"/>
@@ -8084,7 +8013,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборВидОперацииППРасширеннаяПодсказка" id="1567"/>
@@ -8124,7 +8052,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборКонтрагентППРасширеннаяПодсказка" id="1572"/>
@@ -8172,7 +8099,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборСчетИКассаППРасширеннаяПодсказка" id="1577"/>
@@ -8224,7 +8150,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборВалютаППРасширеннаяПодсказка" id="1582"/>
@@ -8262,7 +8187,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборАвторППРасширеннаяПодсказка" id="1928"/>
@@ -8299,7 +8223,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборОрганизацияППРасширеннаяПодсказка" id="1587"/>
@@ -8347,7 +8270,6 @@
 																	</v8:item>
 																</Title>
 																<Group>Horizontal</Group>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ГруппаВедомостьИНастройкаРасширеннаяПодсказка" id="1455"/>
@@ -8355,7 +8277,7 @@
 																	<Button name="ВедомостьПерейти" id="664">
 																		<Type>Hyperlink</Type>
 																		<CommandName>0</CommandName>
-																		<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																		<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																		<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																		<Title>
 																			<v8:item>
@@ -8367,7 +8289,7 @@
 																				<v8:content>Відкрити звіт за коштами</v8:content>
 																			</v8:item>
 																		</Title>
-																		<ExtendedTooltip name="ВедомостьПерейтиExtendedTooltip" id="665">
+																		<ExtendedTooltip name="ВедомостьПерейтиРасширеннаяПодсказка" id="665">
 																			<HorizontalStretch>true</HorizontalStretch>
 																			<Font ref="sys:DefaultGUIFont" height="4" kind="WindowsFont"/>
 																			<Border width="1">
@@ -8381,7 +8303,7 @@
 																<Width>23</Width>
 																<HorizontalStretch>true</HorizontalStretch>
 																<VerticalStretch>true</VerticalStretch>
-																<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																<Title formatted="false">
 																	<v8:item>
 																		<v8:lang>ru</v8:lang>
@@ -8546,7 +8468,6 @@
 									</v8:item>
 								</Title>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаСписокИПраваяПанельРасширеннаяПодсказка" id="1111"/>
@@ -8829,7 +8750,6 @@
 										</ToolTip>
 										<HorizontalStretch>false</HorizontalStretch>
 										<Group>Horizontal</Group>
-										<Behavior>Usual</Behavior>
 										<Representation>None</Representation>
 										<ShowTitle>false</ShowTitle>
 										<ExtendedTooltip name="ПраваяПанельЭРасширеннаяПодсказка" id="1814"/>
@@ -8917,7 +8837,7 @@
 																		<v8:content>Період</v8:content>
 																	</v8:item>
 																</Title>
-																<TitleTextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TitleTextColor>
+																<TitleTextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TitleTextColor>
 																<TitleFont ref="style:NormalTextFont" height="13" kind="StyleItem"/>
 																<TitleLocation>None</TitleLocation>
 																<ToolTip>
@@ -8931,7 +8851,7 @@
 																	</v8:item>
 																</ToolTip>
 																<Hiperlink>true</Hiperlink>
-																<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																<Font ref="style:NormalTextFont" height="11" kind="StyleItem"/>
 																<ContextMenu name="ПредставлениеПериодаЭКонтекстноеМеню" id="1831"/>
 																<ExtendedTooltip name="ПредставлениеПериодаЭРасширеннаяПодсказка" id="1832"/>
@@ -8958,7 +8878,6 @@
 																	</v8:item>
 																</ToolTip>
 																<Group>Vertical</Group>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ГруппаОтборыЭРасширеннаяПодсказка" id="2032"/>
@@ -8975,7 +8894,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборОрганизацияЭРасширеннаяПодсказка" id="1854"/>
@@ -9013,7 +8931,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборАвторЭРасширеннаяПодсказка" id="1933"/>
@@ -9060,7 +8977,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборЭквайринговыйТерминалЭРасширеннаяПодсказка" id="1844"/>
@@ -9097,7 +9013,6 @@
 																			</v8:item>
 																		</Title>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборКонтрагентЭРасширеннаяПодсказка" id="1869"/>
@@ -9154,7 +9069,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборБанкЭквайрерЭРасширеннаяПодсказка" id="1839"/>
@@ -9203,7 +9117,6 @@
 																			</v8:item>
 																		</ToolTip>
 																		<Group>Vertical</Group>
-																		<Behavior>Usual</Behavior>
 																		<Representation>None</Representation>
 																		<ShowTitle>false</ShowTitle>
 																		<ExtendedTooltip name="ГруппаОтборВидОперацииЭРасширеннаяПодсказка" id="1834"/>
@@ -9223,7 +9136,7 @@
 																						<xr:CheckState>0</xr:CheckState>
 																						<xr:Value xsi:type="FormChoiceListDesTimeValue">
 																							<Presentation/>
-																							<Value xsi:type="xr:DesignTimeRef">67ad8c2d-7635-487f-9d2f-1824a26f4d10.cd7a5f9e-cfab-4084-9ac7-b819d043b6ed</Value>
+																							<Value xsi:type="xr:DesignTimeRef">6e1264f4-f6ad-485a-8886-2cda6f0c5b43.024b4d08-6e93-4994-9303-4b08c78f7eda</Value>
 																						</xr:Value>
 																					</xr:Item>
 																					<xr:Item>
@@ -9231,7 +9144,7 @@
 																						<xr:CheckState>0</xr:CheckState>
 																						<xr:Value xsi:type="FormChoiceListDesTimeValue">
 																							<Presentation/>
-																							<Value xsi:type="xr:DesignTimeRef">67ad8c2d-7635-487f-9d2f-1824a26f4d10.30ad20e6-9a90-47ce-ab4e-653aea775d2d</Value>
+																							<Value xsi:type="xr:DesignTimeRef">6e1264f4-f6ad-485a-8886-2cda6f0c5b43.c0a44c81-d82a-4db2-924b-1c7f2e63c006</Value>
 																						</xr:Value>
 																					</xr:Item>
 																				</ChoiceList>
@@ -9272,7 +9185,6 @@
 																	</v8:item>
 																</Title>
 																<Group>Horizontal</Group>
-																<Behavior>Usual</Behavior>
 																<Representation>None</Representation>
 																<ShowTitle>false</ShowTitle>
 																<ExtendedTooltip name="ГруппаВедомостьИНастройкаЭРасширеннаяПодсказка" id="1859"/>
@@ -9280,7 +9192,7 @@
 																	<Button name="ВедомостьПерейтиКОтчетуПоЭквайрингу" id="1860">
 																		<Type>Hyperlink</Type>
 																		<CommandName>0</CommandName>
-																		<TextColor>0:63da025d-789b-4c17-96f4-57ba42a32180</TextColor>
+																		<TextColor>0:843d4078-e177-4d34-aa13-0884214b6311</TextColor>
 																		<Font ref="style:NormalTextFont" kind="StyleItem"/>
 																		<ExtendedTooltip name="ВедомостьПерейтиКОтчетуПоЭквайрингуРасширеннаяПодсказка" id="1861">
 																			<HorizontalStretch>true</HorizontalStretch>
@@ -9296,7 +9208,7 @@
 																<Width>23</Width>
 																<HorizontalStretch>true</HorizontalStretch>
 																<VerticalStretch>true</VerticalStretch>
-																<TextColor>0:2a3fb2ca-a79a-4bcb-a086-5b9fb54ea59d</TextColor>
+																<TextColor>0:3d0faf32-941b-476d-814c-7c1743c86441</TextColor>
 																<Title formatted="false">
 																	<v8:item>
 																		<v8:lang>ru</v8:lang>
@@ -9423,7 +9335,7 @@
 					<dcsset:appearance>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">0:63da025d-789b-4c17-96f4-57ba42a32180</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">auto</dcscor:value>
 						</dcscor:item>
 					</dcsset:appearance>
 				</dcsset:item>
@@ -9443,7 +9355,7 @@
 					<dcsset:appearance>
 						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 							<dcscor:parameter>ЦветТекста</dcscor:parameter>
-							<dcscor:value xsi:type="v8ui:Color">0:b43ef832-0be2-470f-b529-a86c1aeffbcd</dcscor:value>
+							<dcscor:value xsi:type="v8ui:Color">auto</dcscor:value>
 						</dcscor:item>
 					</dcsset:appearance>
 				</dcsset:item>

@@ -66,7 +66,7 @@
 												<v8:content>От покупателя</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.6b0bcc99-61d6-429e-a503-fb65b3098dc2</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.ОтПокупателя</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -79,7 +79,7 @@
 												<v8:content>От поставщика</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.ebeeddc4-6027-4d37-97b6-2d7a81e5ab93</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.ОтПоставщика</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -92,7 +92,7 @@
 												<v8:content>От подотчетника</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.19588320-1904-404a-add2-d5fee92024e0</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.ОтПодотчетника</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -105,7 +105,7 @@
 												<v8:content>Покупка валюты</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.c7d533b7-dde2-446a-b086-a65d0c457c1f</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.ПокупкаВалюты</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -118,7 +118,7 @@
 												<v8:content>Прочее</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.1679d729-e492-485b-a416-04af7f2a056d</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.Прочее</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -131,7 +131,7 @@
 												<v8:content>Прочие расчеты (контрагенты, учредители)</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.20b33f6a-c56e-483c-b568-b6665e0e4bf4</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.ПрочиеРасчеты</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -144,7 +144,7 @@
 												<v8:content>Возврат налогов</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.30281789-0db7-4f04-99e2-3fd66b597c42</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.Налоги</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -157,7 +157,7 @@
 												<v8:content>Расчеты по кредитам</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.884f9769-2fbc-4b40-b606-c778c4f88660</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.РасчетыПоКредитам</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -170,7 +170,7 @@
 												<v8:content>Возврат займа сотрудником</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.9aed7d72-bc7e-439d-a986-82192e332993</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.ВозвратЗаймаСотрудником</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -183,7 +183,7 @@
 												<v8:content>Поступление оплаты по картам</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">8c4cd0c2-5218-4a88-85db-741b1584723a.8fcfdae0-0ee0-4d59-8a32-dac4c2eef2d0</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПоступлениеНаСчет.EnumValue.ПоступлениеОплатыПоКартам</Value>
 									</xr:Value>
 								</xr:Item>
 							</ChoiceList>
@@ -220,7 +220,7 @@
 									<xr:CheckState>0</xr:CheckState>
 									<xr:Value xsi:type="FormChoiceListDesTimeValue">
 										<Presentation/>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.63c42d70-51ad-4e71-adbb-e23dd686e6ff</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.Поставщику</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -228,7 +228,7 @@
 									<xr:CheckState>0</xr:CheckState>
 									<xr:Value xsi:type="FormChoiceListDesTimeValue">
 										<Presentation/>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.e9b947bb-dc6c-4790-99f2-0ec961f1a53a</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.Покупателю</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -236,7 +236,7 @@
 									<xr:CheckState>0</xr:CheckState>
 									<xr:Value xsi:type="FormChoiceListDesTimeValue">
 										<Presentation/>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.e2a9bc12-896e-4c25-ba56-ce19fc63c060</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.Подотчетнику</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -244,7 +244,7 @@
 									<xr:CheckState>0</xr:CheckState>
 									<xr:Value xsi:type="FormChoiceListDesTimeValue">
 										<Presentation/>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.955cbd21-5e28-4aed-a1ba-5a4177e22f10</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.Зарплата</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -252,7 +252,7 @@
 									<xr:CheckState>0</xr:CheckState>
 									<xr:Value xsi:type="FormChoiceListDesTimeValue">
 										<Presentation/>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.6a5f25e9-2774-4d4e-92c4-ba3e6efd1876</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.Налоги</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -260,7 +260,7 @@
 									<xr:CheckState>0</xr:CheckState>
 									<xr:Value xsi:type="FormChoiceListDesTimeValue">
 										<Presentation/>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.0df2b582-6d72-4baf-82ed-8636c55ec122</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.Прочее</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -273,7 +273,7 @@
 												<v8:content>Прочие расчеты (контрагенты, учредители)</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.0c23b137-a2ed-445c-9733-dafa1145f653</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.ПрочиеРасчеты</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -286,7 +286,7 @@
 												<v8:content>Расчеты по кредитам</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.1004bc9f-ab25-4447-8b63-f14a7c434723</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.РасчетыПоКредитам</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -299,7 +299,7 @@
 												<v8:content>Выдача займа сотруднику</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.5c483c55-5ebc-48e8-af24-2ec66e3d45e9</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.ВыдачаЗаймаСотруднику</Value>
 									</xr:Value>
 								</xr:Item>
 								<xr:Item>
@@ -312,7 +312,7 @@
 												<v8:content>Возврат оплаты на карты</v8:content>
 											</v8:item>
 										</Presentation>
-										<Value xsi:type="xr:DesignTimeRef">1848502d-fdaf-4b11-9892-6c435c0ad64c.f7034e2d-0011-4d33-b780-a0992b36d8ff</Value>
+										<Value xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийРасходСоСчета.EnumValue.ВозвратОплатыНаПлатежныеКарты</Value>
 									</xr:Value>
 								</xr:Item>
 							</ChoiceList>

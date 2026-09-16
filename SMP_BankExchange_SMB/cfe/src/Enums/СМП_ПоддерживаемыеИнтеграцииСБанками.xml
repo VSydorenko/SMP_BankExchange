@@ -98,17 +98,17 @@
 			<ChoiceHistoryOnInput>Auto</ChoiceHistoryOnInput>
 		</Properties>
 		<ChildObjects>
-			<EnumValue uuid="965d66e5-5506-4acb-8bdd-58c2a0393365">
+			<EnumValue uuid="8f0175e9-bfa2-4cda-a440-96b7643e459c">
 				<Properties>
-					<Name>ПриватБанк</Name>
+					<Name>NovaPay</Name>
 					<Synonym>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>ПриватБанк</v8:content>
+							<v8:content>NovaPay</v8:content>
 						</v8:item>
 						<v8:item>
 							<v8:lang>uk</v8:lang>
-							<v8:content>ПриватБанк</v8:content>
+							<v8:content>NovaPay</v8:content>
 						</v8:item>
 					</Synonym>
 					<Comment/>
@@ -130,17 +130,33 @@
 					<Comment/>
 				</Properties>
 			</EnumValue>
-			<EnumValue uuid="014ea5e4-4878-4c3d-b295-c335a45f7f66">
+			<EnumValue uuid="fe5ced5a-6555-46cd-a6fa-43bec3d0d091">
 				<Properties>
-					<Name>ПодключаемаяОбработка</Name>
+					<Name>МОНОБанкЮр</Name>
 					<Synonym>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Подключаемая обработка</v8:content>
+							<v8:content>monobank (юрлица)</v8:content>
 						</v8:item>
 						<v8:item>
 							<v8:lang>uk</v8:lang>
-							<v8:content>Зовнішня обробка</v8:content>
+							<v8:content>monobank (юрособи)</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="965d66e5-5506-4acb-8bdd-58c2a0393365">
+				<Properties>
+					<Name>ПриватБанк</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>ПриватБанк</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>ПриватБанк</v8:content>
 						</v8:item>
 					</Synonym>
 					<Comment/>
@@ -162,17 +178,17 @@
 					<Comment/>
 				</Properties>
 			</EnumValue>
-			<EnumValue uuid="8f0175e9-bfa2-4cda-a440-96b7643e459c">
+			<EnumValue uuid="014ea5e4-4878-4c3d-b295-c335a45f7f66">
 				<Properties>
-					<Name>NovaPay</Name>
+					<Name>ПодключаемаяОбработка</Name>
 					<Synonym>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>NovaPay</v8:content>
+							<v8:content>Подключаемая обработка</v8:content>
 						</v8:item>
 						<v8:item>
 							<v8:lang>uk</v8:lang>
-							<v8:content>NovaPay</v8:content>
+							<v8:content>Зовнішня обробка</v8:content>
 						</v8:item>
 					</Synonym>
 					<Comment/>

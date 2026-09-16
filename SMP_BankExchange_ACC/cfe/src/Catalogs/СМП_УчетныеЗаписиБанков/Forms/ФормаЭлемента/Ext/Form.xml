@@ -29,7 +29,6 @@
 				</v8:item>
 			</ToolTip>
 			<Group>AlwaysHorizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ГруппаЛевоПравоРасширеннаяПодсказка" id="66"/>
@@ -48,7 +47,6 @@
 						</v8:item>
 					</ToolTip>
 					<Group>Vertical</Group>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<ShowTitle>false</ShowTitle>
 					<ExtendedTooltip name="ГруппаЛевоРасширеннаяПодсказка" id="68"/>
@@ -67,7 +65,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаНаименованиеКодРасширеннаяПодсказка" id="72"/>
@@ -122,7 +119,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Vertical</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаБанкКартинкаРасширеннаяПодсказка" id="53"/>
@@ -207,7 +203,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>Vertical</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаБанкПумбРасширеннаяПодсказка" id="138"/>
@@ -254,7 +249,6 @@
 								</v8:item>
 							</ToolTip>
 							<Group>AlwaysHorizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаРегламентноеЗаданиеРасширеннаяПодсказка" id="129"/>
@@ -307,7 +301,6 @@
 						</v8:item>
 					</ToolTip>
 					<Group>Vertical</Group>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<ShowTitle>false</ShowTitle>
 					<ExtendedTooltip name="ГруппаПравоРасширеннаяПодсказка" id="70"/>
@@ -379,7 +372,6 @@
 				</v8:item>
 			</ToolTip>
 			<Group>Vertical</Group>
-			<Behavior>Usual</Behavior>
 			<United>false</United>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ГруппаНастроекРасширеннаяПодсказка" id="81"/>

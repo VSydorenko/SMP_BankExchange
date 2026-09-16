@@ -128,7 +128,6 @@
 		</Table>
 		<UsualGroup name="Группа1" id="57">
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="Группа1РасширеннаяПодсказка" id="58"/>

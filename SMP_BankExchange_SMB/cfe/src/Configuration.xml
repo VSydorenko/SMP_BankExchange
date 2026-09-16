@@ -63,7 +63,7 @@
 			</UsePurposes>
 			<ScriptVariant>Russian</ScriptVariant>
 			<Vendor>simplySOFT.com.ua</Vendor>
-			<Version>2.0.1.12</Version>
+			<Version>2.0.3.2</Version>
 			<BriefInformation/>
 			<DetailedInformation/>
 			<Copyright>
@@ -102,38 +102,31 @@
 			<Language>Русский</Language>
 			<Language>Украинский</Language>
 			<Subsystem>СМП_BankExchange</Subsystem>
-			<StyleItem>ТекстВторостепеннойНадписи</StyleItem>
-			<StyleItem>ЦветТекстаПравойПанелиОтборов</StyleItem>
-			<StyleItem>ПоясняющийТекст</StyleItem>
-			<StyleItem>ЦветСуммыПоступления</StyleItem>
-			<StyleItem>ИтогиФонГруппы</StyleItem>
-			<CommonPicture>СМП_BankExchange</CommonPicture>
-			<CommonPicture>СМП_РаботаСБанкамиМОНОБанк</CommonPicture>
-			<CommonPicture>СМП_РаботаСБанкамиПриватБанк</CommonPicture>
 			<CommonPicture>ИзменитьНастройки</CommonPicture>
 			<CommonPicture>КлиентБанкЗаголовокВыгрузка</CommonPicture>
 			<CommonPicture>КлиентБанкЗаголовокЗагрузка</CommonPicture>
 			<CommonPicture>ОбновлениеВнешнихКомпонентССайта</CommonPicture>
-			<CommonPicture>ЗаполнитьПоОснованию</CommonPicture>
-			<CommonPicture>ДокументПозжеТекущегоИСвязанныеДокументы</CommonPicture>
-			<CommonPicture>Органайзер</CommonPicture>
+			<CommonPicture>СМП_BankExchange</CommonPicture>
+			<CommonPicture>СМП_РаботаСБанкамиМОНОБанк</CommonPicture>
+			<CommonPicture>СМП_РаботаСБанкамиПриватБанк</CommonPicture>
 			<Role>ДобавлениеИзменениеБанковскихСчетов</Role>
 			<Role>ИспользованиеБанкаИКассы</Role>
 			<Role>ПолныеПрава</Role>
 			<CommonModule>КоннекторHTTP_BankExchange</CommonModule>
-			<CommonModule>СМП_РаботаСБанкамиNovaPayAPIСервер</CommonModule>
-			<CommonModule>СМП_РаботаСБанкамиМонобанкAPIСервер</CommonModule>
-			<CommonModule>СМП_РаботаСБанкамиПриватБанкAPIСервер</CommonModule>
-			<CommonModule>СМП_РаботаСБанкамиПУМБAPIСервер</CommonModule>
-			<CommonModule>СМП_РаботаСБанкамиСервер</CommonModule>
 			<CommonModule>ОбменСБанками</CommonModule>
 			<CommonModule>ОбменСБанкамиКлиент</CommonModule>
 			<CommonModule>ОбменСБанкамиКлиентСервер</CommonModule>
 			<CommonModule>ОбменСБанкамиПереопределяемый</CommonModule>
 			<CommonModule>ЭлектронноеВзаимодействиеКлиентПереопределяемый</CommonModule>
+			<CommonModule>СМП_ГенерацияTOTPСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиNovaPayAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиМонобанкAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиМонобанкЮрAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиПриватБанкAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиПУМБAPIСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиСервер</CommonModule>
 			<CommonModule>КлиентБанкВызовСервера</CommonModule>
 			<CommonModule>УправлениеНебольшойФирмойКлиент</CommonModule>
-			<CommonModule>СМП_ГенерацияTOTPСервер</CommonModule>
 			<XDTOPackage>NovaPay</XDTOPackage>
 			<ScheduledJob>СМП_ОбменСБанкамиAPI</ScheduledJob>
 			<Catalog>СМП_УчетныеЗаписиБанков</Catalog>
@@ -154,21 +147,22 @@
 			<Document>ПлатежноеПоручение</Document>
 			<Document>ПоступлениеНаСчет</Document>
 			<Document>РасходСоСчета</Document>
+			<Enum>ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</Enum>
+			<Enum>СостоянияВерсийЭД</Enum>
 			<Enum>СМП_ПоддерживаемыеИнтеграцииСБанками</Enum>
+			<Enum>СпособыЗачетаИРаспределенияПлатежей</Enum>
 			<Enum>ВариантыДетализацииИтоговБанкИКасса</Enum>
+			<Enum>ВариантыЗаполненияРасшифровкиПлатежа</Enum>
 			<Enum>ВариантыОтображенияИтоговБанкИКасса</Enum>
 			<Enum>ВидыКонтрагентов</Enum>
 			<Enum>ВидыОперацийПлатежноеПоручение</Enum>
 			<Enum>ВидыОперацийПоступлениеНаСчет</Enum>
 			<Enum>ВидыОперацийРасходСоСчета</Enum>
-			<Enum>ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</Enum>
-			<Enum>СостоянияВерсийЭД</Enum>
-			<Enum>СпособыЗачетаИРаспределенияПлатежей</Enum>
-			<Enum>ВариантыЗаполненияРасшифровкиПлатежа</Enum>
-			<DataProcessor>БанкИКасса</DataProcessor>
+			<Enum>ВидыОперацийЭквайринга</Enum>
 			<DataProcessor>СМП_КлиентБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_АкордБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_БанкВосток</DataProcessor>
+			<DataProcessor>СМП_ОбработкаВыпискиБанка_КредоБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_ОТП</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_ОщадБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_Пивденный</DataProcessor>
@@ -179,11 +173,11 @@
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_УкрГазБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_УкрСибБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_УниверсалБанк</DataProcessor>
-			<DataProcessor>СМП_ОбработкаВыпискиБанка_КредоБанк</DataProcessor>
-			<InformationRegister>ИсторияРаботыСКлиентомБанка</InformationRegister>
+			<DataProcessor>БанкИКасса</DataProcessor>
 			<InformationRegister>ИсторияЗначенийРеквизитовПриЗагрузкеИзКлиентаБанка</InformationRegister>
-			<InformationRegister>СМП_НомерПоследнейТранзакции</InformationRegister>
+			<InformationRegister>ИсторияРаботыСКлиентомБанка</InformationRegister>
 			<InformationRegister>СМП_ДанныеАутентификации</InformationRegister>
+			<InformationRegister>СМП_НомерПоследнейТранзакции</InformationRegister>
 			<ChartOfAccounts>Управленческий</ChartOfAccounts>
 		</ChildObjects>
 	</Configuration>
