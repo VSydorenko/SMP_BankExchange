@@ -31,7 +31,6 @@
 							<HorizontalStretch>true</HorizontalStretch>
 							<Group>Horizontal</Group>
 							<VerticalAlign>Center</VerticalAlign>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="12"/>
@@ -78,7 +77,6 @@
 							<HorizontalStretch>true</HorizontalStretch>
 							<Group>Horizontal</Group>
 							<VerticalAlign>Center</VerticalAlign>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="Группа4РасширеннаяПодсказка" id="32"/>
@@ -118,7 +116,6 @@
 		</Pages>
 		<UsualGroup name="Группа3" id="24">
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="Группа3РасширеннаяПодсказка" id="25"/>
@@ -153,7 +150,6 @@
 			<HorizontalStretch>true</HorizontalStretch>
 			<Group>Horizontal</Group>
 			<HorizontalAlign>Center</HorizontalAlign>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="Группа5РасширеннаяПодсказка" id="45"/>

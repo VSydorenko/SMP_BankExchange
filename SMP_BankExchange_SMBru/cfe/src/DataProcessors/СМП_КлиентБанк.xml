@@ -1141,7 +1141,7 @@
 							<MinValue xsi:nil="true"/>
 							<MaxValue xsi:nil="true"/>
 							<FillFromFillingValue>false</FillFromFillingValue>
-							<FillValue xsi:type="xr:DesignTimeRef">3a511ab2-4525-43e4-8cd7-3bdb1e15d54a.00000000-0000-0000-0000-000000000000</FillValue>
+							<FillValue xsi:type="xr:DesignTimeRef">Enum.ВидыОперацийПлатежноеПоручение.EmptyRef</FillValue>
 							<FillChecking>DontCheck</FillChecking>
 							<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
 							<ChoiceParameterLinks/>
@@ -3630,7 +3630,7 @@
 							<MinValue xsi:nil="true"/>
 							<MaxValue xsi:nil="true"/>
 							<FillFromFillingValue>false</FillFromFillingValue>
-							<FillValue xsi:type="xr:DesignTimeRef">62a89c4f-64c1-463c-976e-bbecea8a1b46.00000000-0000-0000-0000-000000000000</FillValue>
+							<FillValue xsi:type="xr:DesignTimeRef">Catalog.БанковскиеСчета.EmptyRef</FillValue>
 							<FillChecking>DontCheck</FillChecking>
 							<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
 							<ChoiceParameterLinks>
@@ -8183,7 +8183,7 @@
 							<MinValue xsi:nil="true"/>
 							<MaxValue xsi:nil="true"/>
 							<FillFromFillingValue>false</FillFromFillingValue>
-							<FillValue xsi:type="xr:DesignTimeRef">19f53749-65f5-4dda-bd9a-11e63ade822e.00000000-0000-0000-0000-000000000000</FillValue>
+							<FillValue xsi:type="xr:DesignTimeRef">Catalog.СтатьиДвиженияДенежныхСредств.EmptyRef</FillValue>
 							<FillChecking>DontCheck</FillChecking>
 							<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
 							<ChoiceParameterLinks/>
@@ -8219,7 +8219,7 @@
 							<MinValue xsi:nil="true"/>
 							<MaxValue xsi:nil="true"/>
 							<FillFromFillingValue>false</FillFromFillingValue>
-							<FillValue xsi:type="xr:DesignTimeRef">19f53749-65f5-4dda-bd9a-11e63ade822e.00000000-0000-0000-0000-000000000000</FillValue>
+							<FillValue xsi:type="xr:DesignTimeRef">Catalog.СтатьиДвиженияДенежныхСредств.EmptyRef</FillValue>
 							<FillChecking>DontCheck</FillChecking>
 							<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
 							<ChoiceParameterLinks/>
@@ -9374,7 +9374,7 @@
 							<MinValue xsi:nil="true"/>
 							<MaxValue xsi:nil="true"/>
 							<FillFromFillingValue>false</FillFromFillingValue>
-							<FillValue xsi:type="xr:DesignTimeRef">62a89c4f-64c1-463c-976e-bbecea8a1b46.00000000-0000-0000-0000-000000000000</FillValue>
+							<FillValue xsi:type="xr:DesignTimeRef">Catalog.БанковскиеСчета.EmptyRef</FillValue>
 							<FillChecking>DontCheck</FillChecking>
 							<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
 							<ChoiceParameterLinks/>

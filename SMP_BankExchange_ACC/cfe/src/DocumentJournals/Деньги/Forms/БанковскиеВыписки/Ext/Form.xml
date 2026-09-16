@@ -28,7 +28,6 @@
 				</v8:item>
 			</Title>
 			<Group>Vertical</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ГруппаБыстрыеОтборыExtendedTooltip" id="128"/>
@@ -45,7 +44,6 @@
 						</v8:item>
 					</Title>
 					<Group>Horizontal</Group>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<ShowTitle>false</ShowTitle>
 					<ExtendedTooltip name="ГруппаОтборыРасширеннаяПодсказка" id="209"/>
@@ -62,7 +60,6 @@
 								</v8:item>
 							</Title>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаОтборДатаРасширеннаяПодсказка" id="222"/>
@@ -92,7 +89,6 @@
 								</v8:item>
 							</Title>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаОтборБанковскийСчетРасширеннаяПодсказка" id="220"/>
@@ -130,7 +126,6 @@
 								</v8:item>
 							</Title>
 							<Group>Horizontal</Group>
-							<Behavior>Usual</Behavior>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
 							<ExtendedTooltip name="ГруппаОтборОрганизацияРасширеннаяПодсказка" id="202"/>
@@ -165,7 +160,6 @@
 				</v8:item>
 			</Title>
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ГруппаДополнительныеОтборыРасширеннаяПодсказка" id="251"/>
@@ -725,7 +719,6 @@
 			</Title>
 			<HorizontalStretch>true</HorizontalStretch>
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<BackColor>0:ea976a83-6c22-484c-b2d8-c02bcf4121d7</BackColor>
@@ -762,7 +755,6 @@
 					<GroupHorizontalAlign>Right</GroupHorizontalAlign>
 					<Group>Horizontal</Group>
 					<HorizontalAlign>Right</HorizontalAlign>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<ShowTitle>false</ShowTitle>
 					<ExtendedTooltip name="ГруппаОстаткиОборотыРасширеннаяПодсказка" id="410"/>
@@ -903,7 +895,6 @@
 					</v8:item>
 				</Title>
 				<Group>Vertical</Group>
-				<Behavior>Usual</Behavior>
 				<Representation>None</Representation>
 				<ShowTitle>false</ShowTitle>
 				<ExtendedTooltip name="ГруппаБыстрыеОтборыExtendedTooltip" id="128"/>
@@ -920,7 +911,6 @@
 							</v8:item>
 						</Title>
 						<Group>Horizontal</Group>
-						<Behavior>Usual</Behavior>
 						<Representation>None</Representation>
 						<ShowTitle>false</ShowTitle>
 						<ExtendedTooltip name="ГруппаОтборыРасширеннаяПодсказка" id="209"/>
@@ -937,7 +927,6 @@
 									</v8:item>
 								</Title>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаОтборДатаРасширеннаяПодсказка" id="222"/>
@@ -967,7 +956,6 @@
 									</v8:item>
 								</Title>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаОтборБанковскийСчетРасширеннаяПодсказка" id="220"/>
@@ -1005,7 +993,6 @@
 									</v8:item>
 								</Title>
 								<Group>Horizontal</Group>
-								<Behavior>Usual</Behavior>
 								<Representation>None</Representation>
 								<ShowTitle>false</ShowTitle>
 								<ExtendedTooltip name="ГруппаОтборОрганизацияРасширеннаяПодсказка" id="202"/>
@@ -1040,7 +1027,6 @@
 					</v8:item>
 				</Title>
 				<Group>Horizontal</Group>
-				<Behavior>Usual</Behavior>
 				<Representation>None</Representation>
 				<ShowTitle>false</ShowTitle>
 				<ExtendedTooltip name="ГруппаДополнительныеОтборыРасширеннаяПодсказка" id="251"/>
@@ -1600,7 +1586,6 @@
 				</Title>
 				<HorizontalStretch>true</HorizontalStretch>
 				<Group>Horizontal</Group>
-				<Behavior>Usual</Behavior>
 				<Representation>None</Representation>
 				<ShowTitle>false</ShowTitle>
 				<BackColor>0:ea976a83-6c22-484c-b2d8-c02bcf4121d7</BackColor>
@@ -1637,7 +1622,6 @@
 						<GroupHorizontalAlign>Right</GroupHorizontalAlign>
 						<Group>Horizontal</Group>
 						<HorizontalAlign>Right</HorizontalAlign>
-						<Behavior>Usual</Behavior>
 						<Representation>None</Representation>
 						<ShowTitle>false</ShowTitle>
 						<ExtendedTooltip name="ГруппаОстаткиОборотыРасширеннаяПодсказка" id="410"/>

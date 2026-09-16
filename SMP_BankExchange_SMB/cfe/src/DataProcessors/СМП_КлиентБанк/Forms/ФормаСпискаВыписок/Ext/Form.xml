@@ -16,7 +16,6 @@
 				</v8:item>
 			</Title>
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ГруппаДанныеВыписокРасширеннаяПодсказка" id="38"/>

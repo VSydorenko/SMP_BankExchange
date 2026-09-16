@@ -471,7 +471,7 @@
 														<ExtendedTooltip name="СписокБанковскиеВыпискиУправлениеПоискомРасширеннаяПодсказка" id="641"/>
 													</SearchControlAddition>
 													<Events>
-														<Event name="60edb81d-887b-478e-94ee-7fef2b13393d" callType="After">СМП_СписокБанковскиеВыпискиПриАктивизацииСтрокиПосле</Event>
+														<Event name="OnActivateRow" callType="After">СМП_СписокБанковскиеВыпискиПриАктивизацииСтрокиПосле</Event>
 													</Events>
 													<ChildItems>
 														<ColumnGroup name="Строки" id="628">

@@ -60,31 +60,31 @@
 										<Value xsi:type="v8:FixedArray">
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.27c88418-1caf-44b1-a909-5873a404ceb6</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.ПрочиеДоходы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.e8d30bfb-737f-4f81-be50-2c6b6f8aba28</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.КредитыИЗаймы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.8f3b1d03-64cd-462f-a1fe-950982f883c3</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.ДенежныеСредства</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.da49f105-2268-408c-8de7-ef4634c0d729</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.ДолгосрочныеОбязательства</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.0c4c49bb-1b81-4602-8b39-d3564cf564a7</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.Дебиторы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.a7beb8e7-467a-4eaf-82fc-ee2e36cd8fee</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.Капитал</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.677ef3a3-7629-4daa-a942-b0a6be1b0302</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.Кредиторы</Value>
 											</v8:Value>
 										</Value>
 									</app:value>
@@ -151,35 +151,35 @@
 										<Value xsi:type="v8:FixedArray">
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.0c4c49bb-1b81-4602-8b39-d3564cf564a7</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.Дебиторы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.8f3b1d03-64cd-462f-a1fe-950982f883c3</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.ДенежныеСредства</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.a7beb8e7-467a-4eaf-82fc-ee2e36cd8fee</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.Капитал</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.677ef3a3-7629-4daa-a942-b0a6be1b0302</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.Кредиторы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.70ee4c0b-2257-44f3-bfa4-d609a59160b3</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.ПрочиеРасходы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.e8d30bfb-737f-4f81-be50-2c6b6f8aba28</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.КредитыИЗаймы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.3a3fbf65-51fa-4811-922b-b3ba02eca8bf</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.Расходы</Value>
 											</v8:Value>
 											<v8:Value xsi:type="FormChoiceListDesTimeValue">
 												<Presentation/>
-												<Value xsi:type="xr:DesignTimeRef">43d4c67c-5675-4e13-bdab-c1795a087140.da49f105-2268-408c-8de7-ef4634c0d729</Value>
+												<Value xsi:type="xr:DesignTimeRef">Enum.ТипыСчетов.EnumValue.ДолгосрочныеОбязательства</Value>
 											</v8:Value>
 										</Value>
 									</app:value>
