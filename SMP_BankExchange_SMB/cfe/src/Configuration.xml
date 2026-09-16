@@ -134,6 +134,7 @@
 			<CommonModule>КлиентБанкВызовСервера</CommonModule>
 			<CommonModule>УправлениеНебольшойФирмойКлиент</CommonModule>
 			<CommonModule>СМП_ГенерацияTOTPСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиМонобанкЮрAPIСервер</CommonModule>
 			<XDTOPackage>NovaPay</XDTOPackage>
 			<ScheduledJob>СМП_ОбменСБанкамиAPI</ScheduledJob>
 			<Catalog>СМП_УчетныеЗаписиБанков</Catalog>
