@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="d982b49f-506e-4bf2-a405-d751770993ee">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ВидыОперацийЭквайринга" category="Ref">
+				<xr:TypeId>6e1264f4-f6ad-485a-8886-2cda6f0c5b43</xr:TypeId>
+				<xr:ValueId>259d5adc-3321-490d-8724-df9bbba9ec17</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ВидыОперацийЭквайринга" category="Manager">
+				<xr:TypeId>bba63ea5-5d84-499b-af6b-25a378c89381</xr:TypeId>
+				<xr:ValueId>5343203e-6db0-4bf4-af19-1edd9d0e0402</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ВидыОперацийЭквайринга" category="List">
+				<xr:TypeId>e3e84e17-55b1-4d36-b9d0-167a22d66ecb</xr:TypeId>
+				<xr:ValueId>88f59d48-b46a-493d-a24c-de6a6b48e8c0</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ВидыОперацийЭквайринга</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>2a79738e-a3bf-4ea4-aff3-224cf20003f4</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects/>
+	</Enum>
+</MetaDataObject>
