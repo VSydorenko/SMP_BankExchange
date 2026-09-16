@@ -123,7 +123,6 @@
 			<CommonModule>КоннекторHTTP_BankExchange</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиNovaPayAPIСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиМонобанкAPIСервер</CommonModule>
-			<CommonModule>СМП_РаботаСБанкамиМонобанкЮрAPIСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиПриватБанкAPIСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиПУМБAPIСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиСервер</CommonModule>
@@ -135,6 +134,7 @@
 			<CommonModule>КлиентБанкВызовСервера</CommonModule>
 			<CommonModule>УправлениеНебольшойФирмойКлиент</CommonModule>
 			<CommonModule>СМП_ГенерацияTOTPСервер</CommonModule>
+			<CommonModule>СМП_РаботаСБанкамиМонобанкЮрAPIСервер</CommonModule>
 			<XDTOPackage>NovaPay</XDTOPackage>
 			<ScheduledJob>СМП_ОбменСБанкамиAPI</ScheduledJob>
 			<Catalog>СМП_УчетныеЗаписиБанков</Catalog>
