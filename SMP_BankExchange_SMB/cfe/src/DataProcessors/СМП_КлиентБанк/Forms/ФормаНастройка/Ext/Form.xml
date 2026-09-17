@@ -819,22 +819,6 @@
 									</Title>
 									<ExtendedTooltip name="ОткрытьСправочникСоответствийНазначенийПлатежаИРеквизитовДокументовРасширеннаяПодсказка" id="87"/>
 								</Button>
-								<InputField name="СпособЗачета" id="136">
-									<DataPath>СпособЗачета</DataPath>
-									<ClearButton>true</ClearButton>
-									<InputHint>
-										<v8:item>
-											<v8:lang>ru</v8:lang>
-											<v8:content>&lt;по умолчанию&gt;</v8:content>
-										</v8:item>
-										<v8:item>
-											<v8:lang>uk</v8:lang>
-											<v8:content>&lt;за замовчуванням&gt;</v8:content>
-										</v8:item>
-									</InputHint>
-									<ContextMenu name="СпособЗачетаКонтекстноеМеню" id="137"/>
-									<ExtendedTooltip name="СпособЗачетаРасширеннаяПодсказка" id="138"/>
-								</InputField>
 							</ChildItems>
 						</UsualGroup>
 						<UsualGroup name="ГруппаНастроекСозданияДокументов" id="134">
@@ -1293,21 +1277,6 @@
 			</Title>
 			<Type>
 				<v8:Type>xs:boolean</v8:Type>
-			</Type>
-		</Attribute>
-		<Attribute name="СпособЗачета" id="22">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Способ разнесения платежей</v8:content>
-				</v8:item>
-				<v8:item>
-					<v8:lang>uk</v8:lang>
-					<v8:content>Спосіб рознесення платежів</v8:content>
-				</v8:item>
-			</Title>
-			<Type>
-				<v8:Type>cfg:EnumRef.СпособыЗачетаИРаспределенияПлатежей</v8:Type>
 			</Type>
 		</Attribute>
 		<Attribute name="ОбработкаПротокола" id="23">
