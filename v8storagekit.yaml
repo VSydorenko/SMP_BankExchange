@@ -2,8 +2,8 @@
 # Структуру (шляхи, типи) не описує — вона у v8project.yaml кожного воркспейсу;
 # тут лише truth кожного джерела й те, чого Unica не знає.
 version: 1
-kitVersion: 1.0.0                   # до якої версії плагіна доведено структуру репозиторію;
-                                    # 1.1.0 — після sync/adopt/verify (onboarding/references/upgrades.md)
+kitVersion: 1.1.0                   # до якої версії плагіна доведено структуру репозиторію
+                                    # (onboarding/references/upgrades.md)
 product: SMP_BankExchange
 
 workspaces:
