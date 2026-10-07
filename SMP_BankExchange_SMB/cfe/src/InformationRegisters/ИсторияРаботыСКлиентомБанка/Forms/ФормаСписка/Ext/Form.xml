@@ -29,7 +29,6 @@
 				</v8:item>
 			</ToolTip>
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ШапкаРасширеннаяПодсказка" id="58"/>
@@ -118,7 +117,6 @@
 		</UsualGroup>
 		<UsualGroup name="Группа2" id="73">
 			<Group>Horizontal</Group>
-			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="74"/>
@@ -314,7 +312,6 @@
 					<Width>12</Width>
 					<HorizontalStretch>false</HorizontalStretch>
 					<Group>Vertical</Group>
-					<Behavior>Usual</Behavior>
 					<Representation>None</Representation>
 					<ShowTitle>false</ShowTitle>
 					<ExtendedTooltip name="ОтборРасширеннаяПодсказка" id="54"/>
