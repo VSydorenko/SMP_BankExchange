@@ -76,8 +76,8 @@ try {
                 # (жодних модулів kit, жодного парсера) — інакше він перестав би бути шимом.
                 $timeoutSec = 15
                 # Мінімальний фікс (рев'ю Minor): TryParse замість [int] — '99999999999' проходить
-                # ^\d+$, але [int] на ньому кидає OverflowException; діапазон 1…600 — та сама стеля,
-                # що в tools/tests/Run-Tests.ps1 (600000 мс).
+                # ^\d+$, але [int] на ньому кидає OverflowException; діапазон 1…600 — власна
+                # розсудлива стеля цього хука (10 хв), а не запозичена з якогось іншого місця.
                 $parsedTimeout = 0
                 if ($env:V8KIT_SESSION_CHECK_TIMEOUT -and [int]::TryParse($env:V8KIT_SESSION_CHECK_TIMEOUT, [ref]$parsedTimeout) -and $parsedTimeout -ge 1 -and $parsedTimeout -le 600) {
                     $timeoutSec = $parsedTimeout

@@ -30,6 +30,11 @@ SMP_BankExchange_SMB/cf/src/**
 SMP_BankExchange_ACC/cf/src/**
 SMP_BankExchange_SMBru/cf/src/**
 
+# Поставка вендора основної конфігурації (Ext/ParentConfigurations/<Ім'я>.cf) — поза git:
+# ліміт GitHub 100 МБ на файл. Ext/ParentConfigurations.bin із замками об'єктів лишається в git.
+# Для розширень і конфігурацій без підтримки рядок нічого не робить.
+**/Ext/ParentConfigurations/
+
 # Зібрані .epf: артефакт, що відтворюється kit build, у git не тримаємо
 # (рішення 2026-09-10). Сам kit кладе артефакти в build/artifacts, покритий вище;
 # dist/ — конвенція цього репозиторію зі спадку 0.6.0.
