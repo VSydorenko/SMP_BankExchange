@@ -4,6 +4,10 @@
 Василь Прокоф'єв=evil beaver <va.prokophev@gmail.com>
 Олександр (alexsvlight)=alexsvlight <alexsv2012@gmail.com>
 
+# Decoratorskyi_UNF_work — спільна клієнтська база, різні люди в різні періоди,
+# тому лише рядками на версію (власник, 2026-10-07: v53 поклав він сам).
+SMP_BankExchange_SMB#53=Volodymyr Sydorenko <v.m.sydorenko@gmail.com>
+
 # Разові зіставлення для версій 24-40 сховища SMP_BankExchange_SMB.
 # Рішення власника від 2026-08-28: це його знання про те, хто працював
 # у якій клієнтській базі в той період, а НЕ стабільний зв'язок.
