@@ -3,6 +3,7 @@
 # storage/<джерело> — дзеркало сховища конфігурацій 1С. Його пише лише `kit sync`, і лише
 # він виставляє V8KIT_SYNC=1. Будь-який інший коміт сюди — помилка людини або агента:
 # історія дзеркала мусить лишатись рівно історією сховища.
+# Друга перевірка — шляхи в індексі, що різняться лише регістром (див. блок унизу).
 # Установлює скіл onboarding: копія в .githooks/ + `git config core.hooksPath .githooks`.
 branch=$(git symbolic-ref -q HEAD) || exit 0
 case "$branch" in
@@ -14,4 +15,23 @@ case "$branch" in
     fi
     ;;
 esac
+
+# Шляхи, що різняться лише регістром (спека kit 2026-10-04 §4.4). На Windows це один файл: злиття
+# такого дерева в робочу копію впаде, а git із core.ignorecase складає регістр лише ASCII і
+# кириличної пари не бачить. Типова причина — `git add -A` або `git commit --only -- <шлях>` після
+# перейменування лише регістром (--only перечитує старий регістр із диска). Хук бачить і тимчасовий
+# індекс --only (GIT_INDEX_FILE). perl — з Git for Windows: lc на декодованому UTF-8 складає весь
+# Юнікод; sh/tr цього не вміють. Без perl перевірка пропускається (захист тримають kit check/verify).
+if command -v perl >/dev/null 2>&1; then
+  dups=$(git ls-files -z | perl -0 -ne 'chomp; utf8::decode($_); push @{$h{lc $_}}, $_; END { binmode STDOUT, ":encoding(UTF-8)"; for my $k (sort keys %h) { my @g = @{$h{$k}}; print join(" | ", @g), "\n" if @g > 1 } }')
+  if [ -n "$dups" ]; then
+    echo "v8storagekit: в індексі є шляхи, що різняться лише регістром (на Windows це один файл):" >&2
+    printf '%s\n' "$dups" | head -n 5 >&2
+    echo "  Коміт відхилено (pre-commit). Зніміть фантом з індексу: git rm --cached -- <шлях>;" >&2
+    echo "  дерево після dump/canon комітьте без --only (docs kit: storage-and-git.md, «Перейменування регістром»)." >&2
+    exit 1
+  fi
+else
+  echo "v8storagekit: perl не знайдено — перевірку регістру шляхів пропущено (pre-commit)." >&2
+fi
 exit 0
