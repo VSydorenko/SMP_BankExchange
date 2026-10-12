@@ -15,3 +15,10 @@ source-set:
   - name: SMP_BankExchange_SMB
     type: EXTENSION
     path: 'cfe/src'
+  # Тестовий контур YaXUnit (2026-10-12), за зразком SMP_SimplyConnect/SimplyConnect_SMBru.
+  # Окреме розширення: тестовий код кличе API рушія YAXUNIT, якого в клієнта немає,
+  # тож у постачання йде лише основний .cfe. Прогін: operation=test, testRunner=yaxunit.
+  # module передавати БЕЗ префікса `CommonModule.` — з ним YaXUnit 25.12 зациклюється.
+  - name: SMP_BankExchange_SMB_Tests
+    type: EXTENSION
+    path: 'tests/src'

@@ -64,4 +64,5 @@
 SMP_BankExchange_SMB/cfe/src/** -text
 SMP_BankExchange_ACC/cfe/src/** -text
 SMP_BankExchange_SMBru/cfe/src/** -text
+SMP_BankExchange_SMB/tests/src/** -text
 epf/src/** -text
