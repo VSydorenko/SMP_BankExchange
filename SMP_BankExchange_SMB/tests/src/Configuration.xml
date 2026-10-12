@@ -66,6 +66,7 @@
 		<ChildObjects>
 			<Language>Русский</Language>
 			<Role>СМП_ОсновнаяРоль</Role>
+			<CommonModule>СМП_ТестыВендораЗаполнениеПоОснованию</CommonModule>
 			<CommonModule>СМП_ТестыДанныеУНФ</CommonModule>
 			<CommonModule>СМП_ТестыКонтрольХарнеса</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
