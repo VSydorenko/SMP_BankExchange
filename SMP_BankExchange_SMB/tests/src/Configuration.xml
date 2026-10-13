@@ -74,6 +74,7 @@
 			<CommonModule>СМП_ТестыКонтрольХарнеса</CommonModule>
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
+			<CommonModule>СМП_ТестыРаспознаванияШаг5</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
 		</ChildObjects>
 	</Configuration>
