@@ -141,8 +141,11 @@
 			<Catalog>Кассы</Catalog>
 			<Catalog>Контрагенты</Catalog>
 			<Catalog>Организации</Catalog>
+			<Catalog>Проекты</Catalog>
+			<Catalog>СоответствияНазначенийПлатежаИРеквизитовПлатежа</Catalog>
 			<Catalog>Сотрудники</Catalog>
 			<Catalog>СтатьиДвиженияДенежныхСредств</Catalog>
+			<Catalog>СтруктурныеЕдиницы</Catalog>
 			<Document>ЗаказПокупателя</Document>
 			<Document>ЗаказПоставщику</Document>
 			<Document>ПлатежноеПоручение</Document>

@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Catalog uuid="3120d84f-bf08-46b1-aa71-0360993bdce6">
+		<InternalInfo>
+			<xr:GeneratedType name="CatalogObject.СоответствияНазначенийПлатежаИРеквизитовПлатежа" category="Object">
+				<xr:TypeId>6dec64f6-8785-4003-a2a1-02061722e2a4</xr:TypeId>
+				<xr:ValueId>3ca969d2-a8d6-4176-973f-a453823fc0c4</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogRef.СоответствияНазначенийПлатежаИРеквизитовПлатежа" category="Ref">
+				<xr:TypeId>63b778db-ba6e-4e74-b20f-3921e5a16c24</xr:TypeId>
+				<xr:ValueId>45c37cc5-a9d7-4c7f-9415-d1aae3fcd1f8</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogSelection.СоответствияНазначенийПлатежаИРеквизитовПлатежа" category="Selection">
+				<xr:TypeId>45306a80-eeca-4037-9287-ad8c8122c2b5</xr:TypeId>
+				<xr:ValueId>f039e73d-6389-4dc1-a609-31702652b91f</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogList.СоответствияНазначенийПлатежаИРеквизитовПлатежа" category="List">
+				<xr:TypeId>60a5b2ef-b86d-4792-a51a-4b416fd2f901</xr:TypeId>
+				<xr:ValueId>ab145a52-d684-44df-aa80-f1f8794bc987</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="CatalogManager.СоответствияНазначенийПлатежаИРеквизитовПлатежа" category="Manager">
+				<xr:TypeId>2ef3abde-b2b2-4956-855d-f48b67d3201d</xr:TypeId>
+				<xr:ValueId>11a0224b-715e-4801-b946-bc3598c91914</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>СоответствияНазначенийПлатежаИРеквизитовПлатежа</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>95c7495d-e8c4-4274-8ed7-e558ae4ae47e</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects>&#13;
+			<Form>ФормаЭлемента</Form>&#13;
+			<Attribute uuid="e29a96fc-84bc-4166-9926-ed8ffc567f83">
+				<Properties>
+					<Name>СМП_ВидНалога</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Вид налога</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment/>
+					<Type>
+						<v8:Type>cfg:CatalogRef.ВидыНалогов</v8:Type>
+					</Type>
+					<PasswordMode>false</PasswordMode>
+					<Format/>
+					<EditFormat/>
+					<ToolTip/>
+					<MarkNegatives>false</MarkNegatives>
+					<Mask/>
+					<MultiLine>false</MultiLine>
+					<ExtendedEdit>false</ExtendedEdit>
+					<MinValue xsi:nil="true"/>
+					<MaxValue xsi:nil="true"/>
+					<FillFromFillingValue>false</FillFromFillingValue>
+					<FillValue xsi:nil="true"/>
+					<FillChecking>DontCheck</FillChecking>
+					<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
+					<ChoiceParameterLinks/>
+					<ChoiceParameters/>
+					<QuickChoice>Auto</QuickChoice>
+					<CreateOnInput>Auto</CreateOnInput>
+					<ChoiceForm/>
+					<LinkByType/>
+					<ChoiceHistoryOnInput>Auto</ChoiceHistoryOnInput>
+					<Use>ForItem</Use>
+					<Indexing>DontIndex</Indexing>
+					<FullTextSearch>Use</FullTextSearch>
+					<DataHistory>Use</DataHistory>
+				</Properties>
+			</Attribute>
+		
+			<Attribute uuid="10aeca52-51de-4f13-bb18-d523294f885a">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ФразаДляПоискаВНазначенииПлатежа</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>b088e841-3677-4445-a335-449e7c68a68c</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="615005dd-654a-4fc5-8078-adbdca799c1f">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ВидОперацииПоступленияНаСчет</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>de9f9b53-7f3d-4454-b566-43d14b3af9d5</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:EnumRef.ВидыОперацийПоступлениеНаСчет</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="128c4f35-6abe-4100-b16c-61df82ae3bda">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ВидОперацииРасходаСоСчета</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>d227de8e-6457-4057-aecd-f768a1f5b166</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:EnumRef.ВидыОперацийРасходСоСчета</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="4fcf264f-306d-461a-8562-a62fb0b931fe">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>СтатьяДДС</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>9c0c91ee-b73a-475c-a19a-820122c2d3bf</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.СтатьиДвиженияДенежныхСредств</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="c2c24621-f275-48aa-8406-cefb3fd9c916">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Корреспонденция</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>c0d46dc1-f487-4f82-915f-62b7c835d6f2</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:ChartOfAccountsRef.Управленческий</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="7bad0781-20ef-40d6-a392-a6b715fcd775">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Проект</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>7b19c41f-8368-4eeb-8a7a-c0aaf7a84928</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.Проекты</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="c5f4e9ca-3211-4250-bd9a-3cac668de20b">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Подразделение</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>21548883-53bb-409a-adfb-62030e7ca7dc</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.СтруктурныеЕдиницы</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+		</ChildObjects>
+	</Catalog>
+</MetaDataObject>

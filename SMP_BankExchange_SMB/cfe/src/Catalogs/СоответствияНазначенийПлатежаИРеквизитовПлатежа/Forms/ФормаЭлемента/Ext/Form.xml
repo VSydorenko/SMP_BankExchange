@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<WindowOpeningMode>LockOwnerWindow</WindowOpeningMode>
+	
+	<UseForFoldersAndItems>Items</UseForFoldersAndItems>
+	
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	
+	<ChildItems>
+		<InputField name="Код" id="1">
+			<DataPath>Объект.Code</DataPath>
+			<UserVisible>
+				<xr:Common>false</xr:Common>
+			</UserVisible>
+			<EditMode>EnterOnInput</EditMode>
+			<ContextMenu name="КодКонтекстноеМеню" id="2"/>
+			<ExtendedTooltip name="КодРасширеннаяПодсказка" id="3"/>
+		</InputField>
+		<InputField name="ФразаДляПоискаВНазначенииПлатежа" id="4">
+			<DataPath>Объект.ФразаДляПоискаВНазначенииПлатежа</DataPath>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Регистр букв (строчные или прописные) не имеет значения.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Регістр букв (рядкові або прописні) не має значення.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<ToolTipRepresentation>Button</ToolTipRepresentation>
+			<EditMode>EnterOnInput</EditMode>
+			<ContextMenu name="ФразаДляПоискаВНазначенииПлатежаКонтекстноеМеню" id="5"/>
+			<ExtendedTooltip name="ФразаДляПоискаВНазначенииПлатежаРасширеннаяПодсказка" id="6"/>
+		</InputField>
+		<UsualGroup name="ГруппаРеквизиты" id="19">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Реквизиты для подстановки в документ</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Реквізити для підстановки в документ</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<ExtendedTooltip name="ГруппаРеквизитыРасширеннаяПодсказка" id="20"/>
+			<ChildItems>
+				<InputField name="ВидОперацииПоступленияНаСчет" id="10">
+					<DataPath>Объект.ВидОперацииПоступленияНаСчет</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ВидОперацииПоступленияНаСчетКонтекстноеМеню" id="11"/>
+					<ExtendedTooltip name="ВидОперацииПоступленияНаСчетРасширеннаяПодсказка" id="12"/>
+				</InputField>
+				<InputField name="ВидОперацииРасходаСоСчета" id="13">
+					<DataPath>Объект.ВидОперацииРасходаСоСчета</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ВидОперацииРасходаСоСчетаКонтекстноеМеню" id="14"/>
+					<ExtendedTooltip name="ВидОперацииРасходаСоСчетаРасширеннаяПодсказка" id="15"/>
+				</InputField>
+				<InputField name="СтатьяДДС" id="7">
+					<DataPath>Объект.СтатьяДДС</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="СтатьяДДСКонтекстноеМеню" id="8"/>
+					<ExtendedTooltip name="СтатьяДДСРасширеннаяПодсказка" id="9"/>
+				</InputField>
+				<InputField name="Корреспонденция" id="16">
+					<DataPath>Объект.Корреспонденция</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="КорреспонденцияКонтекстноеМеню" id="17"/>
+					<ExtendedTooltip name="КорреспонденцияРасширеннаяПодсказка" id="18"/>
+				</InputField>
+				<InputField name="Проект" id="24">
+					<DataPath>Объект.Проект</DataPath>
+					<ContextMenu name="ПроектКонтекстноеМеню" id="25"/>
+					<ExtendedTooltip name="ПроектРасширеннаяПодсказка" id="26"/>
+				</InputField>
+				<InputField name="Подразделение" id="21">
+					<DataPath>Объект.Подразделение</DataPath>
+					<ContextMenu name="ПодразделениеКонтекстноеМеню" id="22"/>
+					<ExtendedTooltip name="ПодразделениеРасширеннаяПодсказка" id="23"/>
+				</InputField>
+				<InputField name="СМП_ВидНалога" id="1000000">
+					<DataPath>Объект.СМП_ВидНалога</DataPath>
+					<ContextMenu name="СМП_ВидНалогаКонтекстноеМеню" id="1000001"/>
+					<ExtendedTooltip name="СМП_ВидНалогаРасширеннаяПодсказка" id="1000002"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	
+	<Attributes>
+		<Attribute name="Объект" id="1000001">
+			<Type><v8:Type>cfg:CatalogObject.СоответствияНазначенийПлатежаИРеквизитовПлатежа</v8:Type></Type>
+			<MainAttribute>true</MainAttribute>
+			<SavedData>true</SavedData>
+		</Attribute>
+	</Attributes>
+	<BaseForm version="2.20">
+		<WindowOpeningMode>LockOwnerWindow</WindowOpeningMode>
+	
+		<UseForFoldersAndItems>Items</UseForFoldersAndItems>
+	
+		<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+		
+		<ChildItems>
+			<InputField name="Код" id="1">
+				<DataPath>Объект.Code</DataPath>
+				<UserVisible>
+					<xr:Common>false</xr:Common>
+				</UserVisible>
+				<EditMode>EnterOnInput</EditMode>
+				<ContextMenu name="КодКонтекстноеМеню" id="2"/>
+				<ExtendedTooltip name="КодРасширеннаяПодсказка" id="3"/>
+			</InputField>
+			<InputField name="ФразаДляПоискаВНазначенииПлатежа" id="4">
+				<DataPath>Объект.ФразаДляПоискаВНазначенииПлатежа</DataPath>
+				<ToolTip>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Регистр букв (строчные или прописные) не имеет значения.</v8:content>
+					</v8:item>
+					<v8:item>
+						<v8:lang>uk</v8:lang>
+						<v8:content>Регістр букв (рядкові або прописні) не має значення.</v8:content>
+					</v8:item>
+				</ToolTip>
+				<ToolTipRepresentation>Button</ToolTipRepresentation>
+				<EditMode>EnterOnInput</EditMode>
+				<ContextMenu name="ФразаДляПоискаВНазначенииПлатежаКонтекстноеМеню" id="5"/>
+				<ExtendedTooltip name="ФразаДляПоискаВНазначенииПлатежаРасширеннаяПодсказка" id="6"/>
+			</InputField>
+			<UsualGroup name="ГруппаРеквизиты" id="19">
+				<Title>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Реквизиты для подстановки в документ</v8:content>
+					</v8:item>
+					<v8:item>
+						<v8:lang>uk</v8:lang>
+						<v8:content>Реквізити для підстановки в документ</v8:content>
+					</v8:item>
+				</Title>
+				<Group>Vertical</Group>
+				<ExtendedTooltip name="ГруппаРеквизитыРасширеннаяПодсказка" id="20"/>
+				<ChildItems>
+					<InputField name="ВидОперацииПоступленияНаСчет" id="10">
+						<DataPath>Объект.ВидОперацииПоступленияНаСчет</DataPath>
+						<EditMode>EnterOnInput</EditMode>
+						<ContextMenu name="ВидОперацииПоступленияНаСчетКонтекстноеМеню" id="11"/>
+						<ExtendedTooltip name="ВидОперацииПоступленияНаСчетРасширеннаяПодсказка" id="12"/>
+					</InputField>
+					<InputField name="ВидОперацииРасходаСоСчета" id="13">
+						<DataPath>Объект.ВидОперацииРасходаСоСчета</DataPath>
+						<EditMode>EnterOnInput</EditMode>
+						<ContextMenu name="ВидОперацииРасходаСоСчетаКонтекстноеМеню" id="14"/>
+						<ExtendedTooltip name="ВидОперацииРасходаСоСчетаРасширеннаяПодсказка" id="15"/>
+					</InputField>
+					<InputField name="СтатьяДДС" id="7">
+						<DataPath>Объект.СтатьяДДС</DataPath>
+						<EditMode>EnterOnInput</EditMode>
+						<ContextMenu name="СтатьяДДСКонтекстноеМеню" id="8"/>
+						<ExtendedTooltip name="СтатьяДДСРасширеннаяПодсказка" id="9"/>
+					</InputField>
+					<InputField name="Корреспонденция" id="16">
+						<DataPath>Объект.Корреспонденция</DataPath>
+						<EditMode>EnterOnInput</EditMode>
+						<ContextMenu name="КорреспонденцияКонтекстноеМеню" id="17"/>
+						<ExtendedTooltip name="КорреспонденцияРасширеннаяПодсказка" id="18"/>
+					</InputField>
+					<InputField name="Проект" id="24">
+						<DataPath>Объект.Проект</DataPath>
+						<ContextMenu name="ПроектКонтекстноеМеню" id="25"/>
+						<ExtendedTooltip name="ПроектРасширеннаяПодсказка" id="26"/>
+					</InputField>
+					<InputField name="Подразделение" id="21">
+						<DataPath>Объект.Подразделение</DataPath>
+						<ContextMenu name="ПодразделениеКонтекстноеМеню" id="22"/>
+						<ExtendedTooltip name="ПодразделениеРасширеннаяПодсказка" id="23"/>
+					</InputField>
+				</ChildItems>
+			</UsualGroup>
+		</ChildItems>
+		
+		<Attributes>
+			<Attribute name="Объект" id="1000001">
+				<Type><v8:Type>cfg:CatalogObject.СоответствияНазначенийПлатежаИРеквизитовПлатежа</v8:Type></Type>
+				<MainAttribute>true</MainAttribute>
+				<SavedData>true</SavedData>
+			</Attribute>
+		</Attributes>
+	</BaseForm>
+</Form>
