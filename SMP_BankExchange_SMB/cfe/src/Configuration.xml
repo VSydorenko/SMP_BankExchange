@@ -118,6 +118,7 @@
 			<CommonModule>ОбменСБанкамиКлиентСервер</CommonModule>
 			<CommonModule>ОбменСБанкамиПереопределяемый</CommonModule>
 			<CommonModule>СМП_ВыпискаБанка</CommonModule>
+			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
 			<CommonModule>ЭлектронноеВзаимодействиеКлиентПереопределяемый</CommonModule>
 			<CommonModule>СМП_ГенерацияTOTPСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиNovaPayAPIСервер</CommonModule>
