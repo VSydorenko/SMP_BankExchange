@@ -68,6 +68,7 @@
 			<Role>СМП_ОсновнаяРоль</Role>
 			<CommonModule>СМП_ТестыВендораЗаполнениеДокумента</CommonModule>
 			<CommonModule>СМП_ТестыВендораЗаполнениеПоОснованию</CommonModule>
+			<CommonModule>СМП_ТестыВендораСоздание</CommonModule>
 			<CommonModule>СМП_ТестыВендораСпособЗачета</CommonModule>
 			<CommonModule>СМП_ТестыВызовПродукта</CommonModule>
 			<CommonModule>СМП_ТестыДанныеУНФ</CommonModule>
