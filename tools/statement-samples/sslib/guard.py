@@ -46,14 +46,24 @@ def scan_text(text, nums, names):
     return hits
 
 
+def decodings(b):
+    """Усі розкладки байтів, у яких сирі лексеми можуть стояти у файлі: UTF-8, windows-1251, cp866
+    (OEM, DBF), UTF-16LE (платформа 1С, XLS) — для UTF-16LE з обома вирівнюваннями, бо рядок у
+    двійковому контейнері може починатися з непарного зсуву."""
+    for enc in ('utf-8', 'cp1251', 'cp866'):
+        yield b.decode(enc, errors='replace')
+    yield b.decode('utf-16le', errors='replace')
+    yield b[1:].decode('utf-16le', errors='replace')
+
+
 def scan_files(paths, nums, names):
-    """-> {шлях: кількість збігів}; байти читаються як UTF-8 і як windows-1251."""
+    """-> {шлях: кількість збігів}; байти читаються в усіх розкладках з `decodings`, ім'я файлу — як є."""
     res = {}
     for p in paths:
         b = open(p, 'rb').read()
         hits = set()
-        for enc in ('utf-8', 'cp1251'):
-            hits |= scan_text(b.decode(enc, errors='replace'), nums, names)
+        for text in decodings(b):
+            hits |= scan_text(text, nums, names)
         hits |= scan_text(os.path.basename(p), nums, names)
         res[p] = len(hits)
     return res
