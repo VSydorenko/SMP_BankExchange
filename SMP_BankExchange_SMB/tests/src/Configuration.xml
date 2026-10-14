@@ -75,6 +75,7 @@
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
+			<DataProcessor>СМП_ТестыМакеты</DataProcessor>
 		</ChildObjects>
 	</Configuration>
 </MetaDataObject>

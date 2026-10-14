@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<DataProcessor uuid="162ba5b4-72f2-4d35-8b3d-1ec78d08d852">
+		<InternalInfo>
+			<xr:GeneratedType name="DataProcessorObject.СМП_ТестыМакеты" category="Object">
+				<xr:TypeId>0d564565-289e-48ac-9578-c8df37281ee6</xr:TypeId>
+				<xr:ValueId>40dc9a58-05c7-45bf-8f85-146ff5ed0c05</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="DataProcessorManager.СМП_ТестыМакеты" category="Manager">
+				<xr:TypeId>612366b3-3add-4dbb-b79f-6b1da5e43d48</xr:TypeId>
+				<xr:ValueId>18b6a0bf-e320-4746-abe0-38d8c6df99da</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<Name>СМП_ТестыМакеты</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Смп_тесты макеты</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<UseStandardCommands>false</UseStandardCommands>
+			<DefaultForm/>
+			<AuxiliaryForm/>
+			<IncludeHelpInContents>false</IncludeHelpInContents>
+			<ExtendedPresentation/>
+			<Explanation/>
+		</Properties>
+		<ChildObjects>
+			<Template>СМП_ТестВыпискаCSVВосток</Template>
+			<Template>СМП_ТестЭталонCSVВосток</Template>
+			<Template>СМП_ТестВыпискаCSVАкорд</Template>
+			<Template>СМП_ТестВыпискаCSVАваль</Template>
+			<Template>СМП_ТестВыпискаCSVУниверсалNUL</Template>
+			<Template>СМП_ТестВыпискаCSVПроКредит</Template>
+			<Template>СМП_ТестВыпискаCSVУкрСиб</Template>
+			<Template>СМП_ТестВыпискаCSVУкрГаз</Template>
+			<Template>СМП_ТестВыпискаCSVСенсТОВ</Template>
+			<Template>СМП_ТестВыпискаCSVСенсФОП</Template>
+			<Template>СМП_ТестВыпискаXLSСенсТОВ</Template>
+			<Template>СМП_ТестВыпискаDATОТП1191</Template>
+			<Template>СМП_ТестВыпискаDATОТП660</Template>
+			<Template>СМП_ТестВыпискаDBFОТП</Template>
+			<Template>СМП_ТестВыпискаDBFОТПДоба</Template>
+			<Template>СМП_ТестВыпискаXMLОТПДоба</Template>
+			<Template>СМП_ТестВыпискаDBFОщад16</Template>
+			<Template>СМП_ТестВыпискаDBFОщад17</Template>
+			<Template>СМП_ТестВыпискаXMLПивденный</Template>
+			<Template>СМП_ТестЭталонCSVАкорд</Template>
+			<Template>СМП_ТестЭталонCSVАваль</Template>
+			<Template>СМП_ТестЭталонCSVУниверсалNUL</Template>
+			<Template>СМП_ТестЭталонCSVПроКредит</Template>
+			<Template>СМП_ТестЭталонCSVУкрСиб</Template>
+			<Template>СМП_ТестЭталонCSVУкрГаз</Template>
+			<Template>СМП_ТестЭталонCSVСенсТОВ</Template>
+			<Template>СМП_ТестЭталонCSVСенсФОП</Template>
+			<Template>СМП_ТестЭталонXLSСенсТОВ</Template>
+			<Template>СМП_ТестЭталонDATОТП1191</Template>
+			<Template>СМП_ТестЭталонDATОТП660</Template>
+			<Template>СМП_ТестЭталонDBFОТП</Template>
+			<Template>СМП_ТестЭталонDBFОТПДоба</Template>
+			<Template>СМП_ТестЭталонXMLОТПДоба</Template>
+			<Template>СМП_ТестЭталонDBFОщад16</Template>
+			<Template>СМП_ТестЭталонDBFОщад17</Template>
+			<Template>СМП_ТестЭталонXMLПивденный</Template>
+			<Template>СМП_ТестПереченьОбработок</Template>
+		</ChildObjects>
+	</DataProcessor>
+</MetaDataObject>
