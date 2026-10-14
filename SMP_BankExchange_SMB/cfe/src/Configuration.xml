@@ -117,6 +117,7 @@
 			<CommonModule>ОбменСБанкамиКлиент</CommonModule>
 			<CommonModule>ОбменСБанкамиКлиентСервер</CommonModule>
 			<CommonModule>ОбменСБанкамиПереопределяемый</CommonModule>
+			<CommonModule>СМП_ВыгрузкаПлатежей</CommonModule>
 			<CommonModule>СМП_ВыпискаБанка</CommonModule>
 			<CommonModule>СМП_ЗаписьДокументовБанка</CommonModule>
 			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
