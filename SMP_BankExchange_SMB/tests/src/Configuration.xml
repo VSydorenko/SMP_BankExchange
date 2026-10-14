@@ -75,6 +75,7 @@
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
+			<CommonModule>СМП_ТестыФорматаiFOBS_CSV</CommonModule>
 			<CommonModule>СМП_ТестыЧитателейВыписок</CommonModule>
 			<CommonModule>СМП_ТестыЧтенияВыписок</CommonModule>
 			<DataProcessor>СМП_ТестЧитатель</DataProcessor>
