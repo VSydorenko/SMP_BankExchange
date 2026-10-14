@@ -65,6 +65,8 @@
 			<Template>СМП_ТестЭталонDBFОщад17</Template>
 			<Template>СМП_ТестЭталонXMLПивденный</Template>
 			<Template>СМП_ТестПереченьОбработок</Template>
+			<Template>СМП_ТестЧитательВнешний</Template>
+			<Template>СМП_ТестЧитательСтарый</Template>
 		</ChildObjects>
 	</DataProcessor>
 </MetaDataObject>
