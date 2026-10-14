@@ -72,6 +72,7 @@
 			<CommonModule>СМП_ТестыДанныеУНФ</CommonModule>
 			<CommonModule>СМП_ТестыКонтрактаВыписки</CommonModule>
 			<CommonModule>СМП_ТестыКонтрольХарнеса</CommonModule>
+			<CommonModule>СМП_ТестыМатрицыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
