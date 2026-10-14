@@ -76,6 +76,7 @@
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
 			<CommonModule>СМП_ТестыФорматаiFOBS_CSV</CommonModule>
+			<CommonModule>СМП_ТестыФорматаiFOBS_XML</CommonModule>
 			<CommonModule>СМП_ТестыФорматаОТП_DAT</CommonModule>
 			<CommonModule>СМП_ТестыФорматаОщадБанк_DBF</CommonModule>
 			<CommonModule>СМП_ТестыФорматаСенсБанк_CSV</CommonModule>
