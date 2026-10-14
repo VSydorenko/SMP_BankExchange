@@ -121,6 +121,8 @@
 			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
 			<CommonModule>СМП_ЧитателиВыписок</CommonModule>
 			<CommonModule>СМП_ЧитательВыпискиiFOBS_CSV</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиСенсБанк_CSV</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиУкрГазБанк_CSV</CommonModule>
 			<CommonModule>СМП_ЧтениеВыписокОбщее</CommonModule>
 			<CommonModule>ЭлектронноеВзаимодействиеКлиентПереопределяемый</CommonModule>
 			<CommonModule>СМП_ГенерацияTOTPСервер</CommonModule>
