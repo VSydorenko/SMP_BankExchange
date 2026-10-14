@@ -119,6 +119,14 @@
 			<CommonModule>ОбменСБанкамиПереопределяемый</CommonModule>
 			<CommonModule>СМП_ВыпискаБанка</CommonModule>
 			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
+			<CommonModule>СМП_ЧитателиВыписок</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиiFOBS_CSV</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиiFOBS_XML</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиОТП_DAT</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиОщадБанк_DBF</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиСенсБанк_CSV</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиУкрГазБанк_CSV</CommonModule>
+			<CommonModule>СМП_ЧтениеВыписокОбщее</CommonModule>
 			<CommonModule>ЭлектронноеВзаимодействиеКлиентПереопределяемый</CommonModule>
 			<CommonModule>СМП_ГенерацияTOTPСервер</CommonModule>
 			<CommonModule>СМП_РаботаСБанкамиNovaPayAPIСервер</CommonModule>

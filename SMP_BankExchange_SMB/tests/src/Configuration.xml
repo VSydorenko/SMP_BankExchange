@@ -74,11 +74,23 @@
 			<CommonModule>СМП_ТестыДанныеУНФ</CommonModule>
 			<CommonModule>СМП_ТестыКонтрактаВыписки</CommonModule>
 			<CommonModule>СМП_ТестыКонтрольХарнеса</CommonModule>
+			<CommonModule>СМП_ТестыМатрицыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияЗавершение</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияШаг5</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
+			<CommonModule>СМП_ТестыФорматаiFOBS_CSV</CommonModule>
+			<CommonModule>СМП_ТестыФорматаiFOBS_XML</CommonModule>
+			<CommonModule>СМП_ТестыФорматаОТП_DAT</CommonModule>
+			<CommonModule>СМП_ТестыФорматаОщадБанк_DBF</CommonModule>
+			<CommonModule>СМП_ТестыФорматаСенсБанк_CSV</CommonModule>
+			<CommonModule>СМП_ТестыФорматаУкрГазБанк_CSV</CommonModule>
+			<CommonModule>СМП_ТестыЧитателейВыписок</CommonModule>
+			<CommonModule>СМП_ТестыЧтенияВыписок</CommonModule>
+			<DataProcessor>СМП_ТестЧитатель</DataProcessor>
+			<DataProcessor>СМП_ТестЧитательБезОписания</DataProcessor>
+			<DataProcessor>СМП_ТестыМакеты</DataProcessor>
 		</ChildObjects>
 	</Configuration>
 </MetaDataObject>

@@ -1,0 +1,55 @@
+{
+  "_comment": "Конфігурація інструменту зразків. Реальних значень немає: джерела задано масками тек/файлів відносно кореня сирих зразків (перший сегмент '* - Виписки банка' — тека клієнта без назви). 'pick' — 0-базований індекс у відсортованому переліку збігів маски. 'take_rows' — скільки записів лишити (зразок скорочується до однакового розміру для сирого й знеособленого).",
+  "allowed_words": [
+    "ТОВ", "ФОП", "ПП", "ПрАТ", "ПАТ", "АТ", "ДП", "КБ", "ТзОВ", "ВАТ", "АБ", "ПСП", "СФГ", "ФГ", "ОСББ", "КП",
+    "Банк", "БАНК", "банк"
+  ],
+  "guard_allowed_words": [
+    "Акорд", "Аваль", "Восток", "Універсал", "ПроКредит", "УкрСиб", "УкрГаз", "Сенс", "Альфа", "ОТП", "Ощад",
+    "Південний", "Райффайзен", "Сбербанк", "ПУМБ", "Приват", "Укргазбанк", "Укрсиббанк", "Ощадбанк"
+  ],
+  "binary_structure_words": ["Arial", "Entry", "Root", "Sheet", "Workbook"],
+  "verbatim_texts": [],
+  "samples": [
+    {"id": "CSVАкорд", "src": "* - Виписки банка/АкордБанк*.csv", "container": "csv", "schema": "ifobs",
+     "layout": "A", "named": "ifobs", "accepted": true, "note": "лапки у призначенні"},
+    {"id": "CSVАваль", "src": "Банк Аваль*/*.csv", "container": "csv", "schema": "ifobs",
+     "layout": "A", "named": "ifobs", "accepted": true, "note": "колонка номера документа зветься «Документ»"},
+    {"id": "CSVВосток", "src": "Банк Восток/*.csv", "container": "csv", "schema": "ifobs",
+     "layout": "A", "named": "ifobs", "accepted": true, "note": "кінцевий ;"},
+    {"id": "CSVУниверсалNUL", "src": "Банк Універсал*/*2.csv", "container": "csv", "schema": "ifobs",
+     "layout": "A", "named": "ifobs", "accepted": true, "note": "NUL у призначенні, кінцевий ;"},
+    {"id": "CSVПроКредит", "src": "Банк ПроКредитБанк*/export*.csv", "container": "csv", "schema": "ifobs",
+     "layout": "A2_procredit", "named": "ifobs", "accepted": true},
+    {"id": "CSVУкрСиб", "src": "Банк УкрСибБанк*/*.csv", "pick": 3, "container": "csv", "schema": "ifobs",
+     "layout": "A2_ukrsib", "named": "ifobs", "accepted": true, "note": "усі поля в лапках, ; усередині призначення"},
+    {"id": "CSVУкрГаз", "src": "Банк УкрГазБанк*/*.csv", "container": "csv", "schema": "ukrgaz",
+     "layout": "ukrgaz", "named": "ukrgaz", "accepted": true, "note": "залишки"},
+    {"id": "CSVСенсТОВ", "src": "Банк АльфаБанк_ТОВ*/НовыеСтандарты/*.csv", "container": "csv", "schema": "alfa",
+     "layout": "sens", "named": "alfa_csv", "accepted": true, "note": "гілка ТОВ"},
+    {"id": "CSVСенсФОП", "src": "Банк АльфаБанк_ФОП*/account_statement*.csv", "container": "csv", "schema": "ifobs",
+     "layout": "sens", "named": "ifobs", "accepted": true, "note": "гілка ФОП"},
+    {"id": "XLSСенсТОВ", "src": "Банк АльфаБанк_ТОВ*/Старі файли/*_14_24.csv", "container": "xls", "schema": "alfa",
+     "layout": null, "named": "alfa_xls", "accepted": false, "note": "XLS під розширенням .csv"},
+    {"id": "DATОТП1191", "src": "* - Виписки банка/ОТП нова виписка/*.dat", "container": "lines", "schema": "otp1191",
+     "layout": "otp", "named": "otp_dat", "accepted": true},
+    {"id": "DATОТП660", "src": "* - Виписки банка/ОТП 200123.dat", "take_rows": 40, "container": "lines",
+     "schema": "otp660", "layout": null, "named": "otp_dat", "accepted": false, "note": "покоління 660: відхилити"},
+    {"id": "DBFОТП", "src": "* - Виписки банка/ОТП нова виписка/*.dbf", "container": "dbf", "dbf_schema": "otp",
+     "layout": null, "named": "dbf_otp", "accepted": false, "note": "ОТП у DBF: відхилити (пара до DATОТП1191)"},
+    {"id": "DBFОТПДоба", "zip": "Банк ОТП (файли загрузки)/170521 dbf.zip", "member": "210507.dbf", "container": "dbf",
+     "dbf_schema": "otp", "layout": null, "named": "dbf_otp", "accepted": false, "note": "ОТП у DBF з архіву"},
+    {"id": "XMLОТПДоба", "zip": "Банк ОТП (файли загрузки)/170521 xml.zip", "member": "Doc_20210507.xml", "container": "xml",
+     "xml_schema": "rowdata", "layout": null, "named": "xml", "accepted": false, "note": "ОТП у XML: відхилити (пара до DBFОТПДоба)"},
+    {"id": "DBFОщад16", "src": "Банк ОщадБанк*/01.04-15.04.Dbf", "container": "dbf", "dbf_schema": "oschad",
+     "layout": "oschad", "named": "dbf_oschad", "accepted": true, "note": "16 полів"},
+    {"id": "DBFОщад17", "src": "Банк ОщадБанк*/[!0-9]*.Dbf", "take_rows": 40, "container": "dbf", "dbf_schema": "oschad",
+     "layout": "oschad", "named": "dbf_oschad", "accepted": true, "note": "17 полів, uetr"},
+    {"id": "XMLПивденный", "src": "Банк Південний*/Doc_20200601*.xml", "container": "xml", "xml_schema": "rowdata",
+     "layout": "pivd", "named": "xml", "accepted": true, "note": "два власні рахунки, рядки USD"}
+  ],
+  "pairs": [
+    ["DATОТП1191", "DBFОТП"],
+    ["DBFОТПДоба", "XMLОТПДоба"]
+  ]
+}
