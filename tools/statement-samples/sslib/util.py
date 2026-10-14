@@ -251,24 +251,55 @@ def dbf_layout(b):
     return fields, nrec, hlen, rlen
 
 
-def read_dbf(path_or_bytes, enc=ENC, keep_deleted=False):
+# Дві моделі читання DBF. Кожен виклик read_dbf МУСИТЬ назвати модель (параметр model без значення за
+# замовчуванням): модель продукту й модель старої обробки відрізняються, і підміна однієї іншою мовчки
+# змінює результат.
+#
+# 'product' — контейнер ЗаписиDBF продукту (СМП_ЧтениеВыписокОбщее): байти поля декодуються кодуванням
+#   enc; NUL (код 0) -> апостроф (довжина не змінюється); справа знімаються лише пробіли (код 32), ліві
+#   пробіли й усі інші символи лишаються; вилучені записи пропускаються, але нумерація фізична
+#   (meta['numbers'][i] — номер запису у файлі з одиниці, вилучені його займають).
+# 'legacy'  — старі обробки (XBase, вимір у журналі прогонів плану 03, задача 4): значення поля
+#   обрізається на ПЕРШОМУ NUL; вилучені записи пропускаються; номера запису для людини XBase не дає,
+#   meta['numbers'] — внутрішній порядковий номер серед невилучених (з продуктом не зіставляти).
+#   Подальше .strip() з обох боків — це СокрЛП, який старі обробки застосовують самі (розкладки в
+#   legacy.py), а не властивість XBase (XBase віддає значення з добивкою).
+DBF_PRODUCT = 'product'
+DBF_LEGACY = 'legacy'
+DBF_MODELS = (DBF_PRODUCT, DBF_LEGACY)
+
+
+def dbf_value(raw, enc, model):
+    text = raw.decode(enc, errors='replace')
+    if model == DBF_PRODUCT:
+        return text.replace('\x00', "'").rstrip(' ')
+    if model == DBF_LEGACY:
+        return text.split('\x00', 1)[0].strip()
+    raise ValueError('невідома модель DBF: %r (допустимі: %s)' % (model, ', '.join(DBF_MODELS)))
+
+
+def read_dbf(path_or_bytes, *, model, enc=ENC):
+    """-> (fields, recs, meta). model — 'product' або 'legacy' (обов'язково, див. вище).
+    meta: nrec_hdr, deleted, rlen, numbers (номер запису для кожного елемента recs), model."""
+    if model not in DBF_MODELS:
+        raise ValueError('невідома модель DBF: %r (допустимі: %s)' % (model, ', '.join(DBF_MODELS)))
     b = open(path_or_bytes, 'rb').read() if isinstance(path_or_bytes, str) else path_or_bytes
     fields, nrec, hlen, rlen = dbf_layout(b)
     recs = []
+    numbers = []
     deleted = 0
     for i in range(nrec):
         rec = b[hlen + i * rlen: hlen + (i + 1) * rlen]
         if len(rec) < rlen:
             break
+        if rec[0:1] == b'*':
+            deleted += 1
+            continue
         p = 1
         d = {}
         for name, t, ln, dc in fields:
-            raw = rec[p:p + ln]
+            d[name] = dbf_value(rec[p:p + ln], enc, model)
             p += ln
-            d[name] = raw.decode(enc, errors='replace').replace('\x00', '').strip()
-        if rec[0:1] == b'*':
-            deleted += 1
-            if not keep_deleted:
-                continue
         recs.append(d)
-    return fields, recs, {'nrec_hdr': nrec, 'deleted': deleted, 'rlen': rlen}
+        numbers.append(i + 1 if model == DBF_PRODUCT else len(recs))
+    return fields, recs, {'nrec_hdr': nrec, 'deleted': deleted, 'rlen': rlen, 'numbers': numbers, 'model': model}

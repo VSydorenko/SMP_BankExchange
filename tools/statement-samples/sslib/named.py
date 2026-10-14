@@ -12,7 +12,7 @@ from collections import Counter
 from datetime import date
 from decimal import Decimal
 
-from .util import (Op, cur_norm, q2, norm_name, parse_amount, parse_date, read_csv_rows, read_dbf,
+from .util import (DBF_PRODUCT, Op, cur_norm, q2, norm_name, parse_amount, parse_date, read_csv_rows, read_dbf,
                    read_text_lines)
 from .biff import xls_table
 
@@ -317,14 +317,23 @@ def read_otp_dat(src):
 # =====================================================================
 # 4. DBF
 # =====================================================================
+def _read_dbf_named(src):
+    """Розбір «за назвою» представляє ПРОДУКТ: контейнер ЗаписиDBF (модель 'product': NUL -> апостроф, справа
+    лише пробіли, фізична нумерація) і далі те, що робить модуль формату зі значеннями (.strip() — СокрЛП).
+    Старій обробці відповідає legacy.py (модель 'legacy')."""
+    fields, recs, dm = read_dbf(src, model=DBF_PRODUCT)
+    recs = [{k: v.strip() for k, v in r.items()} for r in recs]
+    return fields, recs, dm
+
+
 def read_dbf_oschad(src):
-    fields, recs, dm = read_dbf(src)
+    fields, recs, dm = _read_dbf_named(src)
     low = lambda r: {k.lower(): v for k, v in r.items()}
     meta = {'rows_total': len(recs), 'dbf': dm, 'fields': [f[0] for f in fields], 'fail': Counter(), 'profile': 'oschad_dbf'}
     ops = []
     for n, r0 in enumerate(recs, 1):
         r = low(r0)
-        o = Op(fmt='dbf:oschad', src_row=n)
+        o = Op(fmt='dbf:oschad', src_row=dm['numbers'][n - 1])
         o.date, _ = parse_date(r.get('dt'))
         o.doc_no = r.get('ndoc', '')
         o.amount = parse_amount(r.get('summa'))
@@ -344,14 +353,14 @@ def read_dbf_ndoc(src, debit_operat='1', own_side='by_operat', fmt='dbf:ndoc'):
     """DBF n_doc…tim_pr (Універсал: lowercase, ОТП: UPPERCASE + IBAN_DB/IBAN_K).
     OPERAT: debit_operat — значення «списання». own_side: 'by_operat' (ОТП: власний боком платника при списанні)
     або 'db' (Універсал: власний завжди в *_db)."""
-    fields, recs, dm = read_dbf(src)
+    fields, recs, dm = _read_dbf_named(src)
     names = [f[0].lower() for f in fields]
     meta = {'rows_total': len(recs), 'dbf': dm, 'fields': names, 'fail': Counter(), 'profile': 'ndoc_dbf'}
     has_iban = 'iban_db' in names
     ops = []
     for n, r0 in enumerate(recs, 1):
         r = {k.lower(): v for k, v in r0.items()}
-        o = Op(fmt=fmt, src_row=n)
+        o = Op(fmt=fmt, src_row=dm['numbers'][n - 1])
         o.date, _ = parse_date(r.get('dat_pr') or r.get('dat'))
         d1, _ = parse_date(r.get('dat'))
         o.doc_date = d1

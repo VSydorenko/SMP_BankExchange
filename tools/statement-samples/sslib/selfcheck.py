@@ -9,7 +9,7 @@ from collections import Counter, defaultdict
 from decimal import Decimal
 
 from . import corpus, legacy, named
-from .util import q2, ws, read_dbf, read_text_lines
+from .util import q2, ws, read_text_lines
 
 # (обробка, розкладка, мітки) -> очікуване з 40-oracle.md розд. 2: (рядків, прочитано, усі ключові вірні)
 CASES = [

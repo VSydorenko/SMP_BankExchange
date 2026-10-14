@@ -16,7 +16,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
 
-from .util import (CUR, CUR_NUM, cur_norm, parse_date, q2, read_dbf, read_text_lines, split_csv_quoted, ws)
+from .util import (CUR, CUR_NUM, DBF_LEGACY, cur_norm, parse_date, q2, read_dbf, read_text_lines, split_csv_quoted, ws)
 
 PLATFORM_ASSUMPTIONS = [
     'КодировкаТекста.ANSI = cp1251 (залежить від машини)',
@@ -425,7 +425,8 @@ def emulate(data, layout, mode='old', skip_first=True):
             _run(lay, l, n, expected, res)
     elif kind == 'dbf':
         dev5_oschad_no_temp_file()
-        fields, recs, _ = read_dbf(data, enc)
+        # Модель старої обробки (XBase): обрізання на першому NUL, вилучені пропущені.
+        fields, recs, _ = read_dbf(data, model=DBF_LEGACY, enc=enc)
         for n, r0 in enumerate(recs, 1):
             _run(lay, {k.lower(): v for k, v in r0.items()}, n, expected, res)
     elif kind == 'xml':
