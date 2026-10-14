@@ -70,6 +70,7 @@
 			<CommonModule>СМП_ТестыВендораЗаполнениеПоОснованию</CommonModule>
 			<CommonModule>СМП_ТестыВендораСоздание</CommonModule>
 			<CommonModule>СМП_ТестыВендораСпособЗачета</CommonModule>
+			<CommonModule>СМП_ТестыВыгрузкиПлатежей</CommonModule>
 			<CommonModule>СМП_ТестыВызовПродукта</CommonModule>
 			<CommonModule>СМП_ТестыДанныеУНФ</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиКаркас</CommonModule>
