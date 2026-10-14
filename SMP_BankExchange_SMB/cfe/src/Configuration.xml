@@ -121,6 +121,7 @@
 			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
 			<CommonModule>СМП_ЧитателиВыписок</CommonModule>
 			<CommonModule>СМП_ЧитательВыпискиiFOBS_CSV</CommonModule>
+			<CommonModule>СМП_ЧитательВыпискиiFOBS_XML</CommonModule>
 			<CommonModule>СМП_ЧитательВыпискиОТП_DAT</CommonModule>
 			<CommonModule>СМП_ЧитательВыпискиОщадБанк_DBF</CommonModule>
 			<CommonModule>СМП_ЧитательВыпискиСенсБанк_CSV</CommonModule>
