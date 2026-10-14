@@ -13,7 +13,7 @@ from .util import q2, ws, read_dbf, read_text_lines
 
 # (обробка, розкладка, мітки) -> очікуване з 40-oracle.md розд. 2: (рядків, прочитано, усі ключові вірні)
 CASES = [
-    ('Акорд (A)', 'A', lambda D: ['БЛ-Акорд']),
+    ('Акорд (A)', 'A', lambda D: ['Кл-Акорд']),
     ('БанкВосток (A)', 'A', lambda D: ['Восток#1']),
     ('Універсал (A)', 'A', lambda D: [k for k in D if k.startswith('Універсал-csv')]),
     ('ПроКредит (A2)', 'A2_procredit', lambda D: [k for k in D if k.startswith('ПроКредит')]),
@@ -21,9 +21,9 @@ CASES = [
     ('УкрГаз (B)', 'ukrgaz', lambda D: [k for k in D if k.startswith('УкрГаз')]),
     ('Сенс (C, юр.особа)', 'sens', lambda D: [k for k in D if k.startswith('АльфаТОВ') and D[k]['key'] == 'alfa_csv']),
     ('Сенс (C, ФОП)', 'sens', lambda D: [k for k in D if k.startswith('АльфаФОП')]),
-    ('ОТП (D) 1191', 'otp', lambda D: ['БЛ-ОТП-dat-1191']),
-    ('ОТП (D) 660', 'otp', lambda D: ['БЛ-ОТП-dat-660', 'ОТП-170521-txt']),
-    ('Ощад (E)', 'oschad', lambda D: [k for k in D if k.startswith('Ощад') or k.startswith('БЛ-Ощад')]),
+    ('ОТП (D) 1191', 'otp', lambda D: ['Кл-ОТП-dat-1191']),
+    ('ОТП (D) 660', 'otp', lambda D: ['Кл-ОТП-dat-660', 'ОТП-170521-txt']),
+    ('Ощад (E)', 'oschad', lambda D: [k for k in D if k.startswith('Ощад') or k.startswith('Кл-Ощад')]),
     ('Південний (F)', 'pivd', lambda D: [k for k in D if k.startswith('Південний')]),
 ]
 # очікувано: (всього рядків, прочитано без винятку, усі ключові вірні) — 40-oracle.md, розд. 1–2
@@ -92,7 +92,7 @@ def field_matches(pairs, fields=FIELDS):
 
 
 def run_crosschecks(D, root, log):
-    """Звірки ОТП 233/233 (xls=dbf=xml), масштаб SUMMA, txt ⊇ 233, БоатЛаб 15/15. -> кількість розбіжностей."""
+    """Звірки ОТП 233/233 (xls=dbf=xml), масштаб SUMMA, txt ⊇ 233, пара .dat↔.dbf 15/15. -> кількість розбіжностей."""
     bad = 0
     otp = os.path.join(root, 'Банк ОТП (файли загрузки)')
     xls = D['ОТП-170521-xls']['ops']
@@ -122,8 +122,8 @@ def run_crosschecks(D, root, log):
     fm = field_matches(ptx, [f for f in FIELDS if f[0] not in ('дата док.', 'ЄДРПОУ власн.')])
     log('dbf(233)↔txt(599): пар %d, без пари в dbf %d; не повні збіги: %s' % (len(ptx), len(ua), {k: v for k, v in fm.items() if v != len(ptx)}))
     bad += len(ptx) != 233
-    # БоатЛаб 15/15
-    dat, dbf1 = D['БЛ-ОТП-dat-1191']['ops'], D['БЛ-ОТП-dbf']['ops']
+    # пара .dat↔.dbf 15/15
+    dat, dbf1 = D['Кл-ОТП-dat-1191']['ops'], D['Кл-ОТП-dbf']['ops']
     pairs = list(zip(dat, dbf1))
     fm = field_matches(pairs)
     log('ОТП .dat1191↔.dbf: пар %d (рядок до рядка); не повні збіги: %s' % (len(pairs), {k: v for k, v in fm.items() if v != len(pairs)}))
@@ -135,7 +135,7 @@ def run_counts(D, log):
     """Кількості розібрано/усього за таблицею 40-oracle.md розд. 1 (по групах)."""
     exp = {'Аваль': [9], 'АльфаФОП': [37], 'Восток': [2], 'ПроКредит': [43 + 158 + 158 + 14], 'УкрСиб': [13 + 81 + 33 + 36 + 67 + 1],
            'Універсал-csv': [5 + 25 + 25 + 27], 'Універсал-dbf': [27], 'УкрГаз': [7], 'Південний': [113],
-           'Ощад': [14 + 179 + 4], 'БЛ-Ощад': [24]}
+           'Ощад': [14 + 179 + 4], 'Кл-Ощад': [24]}
     bad = 0
     for pref, (n,) in exp.items():
         tot = sum(len(v['ops']) for k, v in D.items() if k.startswith(pref + '#') or k == pref)
@@ -146,8 +146,8 @@ def run_counts(D, log):
     tot = sum(len(D[k]['ops']) for k in alfa)
     log('АльфаТОВ (CSV+XLS): розібрано %d (очікувано %d)' % (tot, 82 + 82 + 37 + 30 + 28 + 5 + 9 + 11))
     bad += tot != 82 + 82 + 37 + 30 + 28 + 5 + 9 + 11
-    for k, want in (('ОТП-170521-txt', 599), ('БЛ-ОТП-dat-660', 386), ('БЛ-ОТП-dat-1191', 15), ('БЛ-ОТП-dbf', 15),
-                    ('ОТП-170521-xls', 233), ('ОТП-170521-dbf.zip', 233), ('ОТП-170521-xml.zip', 233), ('БЛ-Акорд', 17)):
+    for k, want in (('ОТП-170521-txt', 599), ('Кл-ОТП-dat-660', 386), ('Кл-ОТП-dat-1191', 15), ('Кл-ОТП-dbf', 15),
+                    ('ОТП-170521-xls', 233), ('ОТП-170521-dbf.zip', 233), ('ОТП-170521-xml.zip', 233), ('Кл-Акорд', 17)):
         n = len(D[k]['ops'])
         log('%s: розібрано %d (очікувано %d)' % (k, n, want))
         bad += n != want

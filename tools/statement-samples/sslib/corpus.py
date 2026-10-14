@@ -51,14 +51,14 @@ def build(root):
                              ('ОТП-170521-xml.zip', '170521 xml.zip', 'zip_xml')):
         R.append((label, os.path.join(root, otp, name), key))
     one = lambda pat: (g(pat) or [None])[0]
-    for label, pat, key in (('БЛ-Акорд', client + '/АкордБанк*.csv', 'ifobs'),
-                            ('БЛ-ОТП-dat-660', client + '/ОТП 200123.dat', 'otp_dat'),
-                            ('БЛ-ОТП-dat-1191', client + '/ОТП нова виписка/030423.dat', 'otp_dat'),
-                            ('БЛ-ОТП-dbf', client + '/ОТП нова виписка/230331.dbf', 'dbf_otp')):
+    for label, pat, key in (('Кл-Акорд', client + '/АкордБанк*.csv', 'ifobs'),
+                            ('Кл-ОТП-dat-660', client + '/ОТП 200123.dat', 'otp_dat'),
+                            ('Кл-ОТП-dat-1191', client + '/ОТП нова виписка/030423.dat', 'otp_dat'),
+                            ('Кл-ОТП-dbf', client + '/ОТП нова виписка/230331.dbf', 'dbf_otp')):
         p = one(pat)
         if p:
             R.append((label, p, key))
-    add('БЛ-Ощад', g(client + '/Ощад*.Dbf'), 'dbf_oschad')
+    add('Кл-Ощад', g(client + '/Ощад*.Dbf'), 'dbf_oschad')
     return R
 
 

@@ -46,7 +46,8 @@ class GeneratorsAgainstIndependentValidator(unittest.TestCase):
     def test_validator_can_fail(self):
         # контроль: валідатор відхиляє значення з псованою контрольною цифрою
         self.assertFalse(sn_iban.is_valid('UA223223130000026007233566001'))
-        self.assertFalse(sn_edrpou.is_valid('12345678') and sn_edrpou.is_valid('12345679'))
+        self.assertTrue(sn_edrpou.is_valid('12345678'))
+        self.assertFalse(sn_edrpou.is_valid('12345679'))
 
     def test_generated_codes_valid_for_all_weight_branches(self):
         rng = random.Random(1)

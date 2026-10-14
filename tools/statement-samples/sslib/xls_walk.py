@@ -63,6 +63,22 @@ def _patch(buf, entry_map, stream_off, raw):
         buf[entry_map(stream_off + i)] = bt
 
 
+def _scrub_write_access(x, f2o, buf):
+    """Запис WRITEACCESS (0x005C) несе ім'я користувача, що створив книгу: це особисті дані поза полями.
+    Символи заповнюються пробілами (довжина й прапорець кодування лишаються); робиться і в режимі скелета,
+    тож скелети сирого й знеособленого збігаються."""
+    st = x['stream']
+    for rid, off, ln in biff.records(st):
+        if rid != 0x005C or ln < 3:
+            continue
+        high = st[off + 2] & 1
+        fill = b' \x00' if high else b' '
+        n = (ln - 3) // (2 if high else 1)
+        for i in range(n):
+            for j, bt in enumerate(fill):
+                buf[f2o(off + 3 + i * len(fill) + j)] = bt
+
+
 def walk_xls(data, spec, fn, blank=False):
     x, col_role, sst_roles, header_idx, num_cells = _analyse(data, spec)
     ole, ent = x['ole'], x['entry']
@@ -116,6 +132,8 @@ def walk_xls(data, spec, fn, blank=False):
                 rid, off = x['cellpos'][(r, c)]
                 if rid == 0x0203:
                     _patch(buf, f2o, off, struct.pack('<d', 0.0))
+    if not spec.get('no_scrub'):
+        _scrub_write_access(x, f2o, buf)
     return bytes(buf)
 
 

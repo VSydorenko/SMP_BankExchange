@@ -139,6 +139,53 @@ def pattern_scan(spec, anon, issued):
     return dict(total=total, issued=explained_issued, keep=explained_keep, unexplained=unexplained)
 
 
+LETTERS4 = re.compile(r"[A-Za-zА-Яа-яІіЇїЄєҐґ]{4,}")
+BLANK_BYTES = (0x00, 0x20, 0x1A)
+
+
+def residual_violations(spec, data, cfg):
+    """Байти поза полями (скелет, `walk(..., blank=True)`) мають складатися лише зі слів структури й порожніх
+    байтів. -> кількість порушень (0 = чисто).
+
+    * csv / xml / lines: лексеми скелета (числа від 5 цифр, слова з великої літери) поза словами структури;
+    * dbf: байти прапорців записів, проміжки між полями та хвіст після записів — лише 0x00 / 0x20 / 0x1A (прапорець
+      запису ще й 0x2A), заголовок — лише слова структури (імена полів);
+    * xls: усе, що не рядок SST і не числова комірка (WRITEACCESS, властивості, імена аркушів і шрифтів), у трьох
+      поданнях байтів — слова від 4 літер і числа від 5 цифр поза словами структури, `allowed_words` і
+      `binary_structure_words` (технічні слова BIFF / OLE)."""
+    kind = spec['container']
+    allowed = set(cfg.get('allowed_words', [])) | set(cfg.get('binary_structure_words', []))
+    st = set()
+    for w in containers.structure_words(spec, data):
+        st |= lexemes(str(w)) | set(WORD.findall(str(w)))
+    skel = containers.walk(dict(spec, no_scrub=True), data, None, blank=True)   # без зачистки: бачимо, що лишилось
+    bad = 0
+    if kind in ('csv', 'xml', 'lines'):
+        bad += len(lexemes(skel.decode('cp1251', errors='replace')) - st - allowed)
+    elif kind == 'dbf':
+        fields, nrec, hlen, rlen = containers._dbf_parse(data)
+        flen = 1 + sum(f[3] for f in fields)
+        bad += rlen != flen                                     # байти запису поза полями
+        for i in range(nrec):
+            if data[hlen + i * rlen] not in (0x20, 0x2A):
+                bad += 1
+        bad += sum(1 for b in data[hlen + nrec * rlen:] if b not in BLANK_BYTES)
+        head = data[:hlen]
+        pos = 32 + 32 * len(fields)
+        bad += sum(1 for b in head[pos + 1:] if b not in BLANK_BYTES)
+        words = {w for w in LETTERS4.findall(head.decode('cp1251', errors='replace'))} - st - allowed
+        bad += len(words)
+    elif kind == 'xls':
+        found = set()
+        v8, v16a, v16b = views(skel)
+        # 8-бітне подання бінарного файлу дає шум кирилиці з довільних байтів: там лише латиниця й числа
+        found |= set(re.findall(r'[A-Za-z]{4,}', v8)) | {t for t in DIG.findall(v8) if len(set(t)) > 1}
+        for v in (v16a, v16b):
+            found |= set(LETTERS4.findall(v)) | {t for t in DIG.findall(v) if len(set(t)) > 1}
+        bad += len(found - st - allowed)
+    return bad
+
+
 def check_a(spec, raw, anon, cfg, issued, control=False):
     """(а): чутливі значення сирого файлу не трапляються в знеособленому. control=True: anon — сирий
     файл; перевірка мусить дати збіги, інакше вона не вміє падати."""
@@ -148,15 +195,9 @@ def check_a(spec, raw, anon, cfg, issued, control=False):
     hl, hv = find_hits(lex, values, anon, spec['container'], units)
     res = dict(stats)
     res.update(hits_lexemes=len(hl), hits_values=len(hv))
-    # залишок поза полями: лексеми скелета, яких нема серед слів структури
-    skel = containers.walk(spec, raw, None, blank=True) if spec['container'] != 'xls' else b''
-    struct = containers.structure_words(spec, raw)
-    st = set()
-    for w in struct:
-        st |= lexemes(str(w)) | set(WORD.findall(str(w)))
-    resid = lexemes(skel.decode('cp1251', errors='replace')) - st - set(cfg.get('allowed_words', [])) \
-        if spec['container'] in ('csv', 'xml', 'lines') else set()
-    res['residual_unclassified'] = len(resid)
+    # залишок поза полями (скелет файлу) у знеособленому: лише слова структури, порожні байти
+    resid = residual_violations(spec, anon, cfg)
+    res['residual_unclassified'] = resid
     if control:
         res['ok'] = (len(hl) + len(hv)) > 0
         return res
