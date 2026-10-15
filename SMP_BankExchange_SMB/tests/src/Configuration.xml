@@ -87,6 +87,7 @@
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияЗавершение</CommonModule>
+			<CommonModule>СМП_ТестыРаспознаванияПоручение</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияШаг5</CommonModule>
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
 			<CommonModule>СМП_ТестыФорматаiFOBS_CSV</CommonModule>
