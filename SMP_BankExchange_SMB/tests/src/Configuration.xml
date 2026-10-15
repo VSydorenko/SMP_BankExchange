@@ -70,6 +70,7 @@
 			<CommonModule>СМП_ТестыВендораЗаполнениеПоОснованию</CommonModule>
 			<CommonModule>СМП_ТестыВендораСоздание</CommonModule>
 			<CommonModule>СМП_ТестыВендораСпособЗачета</CommonModule>
+			<CommonModule>СМП_ТестыВыгрузкиПлатежей</CommonModule>
 			<CommonModule>СМП_ТестыВызовПродукта</CommonModule>
 			<CommonModule>СМП_ТестыДанныеУНФ</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиКаркас</CommonModule>
@@ -86,12 +87,15 @@
 			<CommonModule>СМП_ТестыФикстур</CommonModule>
 			<CommonModule>СМП_ТестыФорматаiFOBS_CSV</CommonModule>
 			<CommonModule>СМП_ТестыФорматаiFOBS_XML</CommonModule>
+			<CommonModule>СМП_ТестыФорматаВыгрузкиiFOBS_TXT</CommonModule>
+			<CommonModule>СМП_ТестыФорматаВыгрузкиСенсБанк_DBF</CommonModule>
 			<CommonModule>СМП_ТестыФорматаОТП_DAT</CommonModule>
 			<CommonModule>СМП_ТестыФорматаОщадБанк_DBF</CommonModule>
 			<CommonModule>СМП_ТестыФорматаСенсБанк_CSV</CommonModule>
 			<CommonModule>СМП_ТестыФорматаУкрГазБанк_CSV</CommonModule>
 			<CommonModule>СМП_ТестыЧитателейВыписок</CommonModule>
 			<CommonModule>СМП_ТестыЧтенияВыписок</CommonModule>
+			<CommonModule>СМП_ТестыЭталонаВыгрузки</CommonModule>
 			<DataProcessor>СМП_ТестЧитатель</DataProcessor>
 			<DataProcessor>СМП_ТестЧитательБезОписания</DataProcessor>
 			<DataProcessor>СМП_ТестыМакеты</DataProcessor>

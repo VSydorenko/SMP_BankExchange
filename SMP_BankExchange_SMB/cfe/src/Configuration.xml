@@ -117,9 +117,12 @@
 			<CommonModule>ОбменСБанкамиКлиент</CommonModule>
 			<CommonModule>ОбменСБанкамиКлиентСервер</CommonModule>
 			<CommonModule>ОбменСБанкамиПереопределяемый</CommonModule>
+			<CommonModule>СМП_ВыгрузкаПлатежей</CommonModule>
 			<CommonModule>СМП_ВыпискаБанка</CommonModule>
 			<CommonModule>СМП_ЗаписьДокументовБанка</CommonModule>
 			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
+			<CommonModule>СМП_ФорматВыгрузкиiFOBS_TXT</CommonModule>
+			<CommonModule>СМП_ФорматВыгрузкиСенсБанк_DBF</CommonModule>
 			<CommonModule>СМП_ЧитателиВыписок</CommonModule>
 			<CommonModule>СМП_ЧитательВыпискиiFOBS_CSV</CommonModule>
 			<CommonModule>СМП_ЧитательВыпискиiFOBS_XML</CommonModule>
