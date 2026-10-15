@@ -83,7 +83,7 @@ class PrivatForms(unittest.TestCase):
 
     def test_http_errors_have_the_observed_shape(self):
         for sid in ('СинтТокен401', 'СинтПериод400', 'СинтЧужойСчет403'):
-            self.assertEqual(set(body(SCN[('privat', sid)])), {'status', 'code', 'message', 'requestId', 'appErrorCode'})
+            self.assertEqual(set(body(SCN[('privat', sid)], path=C.PRIVAT_PATH)), {'status', 'code', 'message', 'requestId', 'appErrorCode'})
 
     def test_error_at_200_stays_synthetic_and_marked(self):
         for sid in ('СинтОшибкаСтатус', 'СинтОшибкаАвторизация'):

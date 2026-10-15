@@ -32,11 +32,13 @@ def tx(when=datetime(2026, 10, 15, 10, 0, 0), tran='C', state='r', amount='10.00
     return d
 
 
-def privat(pages, flags=None, absent=(), balance=True, **kw):
+def privat(pages, flags=None, absent=(), balance=True, settings=True, **kw):
     """Читання ПриватБанку: сторінки транзакцій (кожна -- список; пара `(список, _)` теж приймається) і `/balance`."""
     p = Params(**{'account': IBAN, 'period_start': DAY, 'period_end': datetime(2026, 10, 15, 23, 59, 59),
                   'old_account_currency': '980', **kw})
     b = S.Builder('privat', 't', p)
+    if settings:
+        b.settings(S.resp_json(200, S.privat_settings_body(work_balance=settings if isinstance(settings, str) else 'N')))
     b.privat_pages([x[0] if isinstance(x, tuple) else x for x in pages])
     if balance:
         b.privat_balance(S.resp_json(200, S.privat_balance_body(p, flags, absent)))
@@ -228,10 +230,10 @@ class Expected(unittest.TestCase):
         self.assertEqual(len(E.run(rec, p).ops[0]['НазначениеПлатежа']), 300)
 
     def test_pauses_are_technical_only(self):
+        # /settings + 2 сторінки + /balance: пауза після кожного обміну, крім останнього
         rec, p = privat([([tx()], 'n1'), ([tx(tid='2')], None)])
         e = E.run(rec, p)
-        self.assertEqual(e.pauses, [{'ПослеЗапроса': 1, 'Секунд': 1, 'Причина': 'privat-1-per-second'},
-                                    {'ПослеЗапроса': 2, 'Секунд': 1, 'Причина': 'privat-1-per-second'}])      # 2 сторінки + /balance
+        self.assertEqual(e.pauses, [{'ПослеЗапроса': k, 'Секунд': 1, 'Причина': 'privat-1-per-second'} for k in (1, 2, 3)])
         e0 = E.run(rec, p, {'dev9'})
         self.assertEqual(e0.pauses, [])
         self.assertEqual(e0.ops, e.ops)                    # кількість і зміст операцій від dev9 не залежать

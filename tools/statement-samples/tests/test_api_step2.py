@@ -231,8 +231,8 @@ class Anonymize(unittest.TestCase):
 
     def test_cp1251_body_stays_cp1251(self):
         env = self.envs[('privat', 'СинтПоля')]
-        rx = R.Recording.from_dir(env.raw).exchanges[0]
-        ry = R.Recording.from_dir(env.anon).exchanges[0]
+        rx = R.Recording.from_dir(env.raw).exchanges[1]
+        ry = R.Recording.from_dir(env.anon).exchanges[1]
         self.assertEqual(R.header(rx, 'content-type'), R.header(ry, 'content-type'))
         by = R.body_bytes(ry)
         with self.assertRaises(UnicodeDecodeError):
@@ -244,14 +244,14 @@ class Anonymize(unittest.TestCase):
         a = R.Recording.from_dir(env.anon)
         raw = R.Recording.from_dir(env.raw)
         # next_page_id сторінки = ID її останньої операції, і followId наступного запиту -- та сама вигадана заміна
-        p1 = R.body_json(a.exchanges[1])
-        q2 = dict(R.query_pairs(a.exchanges[2]))
+        p1 = R.body_json(a.exchanges[2])
+        q2 = dict(R.query_pairs(a.exchanges[3]))
         self.assertEqual(q2['followId'], p1['next_page_id'])
         self.assertEqual(p1['next_page_id'], p1['transactions'][-1]['ID'])
-        self.assertNotEqual(p1['next_page_id'], R.body_json(raw.exchanges[1])['next_page_id'])
+        self.assertNotEqual(p1['next_page_id'], R.body_json(raw.exchanges[2])['next_page_id'])
         # acc запиту = хвіст власного IBAN у відповіді
         own = p1['transactions'][0]['AUT_MY_ACC']
-        self.assertEqual(dict(R.query_pairs(a.exchanges[1]))['acc'], own[-14:])
+        self.assertEqual(dict(R.query_pairs(a.exchanges[2]))['acc'], own[-14:])
         # ID = TECHNICAL_TRANSACTION_ID і починається з REF
         for t in p1['transactions']:
             self.assertEqual(t['ID'], t['TECHNICAL_TRANSACTION_ID'])
@@ -322,7 +322,7 @@ class CheckA(unittest.TestCase):
 
     def first_sensitive(self):
         raw = R.Recording.from_dir(self.env.raw)
-        t = R.body_json(raw.exchanges[0])['transactions'][0]
+        t = R.body_json(raw.exchanges[1])['transactions'][0]
         return t
 
     def test_raw_name_leaked_into_a_free_text_field(self):
@@ -333,25 +333,27 @@ class CheckA(unittest.TestCase):
 
     def test_raw_iban_in_the_path_of_a_request(self):
         t = self.first_sensitive()
-        mutate_exchange(self.env.anon, 2, lambda ex: ex['request'].update(query=ex['request']['query'] + '&x=' + t['AUT_CNTR_ACC']))
+        mutate_exchange(self.env.anon, 3, lambda ex: ex['request'].update(query=ex['request']['query'] + '&x=' + t['AUT_CNTR_ACC']))
         self.assertGreater(self.hits(), 0)
 
     def test_raw_id_unchanged_in_place(self):
         raw = R.Recording.from_dir(self.env.raw)
-        rid = R.body_json(raw.exchanges[0])['transactions'][0]['ID']
-        anon_first = R.Recording.from_dir(self.env.anon).exchanges[0]
+        rid = R.body_json(raw.exchanges[1])['transactions'][0]['ID']
+        anon_first = R.Recording.from_dir(self.env.anon).exchanges[1]
         old = R.body_json(anon_first)['transactions'][0]['ID']
-        mutate_body(self.env.anon, 1, lambda s: s.replace(old, rid))
+        mutate_body(self.env.anon, 2, lambda s: s.replace(old, rid))
         self.assertGreater(self.hits(), 0)
 
     def test_leak_hidden_behind_json_unicode_escapes(self):
+        """Назва (кирилиця) і IBAN, екрановані як \\uXXXX у вільному полі `type`: байтовий пошук не бачить, розкодований JSON -- бачить."""
         t = self.first_sensitive()
-        esc = ''.join('\\u%04x' % ord(c) for c in t['AUT_CNTR_ACC'])        # ASCII-токен екранований
-        word = [w for w in t['AUT_MY_NAM'].replace('"', ' ').split() if len(w) > 3 and w[0].isupper()]
-        name = word[0] if word else 'Вигадана'
-        esc_name = ''.join('\\u%04x' % ord(c) for c in t['AUT_CNTR_NAM'].replace('"', ''))
-        mutate_body(self.env.anon, 1, lambda s: s.replace('"type":"transactions"', '"type":"%s"' % esc_name, 1))
-        self.assertGreater(self.hits(), 0)
+        for value in (t['AUT_CNTR_NAM'].replace('"', ''), t['AUT_CNTR_ACC']):
+            shutil.rmtree(self.env.anon)
+            self.env.anonymize()
+            self.assertEqual(self.hits(), 0)
+            esc = ''.join('\\u%04x' % ord(c) for c in value)
+            mutate_body(self.env.anon, 2, lambda s: s.replace('"type":"transactions"', '"type":"%s"' % esc, 1))
+            self.assertGreater(self.hits(), 0)
 
     def test_every_encoding_is_searched(self):
         token = 'Вигадана Назва Підприємства'

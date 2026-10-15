@@ -31,6 +31,7 @@ class FailureClasses(unittest.TestCase):
     def privat_error(self, body):
         p = Params(account=IBAN, period_start=DAY, period_end=datetime(2026, 10, 15, 23, 59, 59))
         b = S.Builder('privat', 't', p)
+        b.settings(S.resp_json(200, S.privat_settings_body()))
         b.privat(S.resp_json(200, body))
         return E.run(R.Recording(R.make_manifest('privat', 't', b.ex), b.ex), p)
 
@@ -53,7 +54,7 @@ class FailureClasses(unittest.TestCase):
         Клас -- за HTTP-кодом (принцип «чи допоможе повтор»); serviceCode -- лише документальний варіант."""
         for sid, status, app in (('СинтТокен401', 401, 'SE004'), ('СинтПериод400', 400, 'VE017'), ('СинтЧужойСчет403', 403, 'SE013')):
             s, e = run('privat', sid)
-            ex = s.exchanges[0]
+            ex = s.exchanges[1]
             body = R.body_json(ex)
             self.assertEqual((ex['response']['status'], body['status'], body['code'], body['appErrorCode']), (status, 'ERROR', str(status), app))
             self.assertNotIn('serviceCode', body)
@@ -326,8 +327,8 @@ class TrustBoundary(unittest.TestCase):
             paths = [x['request']['path'] for x in s.exchanges]
             if not e.failure_class:
                 self.assertEqual(paths[-1], C.PRIVAT_BALANCE_PATH, s.name)
-            if C.PRIVAT_SETTINGS_PATH in paths:
-                self.assertIn(s.sid, {'СинтНастройкиСбой', 'СинтРегламентБанка', 'СинтГраницаПриват'}, s.name)
+            self.assertEqual(paths[0], C.PRIVAT_SETTINGS_PATH, s.name)             # R14: /settings -- перший обмін кожного читання
+            self.assertEqual(paths.count(C.PRIVAT_SETTINGS_PATH), 1, s.name)
 
     def test_etalon_marks_interpretation_dependency(self):
         from apilib import etalon
