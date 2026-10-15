@@ -6,7 +6,7 @@
   Лише читання в банку: тільки GET, шляхи — з білого списку (ApiRecorder.Lib.ps1). Відповіді зберігаються як
   упорядкована послідовність обмінів (FORMAT.md): тіло — байтами, заголовка запиту з токеном у записі немає.
   Після прогону рекордер сам шукає значення кожного токена в кожному записаному файлі в усіх кодуваннях.
-  Режими: звичайний; -DryRun (план запитів без мережі); -SelfTest (перевірка самого пошуку секретів, без мережі).
+  Режими: звичайний; -CheckRun (перевірка наявного запису на токени); -DryRun (план запитів без мережі); -SelfTest (перевірка самого пошуку секретів, без мережі).
   Запускає власник. Див. README.md.
 #>
 [CmdletBinding()]
@@ -21,6 +21,8 @@ param(
     [string]$OwnerRoot = 'R:/github/SMP_BankExchange/temp/api-recorder/owner-only',
     [switch]$DryRun,
     [switch]$SelfTest,
+    # Перевірити НАЯВНУ теку запису (-Bank, -RunLabel) і відповідну теку owner-only на токени з конфігурації. Без мережі.
+    [switch]$CheckRun,
     [string]$SelfTestDir = ''
 )
 
@@ -756,6 +758,34 @@ function Write-OwnerReconcile {
 }
 
 # =============================================================================================
+# Перевірка наявної теки запису (і теки звірки) на значення секретів. Без мережі. Повертає код виходу: 0 чисто, 3 знайдено.
+# Порожній набір секретів — виняток (Test-SecretsInFiles), а не «чисто».
+function Invoke-SecretCheck {
+    param([string]$RunDir, [string]$OwnerDir, $Secrets, [string]$BaseDir)
+    if (-not (Test-Path -LiteralPath $RunDir -PathType Container)) { throw "Теки запису немає: $RunDir" }
+    $files = @(Get-ChildItem -LiteralPath $RunDir -Recurse -File | ForEach-Object FullName)
+    if ($OwnerDir -and (Test-Path -LiteralPath $OwnerDir -PathType Container)) { $files += @(Get-ChildItem -LiteralPath $OwnerDir -Recurse -File | ForEach-Object FullName) }
+    $findings = Test-SecretsInFiles $files $Secrets $BaseDir
+    if ($findings.Count -gt 0) {
+        $lines = foreach ($f in $findings) { "файл: $($f.File); секрет: $($f.Secret); форма: $($f.Where), $($f.Form)" }
+        Write-Host '!!!!!!!! ЗНАЙДЕНО значення токена в записаних файлах !!!!!!!!'
+        $lines | ForEach-Object { Write-Host "  $_" }
+        [System.IO.File]::WriteAllText((Join-Path $RunDir 'LEAK-DETECTED.txt'), "Самоперевірка знайшла значення токена у файлах (значень тут немає):`r`n" + ($lines -join "`r`n") + "`r`n", $script:Utf8NoBom)
+        return 3
+    }
+    Write-Host ("Самоперевірка: токенів у {0} файлах не знайдено." -f $files.Count)
+    0
+}
+
+# Чи лежить $Inner усередині $Outer (або збігається з ним). Шляхи порівнюються без урахування регістру.
+function Test-PathInside {
+    param([string]$Inner, [string]$Outer)
+    $i = [System.IO.Path]::GetFullPath($Inner).TrimEnd('\', '/')
+    $o = [System.IO.Path]::GetFullPath($Outer).TrimEnd('\', '/')
+    ($i -ieq $o) -or $i.StartsWith($o + '\', [StringComparison]::OrdinalIgnoreCase) -or $i.StartsWith($o + '/', [StringComparison]::OrdinalIgnoreCase)
+}
+
+# =============================================================================================
 # Самотест пошуку секретів (без мережі, без справжніх токенів)
 # =============================================================================================
 function Invoke-SelfTestMode {
@@ -865,6 +895,28 @@ function Invoke-SelfTestMode {
     & $check 'порожній набір секретів: самоперевірка падає' (& $thrown2 { Test-SecretsInFiles @((Get-ChildItem $neg -File | Select-Object -First 1).FullName) ([ordered]@{}) $neg })
     & $check 'набір із порожніх значень: самоперевірка падає' (& $thrown2 { Test-SecretsInFiles @((Get-ChildItem $neg -File | Select-Object -First 1).FullName) ([ordered]@{ A = '' }) $neg })
 
+    # --- перевірка наявної теки (-CheckRun): знаходить підкинутий токен, на чистій — нуль ---
+    $ckRun = Join-Path $Dir 'ck\rec\privat\r1'; $ckOwn = Join-Path $Dir 'ck\own\privat\r1'
+    if (Test-Path (Join-Path $Dir 'ck')) { Remove-Item (Join-Path $Dir 'ck') -Recurse -Force }
+    foreach ($d in $ckRun, $ckOwn) { New-Item -ItemType Directory -Path $d -Force | Out-Null }
+    [System.IO.File]::WriteAllText((Join-Path $ckRun 'a.json'), '{"x":"clean"}', $script:Utf8NoBom)
+    [System.IO.File]::WriteAllText((Join-Path $ckOwn 'reconcile.txt'), 'суми 1,00', $script:Utf8NoBom)
+    $code0 = Invoke-SecretCheck $ckRun $ckOwn $secrets (Join-Path $Dir 'ck')
+    & $check 'перевірка наявної теки: чиста тека — код 0' ($code0 -eq 0)
+    [System.IO.File]::WriteAllBytes((Join-Path $ckRun 'b.bin'), [System.Text.Encoding]::Unicode.GetBytes("x $($secrets['СИНТ.B']) y"))
+    $code3 = Invoke-SecretCheck $ckRun $ckOwn $secrets (Join-Path $Dir 'ck')
+    $leakTxt = if (Test-Path (Join-Path $ckRun 'LEAK-DETECTED.txt')) { [System.IO.File]::ReadAllText((Join-Path $ckRun 'LEAK-DETECTED.txt')) } else { '' }
+    & $check 'перевірка наявної теки: підкинутий токен у теці запису — код 3, LEAK-DETECTED.txt без значення' (($code3 -eq 3) -and $leakTxt.Contains('b.bin') -and -not $leakTxt.Contains($secrets['СИНТ.B']))
+    Remove-Item (Join-Path $ckRun 'b.bin'), (Join-Path $ckRun 'LEAK-DETECTED.txt') -Force
+    [System.IO.File]::WriteAllText((Join-Path $ckOwn 'leak.txt'), "q=$($secrets['СИНТ.A'])", $script:Utf8NoBom)
+    & $check 'перевірка наявної теки: токен у теці owner-only — код 3' ((Invoke-SecretCheck $ckRun $ckOwn $secrets (Join-Path $Dir 'ck')) -eq 3)
+    & $check 'перевірка наявної теки: порожній набір секретів — помилка, не «чисто»' (& $thrown2 { Invoke-SecretCheck $ckRun $ckOwn ([ordered]@{}) (Join-Path $Dir 'ck') })
+    & $check 'перевірка наявної теки: немає теки — помилка' (& $thrown2 { Invoke-SecretCheck (Join-Path $Dir 'ck\nope') $null $secrets $Dir })
+
+    # --- OwnerRoot усередині OutRoot відхиляється ---
+    & $check 'OwnerRoot усередині OutRoot розпізнається (вкладена тека, збіг, інший регістр)' ((Test-PathInside 'C:\x\rec\owner' 'C:\x\rec') -and (Test-PathInside 'C:\x\rec' 'C:\x\rec') -and (Test-PathInside 'c:\X\REC\a\b' 'C:\x\rec'))
+    & $check 'OwnerRoot поза OutRoot не відхиляється (сусідня тека з тим самим префіксом)' (-not (Test-PathInside 'C:\x\rec-owner' 'C:\x\rec') -and -not (Test-PathInside 'C:\x\owner' 'C:\x\rec'))
+
     # --- білий список читання ---
     $thrown = { param([scriptblock]$B) try { & $B; $false } catch { $true } }
     & $check 'білий список: POST відхилено' (& $thrown { Assert-ReadOnlyRequest 'POST' 'acp.privatbank.ua' '/api/statements/transactions' })
@@ -896,6 +948,11 @@ $bankMap = [ordered]@{
     monoCorp = @{ Key = 'MonoCorp'; Dir = 'mono-corp'; Host = 'corp-api.monobank.ua'; Gap = 1.5; Run = ${function:Invoke-MonoCorpRun} }
     monoFop  = @{ Key = 'MonoFop'; Dir = 'mono-fop'; Host = 'api.monobank.ua'; Gap = 61.0; Run = ${function:Invoke-MonoFopRun} }
 }
+if (Test-PathInside $OwnerRoot $OutRoot) {
+    Write-Host "ВІДМОВА: -OwnerRoot ($OwnerRoot) лежить усередині -OutRoot ($OutRoot): файли із сумами потрапили б у теку, яку читає агент."
+    Write-Host 'Вкажіть -OwnerRoot поза текою записів (за замовчуванням temp/api-recorder/owner-only).'
+    exit 2
+}
 $selected = if ($Bank -contains 'all') { @($bankMap.Keys) } else { @($Bank) }
 
 if (-not (Test-Path -LiteralPath $Config)) {
@@ -907,8 +964,25 @@ $raw = Import-PowerShellDataFile -LiteralPath $Config
 # усі значення секретів із конфігурації (для самоперевірки й маскування тексту збоїв)
 $allSecrets = [ordered]@{}
 foreach ($pair in @(@('Privat', 'Token'), @('Privat', 'ClientId'), @('MonoCorp', 'Token'), @('MonoFop', 'Token'))) {
-    $v = $raw[$pair[0]][$pair[1]]
+    $v = if ($raw[$pair[0]] -is [System.Collections.IDictionary]) { $raw[$pair[0]][$pair[1]] } else { $null }
     if (-not (Test-Placeholder $v)) { $allSecrets["$($pair[0]).$($pair[1])"] = [string]$v }
+}
+
+if ($CheckRun) {
+    if (-not $PSBoundParameters.ContainsKey('RunLabel')) { Write-Host 'ВІДМОВА: для -CheckRun вкажіть -RunLabel <мітка прогону> (і -Bank, якщо не всі банки).'; exit 2 }
+    if ($allSecrets.Count -eq 0) { Write-Host "ВІДМОВА: у конфігурації ($Config) немає жодного заповненого токена — перевіряти нічого. Порожній набір секретів не є доказом, що чисто."; exit 2 }
+    $ckExit = 0; $found = 0
+    foreach ($b in $selected) {
+        $m = $bankMap[$b]
+        $dir = Join-Path $OutRoot (Join-Path $m.Dir $RunLabel)
+        if (-not (Test-Path -LiteralPath $dir -PathType Container)) { if ($Bank -notcontains 'all') { Write-Host "Теки запису немає: $dir"; $ckExit = 2 }; continue }
+        $found++
+        Write-Host "Перевіряю $dir"
+        $c = Invoke-SecretCheck $dir (Join-Path $OwnerRoot (Join-Path $m.Dir $RunLabel)) $allSecrets $OutRoot
+        if ($c -eq 3) { $ckExit = 3 } elseif ($c -ne 0 -and $ckExit -ne 3) { $ckExit = $c }
+    }
+    if ($found -eq 0 -and $ckExit -eq 0) { Write-Host "Жодної теки запису з міткою $RunLabel у $OutRoot не знайдено."; $ckExit = 2 }
+    exit $ckExit
 }
 
 $exit = 0; $refused = $false; $leak = $false; $failedAny = $false
