@@ -67,6 +67,18 @@
 			<Template>СМП_ТестПереченьОбработок</Template>
 			<Template>СМП_ТестЧитательВнешний</Template>
 			<Template>СМП_ТестЧитательСтарый</Template>
+			<Template>СМП_ТестОтветыПриватСинт</Template>
+			<Template>СМП_ТестОтветыПриватRun1</Template>
+			<Template>СМП_ТестОтветыМоноФОПСинт</Template>
+			<Template>СМП_ТестОтветыМоноФОПRun1</Template>
+			<Template>СМП_ТестОтветыМоноЮрСинт</Template>
+			<Template>СМП_ТестОтветыМоноЮрRun1</Template>
+			<Template>СМП_ТестЭталоныПриватСинт</Template>
+			<Template>СМП_ТестЭталоныПриватRun1</Template>
+			<Template>СМП_ТестЭталоныМоноФОПСинт</Template>
+			<Template>СМП_ТестЭталоныМоноФОПRun1</Template>
+			<Template>СМП_ТестЭталоныМоноЮрСинт</Template>
+			<Template>СМП_ТестЭталоныМоноЮрRun1</Template>
 		</ChildObjects>
 	</DataProcessor>
 </MetaDataObject>

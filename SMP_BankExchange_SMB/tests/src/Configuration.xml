@@ -66,6 +66,7 @@
 		<ChildObjects>
 			<Language>Русский</Language>
 			<Role>СМП_ОсновнаяРоль</Role>
+			<CommonModule>СМП_ТестЗаписиAPI</CommonModule>
 			<CommonModule>СМП_ТестыВендораЗаполнениеДокумента</CommonModule>
 			<CommonModule>СМП_ТестыВендораЗаполнениеПоОснованию</CommonModule>
 			<CommonModule>СМП_ТестыВендораСоздание</CommonModule>
