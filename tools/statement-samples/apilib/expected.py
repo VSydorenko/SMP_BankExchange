@@ -273,7 +273,8 @@ def rule_privat_api_error(js):
     service = C.trim(C.to_str(js.get('serviceCode')))
     facts = {'Банк': BANK_NAMES['privat'], 'Вид': 'api-error', 'Статус': 200, 'ОписаниеБанка': C.to_str(js.get('message')),
              'КодСервиса': service}
-    human = service.startswith(PRIVAT_AUTH_SERVICE_PREFIX) or (code.isdigit() and 400 <= int(code) < 500)
+    human = service.startswith(PRIVAT_AUTH_SERVICE_PREFIX) or (
+        code.isdigit() and 400 <= int(code) < 500 and int(code) not in (408, 429))   # 408/429 повтор лікує, як і в HTTP
     return (CLS_HUMAN if human else CLS_RETRY), facts
 
 
@@ -287,6 +288,17 @@ def rule_trust_boundary(out, p):
     if out.bank_boundary is not None:
         cands.append(out.bank_boundary)
     return max(p.period_start, min(cands))
+
+
+def rule_work_balance(settings):
+    """`/settings` ПриватБанку: `work_balance = Y` — іде регламент банку, «запити не робити» (privat.txt:101). Конектор запитів
+    транзакцій не робить: клас «повторити», `Предупреждение`, читання неповне, межа — `НачалоПериода`.
+
+    ВІДСТУП НА БЕЗПЕЧНИЙ БІК (не з переліку 1–9): попередник `work_balance` не перевіряв і `/settings` не викликав взагалі
+    (у `СМП_РаботаСБанкамиПриватБанкAPIСервер` рядка `work_balance` немає; читання — `ПрочитатьВыписки`, PB:2-63, викликається з
+    PB:306 і PB:412 одразу, без пробного запиту) — він робив запити попри `Y`, тож під час регламенту банку міг отримати помилку
+    або неповні дані."""
+    return C.trim(C.to_str(settings.get('work_balance'))).upper() == 'Y'
 
 
 def rule_bank_boundary_privat(settings_day, p):
@@ -452,6 +464,11 @@ def _privat_settings(rec, p, out):
         day = C.parse_1c_date(C.to_str(js['settings']['date_final_statement']))
     except (KeyError, TypeError, ValueError):
         _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'bad-settings', 'Статус': 200, 'ОписаниеБанка': ''})
+        return False
+    if rule_work_balance(js['settings']):
+        _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'work-balance', 'Статус': 200, 'ОписаниеБанка': ''},
+              'work-balance')
+        out.rules.add('rule_work_balance')
         return False
     out.bank_boundary = rule_bank_boundary_privat(day, p)
     return True

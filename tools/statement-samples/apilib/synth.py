@@ -169,11 +169,11 @@ def seqid(prefix, i, width=4):
     return '%s-%s' % (prefix, ''.join('abcdefghij'[int(c)] for c in '%0*d' % (width, i)))
 
 
-def privat_settings_body(final='30.10.2026 00:00:00'):
+def privat_settings_body(final='30.10.2026 00:00:00', work_balance='N'):
     """Відповідь `/api/statements/settings` за privat.txt («Отримання серверних дат»); `final` — date_final_statement."""
     return {'status': 'SUCCESS', 'type': 'settings',
             'settings': {'phase': 'WRK', 'dates_without_oper_day': ['01.01.2026 00:00:00'], 'today': '15.10.2026 00:00:00',
-                         'lastday': '14.10.2026 00:00:00', 'work_balance': 'N', 'server_date_time': '15.10.2026 12:03:51',
+                         'lastday': '14.10.2026 00:00:00', 'work_balance': work_balance, 'server_date_time': '15.10.2026 12:03:51',
                          'date_final_statement': final}}
 
 
@@ -431,6 +431,12 @@ def _privat_scenarios():
 
     # --- Межа довіри: date_final_statement 14.10 -> банківська межа 14.10 00:00 (сам день вважаємо не остаточним);
     # неостаточна p лише 15.10 12:00, тож межу задає банк
+    s, b = new('СинтРегламентБанка', 'ПриватБанк: /settings з work_balance = Y (іде регламент банку) — запитів транзакцій немає', [4],
+               settings=None)
+    b.settings(resp_json(200, privat_settings_body(work_balance='Y')))
+    s.exchanges = b.ex
+    sc.append(s)
+
     s, b = new('СинтГраницаПриват', 'ПриватБанк: ГраницаДоверия за date_final_statement (14.10), p пізніше', [2],
                settings='14.10.2026 00:00:00', period_start=_day(2026, 10, 13), period_end=_day(2026, 10, 15, 23, 59, 59))
     b.privat(resp_json(200, privat_page([
