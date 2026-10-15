@@ -101,6 +101,8 @@
 			<CommonModule>СМП_ТестыЧитателейВыписок</CommonModule>
 			<CommonModule>СМП_ТестыЧтенияВыписок</CommonModule>
 			<CommonModule>СМП_ТестыЭталонаВыгрузки</CommonModule>
+			<DataProcessor>СМП_ТестКоннектор</DataProcessor>
+			<DataProcessor>СМП_ТестТранспортВоспроизведение</DataProcessor>
 			<DataProcessor>СМП_ТестЧитатель</DataProcessor>
 			<DataProcessor>СМП_ТестЧитательБезОписания</DataProcessor>
 			<DataProcessor>СМП_ТестыМакеты</DataProcessor>
