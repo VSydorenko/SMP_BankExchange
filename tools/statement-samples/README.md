@@ -253,6 +253,7 @@ python -P tools/statement-samples/apisamples.py pack|unpack ...               # 
 python -P tools/statement-samples/apisamples.py anonymize --raw-root <сирі записи> --label run1 --anon-root temp/api-anon/run1 --map-dir <мапа>
 python -P tools/statement-samples/apisamples.py check-a|check-b|check-c|etalons ... # ті самі аргументи; коди: 0, 1 порушення, 2 контроль (а) не падає, 4 зупинка
 python -P tools/statement-samples/apisamples.py verify ... --report temp/api-anon/run1/checks-report.txt   # а+б+в, звіт без значень
+python -P tools/statement-samples/apisamples.py sets --anon-root temp/api-anon/run1 --out <тека>   # 12 наборів для макетів тестового розширення (R15: записи й еталони пакетами; синтетика і run1)
 ```
 
 Тести (разом із наявними): `python -P -m unittest discover -s tests` з цієї теки.

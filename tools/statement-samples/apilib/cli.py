@@ -12,6 +12,7 @@
 | `guard --raw R [--staged] [--files …]` | сторож для коду й документації режиму API (з `api_guard_allowed_words`) | те саме |
 | `anonymize --raw-root R --anon-root A --map-dir M [--label run1] [--bank …]` | знеособлення справжніх записів (Step 2) | 0, 4 -- зупинка (невідоме поле тощо) |
 | `check-a`, `check-b`, `check-c` (ті самі аргументи) | перевірки D22 а / б / в | 0; 1 -- порушення; 2 -- контроль (а) не падає; 4 -- зупинка |
+| `sets --anon-root A --out DIR` | 12 наборів для макетів тестового розширення (записи й еталони пакетами, R15) | 0 |
 | `etalons`, `verify [--report FILE]` | читання й еталони знеособлених записів; а+б+в зі звітом | як перевірки |
 """
 import argparse
@@ -20,7 +21,7 @@ import os
 import sys
 from datetime import datetime
 
-from . import anonymize as A, common as C, etalon, expected, leakguard, oracle_old, recording as R, schema, selfcheck, step2, synth
+from . import sets as sets_mod, anonymize as A, common as C, etalon, expected, leakguard, oracle_old, recording as R, schema, selfcheck, step2, synth
 
 RC_VIOLATION = 1
 RC_CONTROL = 2
@@ -110,6 +111,13 @@ def cmd_guard_files(a):
     bad = sum(1 for v in res.values() if v)
     print('перевірено файлів: %d; файлів зі збігами: %d; усього збігів: %d' % (len(res), bad, sum(res.values())))
     return 1 if bad else 0
+
+
+def cmd_sets(a):
+    """12 файлів наборів для макетів тестового розширення (R15): записи й еталони пакетами, синтетика і run1."""
+    for name, kind, n, size in sets_mod.build(a.anon_root, a.out):
+        print('%-40s %-10s записів %3d  байтів %8d' % (name, kind, n, size))
+    return 0
 
 
 def cmd_pack(a):
@@ -278,6 +286,10 @@ def main(argv):
     p.add_argument('--files', nargs='*')
     p.add_argument('--staged', action='store_true')
     p.set_defaults(fn=cmd_guard_files)
+    p = sub.add_parser('sets')
+    p.add_argument('--anon-root', required=True, help='знеособлений вихід run1 (etalons/, readings/)')
+    p.add_argument('--out', required=True)
+    p.set_defaults(fn=cmd_sets)
     p = sub.add_parser('pack')
     p.add_argument('--recording', required=True)
     p.add_argument('--out', required=True)
