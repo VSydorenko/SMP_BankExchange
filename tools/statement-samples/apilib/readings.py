@@ -78,6 +78,7 @@ def readings(rec):
     out = []
     if bank == 'privat':
         bal = _first(rec, lambda e: e['request']['path'] == C.PRIVAT_BALANCE_PATH and _ok(e))
+        settings = _first(rec, lambda e: e['request']['path'] == C.PRIVAT_SETTINGS_PATH and _ok(e))
         for sc, exs in _groups(rec):
             tx = [e for e in exs if e['request']['path'] == C.PRIVAT_PATH]
             if not tx or bal is None:
@@ -89,7 +90,10 @@ def readings(rec):
             rows = (_json(bal) or {}).get('balances') or []
             account = rows[0]['acc'] if rows else ''
             p = Params(account=account, period_start=start, period_end=end, old_account_currency='980')
-            out.append(Reading(reading_id(bank, sc), bank, sc, tx + [bal], p))
+            # R14: `/settings` -- перший обмін кожного читання (той самий прогін); `/balance` -- лише коли транзакції прочитано
+            # без відмови: після відмови конектор запитів більше не робить (I1)
+            seq = ([settings] if settings is not None else []) + tx + ([bal] if _ok(tx[-1]) else [])
+            out.append(Reading(reading_id(bank, sc), bank, sc, seq, p))
     elif bank == 'mono-corp':
         bal = _first(rec, lambda e: e['request']['path'].endswith('/balances') and _ok(e))
         for sc, exs in _groups(rec):
@@ -98,7 +102,7 @@ def readings(rec):
                 continue
             acct, frm, to = R.statement_window(st[0])
             p = Params(account=acct, period_start=kyiv.unix_to_local(frm), period_end=kyiv.unix_to_local(to), old_account_currency='980')
-            out.append(Reading(reading_id(bank, sc), bank, sc, st + [bal], p))
+            out.append(Reading(reading_id(bank, sc), bank, sc, st + ([bal] if _ok(st[-1]) else []), p))
     else:
         info = _first(rec, lambda e: e['request']['path'] == C.FOP_CLIENT_INFO and _ok(e))
         for sc, exs in _groups(rec):

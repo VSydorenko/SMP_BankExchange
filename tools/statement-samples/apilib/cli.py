@@ -153,6 +153,8 @@ def _run_a(a):
                      '(коротких без збігу: %d, без пари: %d)' % (
                          bank, res['exchanges'], res['tokens'], res['hits_whole'], res['hits_nums'], res['hits_names'],
                          res['unchanged_long'], res['unchanged_short_info'], res['misaligned']))
+        lines.append('a %s: вузькі винятки за парою полів (у сирому записі): %s; значень поза дозволеними полями: %d' % (
+            bank, res['pair_counts'] or '{}', res['pair_leaks']))
         lines.append('a %s КОНТРОЛЬ на сирому записі: збігів %d (мусить бути > 0)' % (bank, ctl['hits']))
         if ctl['hits'] == 0 and sum(res['tokens'][k] for k in ('whole', 'nums', 'names')) > 0:
             rc = max(rc, RC_CONTROL)             # чутливі токени є, а контроль на сирому записі їх не знаходить

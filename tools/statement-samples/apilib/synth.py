@@ -359,9 +359,13 @@ def _privat_scenarios():
     acct = base.account                           # AUT_MY_ACC -- IBAN (run1: 87 з 87), у базі теж IBAN
     sc = []
 
-    def new(sid, title, focus, **kw):
+    def new(sid, title, focus, settings=True, **kw):
+        """R14: `/settings` -- обов'язковий перший обмін кожного читання ПриватБанку (`settings=False` -- сценарій додає свій)."""
         p = Params(**{**base.__dict__, **kw})
-        return Scenario('privat', sid, title, focus, p), Builder('privat', sid, p)
+        b = Builder('privat', sid, p)
+        if settings:
+            b.settings(resp_json(200, privat_settings_body()))
+        return Scenario('privat', sid, title, focus, p), b
 
     def done(s, b, balance=True, **kw):
         """Успішне читання закінчується обміном `/balance` (банківська межа, D36 п. 10); збій -- без нього."""
@@ -493,11 +497,12 @@ def _privat_scenarios():
         b.privat(resp_json(code, privat_error_body(code, app, msg)))
         done(s, b, balance=False)
 
-    s, b = new('СинтНастройкиСбой', 'ПриватБанк: збій необов\'язкового обміну /settings (HTTP 500)', [4])
+    s, b = new('СинтНастройкиСбой', 'ПриватБанк: збій обміну /settings (HTTP 500)', [4], settings=False)
     b.settings(resp_json(500, {'message': 'Service temporarily unavailable'}))
     done(s, b, balance=False)
 
-    s, b = new('СинтРегламентБанка', 'ПриватБанк: /settings з work_balance = Y (іде регламент банку; у run1 N) -- запитів транзакцій немає', [4])
+    s, b = new('СинтРегламентБанка', 'ПриватБанк: /settings з work_balance = Y (іде регламент банку; у run1 N) -- запитів транзакцій немає', [4],
+               settings=False)
     b.settings(resp_json(200, privat_settings_body(work_balance='Y')))
     done(s, b, balance=False)
 
@@ -509,7 +514,7 @@ def _privat_scenarios():
     # --- Межа довіри (D36 п. 10): початок першого дня без is_final_bal = true; date_final_statement у межі не бере участі
     s, b = new('СинтГраницаПриват', 'ПриватБанк: ГраницаДоверия за /balance (13, 14 остаточні, 15 -- ні; p пізніше), '
                                     'date_final_statement далеко в минулому (як у run1) і на межу не впливає', [2],
-               period_start=_day(2026, 10, 13), period_end=_day(2026, 10, 15, 23, 59, 59))
+               settings=False, period_start=_day(2026, 10, 13), period_end=_day(2026, 10, 15, 23, 59, 59))
     b.settings(resp_json(200, privat_settings_body(final='01.04.2026 00:00:00')))
     b.privat_pages([[ptx(g, acct, when=_day(2026, 10, 13, 10), tran='C', amount='100.00', **cnt()),
                      ptx(g, acct, when=_day(2026, 10, 14, 10), tran='D', amount='20.00', **cnt()),

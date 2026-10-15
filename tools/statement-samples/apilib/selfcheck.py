@@ -35,6 +35,7 @@ def _privat_rec(tx):
     p = Params(account=_privat_iban(OWN14), period_start=datetime(2020, 1, 7), period_end=datetime(2020, 1, 7, 23, 59, 59),
                old_account_currency='980')
     b = S.Builder('privat', 'doc', p)
+    b.settings(S.resp_json(200, S.privat_settings_body()))
     b.privat_pages([[tx]])
     b.privat_balance(S.resp_json(200, S.privat_balance_body(p)))
     m = S.R.make_manifest('privat', 'doc-privat', b.ex)

@@ -56,6 +56,18 @@ OP_COLUMNS = ['ПорядковыйНомер', 'НомерСчета', 'Вал�
               'КонтрагентМФО', 'НазначениеПлатежа']
 
 
+class Consumed:
+    """Спожита частина запису: те, що бачить `dev9_pauses`."""
+
+    def __init__(self, bank, exchanges):
+        self.bank, self.exchanges = bank, exchanges
+
+
+def use(out, ex):
+    if not any(x is ex for x in out.used):
+        out.used.append(ex)
+
+
 class RecordingMismatch(Exception):
     """Запис не відповідає тому, що зробив би конектор (кінчається раніше, чужий шлях тощо)."""
 
@@ -85,7 +97,8 @@ class Expected:
     duplicate_numbers: list = field(default_factory=list)
     silent: int = 0                                  # відкинуто без сліду (лише вимкнений відступ чи старий пропуск)
     nonfinal: list = field(default_factory=list)     # моменти неостаточних операцій
-    bank_boundary: object = None                     # межа остаточності від банку (settings / balances), D36 п. 10
+    bank_boundary: object = None                     # межа остаточності від банку (balances), D36 п. 10
+    used: list = field(default_factory=list)         # обміни запису, які оракул СПОЖИВ, у порядку споживання
 
     def diag(self, level, n, essence, dev=None, **facts):
         self.diags.append({'Уровень': level, 'ПорядковыйНомер': n, 'Суть': essence, 'Отступ': dev or '', 'Факты': facts})
@@ -98,9 +111,10 @@ def run(rec, p, disabled=frozenset()):
         raise ValueError('невідомий банк ' + rec.bank)
     out = Expected(rec.bank)
     {'privat': _privat, 'mono-fop': _mono, 'mono-corp': _mono}[rec.bank](rec, p, out, frozenset(disabled))
+    # Запити й паузи -- лише обміни, які конектор справді зробить: відмова зупиняє читання, обміну балансів після неї немає (I1)
     out.requests = [{'Метод': e['request']['method'], 'Хост': e['request']['host'], 'Путь': e['request']['path'],
-                     'Запрос': [list(kv) for kv in R.query_pairs(e)]} for e in rec.exchanges]
-    out.pauses = dev9_pauses(rec, p, 'dev9' not in disabled, out)
+                     'Запрос': [list(kv) for kv in R.query_pairs(e)]} for e in out.used]
+    out.pauses = dev9_pauses(Consumed(rec.bank, out.used), p, 'dev9' not in disabled, out)
     out.trust = rule_trust_boundary(out, p)
     out.complete = rule_complete(out)
     return out
@@ -328,7 +342,8 @@ def rule_bank_boundary_privat(balances, p):
                 day = C.parse_1c_date(C.to_str(b['dpd']))
             except ValueError:
                 continue
-            final[day.strftime('%Y-%m-%d')] = b.get('is_final_bal') is True
+            key = day.strftime('%Y-%m-%d')
+            final[key] = final.get(key, True) and b.get('is_final_bal') is True      # день остаточний, лише якщо ВСІ його рядки остаточні
     return _first_nonfinal_day(final, p)
 
 
@@ -337,7 +352,8 @@ def rule_bank_boundary_corp(balances, p):
     final = {}
     for b in balances:
         if isinstance(b, dict) and b.get('date'):
-            final[C.to_str(b['date'])] = b.get('isFinal') is True
+            key = C.to_str(b['date'])
+            final[key] = final.get(key, True) and b.get('isFinal') is True           # те саме: один неостаточний рядок -- день неостаточний
     return _first_nonfinal_day(final, p)
 
 
@@ -427,6 +443,7 @@ def _privat(rec, p, out, disabled):
     if not exs:
         raise RecordingMismatch('у записі немає запитів транзакцій ПриватБанку')
     for ex in exs:
+        use(out, ex)
         if ex['failure'] or ex['response']['status'] != 200:
             _failure(out, ex, 'privat')
             break
@@ -465,13 +482,15 @@ def _privat(rec, p, out, disabled):
 
 
 def _privat_settings(rec, p, out):
-    """Обмін `/settings` -- НЕОБОВ'ЯЗКОВИЙ: лише ознака `work_balance = Y` (іде регламент банку, `rule_work_balance`). Його
-    `date_final_statement` у межі довіри участі не бере (D36 п. 10). Немає обміну -- перевірки немає.
+    """Обмін `/settings` -- ОБОВ'ЯЗКОВИЙ перший обмін кожного читання ПриватБанку (R14: конектор читає його щоразу; ознака
+    `work_balance = Y` -- іде регламент банку, `rule_work_balance`). `date_final_statement` у межі довіри участі не бере
+    (D36 п. 10). Немає обміну -- ЯВНА помилка еталона (`RecordingMismatch`), а не мовчазне "перевірки немає".
     -> True, якщо читати далі."""
     exs = C.exchanges_for(rec, C.PRIVAT_SETTINGS_PATH)
-    if not exs:
-        return True
+    if not exs or rec.exchanges[0] is not exs[0]:
+        raise RecordingMismatch('у записі ПриватБанку /settings не перший обмін')
     ex = exs[0]
+    use(out, ex)
     if ex['failure'] or ex['response']['status'] != 200:
         _failure(out, ex, 'privat')
         return False
@@ -501,6 +520,7 @@ def _privat_balance(rec, p, out):
     if not exs:
         raise RecordingMismatch('у записі ПриватБанку немає /balance')
     ex = exs[0]
+    use(out, ex)
     if ex['failure'] or ex['response']['status'] != 200:
         _failure(out, ex, 'privat')
         return
@@ -615,6 +635,7 @@ def _mono(rec, p, out, disabled):
         if not info:
             raise RecordingMismatch('у записі ФОП немає client-info')
         e = info[0]
+        use(out, e)
         if e['failure'] or e['response']['status'] != 200:
             _failure(out, e, bank)
             return
@@ -635,6 +656,7 @@ def _mono(rec, p, out, disabled):
     while i < len(stmts):
         ex = stmts[i]
         i += 1
+        use(out, ex)
         acct, frm, to = R.statement_window(ex)
         if ex['response'] and ex['response']['status'] == 429:
             # dev9: один повтор після 429 за заголовком (юросіб це вже мав, ФОП — ні)
@@ -644,6 +666,7 @@ def _mono(rec, p, out, disabled):
             if i < len(stmts):
                 ex = stmts[i]
                 i += 1
+                use(out, ex)
                 out.applied.add('dev9') if not corp else None
             else:
                 raise RecordingMismatch('запис кінчається на 429 без повтору')
@@ -688,8 +711,10 @@ def _corp_balances(rec, p, out):
     if not exs:
         raise RecordingMismatch('у записі юросіб немає balances')
     ex = exs[0]
+    use(out, ex)
     if ex['response'] and ex['response']['status'] == 429 and len(exs) > 1:
         ex = exs[1]                                         # один повтор після 429
+        use(out, ex)
     if ex['failure'] or ex['response']['status'] != 200:
         _failure(out, ex, 'mono-corp')
         return

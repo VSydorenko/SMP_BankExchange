@@ -100,22 +100,72 @@ class Sensitive:
         self.nums = set()             # числа від 5 цифр
         self.names = set()            # власні назви (слова з великої літери)
         self.positional = []          # [(індекс обміну, шлях у дереві, роль, значення)] -- для порівняння на своєму місці
-        self.keep_blob = ''           # усі значення KEEP-полів (крім вільного тексту): що там є, політика лишає видимим
         self.generic = set()          # загальні фрази словника замін
+        self.pair_exempt = {}         # токен -> {поля, у яких він МОЖЕ лишитися}: вузькі винятки за парою полів
+        self.pair_counts = {}         # назва пари -> кількість випадків у сирому записі (іде у звіт)
 
     def exempt(self, v):
-        """Не витік: значення з однієї повторюваної цифри/літери (нульовий «неіснуючий» рахунок), частина значення KEEP-поля
-        (обороти дня = сума єдиної операції; DLR, що є частиною номера документа) і загальна фраза, яку генератор видає сам."""
+        """Не витік: значення з однієї повторюваної цифри/літери (нульовий «неіснуючий» рахунок) і загальна фраза, яку генератор
+        видає сам. Решта винятків -- лише за ПАРОЮ полів (`PAIRS`), див. `pair_leaks`."""
         v = str(v).strip()
-        return len(set(v)) <= 1 or v in self.generic or v in self.keep_blob
+        return len(set(v)) <= 1 or v in self.generic
 
     def counts(self):
         return {'whole': len(self.whole), 'nums': len(self.nums), 'names': len(self.names), 'positional': len(self.positional)}
 
 
+# Винятки (а) за парою полів: (назва пари, поле-джерело(а), поля KEEP, де значення МОЖЕ лишитися за політикою D22).
+# DLR ПриватБанку -- частина номера документа (NUM_DOC, KEEP за D22); обороти/залишки дня дорівнюють сумі єдиної операції
+# (SUM / SUM_E, KEEP). Поза цими полями значення -- витік.
+PAIRS = (('DLR_in_NUM_DOC', ('DLR',), ('NUM_DOC',)),
+         ('turnover_equals_SUM', ('balanceIn', 'balanceInEq', 'balanceOut', 'balanceOutEq', 'turnoverCred', 'turnoverCredEq',
+                                 'turnoverDebt', 'turnoverDebtEq'), ('SUM', 'SUM_E')))
+
+
+def collect_pairs(sens, objs):
+    """Вузькі винятки за парою полів в ОДНОМУ об'єкті/рядку (`objs`: {(обмін, шлях): {поле: значення}})."""
+    money = {v for f in objs.values() for k in ('SUM', 'SUM_E') if (v := f.get(k))}
+    for f in objs.values():
+        dlr = (f.get('DLR') or '').strip()
+        if dlr and dlr in (f.get('NUM_DOC') or ''):
+            sens.pair_exempt.setdefault(dlr, set()).update(('NUM_DOC',))
+            sens.pair_counts['DLR_in_NUM_DOC'] = sens.pair_counts.get('DLR_in_NUM_DOC', 0) + 1
+        for k in PAIRS[1][1]:
+            v = (f.get(k) or '').strip()
+            if v and v in money:
+                sens.pair_exempt.setdefault(v, set()).update(PAIRS[1][2])
+                sens.pair_counts['turnover_equals_SUM'] = sens.pair_counts.get('turnover_equals_SUM', 0) + 1
+
+
+def pair_leaks(bank, rec, pair_exempt):
+    """Скільки разів токен із вузького винятку стоїть ПОЗА дозволеними полями (будь-яке інше поле, шлях, запит) -- це витік."""
+    if not pair_exempt:
+        return 0
+    n = 0
+    for ex in rec.exchanges:
+        req = ex['request']
+        flat = urllib.parse.unquote(req['path'] + '?' + req['query'])
+        n += sum(1 for t in pair_exempt if t in flat)
+        if not ex['response']:
+            continue
+        try:
+            root = jsonspan.parse(R.body_text(ex))
+        except jsonspan.JsonSpanError:
+            continue
+        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
+            if nd.kind == 'lit':
+                continue
+            field = next((w for w in reversed(where) if isinstance(w, str)), '')
+            for t, allowed in pair_exempt.items():
+                if field not in allowed and t in nd.value:
+                    n += 1
+    return n
+
+
 def collect(bank, rec, cfg):
     sens = Sensitive()
-    keep_nums, keep_words, lower_words, keep_values = set(), set(), set(), set()
+    keep_nums, keep_words, lower_words = set(), set(), set()
+    objs = {}
     allowed = {w.casefold() for w in list(cfg.get('allowed_words', [])) + list(cfg.get('guard_allowed_words', [])) +
                list(cfg.get('api_guard_allowed_words', []))}
     texts = []                                  # (роль, значення)
@@ -137,9 +187,9 @@ def collect(bank, rec, cfg):
             if nd.kind == 'lit':
                 continue
             val = nd.value if nd.kind == 'str' else nd.value
+            if nd.kind == 'str' and where and isinstance(where[-1], str):
+                objs.setdefault((idx, tuple(where[:-1])), {})[where[-1]] = val
             if role == 'KEEP':
-                if not (nd.kind == 'str' and where and where[-1] in A.FREE_TEXT_KEEP):
-                    keep_values.add(val.strip() if nd.kind == 'str' else val)
                 if nd.kind == 'str':
                     keep_nums |= set(DIG.findall(val))
                     keep_words |= {w.casefold() for w in WORD.findall(val)}
@@ -171,8 +221,8 @@ def collect(bank, rec, cfg):
                     sens.names.add(w)
     sens.nums -= keep_nums
     sens.generic = {x for lst in gen.PHRASES.values() for x in lst} | {x for lst in gen.SHORT.values() for x in lst}
-    sens.keep_blob = '\n'.join(sorted(keep_values))
-    sens.whole = {t for t in sens.whole if not sens.exempt(t)}
+    collect_pairs(sens, objs)
+    sens.whole = {t for t in sens.whole if not sens.exempt(t) and t not in sens.pair_exempt}
     return sens
 
 
@@ -267,8 +317,9 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
                     unchanged_long += 1
                 else:
                     unchanged_short += 1
-    hits = len(whole) + len(nums) + len(names) + unchanged_long
-    return {'bank': bank, 'control': control, 'exchanges': len(raw.exchanges), 'tokens': sens.counts(),
+    pair = pair_leaks(bank, R.Recording.from_dir(target), sens.pair_exempt)
+    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair
+    return {'pair_counts': dict(sens.pair_counts), 'pair_leaks': pair, 'bank': bank, 'control': control, 'exchanges': len(raw.exchanges), 'tokens': sens.counts(),
             'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names),
             'unchanged_long': unchanged_long, 'unchanged_short_info': unchanged_short, 'misaligned': misaligned,
             'hits': hits, 'problems': ['збіги: %d' % hits] if hits else []}
@@ -593,9 +644,10 @@ def check_c(bank, raw_dir, anon_dir, map_path, cfg=None):
         d.cmp(o1['dependsOn'], o2['dependsOn'], tag + '.dependsOn')
         d.cmp({k: v for k, v in o1['parameters'].items() if k != 'НомерСчета'},
               {k: v for k, v in o2['parameters'].items() if k != 'НомерСчета'}, tag + '.parameters')
-        want_req = []
-        for ex in r1.exchanges:
-            q = b.request(ex['request'])
+        want_req = []                    # лише спожиті оракулом запити (I1): беремо їх з еталона сирого читання
+        for rq in o1['expected']['Запросы']:
+            q = b.request({'method': rq['Метод'], 'host': rq['Хост'], 'path': rq['Путь'],
+                           'query': '&'.join('%s=%s' % (k, v) for k, v in rq['Запрос'])})
             want_req.append({'Метод': q['method'], 'Хост': q['host'], 'Путь': q['path'],
                              'Запрос': [list(kv) for kv in urllib.parse.parse_qsl(q['query'], keep_blank_values=True)]})
         got_req = o2['expected']['Запросы']
