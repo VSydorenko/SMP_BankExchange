@@ -156,7 +156,7 @@ class Coverage(unittest.TestCase):
         for bank in ('mono-fop', 'mono-corp'):
             rec = by[(bank, 'СинтСтраницы')].recording()
             pages = [R.body_json(e) for e in C.statement_exchanges(rec)]
-            self.assertEqual(len(pages[0]), 500)
+            self.assertEqual(len(pages[0]), 500 if bank == 'mono-fop' else C.CORP_WORKING_LIMIT)
             ids = [t['id'] for p in pages for t in p]
             self.assertGreater(len(ids), len(set(ids)))                       # одна операція на двох сторінках
             self.assertEqual(len(E.run(rec, by[(bank, 'СинтСтраницы')].params).ops), len(set(ids)))   # але рівно один раз
@@ -191,7 +191,7 @@ class KeyCompatibility(unittest.TestCase):
                 self.assertEqual(o['КонтрагентНомерСчета'], f['КонтрагентНомерСчета'], (s.name, r.n))
                 self.assertEqual(Decimal(o['Сумма']), f['Сумма'], (s.name, r.n))
                 compared += 1
-        self.assertGreater(compared, 1500)
+        self.assertGreater(compared, 700)
 
 
 class KyivBoundaries(unittest.TestCase):

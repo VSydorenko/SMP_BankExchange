@@ -11,6 +11,7 @@ from decimal import Decimal
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from apilib import expected as E, kyiv, oracle_old as O, recording as R, synth as S
+from apilib import common as C
 from apilib.common import Params
 
 OWN14 = '26001234567890'
@@ -20,24 +21,25 @@ IBAN = 'UA' + sg.iban_check_digits('UA', BBAN) + BBAN
 DAY = datetime(2026, 10, 15)
 
 
-def tx(when=datetime(2026, 10, 15, 10, 0, 0), tran='C', state='r', amount='10.00', own=OWN14, cnt='26009999999999',
+def tx(when=datetime(2026, 10, 15, 10, 0, 0), tran='C', state='r', amount='10.00', own=IBAN, cnt='26009999999999',
        ccy='UAH', num='N1', ref=None, refn='1', tid='111', osnd='призначення', **kw):
     ref = ref or 'REF' + tid
     d = {'AUT_MY_ACC': own, 'AUT_CNTR_ACC': cnt, 'AUT_CNTR_NAM': 'Контрагент', 'AUT_CNTR_CRF': '12345678', 'AUT_CNTR_MFO': '305299',
          'CCY': ccy, 'PR_PR': state, 'NUM_DOC': num, 'OSND': osnd, 'SUM': amount, 'REF': ref, 'REFN': refn,
          'DATE_TIME_DAT_OD_TIM_P': when.strftime('%d.%m.%Y %H:%M:%S'), 'ID': tid, 'TRANTYPE': tran,
-         'TECHNICAL_TRANSACTION_ID': tid + '_online'}
+         'TECHNICAL_TRANSACTION_ID': tid}                 # run1: ID = TECHNICAL_TRANSACTION_ID
     d.update(kw)
     return d
 
 
-def privat(pages, final='30.10.2026 00:00:00', **kw):
+def privat(pages, flags=None, absent=(), balance=True, **kw):
+    """Читання ПриватБанку: сторінки транзакцій (кожна -- список; пара `(список, _)` теж приймається) і `/balance`."""
     p = Params(**{'account': IBAN, 'period_start': DAY, 'period_end': datetime(2026, 10, 15, 23, 59, 59),
                   'old_account_currency': '980', **kw})
     b = S.Builder('privat', 't', p)
-    b.settings(S.resp_json(200, S.privat_settings_body(final)))
-    for i, (txs, nxt) in enumerate(pages):
-        b.privat(S.resp_json(200, S.privat_page(txs, nxt=nxt)), follow=(pages[i - 1][1] if i else None))
+    b.privat_pages([x[0] if isinstance(x, tuple) else x for x in pages])
+    if balance:
+        b.privat_balance(S.resp_json(200, S.privat_balance_body(p, flags, absent)))
     return R.Recording(R.make_manifest('privat', 't', b.ex), b.ex), p
 
 
@@ -79,19 +81,20 @@ class OldPrivat(unittest.TestCase):
         self.assertEqual(len(O.run(rec, p).rows), 4)       # PB: PR_PR не читається
 
     def test_foreign_account_is_dropped_without_trace(self):
-        rec, p = privat([([tx(own='26007777777777')], None)])
+        rec, p = privat([([tx(own=S.Gen('x').iban())], None)])
         res = O.run(rec, p)
         self.assertEqual((len(res.rows), [d[0] for d in res.dropped]), (0, ['foreign-account']))
 
-    def test_iban_in_base_drops_everything_unless_obsolete_number_is_set(self):
+    def test_account_in_base_is_iban_and_comparison_is_exact(self):
+        """run1: AUT_MY_ACC -- IBAN (87 з 87), у базі теж IBAN (слова власника): рядок з IBAN завантажується; рядок із 14 цифрами
+        (форми в run1 немає) відкидає регламентний фільтр, як PB:510."""
         rec, p = privat([([tx(tran='D'), tx(tran='C', tid='2')], None)])
-        self.assertEqual(len(O.run(rec, replace(p, old_account_format='iban')).rows), 0)
-        res = O.run(rec, replace(p, old_account_format='iban', old_account_obsolete=OWN14))
+        res = O.run(rec, p)
         self.assertEqual(len(res.rows), 2)
-        # знахідка задачі 0: списання тоді розпізнається як поступлення, а «контрагент» — наш власний рахунок
-        d_row = res.rows[0].fields
-        self.assertFalse(d_row['Исходящий'])
-        self.assertEqual(d_row['КонтрагентНомерСчета'], OWN14)
+        self.assertTrue(res.rows[0].fields['Исходящий'])
+        rec, p = privat([([tx(own=OWN14)], None)])
+        res = O.run(rec, p)
+        self.assertEqual((len(res.rows), [d[0] for d in res.dropped]), (0, ['regulation-filter']))
 
     def test_regulation_currency_filter(self):
         rec, p = privat([([tx(ccy='UAH')], None)])
@@ -100,14 +103,14 @@ class OldPrivat(unittest.TestCase):
 
     def test_error_and_missing_next_page_id_abort_everything(self):
         b = S.Builder('privat', 't', Params(account=IBAN, period_start=DAY, period_end=DAY))
-        b.privat(S.resp_json(200, S.privat_page([tx()], nxt='n1')))
-        b.privat(S.resp_json(200, {'status': 'ERROR', 'message': 'boom'}), follow='n1')
+        b.privat(S.resp_json(200, S.privat_page([tx()], exist=True)))
+        b.privat(S.resp_json(200, {'status': 'ERROR', 'message': 'boom'}), follow='111')
         rec = R.Recording(R.make_manifest('privat', 't', b.ex), b.ex)
         res = O.run(rec, Params(account=IBAN, period_start=DAY, period_end=DAY))
         self.assertEqual((res.rows, res.error['kind']), ([], 'exception'))
         p = Params(account=IBAN, period_start=DAY, period_end=DAY)
         b = S.Builder('privat', 't', p)
-        b.privat(S.resp_json(200, S.privat_page([tx()], exist=True)))          # exist_next_page = true без next_page_id
+        b.privat(S.resp_json(200, S.privat_page([tx()], exist=True, with_id=False)))          # exist_next_page = true без next_page_id
         rec = R.Recording(R.make_manifest('privat', 't', b.ex), b.ex)
         self.assertEqual(O.run(rec, p).error['kind'], 'hang')
 
@@ -161,19 +164,19 @@ class OldMono(unittest.TestCase):
 class Expected(unittest.TestCase):
     def test_privat_states_and_boundary(self):
         rec, p = privat([([tx(tid='1'), tx(state='p', tid='2', when=datetime(2026, 10, 15, 12, 0)),
-                           tx(state='n', tid='3'), tx(state='t', tid='4', ref='R4')], None)])
+                           tx(state='n', tid='3'), tx(state='t', tid='4', ref='R4')], None)])      # баланси за період усі остаточні
         e = E.run(rec, p)
         self.assertEqual([o['ПорядковыйНомер'] for o in e.ops], [1, 4])
         self.assertEqual([(d['Уровень'], d['Суть']) for d in e.diags], [('Предупреждение', 'nonfinal'), ('Предупреждение', 'cancelled')])
         self.assertEqual(e.trust, datetime(2026, 10, 15, 12, 0))
 
     def test_reversal_case_a_and_b(self):
-        rec, p = privat([([tx(tid='1', ref='RA', refn='1'), tx(state='t', tid='2', ref='RB', refn='1'),     # (а): свій REF
-                           tx(state='t', tid='3', ref='RA', refn='1')], None)])                          # (б): REF+REFN оригіналу
+        rec, p = privat([([tx(tid='1', ref='RA', refn='1'), tx(state='t', tid='2', ref='RB', refn='1'),     # (а): свій ID
+                           tx(state='t', tid='1', ref='RA', refn='1', TECHNICAL_TRANSACTION_ID='1x')], None)])   # (б): ID оригіналу
         e = E.run(rec, p)
         self.assertEqual([o['ПорядковыйНомер'] for o in e.ops], [1, 2])
         self.assertEqual([(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags], [('Ошибка', 'reversal-state-change', 3)])
-        # той самий запис, але ідентифікатор — TECHNICAL_TRANSACTION_ID: колізії немає, (б) не розпізнається
+        # той самий запис, але ідентифікатор — TECHNICAL_TRANSACTION_ID (на випадок, не спостерігалось: у run1 він дорівнює ID)
         e2 = E.run(rec, replace(p, privat_id='TECHNICAL_TRANSACTION_ID'))
         self.assertEqual([d['Суть'] for d in e2.diags], [])
 
@@ -190,7 +193,7 @@ class Expected(unittest.TestCase):
         def run_with(resp=None, failure=None):
             p = Params(account=IBAN, period_start=DAY, period_end=datetime(2026, 10, 15, 23, 59, 59), old_account_currency='980')
             b = S.Builder('mono-corp', 't', p)
-            page = [corp('p%03d' % i, S.utc(2026, 10, 15, 6) + 3 * i, -(i + 1)) for i in range(500)]
+            page = [corp('p%03d' % i, S.utc(2026, 10, 15, 6) + 3 * i, -(i + 1)) for i in range(C.CORP_WORKING_LIMIT)]
             b.statement(S.to_unix(p.period_start), S.to_unix(p.period_end), S.resp_json(200, sorted(page, key=lambda x: -x['time'])))
             b.statement(S.to_unix(p.period_start), S.next_to(min(x['time'] for x in page)), resp, failure)
             return E.run(R.Recording(R.make_manifest('mono-corp', 't', b.ex), b.ex), p)
@@ -201,7 +204,7 @@ class Expected(unittest.TestCase):
                  (S.resp_json(400, {}), None, 'ДействиеЧеловека'), (S.resp_json(422, {}), None, 'ДействиеЧеловека')]
         for resp, fail, cls in cases:
             e = run_with(resp, fail)
-            self.assertEqual((e.failure_class, e.complete, len(e.ops), e.trust), (cls, False, 500, DAY), (resp, fail))
+            self.assertEqual((e.failure_class, e.complete, len(e.ops), e.trust), (cls, False, C.CORP_WORKING_LIMIT, DAY), (resp, fail))
             self.assertEqual((e.diags[0]['Суть'], e.diags[0]['Уровень']), ('read-failed', 'Предупреждение'))   # неповне читання, не втрата
             self.assertEqual(e.diags[0]['Факты']['Банк'], 'monobank юросіб')
 
@@ -228,7 +231,7 @@ class Expected(unittest.TestCase):
         rec, p = privat([([tx()], 'n1'), ([tx(tid='2')], None)])
         e = E.run(rec, p)
         self.assertEqual(e.pauses, [{'ПослеЗапроса': 1, 'Секунд': 1, 'Причина': 'privat-1-per-second'},
-                                    {'ПослеЗапроса': 2, 'Секунд': 1, 'Причина': 'privat-1-per-second'}])      # settings + 2 сторінки
+                                    {'ПослеЗапроса': 2, 'Секунд': 1, 'Причина': 'privat-1-per-second'}])      # 2 сторінки + /balance
         e0 = E.run(rec, p, {'dev9'})
         self.assertEqual(e0.pauses, [])
         self.assertEqual(e0.ops, e.ops)                    # кількість і зміст операцій від dev9 не залежать
