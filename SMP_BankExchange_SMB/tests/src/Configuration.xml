@@ -86,6 +86,7 @@
 			<CommonModule>СМП_ТестыМатрицыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
+			<CommonModule>СМП_ТестыРаспознаванияВладельцыСчета</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияЗавершение</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияПоручение</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияШаг5</CommonModule>
