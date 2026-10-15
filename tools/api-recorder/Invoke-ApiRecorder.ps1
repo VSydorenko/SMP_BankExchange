@@ -17,6 +17,8 @@ param(
     # Мітка прогону = назва теки запису. Другий прогін — та сама команда з новою міткою.
     [string]$RunLabel = (Get-Date -Format 'yyyyMMdd-HHmmss'),
     [string]$OutRoot = 'R:/github/SMP_BankExchange/temp/api-recordings',
+    # Файли звірки із сумами — ПОЗА текою записів (її читає агент), поруч із конфігурацією.
+    [string]$OwnerRoot = 'R:/github/SMP_BankExchange/temp/api-recorder/owner-only',
     [switch]$DryRun,
     [switch]$SelfTest,
     [string]$SelfTestDir = ''
@@ -24,6 +26,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $OutRoot = [System.IO.Path]::GetFullPath($OutRoot)
+$OwnerRoot = [System.IO.Path]::GetFullPath($OwnerRoot)
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 . (Join-Path $PSScriptRoot 'ApiRecorder.Lib.ps1')
 
@@ -184,7 +187,7 @@ function Wait-Gap {
 # Єдина точка запиту. Повертає Status, Body (байти), Headers, Failure. 429: пауза за retry-after і один повтор, далі — стоп сценарію.
 function Invoke-Api {
     param($Ctx, [string]$Path, [string]$Query = '', [hashtable]$Headers = $null, [string]$ContentType = $null,
-        [string]$DryStub = '[]', [switch]$NoGap)
+        [string]$DryStub = '[]', [switch]$NoGap, [switch]$NoRetry)
     if ($null -eq $Headers) { $Headers = $Ctx.BaseHeaders }
     if (-not $ContentType) { $ContentType = $Ctx.ContentType }
     Assert-ReadOnlyRequest 'GET' $Ctx.HostName $Path
@@ -215,6 +218,10 @@ function Invoke-Api {
         $rem = Get-HeaderValue $r.Headers 'x-rate-limit-remaining'
         if ($rem -eq '0' -and $r.Status -eq 200) { $Ctx.NextGap = [math]::Max($Ctx.NextGap, (Get-RetryWaitSeconds $r.Headers)) }
         $result = $r
+        if ($r.Status -eq 429 -and $NoRetry) {
+            Add-Note $Ctx '429 на запит без повтору — записано, сценарій завершено без очікування й повтору'
+            break
+        }
         if ($r.Status -eq 429) {
             $wait = Get-RetryWaitSeconds $r.Headers
             if ($attempt -eq 1) {
@@ -444,8 +451,8 @@ function Invoke-PrivatRun {
             Invoke-Scenario $Ctx "privat_${tag}_tx_default_limit" { Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$from", "endDate=$to") 'transactions' $maxSmall }
         }
         if (Test-ScenarioOn $Cfg 'TxNoEndDate') {
-            # без endDate: startDate = останній день періоду; що банк віддає до «сьогодні» (проміжна виписка)
-            Invoke-Scenario $Ctx "privat_${tag}_tx_no_enddate" { Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$to", "limit=$work") 'transactions' $maxPages }
+            # без endDate: startDate = початок періоду; що банк віддає до «сьогодні» (порівняння з тим самим періодом з endDate)
+            Invoke-Scenario $Ctx "privat_${tag}_tx_no_enddate" { Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$from", "limit=$work") 'transactions' $maxPages }
         }
         if (Test-ScenarioOn $Cfg 'TxFullIban') {
             Invoke-Scenario $Ctx "privat_${tag}_tx_acc_full_iban" { Read-PrivatPages $Ctx $tx @("acc=$iban", "startDate=$from", "endDate=$to", "limit=$work") 'transactions' $maxPages }
@@ -657,7 +664,7 @@ function Invoke-MonoFopRun {
             $script:fopAcc = Get-FopAccountId $Ctx $Cfg $r
             if ($script:fopAcc) {
                 $dayFrom = ConvertTo-UnixKyiv $P.To; $dayTo = ConvertTo-UnixKyiv $P.To.AddDays(1).AddSeconds(-1)
-                $r2 = Invoke-Api $Ctx "/personal/statement/$($script:fopAcc)/$dayFrom/$dayTo" '' -NoGap -DryStub '[]'
+                $r2 = Invoke-Api $Ctx "/personal/statement/$($script:fopAcc)/$dayFrom/$dayTo" '' -NoGap -NoRetry -DryStub '[]'
                 $j = ConvertFrom-BodyBytes $r2.Body $r2.Headers
                 if ($j -is [array]) { Add-MonoTxDigest $Ctx @($j) $true }
             }
@@ -853,6 +860,11 @@ function Invoke-SelfTestMode {
     $foundWrong = Test-SecretsInFiles @(Get-ChildItem $pos -Recurse -File | ForEach-Object FullName) $wrong $pos
     & $check 'контроль: чужого значення в позитивних файлах немає (пошук залежить від значення)' ($foundWrong.Count -eq 0) "(знахідок: $($foundWrong.Count))"
 
+    $thrown2 = { param([scriptblock]$B) try { & $B | Out-Null; $false } catch { $true } }
+    # --- порожній набір секретів: самоперевірка мусить падати, а не проходити вакуумно ---
+    & $check 'порожній набір секретів: самоперевірка падає' (& $thrown2 { Test-SecretsInFiles @((Get-ChildItem $neg -File | Select-Object -First 1).FullName) ([ordered]@{}) $neg })
+    & $check 'набір із порожніх значень: самоперевірка падає' (& $thrown2 { Test-SecretsInFiles @((Get-ChildItem $neg -File | Select-Object -First 1).FullName) ([ordered]@{ A = '' }) $neg })
+
     # --- білий список читання ---
     $thrown = { param([scriptblock]$B) try { & $B; $false } catch { $true } }
     & $check 'білий список: POST відхилено' (& $thrown { Assert-ReadOnlyRequest 'POST' 'acp.privatbank.ua' '/api/statements/transactions' })
@@ -924,9 +936,18 @@ foreach ($b in $selected) {
     $rec = New-Recording $runDir $m.Dir $RunLabel $bankSecrets
     $ctx = New-Ctx $m.Dir $m.Host $m.Gap $rec $bankSecrets ([bool]$DryRun)
     if ($DryRun) { Write-Host "[dry-run] мережі немає, запису немає; пауза між запитами $($m.Gap) с; відповіді-заглушки порожні, тож сторінок буде менше, ніж у справжньому прогоні." }
-    $state = 'ok'
+    if ($DryRun) {
+        try { & $m.Run $cfg $ctx } catch { Write-Host ('ПОМИЛКА: ' + (Remove-SecretValues ([string]$_.Exception.Message) $bankSecrets)); $failedAny = $true }
+        Write-Host ("[dry-run] {0}: запитів у плані {1}, сумарні паузи ≈ {2:N1} хв" -f $m.Key, $ctx.Requests, ($ctx.PlannedSeconds / 60))
+        $totalPlanned += $ctx.PlannedSeconds
+        continue
+    }
+    # Справжній прогін: самоперевірка й позначка стану виконуються ЗАВЖДИ (finally), зокрема після Ctrl+C чи винятку.
+    $state = 'interrupted'
+    $ownerFile = Join-Path $OwnerRoot (Join-Path $m.Dir (Join-Path $RunLabel 'reconcile.txt'))
     try {
         & $m.Run $cfg $ctx
+        $state = 'ok'
         if ($ctx.Failed) { $state = 'incomplete'; $failedAny = $true }
         if ($ctx.Abort) { $state = 'aborted'; Write-Host "Банк зупинено: $($ctx.Abort)" }
     }
@@ -934,34 +955,38 @@ foreach ($b in $selected) {
         $state = 'error'; $failedAny = $true
         Write-Host ('ПОМИЛКА: ' + (Remove-SecretValues ([string]$_.Exception.Message) $bankSecrets))
     }
-    if ($DryRun) {
-        Write-Host ("[dry-run] {0}: запитів у плані {1}, сумарні паузи ≈ {2:N1} хв" -f $m.Key, $ctx.Requests, ($ctx.PlannedSeconds / 60))
-        $totalPlanned += $ctx.PlannedSeconds
-        continue
+    finally {
+        if ($state -eq 'interrupted') { $failedAny = $true; Write-Host 'Прогін перервано — виконую самоперевірку на те, що встигло записатись.' }
+        try {
+            New-Item -ItemType Directory -Path $runDir -Force | Out-Null
+            New-Item -ItemType Directory -Path (Split-Path $ownerFile) -Force | Out-Null
+            Write-AgentSummary $ctx (Join-Path $runDir 'summary-agent.txt') $state
+            Write-OwnerReconcile $ctx $ownerFile
+            Save-Manifest $rec $state
+            $files = @(Get-ChildItem -LiteralPath $runDir -Recurse -File | ForEach-Object FullName) + @($ownerFile)
+            $findings = Test-SecretsInFiles $files $bankSecrets $OutRoot
+            if ($findings.Count -gt 0) {
+                $leak = $true
+                Write-Host ''
+                Write-Host '!!!!!!!! САМОПЕРЕВІРКА ПРОВАЛЕНА: значення токена знайдено в записаних файлах !!!!!!!!'
+                $lines = foreach ($f in $findings) { "файл: $($f.File); секрет: $($f.Secret); форма: $($f.Where), $($f.Form)" }
+                $lines | ForEach-Object { Write-Host "  $_" }
+                [System.IO.File]::WriteAllText((Join-Path $runDir 'LEAK-DETECTED.txt'), "Самоперевірка знайшла значення токена у файлах (значень тут немає):`r`n" + ($lines -join "`r`n") + "`r`n", $script:Utf8NoBom)
+                Save-Manifest $rec 'leak-detected' 'самоперевірка знайшла токен у записі; теку нікому не передавати'
+                Write-Host '  Теку НЕ передавайте нікому. Токен у банку краще перевипустити. Повідомте планувальника (без значення токена).'
+            }
+            else { Write-Host ("Самоперевірка: токенів у {0} файлах не знайдено." -f $files.Count) }
+        }
+        catch {
+            # самоперевірку виконати не вдалося — це не «чисто»: прогін вважається проваленим
+            $leak = $true
+            Write-Host ('САМОПЕРЕВІРКА НЕ ВИКОНАНА: ' + (Remove-SecretValues ([string]$_.Exception.Message) $bankSecrets))
+            Write-Host '  Теку НЕ передавайте нікому, доки самоперевірка не пройде.'
+        }
+        Write-Host "Запис: $runDir"
+        Write-Host "Зведення для агента: $(Join-Path $runDir 'summary-agent.txt')"
+        Write-Host "Звірка з кабінетом (лише власнику, суми й ідентифікатори; поза текою записів): $ownerFile"
     }
-    # зведення, маніфест, самоперевірка
-    $ownerDir = Join-Path $OutRoot '_owner-only'
-    New-Item -ItemType Directory -Path $ownerDir -Force | Out-Null
-    $ownerFile = Join-Path $ownerDir "$($m.Dir)__$RunLabel`__reconcile.txt"
-    Write-AgentSummary $ctx (Join-Path $runDir 'summary-agent.txt') $state
-    Write-OwnerReconcile $ctx $ownerFile
-    Save-Manifest $rec $state
-    $files = @(Get-ChildItem -LiteralPath $runDir -Recurse -File | ForEach-Object FullName) + @($ownerFile)
-    $findings = Test-SecretsInFiles $files $bankSecrets $OutRoot
-    if ($findings.Count -gt 0) {
-        $leak = $true
-        Write-Host ''
-        Write-Host '!!!!!!!! САМОПЕРЕВІРКА ПРОВАЛЕНА: значення токена знайдено в записаних файлах !!!!!!!!'
-        $lines = foreach ($f in $findings) { "файл: $($f.File); секрет: $($f.Secret); форма: $($f.Where), $($f.Form)" }
-        $lines | ForEach-Object { Write-Host "  $_" }
-        [System.IO.File]::WriteAllText((Join-Path $runDir 'LEAK-DETECTED.txt'), "Самоперевірка знайшла значення токена у файлах (значень тут немає):`r`n" + ($lines -join "`r`n") + "`r`n", $script:Utf8NoBom)
-        Save-Manifest $rec 'leak-detected' 'самоперевірка знайшла токен у записі; теку нікому не передавати'
-        Write-Host '  Теку НЕ передавайте нікому. Токен у банку краще перевипустити. Повідомте планувальника (без значення токена).'
-    }
-    else { Write-Host ("Самоперевірка: токенів у {0} файлах не знайдено." -f $files.Count) }
-    Write-Host "Запис: $runDir"
-    Write-Host "Зведення для агента: $(Join-Path $runDir 'summary-agent.txt')"
-    Write-Host "Звірка з кабінетом (лише власнику, суми й ідентифікатори): $ownerFile"
 }
 
 if ($DryRun) { Write-Host ''; Write-Host ("[dry-run] загалом сумарні паузи ≈ {0:N1} хв (без часу самих запитів). Нічого не записано, мережі не було." -f ($totalPlanned / 60)) }

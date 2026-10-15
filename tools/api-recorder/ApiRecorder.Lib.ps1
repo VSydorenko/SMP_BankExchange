@@ -268,6 +268,7 @@ function Test-SecretsInFiles {
     $findings = [System.Collections.Generic.List[object]]::new()
     $needleSets = @{}
     foreach ($k in $Secrets.Keys) { if (-not [string]::IsNullOrEmpty([string]$Secrets[$k])) { $needleSets[$k] = Get-SecretNeedles ([string]$Secrets[$k]) } }
+    if ($needleSets.Count -eq 0) { throw 'Самоперевірка неможлива: набір секретів порожній (перевірка без що шукати не є доказом).' }
     foreach ($f in $Files) {
         $bytes = [System.IO.File]::ReadAllBytes($f)
         $rel = if ($BaseDir -and $f.StartsWith($BaseDir)) { $f.Substring($BaseDir.Length).TrimStart('\', '/') } else { $f }

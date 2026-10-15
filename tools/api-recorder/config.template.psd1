@@ -53,7 +53,7 @@
             TxSmallLimit        = $true   # транзакції за період, малий limit, усі сторінки (до MaxSmallPages)
             TxWorkLimit         = $true   # транзакції за період, робочий limit
             TxDefaultLimit      = $true   # транзакції без limit (банк дає 20 на сторінку)
-            TxNoEndDate         = $true   # запит без endDate (startDate = останній день періоду)
+            TxNoEndDate         = $true   # запит без endDate (startDate = початок періоду)
             TxFullIban          = $true   # acc повним IBAN (основні сценарії йдуть з 14 останніми цифрами, як у попередника)
             TxInterim           = $true   # проміжна виписка
             TxFinal             = $true   # підсумкова виписка
