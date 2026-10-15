@@ -61,6 +61,14 @@ operation=syntax, mode=designer-modules, extension=SMP_BankExchange_SMB, server+
   загружаемых файлов», файл-список при цьому коректний); `operation=test` зупиняється на
   `build prerequisite`, exit 4. Обхід: `operation=build`, `sourceSet=<розширення>`,
   `fullRebuild=true` — вантажить лише це розширення (≈20–30 с), `base` не чіпає; потім `test`.
+- **`operation=test` Уніки (v8-runner `test`) за замовчуванням спершу сам довантажує змінені вихідники
+  інкрементом.** Це те саме часткове завантаження, і на кириличних іменах воно падає на «Ошибка
+  чтения файла-списка загружаемых файлов». MCP-параметра, що це вимикає, немає.
+- **Правило обходу:** `build` з `fullRebuild=true` потрібного source-set, потім з теки воркспейсу
+  `v8-runner test --no-build yaxunit module <Модуль>` (накладка `v8project.local.yaml` діє, база
+  серверна; інкрементне довантаження тоді неможливе). Друга лінія захисту — відбиток вихідників на
+  момент збірки: перед кожним прогоном звіряти, що вихідники не змінювались після останнього
+  `build`; мутація продукту й повернення правки — теж зміна вихідників, після них знову `build`.
 - Стан збирача (`build/hash-storages`) ведеться на source-set, а не на базу: `base` вважається
   завантаженою, поки `cf/src` не змінювалась (`find cf/src -newer build/hash-storages/designer-base.redb`).
 - **YaXUnit 25.12** встановлено Конфігуратором (`/LoadCfg … -Extension YAXUNIT /UpdateDBCfg`,
