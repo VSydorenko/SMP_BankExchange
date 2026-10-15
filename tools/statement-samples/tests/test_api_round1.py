@@ -41,6 +41,7 @@ class FailureClasses(unittest.TestCase):
                  (dict(base, serviceCode='CLIENT_AUTH'), E.CLS_HUMAN),
                  (dict(base, serviceCode='CLIENT_AUTH_BADSESSION', code='500'), E.CLS_HUMAN),
                  (dict(base, code='403'), E.CLS_HUMAN), (dict(base, code='422', serviceCode='X'), E.CLS_HUMAN),
+                 (dict(base, code='408'), E.CLS_RETRY), (dict(base, code='429', serviceCode='X'), E.CLS_RETRY),
                  (dict(base, code='500', serviceCode='SERVICE_ERROR_LOCAL_JOURNAL'), E.CLS_RETRY),
                  (dict(base), E.CLS_RETRY), (dict(base, code='503'), E.CLS_RETRY)]
         for body, cls in cases:
@@ -68,7 +69,7 @@ class FailureClasses(unittest.TestCase):
                 self.assertEqual(e.trust, s.params.period_start, s.name)
                 self.assertFalse(e.complete)
                 for d in e.diags:
-                    if d['Суть'] in ('read-failed', 'account-not-found'):
+                    if d['Суть'] in ('read-failed', 'account-not-found', 'work-balance'):
                         self.assertEqual(d['Уровень'], 'Предупреждение', s.name)
         e = run('privat', 'СинтБезСледующей')[1]
         self.assertEqual((e.failure_class, e.diags[-1]['Уровень']), (E.CLS_RETRY, 'Предупреждение'))
@@ -167,6 +168,26 @@ class IdentifierStability(unittest.TestCase):
               if d['Суть'] == 'nonfinal'][0]['Факты']['Ид']
         t2 = [o['ИдентификаторОперации'] for o in E.run(s2.recording(), replace(s2.params, privat_id='TECHNICAL_TRANSACTION_ID')).ops]
         self.assertNotIn(t1, t2)
+
+
+class WorkBalance(unittest.TestCase):
+    def test_regulation_of_the_bank_means_no_transaction_requests(self):
+        s, e = run('privat', 'СинтРегламентБанка')
+        self.assertEqual(len(s.exchanges), 1)                                   # лише /settings
+        self.assertEqual((e.failure_class, e.complete, e.trust, e.ops, e.items), (E.CLS_RETRY, False, s.params.period_start, [], 0))
+        self.assertEqual([(d['Суть'], d['Уровень'], d['Факты']['Вид']) for d in e.diags],
+                         [('work-balance', 'Предупреждение', 'work-balance')])
+
+    def test_n_means_reading_proceeds(self):
+        self.assertTrue(run('privat', 'СинтСтатусы')[1].complete)
+        self.assertFalse(E.rule_work_balance({'work_balance': 'N'}))
+        self.assertTrue(E.rule_work_balance({'work_balance': ' y '}))
+
+    def test_predecessor_never_checked_it(self):
+        bsl = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'SMP_BankExchange_SMB', 'cfe', 'src',
+                           'CommonModules', 'СМП_РаботаСБанкамиПриватБанкAPIСервер', 'Ext', 'Module.bsl')
+        with open(bsl, encoding='utf-8-sig') as f:
+            self.assertNotIn('work_balance', f.read())
 
 
 class TrustBoundary(unittest.TestCase):
