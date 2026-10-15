@@ -315,7 +315,7 @@ function Resolve-BankConfig {
     $fakeTo = if ($Key -eq 'MonoFop') { '2020-02-20' } else { '2020-01-03' }
     $c.PeriodParsed = & $parsePeriod 'Period' $Raw.Period $true '2020-01-01' $fakeTo
     $c.ReversalParsed = & $parsePeriod 'ReversalPeriod' $Raw.ReversalPeriod $false '' ''
-    if ($Key -eq 'MonoFop') { $c.SaturatedParsed = & $parsePeriod 'SaturatedPeriod' $Raw.SaturatedPeriod $false '' '' }
+    if ($Key -in 'MonoFop', 'MonoCorp') { $c.SaturatedParsed = & $parsePeriod 'SaturatedPeriod' $Raw.SaturatedPeriod $false '' '' }
     # за замовчуванням сценарій «період із поверненням» вмикається, лише якщо період заданий
     foreach ($n in 'Reversal') { if (-not $c.ReversalParsed) { $c.Scenarios[$n] = $false } }
     [pscustomobject]@{ Problems = $problems.ToArray(); Notes = $notes.ToArray(); Cfg = $c }
@@ -549,6 +549,13 @@ function Invoke-MonoCorpRun {
         if (Test-ScenarioOn $Cfg 'StatementLimit500') {
             Invoke-Scenario $Ctx "corp_${tag}_statement_limit500" { Read-MonoCorpStatement $Ctx $iban $fromU $toU 500 $maxPages }
         }
+        # Насичений період (необов'язковий; відсутній блок чи перемикач = вимкнено, не помилка): limit=500, сторінки зсувом
+        # верхньої межі, доки сторінка повна, — максимум сторінки банку. Розміри сторінок — у summary-agent.txt.
+        if ((Test-ScenarioOn $Cfg 'Saturated' $false) -and $Cfg.SaturatedParsed) {
+            $sf = ConvertTo-UnixKyiv $Cfg.SaturatedParsed.From; $st = ConvertTo-UnixKyiv $Cfg.SaturatedParsed.To.AddDays(1).AddSeconds(-1)
+            Invoke-Scenario $Ctx "corp_${tag}_statement_saturated_limit500" { Read-MonoCorpStatement $Ctx $iban $sf $st 500 $maxPages }
+        }
+        else { Write-Host "[вимкнено] corp_${tag}_statement_saturated_limit500 — немає SaturatedPeriod або Scenarios.Saturated не ввімкнено" }
         if (Test-ScenarioOn $Cfg 'StatementSmallLimit') {
             Invoke-Scenario $Ctx "corp_${tag}_statement_small_limit" { Read-MonoCorpStatement $Ctx $iban $fromU $toU $small $maxSmall }
         }
