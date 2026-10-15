@@ -8,6 +8,8 @@
 | `selfcheck` | самоперевірка оракула на прикладах з документації | 1, якщо хоч одна перевірка не пройшла |
 | `oracle --recording DIR --mode old|expected --account IBAN --start ISO --end ISO` | оракул на записі, JSON у stdout | 0 |
 | `pack --recording DIR --out FILE` / `unpack --pack FILE --out DIR` | запис <-> один JSON-файл | 0 |
+| `guard-synth --raw R` | сторож (`sslib.guard`) на згенерованих записях, пакетах, еталонах | 1 — збіги, 2 — контроль не падає |
+| `guard --raw R [--staged] [--files …]` | сторож для коду й документації режиму API (з `api_guard_allowed_words`) | те саме |
 | `anonymize`, `check-a`, `check-b`, `check-c`, `verify` | Step 2 (знеособлення справжніх записів) | 3: ще не виконано |
 """
 import argparse
@@ -16,7 +18,7 @@ import os
 import sys
 from datetime import datetime
 
-from . import common as C, etalon, expected, oracle_old, recording as R, selfcheck, step2, synth
+from . import common as C, etalon, expected, leakguard, oracle_old, recording as R, selfcheck, step2, synth
 
 STEP2_RC = 3
 
@@ -75,6 +77,36 @@ def cmd_oracle(a):
     return 0
 
 
+def cmd_guard_synth(a):
+    """Сторож на згенерованих файлах (записи, пакети, еталони). 1 — збіги, 2 — контроль не падає."""
+    nums, names = leakguard.lexicon(a.raw)
+    print('лексикон: чисел %d, власних назв %d' % (len(nums), len(names)))
+    if not leakguard.control(nums, names):
+        print('КОНТРОЛЬ НЕ ПАДАЄ: сторож нічого не вміє знаходити')
+        return 2
+    n, bad = leakguard.scan_generated(nums, names)
+    print('перевірено файлів: %d; файлів зі збігами: %d; усього збігів: %d' % (n, len(bad), sum(bad.values())))
+    return 1 if bad else 0
+
+
+def cmd_guard_files(a):
+    """Сторож перед комітом для коду й документації режиму API: як `samples.py guard`, але з `api_guard_allowed_words`."""
+    import subprocess
+    from sslib import guard
+    nums, names = leakguard.lexicon(a.raw)
+    if not leakguard.control(nums, names):
+        print('КОНТРОЛЬ НЕ ПАДАЄ: сторож нічого не вміє знаходити')
+        return 2
+    files = list(a.files or [])
+    if a.staged:
+        out = subprocess.run(['git', 'diff', '--cached', '--name-only', '-z'], capture_output=True).stdout
+        files += [x.decode('utf-8') for x in out.split(b'\x00') if x]
+    res = guard.scan_files(files, nums, names)
+    bad = sum(1 for v in res.values() if v)
+    print('перевірено файлів: %d; файлів зі збігами: %d; усього збігів: %d' % (len(res), bad, sum(res.values())))
+    return 1 if bad else 0
+
+
 def cmd_pack(a):
     _write(a.out, R.Recording.from_dir(a.recording).pack())
     return 0
@@ -118,6 +150,14 @@ def main(argv):
     p.add_argument('--privat-id', default='REF+REFN', choices=['REF+REFN', 'TECHNICAL_TRANSACTION_ID', 'ID', 'none'])
     p.add_argument('--disable', nargs='*', choices=sorted(expected.DEVIATIONS))
     p.set_defaults(fn=cmd_oracle)
+    p = sub.add_parser('guard-synth')
+    p.add_argument('--raw', required=True)
+    p.set_defaults(fn=cmd_guard_synth)
+    p = sub.add_parser('guard')
+    p.add_argument('--raw', required=True)
+    p.add_argument('--files', nargs='*')
+    p.add_argument('--staged', action='store_true')
+    p.set_defaults(fn=cmd_guard_files)
     p = sub.add_parser('pack')
     p.add_argument('--recording', required=True)
     p.add_argument('--out', required=True)

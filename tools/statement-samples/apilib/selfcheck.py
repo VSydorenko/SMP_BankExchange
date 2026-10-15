@@ -35,6 +35,7 @@ def _privat_rec(tx, next_id=None):
     p = Params(account=_privat_iban(OWN14), period_start=datetime(2020, 1, 7), period_end=datetime(2020, 1, 7, 23, 59, 59),
                old_account_currency='980')
     b = S.Builder('privat', 'doc', p)
+    b.settings(S.resp_json(200, S.privat_settings_body('28.03.2020 00:00:00')))   # приклад settings із документації
     b.privat(S.resp_json(200, S.privat_page([tx], nxt=next_id)))
     if next_id:
         b.privat(S.resp_json(200, S.privat_page([], exist=False)), follow=next_id)
@@ -51,6 +52,8 @@ def _mono_rec(bank, txs, iban):
     if bank == 'mono-fop':
         b.client_info(S.resp_json(200, {'clientId': '1', 'accounts': [{'id': 'doc-account-id', 'iban': iban}]}))
     b.statement(S.to_unix(p.period_start), S.to_unix(p.period_end), S.resp_json(200, txs))
+    if bank == 'mono-corp':
+        b.balances(S.resp_json(200, S.corp_balances_body(p)))
     m = S.R.make_manifest(bank, 'doc-' + bank, b.ex)
     return S.R.Recording(m, b.ex), p
 

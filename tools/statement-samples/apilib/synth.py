@@ -142,6 +142,15 @@ class Builder:
             q += '&followId=' + follow
         self.add({'path': C.PRIVAT_PATH, 'query': q}, resp, failure)
 
+    def settings(self, resp=None, failure=None):
+        self.add({'path': C.PRIVAT_SETTINGS_PATH, 'query': ''}, resp, failure)
+
+    def balances(self, resp=None, failure=None):
+        p = self.p
+        self.add({'path': '/ext/v1/accounts/%s/balances' % p.account,
+                  'query': 'dateFrom=%s&dateTo=%s' % (p.period_start.strftime('%Y-%m-%d'), p.period_end.strftime('%Y-%m-%d'))},
+                 resp, failure)
+
     def client_info(self, resp=None, failure=None):
         self.add({'path': C.FOP_CLIENT_INFO, 'query': ''}, resp, failure)
 
@@ -160,6 +169,27 @@ def seqid(prefix, i, width=4):
     return '%s-%s' % (prefix, ''.join('abcdefghij'[int(c)] for c in '%0*d' % (width, i)))
 
 
+def privat_settings_body(final='30.10.2026 00:00:00'):
+    """Відповідь `/api/statements/settings` за privat.txt («Отримання серверних дат»); `final` — date_final_statement."""
+    return {'status': 'SUCCESS', 'type': 'settings',
+            'settings': {'phase': 'WRK', 'dates_without_oper_day': ['01.01.2026 00:00:00'], 'today': '15.10.2026 00:00:00',
+                         'lastday': '14.10.2026 00:00:00', 'work_balance': 'N', 'server_date_time': '15.10.2026 12:03:51',
+                         'date_final_statement': final}}
+
+
+def corp_balances_body(p, flags=None, absent=()):
+    """Відповідь `balances` юросіб (corp-api): [{date, balance, isFinal}] за кожен день періоду. `flags` — {день 'YYYY-MM-DD':
+    isFinal}; за замовчуванням усі дні остаточні; `absent` — дні, яких у відповіді немає."""
+    out, day = [], datetime(p.period_start.year, p.period_start.month, p.period_start.day)
+    last = datetime(p.period_end.year, p.period_end.month, p.period_end.day)
+    while day <= last:
+        key = day.strftime('%Y-%m-%d')
+        if key not in absent:
+            out.append({'date': key, 'balance': 1000050, 'isFinal': (flags or {}).get(key, True)})
+        day += timedelta(days=1)
+    return out
+
+
 def to_unix(local):
     return kyiv.local_to_unix(local)
 
@@ -172,7 +202,7 @@ def next_to(earliest_unix):
 # ====================================================================== побудова записів транзакцій
 def ptx(g, own14, *, when, tran, state='r', amount='100.00', ccy='UAH', ref=None, refn='1', num=None, osnd=None,
         cnt_acc=None, cnt_name='', cnt_crf='', cnt_mfo='305299', my_name='ТОВ "Вигадана Назва"', my_crf='', my_mfo='305299',
-        pid=None, drop=()):
+        pid=None, tech=None, drop=()):
     """Транзакція ПриватБанку за схемою `privat.txt` («Приклад відповіді з транзакціями»). `drop` — поля, яких немає."""
     pid = pid or g.digits(9)
     ref = ref or 'DN' + g.refid()
@@ -184,7 +214,7 @@ def ptx(g, own14, *, when, tran, state='r', amount='100.00', ccy='UAH', ref=None
          'DAT_OD': when.strftime('%d.%m.%Y'), 'OSND': osnd if osnd is not None else g.phrase(), 'SUM': amount,
          'SUM_E': amount, 'REF': ref, 'REFN': refn, 'TIM_P': when.strftime('%H:%M'),
          'DATE_TIME_DAT_OD_TIM_P': _fmt_1c(when), 'ID': pid, 'TRANTYPE': tran, 'DLR': 'J' + g.digits(8),
-         'TECHNICAL_TRANSACTION_ID': pid + '_online'}
+         'TECHNICAL_TRANSACTION_ID': tech or pid + '_online'}
     for k in drop:
         d.pop(k, None)
     return d
@@ -270,10 +300,13 @@ def _privat_scenarios():
     own14, base = _privat_params(g)
     sc = []
 
-    def new(sid, title, focus, **kw):
+    def new(sid, title, focus, settings='30.10.2026 00:00:00', **kw):
         p = Params(**{**base.__dict__, **kw})
         s = Scenario('privat', sid, title, focus, p)
-        return s, Builder('privat', sid, p)
+        b = Builder('privat', sid, p)
+        if settings:                       # `/settings` — перший запит читання (банківська межа, D36 п. 10)
+            b.settings(resp_json(200, privat_settings_body(settings)))
+        return s, b
 
     day = _day(2026, 10, 15)
     cnt = lambda: dict(cnt_acc=g.acc14(), cnt_name=g.name(), cnt_crf=g.edrpou())
@@ -283,7 +316,8 @@ def _privat_scenarios():
     orig = ptx(g, own14, when=day.replace(hour=0, minute=30), tran='D', amount='250.50', ref='DNORIGAB1CDE1A', refn='1', **cnt())
     rows1 = [ptx(g, own14, when=day.replace(hour=10, minute=15), tran='C', amount='1500.00', **cnt()),
              orig,
-             ptx(g, own14, when=day.replace(hour=12), tran='C', state='p', amount='77.70', **cnt()),
+             ptx(g, own14, when=day.replace(hour=12), tran='C', state='p', amount='77.70', ref='DNPENDAB2CDE1A', refn='1',
+                pid='55700a001', **cnt()),
              ptx(g, own14, when=day.replace(hour=12, minute=5), tran='C', state='n', amount='19.99', **cnt()),
              ptx(g, own14, when=day.replace(hour=12, minute=30), tran='C', state='t', amount='40.00', **cnt())]
     rows2 = [ptx(g, own14, when=day.replace(hour=13), tran='C', state='t', amount='250.50', ref='DNORIGAB1CDE1A', refn='1', **cnt()),
@@ -295,10 +329,10 @@ def _privat_scenarios():
     sc.append(s)
 
     # --- Повтор: той самий період наступного разу; p уже проведена, той самий ідентифікатор
-    s, b = new('СинтПовтор', 'ПриватБанк: друге читання, операція зі стану p стала r (ті самі REF/REFN)', [2])
+    s, b = new('СинтПовтор', 'ПриватБанк: друге читання, p стала r: ті самі REF/REFN, інший TECHNICAL_TRANSACTION_ID', [2])
     first = {'ref': 'DNPENDAB2CDE1A', 'refn': '1'}
     b.privat(resp_json(200, privat_page([
-        ptx(g, own14, when=day.replace(hour=12), tran='C', amount='77.70', pid='55700a001', **first, **cnt()),
+        ptx(g, own14, when=day.replace(hour=12), tran='C', amount='77.70', pid='55700a001', tech='55700a001_final', **first, **cnt()),
         ptx(g, own14, when=day.replace(hour=16), tran='D', amount='15.00', **cnt())])))
     s.exchanges = b.ex
     sc.append(s)
@@ -362,15 +396,47 @@ def _privat_scenarios():
     s.exchanges = b.ex
     sc.append(s)
 
-    s, b = new('СинтОшибкаСтатус', 'ПриватБанк: status = ERROR при HTTP 200', [4])
+    s, b = new('СинтОшибкаСтатус', 'ПриватБанк: status = ERROR при HTTP 200, тимчасова помилка сервісу (повторити)', [4])
     b.privat(resp_json(200, privat_page(two(), nxt='620699373_online')))
-    b.privat(resp_json(200, {'status': 'ERROR', 'type': 'transactions', 'message': 'Search error: temporary failure'}),
+    b.privat(resp_json(200, {'status': 'ERROR', 'type': 'transactions', 'code': '500', 'message': 'Search error: temporary failure',
+                             'requestId': '20261015_101010_abcd', 'serviceCode': 'SERVICE_ERROR_LOCAL_JOURNAL'}),
              follow='620699373_online')
     s.exchanges = b.ex
     sc.append(s)
 
-    s, b = new('СинтТокен401', 'ПриватБанк: недійсний токен (401)', [4])
-    b.privat(resp_json(401, {'status': 'ERROR', 'type': 'transactions', 'message': 'Invalid token'}))
+    s, b = new('СинтОшибкаАвторизация', 'ПриватБанк: status = ERROR при HTTP 200, автентифікація (CLIENT_AUTH_P24_NOT_VALID)', [4])
+    b.privat(resp_json(200, {'status': 'ERROR', 'type': 'transactions', 'code': '401', 'message': 'Invalid token',
+                             'requestId': '20261015_101011_abce', 'serviceCode': 'CLIENT_AUTH_P24_NOT_VALID'}))
+    s.exchanges = b.ex
+    sc.append(s)
+
+    s, b = new('СинтДубль', 'ПриватБанк: та сама операція на двох сторінках (однаковий запис, REF/REFN)', [3])
+    x = ptx(g, own14, when=day.replace(hour=10), tran='C', amount='11.00', **cnt())
+    b.privat(resp_json(200, privat_page([x, ptx(g, own14, when=day.replace(hour=11), tran='D', amount='12.00', **cnt())],
+                                        nxt='620699375_online')))
+    b.privat(resp_json(200, privat_page([x, ptx(g, own14, when=day.replace(hour=12), tran='C', amount='13.00', **cnt())])),
+             follow='620699375_online')
+    s.exchanges = b.ex
+    sc.append(s)
+
+    s, b = new('СинтТокен401', 'ПриватБанк: недійсний токен (401) — на першому запиті, /settings', [4], settings=None)
+    b.settings(resp_json(401, {'status': 'ERROR', 'type': 'settings', 'message': 'Invalid token'}))
+    s.exchanges = b.ex
+    sc.append(s)
+
+    s, b = new('СинтНастройкиСбой', 'ПриватБанк: збій самого обміну /settings (HTTP 500)', [4], settings=None)
+    b.settings(resp_json(500, {'message': 'Service temporarily unavailable'}))
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # --- Межа довіри: date_final_statement 14.10 -> банківська межа 14.10 00:00 (сам день вважаємо не остаточним);
+    # неостаточна p лише 15.10 12:00, тож межу задає банк
+    s, b = new('СинтГраницаПриват', 'ПриватБанк: ГраницаДоверия за date_final_statement (14.10), p пізніше', [2],
+               settings='14.10.2026 00:00:00', period_start=_day(2026, 10, 13), period_end=_day(2026, 10, 15, 23, 59, 59))
+    b.privat(resp_json(200, privat_page([
+        ptx(g, own14, when=_day(2026, 10, 13, 10), tran='C', amount='100.00', **cnt()),
+        ptx(g, own14, when=_day(2026, 10, 14, 10), tran='D', amount='20.00', **cnt()),
+        ptx(g, own14, when=_day(2026, 10, 15, 12), tran='C', state='p', amount='5.00', **cnt())])))
     s.exchanges = b.ex
     sc.append(s)
 
@@ -678,6 +744,30 @@ def _corp_scenarios():
     sc.append(s)
 
     _mono_failures(sc, new, None, one, g, cnt, 'mono-corp', t0)
+
+    # Межа довіри: дні 14.10 final, 15.10 НЕ final (діра), 16.10 final, 17.10 не final. Межа — початок ПЕРШОГО неостаточного
+    # дня (15.10 00:00), а не кінець останнього остаточного (16.10 24:00).
+    s, b = new('СинтГраницаДыра', 'monobank юросіб: balances з діркою (isFinal: так, ні, так, ні) — межа на першому неостаточному дні', [2],
+               start=_day(2026, 10, 14), end=_day(2026, 10, 17, 23, 59, 59))
+    one(b, [ctx_(g, t=utc(2026, 10, 14, 8), amount=-1000, desc='Операція', done=utc(2026, 10, 14, 8) + 10, cnt=cnt())],
+        s.params.period_start, s.params.period_end)
+    b.balances(resp_json(200, corp_balances_body(s.params, {'2026-10-15': False, '2026-10-17': False})))
+    s.exchanges = b.ex
+    sc.append(s)
+
+    s, b = new('СинтБалансыСбой', 'monobank юросіб: виписка прочитана, збій самого обміну balances (HTTP 500)', [4])
+    one(b, [ctx_(g, t=t0 + 60, amount=-500, desc='Операція', done=t0 + 70, cnt=cnt())], s.params.period_start, s.params.period_end)
+    b.balances(resp_json(500, {'errorCode': 'internal', 'errorDescription': 'Internal server error'}))
+    s.exchanges = b.ex
+    sc.append(s)
+
+    with_balances = {'СинтСтатусы', 'СинтПовтор', 'СинтПоля', 'СинтСтраницы', 'СинтВремяВесна', 'СинтВремяОсень', 'СинтВалюта',
+                     'СинтПусто', 'СинтЛимит429'}
+    for s in sc:
+        if s.sid in with_balances:
+            b = Builder('mono-corp', s.sid, s.params)
+            b.ex = s.exchanges
+            b.balances(resp_json(200, corp_balances_body(s.params)))
 
     s, b = new('СинтСчетНеНайден404', 'monobank юросіб: IBAN не знайдено (404)', [4])
     b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),

@@ -25,7 +25,10 @@ PRIVAT_TX = {
     'PAYER_ULTMT_COUNTRY_CODE': 'KEEP', 'RECIPIENT_ULTMT_NCEO': 'CODE', 'RECIPIENT_ULTMT_DOCUMENT': 'SCRAMBLE',
     'RECIPIENT_ULTMT_NAME': 'NAME', 'RECIPIENT_ULTMT_COUNTRY_CODE': 'KEEP', 'STRUCT_CODE': 'KEEP', 'STRUCT_TYPE': 'KEEP',
     'STRUCT_CATEGORY': 'PURPOSE'}
-PRIVAT_PAGE = {'status': 'KEEP', 'type': 'KEEP', 'exist_next_page': 'KEEP', 'next_page_id': 'ID', 'message': 'KEEP',
+PRIVAT_SETTINGS = {'phase': 'KEEP', 'dates_without_oper_day': 'ARRAY', 'today': 'KEEP', 'lastday': 'KEEP', 'work_balance': 'KEEP',
+                    'server_date_time': 'KEEP', 'date_final_statement': 'KEEP'}
+PRIVAT_PAGE = {'settings': 'OBJECT', 'status': 'KEEP', 'type': 'KEEP', 'exist_next_page': 'KEEP', 'next_page_id': 'ID', 'message': 'KEEP',
+               'code': 'KEEP', 'serviceCode': 'KEEP', 'requestId': 'ID',
                'transactions': 'ARRAY'}
 
 MONO_FOP_TX = {
@@ -43,12 +46,13 @@ MONO_CORP_TX = {
     'currencyCode': 'KEEP', 'receiptId': 'ID', 'counterEdrpou': 'CODE', 'counterIban': 'ACC', 'counterName': 'NAME',
     'reverse': 'KEEP', 'status': 'KEEP', 'ultimateDebit': 'OBJECT'}
 MONO_CORP_ULTIMATE = {'name': 'NAME', 'idCode': 'CODE'}
+MONO_CORP_BALANCE = {'date': 'KEEP', 'balance': 'SCRAMBLE', 'isFinal': 'KEEP'}
 ERROR_BODY = {'errorCode': 'KEEP', 'errorDescription': 'KEEP'}
 
 ROLES = {
-    'privat': {'page': PRIVAT_PAGE, 'tx': PRIVAT_TX},
+    'privat': {'page': PRIVAT_PAGE, 'tx': PRIVAT_TX, 'settings': PRIVAT_SETTINGS},
     'mono-fop': {'tx': MONO_FOP_TX, 'client': MONO_FOP_CLIENT, 'account': MONO_FOP_ACCOUNT, 'error': ERROR_BODY},
-    'mono-corp': {'tx': MONO_CORP_TX, 'ultimate': MONO_CORP_ULTIMATE, 'error': ERROR_BODY},
+    'mono-corp': {'tx': MONO_CORP_TX, 'ultimate': MONO_CORP_ULTIMATE, 'balance': MONO_CORP_BALANCE, 'error': ERROR_BODY},
 }
 
 

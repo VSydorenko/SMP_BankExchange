@@ -28,6 +28,8 @@
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 
+from datetime import datetime, timedelta
+
 from . import common as C, kyiv, oracle_old, recording as R
 
 DEVIATIONS = {
@@ -79,8 +81,10 @@ class Expected:
     rules: set = field(default_factory=set)          # id контрактних правил, що спрацювали
     items: int = 0                                   # скільки записів прочитано (для інваріанта «жодна не зникла»)
     duplicates: int = 0
+    duplicate_numbers: list = field(default_factory=list)
     silent: int = 0                                  # відкинуто без сліду (лише вимкнений відступ чи старий пропуск)
     nonfinal: list = field(default_factory=list)     # моменти неостаточних операцій
+    bank_boundary: object = None                     # межа остаточності від банку (settings / balances), D36 п. 10
 
     def diag(self, level, n, essence, dev=None, **facts):
         self.diags.append({'Уровень': level, 'ПорядковыйНомер': n, 'Суть': essence, 'Отступ': dev or '', 'Факты': facts})
@@ -241,26 +245,74 @@ def _retry_seconds(ex):
 
 
 # ====================================================================== контрактні правила
-def rule_failure_class(bank, ex, essence=None):
-    """Клас відмови (D36 п. 8) і факти для тексту людині. Класифікує конектор, бо знає факт: статус і відповідь банку.
-    -> (клас, факти). «Повторити»: мережа, таймаут, 5xx, 429 після дозволеного повтору, тіло не того формату, будь-яка інша
-    відповідь; «дія людини»: автентифікація (401/403), 400/404 (формат запиту, рахунку немає)."""
+PRIVAT_AUTH_SERVICE_PREFIX = 'CLIENT_AUTH'      # privat.txt: CLIENT_AUTH, _DENY, _BADSESSION, _P24_CHECK_ERR, _P24_NOT_VALID, _ERROR
+
+
+def rule_failure_class(bank, ex):
+    """Клас відмови (D36 п. 8) і факти для тексту людині. Принцип: чи допоможе повтор?
+    «Повторити» — мережа, таймаут, 408, 429 (після дозволеного повтору), 5xx, будь-яка інша нестандартна відповідь;
+    «дія людини» — 401, 403 та інші 4xx (токен, права, формат запиту, рахунку немає)."""
     facts = {'Банк': BANK_NAMES[bank]}
     if ex['failure']:
         facts.update(Вид=ex['failure']['kind'], Статус='', ОписаниеБанка='')
         return CLS_RETRY, facts
     st = ex['response']['status']
     facts.update(Вид='http', Статус=st, ОписаниеБанка=C.error_description(ex))
-    if st in (401, 403, 400, 404):
+    if st in (408, 429) or st >= 500:
+        return CLS_RETRY, facts
+    if 400 <= st < 500:
         return CLS_HUMAN, facts
     return CLS_RETRY, facts
 
 
+def rule_privat_api_error(js):
+    """`status: ERROR` при HTTP 200 (тіло за privat.txt: `code` — HTTP-статус рядком, `message`, `serviceCode`).
+    Той самий принцип: автентифікація (`serviceCode` починається з CLIENT_AUTH) та 4xx у `code` — «дія людини»;
+    решта (5xx, немає коду) — «повторити». Перелік `CLIENT_AUTH*` — з документації."""
+    code = C.trim(C.to_str(js.get('code')))
+    service = C.trim(C.to_str(js.get('serviceCode')))
+    facts = {'Банк': BANK_NAMES['privat'], 'Вид': 'api-error', 'Статус': 200, 'ОписаниеБанка': C.to_str(js.get('message')),
+             'КодСервиса': service}
+    human = service.startswith(PRIVAT_AUTH_SERVICE_PREFIX) or (code.isdigit() and 400 <= int(code) < 500)
+    return (CLS_HUMAN if human else CLS_RETRY), facts
+
+
 def rule_trust_boundary(out, p):
-    """Межа довіри: момент першої неостаточної операції, інакше кінець періоду; при відмові — не визначена."""
+    """Межа довіри (D36 п. 10): найраніша з `КонецПериода`, моменту першої неостаточної операції й банківської межі
+    (ПриватБанк — `date_final_statement`; юросіб — початок першого дня без `isFinal`; ФОП — лише `hold`); не раніша за
+    `НачалоПериода`. При непорожньому класі відмови — `НачалоПериода`: нічого не підтверджено."""
     if out.failure_class:
-        return None
-    return min(out.nonfinal) if out.nonfinal else p.period_end
+        return p.period_start
+    cands = [p.period_end] + list(out.nonfinal)
+    if out.bank_boundary is not None:
+        cands.append(out.bank_boundary)
+    return max(p.period_start, min(cands))
+
+
+def rule_bank_boundary_privat(settings_day, p):
+    """ПриватБанк: `date_final_statement` — «дата, включно з якої є підсумкова виписка». Чи остаточний сам цей день —
+    не виміряно; до виміру день вважається НЕ остаточним (межа = його початок), параметр `privat_final_date_inclusive`."""
+    start = settings_day.replace(hour=0, minute=0, second=0)
+    return start + timedelta(days=1) if p.privat_final_date_inclusive else start
+
+
+def rule_bank_boundary_corp(balances, p):
+    """monobank юросіб: початок ПЕРШОГО дня запитаного періоду без `isFinal = true` (не кінець останнього остаточного
+    дня: межа не мусить перескочити діру). День, якого немає у відповіді, до виміру вважається не остаточним
+    (`corp_absent_day_is_final`). -> datetime або None, якщо всі дні остаточні."""
+    final = {}
+    for b in balances:
+        if isinstance(b, dict) and b.get('date'):
+            final[C.to_str(b['date'])] = b.get('isFinal') is True
+    day = datetime(p.period_start.year, p.period_start.month, p.period_start.day)
+    last = datetime(p.period_end.year, p.period_end.month, p.period_end.day)
+    while day <= last:
+        key = day.strftime('%Y-%m-%d')
+        ok = final[key] if key in final else p.corp_absent_day_is_final
+        if not ok:
+            return day
+        day += timedelta(days=1)
+    return None
 
 
 def rule_complete(out):
@@ -278,39 +330,70 @@ def rule_unknown_direction(out, n, value, ident):
     out.rules.add('rule_unknown_direction')
 
 
-def rule_page_without_id(out, ex):
-    """exist_next_page без next_page_id: читати далі нічим — читання неповне, клас «повторити»."""
-    out.failure_class = CLS_RETRY
-    out.complete = False
-    out.diag('Ошибка', 0, 'read-failed', None, Банк=BANK_NAMES['privat'], Вид='page-without-id', Статус=200,
-             ОписаниеБанка='')
-    out.rules.add('rule_page_without_id')
-
-
-def rule_dedupe_by_id(seen, item, ident):
-    """Той самий запис на межі сторінок (id і вміст ті самі) — один раз. -> 'dup' | 'conflict' | 'new'."""
-    prev = seen.get(ident)
-    if prev is None:
-        seen[ident] = item
-        return 'new'
-    return 'dup' if prev.raw == item.raw else 'conflict'
-
-
-def _failure(out, ex, bank, essence='read-failed'):
-    cls, facts = rule_failure_class(bank, ex)
+def _fail(out, cls, facts, essence='read-failed'):
+    """Збій читання з непорожнім класом: неповне читання (курсор утримується), даних не втрачено -> `Предупреждение`.
+    `Ошибка` — лише операція, яку неможливо подати."""
     out.failure_class = cls
     out.complete = False
-    out.diag('Ошибка', 0, essence, None, **facts)
+    out.diag('Предупреждение', 0, essence, None, **facts)
     out.rules.add('rule_failure_class')
 
 
+def _failure(out, ex, bank):
+    cls, facts = rule_failure_class(bank, ex)
+    _fail(out, cls, facts)
+
+
+def _fail_not_json(out, bank, kind='not-json'):
+    _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': kind, 'Статус': 200, 'ОписаниеБанка': ''})
+
+
+def rule_page_without_id(out, ex):
+    """exist_next_page без next_page_id: читати далі нічим — читання неповне, «повторити», `Предупреждение`."""
+    _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'page-without-id', 'Статус': 200, 'ОписаниеБанка': ''})
+    out.rules.add('rule_page_without_id')
+
+
+def rule_dedupe_by_id(out, items, ident_of, is_final, is_reversal):
+    """Дублі в одному читанні — за ідентифікатором операції. Фільтр стану СПЕРШУ, як у попередника (MU:309-323,
+    MF:312-324): неостаточний запис у `seen` не потрапляє, тож `DONE` з тим самим id на наступній сторінці не губиться.
+    Тотожний запис (id і вміст) — один раз; той самий id з іншим вмістом, що не реверс, — `Ошибка conflicting-duplicate`.
+    Якщо ідентифікатора немає (`ident_of` дає порожнє — зокрема Приват без стабільного ідентифікатора), дедуплікації за
+    вмістом НЕМАЄ: дві справжні однакові операції не зливаються (D35.4). -> множина номерів, які далі не обробляються."""
+    seen, seen_nonfinal, skip = {}, {}, set()
+    for it in items:
+        idv = ident_of(it)
+        if not idv:
+            continue
+        table = seen if is_final(it) else seen_nonfinal
+        prev = table.get(idv)
+        if prev is None:
+            table[idv] = it
+        elif prev.raw == it.raw:
+            out.duplicates += 1
+            out.duplicate_numbers.append(it.n)
+            skip.add(it.n)
+            out.rules.add('rule_dedupe_by_id')
+        elif table is seen and not (is_reversal(it) or is_reversal(prev)):
+            out.diag('Ошибка', it.n, 'conflicting-duplicate', None, Ид=idv)
+            skip.add(it.n)
+            out.rules.add('rule_dedupe_by_id')
+    return skip
+
+
 # ====================================================================== ПриватБанк
+def _privat_state(raw):
+    return C.to_str(raw.get('PR_PR')) or 'r'
+
+
 def _privat(rec, p, out, disabled):
     items = []
+    n = 0
+    if not _privat_settings(rec, p, out):
+        return
     exs = C.exchanges_for(rec, C.PRIVAT_PATH)
     if not exs:
         raise RecordingMismatch('у записі немає запитів транзакцій ПриватБанку')
-    n = 0
     for ex in exs:
         if ex['failure'] or ex['response']['status'] != 200:
             _failure(out, ex, 'privat')
@@ -318,17 +401,18 @@ def _privat(rec, p, out, disabled):
         try:
             js = R.body_json(ex)
         except R.NotJson:
-            out.failure_class, out.complete = CLS_RETRY, False
-            out.diag('Ошибка', 0, 'read-failed', None, Банк=BANK_NAMES['privat'], Вид='not-json', Статус=200,
-                     ОписаниеБанка='')
-            out.rules.add('rule_failure_class')
+            _fail_not_json(out, 'privat')
             break
-        if not isinstance(js, dict) or js.get('status') != 'SUCCESS':
-            desc = C.to_str(js.get('message')) if isinstance(js, dict) else ''
-            out.failure_class, out.complete = CLS_RETRY, False
-            out.diag('Ошибка', 0, 'read-failed', None, Банк=BANK_NAMES['privat'], Вид='api-error', Статус=200,
-                     ОписаниеБанка=desc)
-            out.rules.add('rule_failure_class')
+        if not isinstance(js, dict):
+            _fail_not_json(out, 'privat', 'not-object')
+            break
+        if js.get('status') != 'SUCCESS':
+            if js.get('status') == 'ERROR':
+                cls, facts = rule_privat_api_error(js)
+            else:
+                cls, facts = CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'unexpected-status', 'Статус': 200,
+                                         'ОписаниеБанка': C.to_str(js.get('message'))}
+            _fail(out, cls, facts)
             break
         for tx in js.get('transactions') or []:
             n += 1
@@ -346,16 +430,55 @@ def _privat(rec, p, out, disabled):
     _privat_items(out, items, p, disabled)
 
 
+def _privat_settings(rec, p, out):
+    """Обмін `/settings` (банківська межа): перший запит читання. Збій — відмова за п. 8. -> True, якщо читати далі."""
+    exs = C.exchanges_for(rec, C.PRIVAT_SETTINGS_PATH)
+    if not exs:
+        raise RecordingMismatch('у записі ПриватБанку немає /settings')
+    ex = exs[0]
+    if ex['failure'] or ex['response']['status'] != 200:
+        _failure(out, ex, 'privat')
+        return False
+    try:
+        js = R.body_json(ex)
+    except R.NotJson:
+        _fail_not_json(out, 'privat')
+        return False
+    if isinstance(js, dict) and js.get('status') == 'ERROR':
+        cls, facts = rule_privat_api_error(js)
+        _fail(out, cls, facts)
+        return False
+    try:
+        day = C.parse_1c_date(C.to_str(js['settings']['date_final_statement']))
+    except (KeyError, TypeError, ValueError):
+        _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'bad-settings', 'Статус': 200, 'ОписаниеБанка': ''})
+        return False
+    out.bank_boundary = rule_bank_boundary_privat(day, p)
+    return True
+
+
 def _privat_items(out, items, p, disabled):
+    def ident_of(it):
+        return dev7_privat_identifier(it.raw, p, set()) if p.privat_id else ''
+
+    def is_final(it):
+        return _privat_state(it.raw) in ('r', 't')
+
+    def is_reversal(it):
+        return _privat_state(it.raw) == 't'
+
+    skip = rule_dedupe_by_id(out, items, ident_of, is_final, is_reversal)
     by_ident = {}
     for it in items:
-        idv = dev7_privat_identifier(it.raw, p, set()) if p.privat_id else ''
-        by_ident.setdefault(idv, []).append(it) if idv else None
+        if is_final(it) and ident_of(it):
+            by_ident.setdefault(ident_of(it), []).append(it)
     for it in items:
+        if it.n in skip:
+            continue
         d, n = it.raw, it.n
-        state = C.to_str(d.get('PR_PR')) or 'r'
+        state = _privat_state(d)
         # у діагностиці — той самий ідентифікатор, який операція матиме наступного разу (Review Focus 2)
-        ident_for_diag = (dev7_privat_identifier(d, p, set()) if p.privat_id else '') or C.to_str(d.get('TECHNICAL_TRANSACTION_ID'))
+        ident_for_diag = ident_of(it) or C.to_str(d.get('TECHNICAL_TRANSACTION_ID'))
         try:
             moment = C.parse_1c_date(C.to_str(d.get('DATE_TIME_DAT_OD_TIM_P')))
         except ValueError:
@@ -367,7 +490,7 @@ def _privat_items(out, items, p, disabled):
         elif state == 'n':
             verdict = dev3_privat_rejected(out, disabled, n, ident_for_diag, moment)
         elif state == 't':
-            idv = dev7_privat_identifier(d, p, set()) if p.privat_id else ''
+            idv = ident_of(it)
             collides = bool(idv) and any(o is not it for o in by_ident.get(idv, []))
             verdict = dev4_reversal(out, disabled, n, 't', ident_for_diag, collides, 'emit')
         elif state != 'r':
@@ -430,14 +553,10 @@ def _mono(rec, p, out, disabled):
         except (R.NotJson, AttributeError):
             accounts = None
         if accounts is None:
-            out.failure_class, out.complete = CLS_RETRY, False
-            out.diag('Ошибка', 0, 'read-failed', None, Банк=BANK_NAMES[bank], Вид='not-json', Статус=200, ОписаниеБанка='')
-            out.rules.add('rule_failure_class')
+            _fail_not_json(out, bank)
             return
         if not any(isinstance(a, dict) and a.get('iban') == p.account for a in accounts):
-            out.failure_class, out.complete = CLS_HUMAN, False
-            out.diag('Ошибка', 0, 'account-not-found', None, Банк=BANK_NAMES[bank])
-            out.rules.add('rule_failure_class')
+            _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES[bank]}, 'account-not-found')
             return
     stmts = C.statement_exchanges(rec)
     if not stmts:
@@ -466,10 +585,7 @@ def _mono(rec, p, out, disabled):
         except R.NotJson:
             page = None
         if not isinstance(page, list):
-            out.failure_class, out.complete = CLS_RETRY, False
-            out.diag('Ошибка', 0, 'read-failed', None, Банк=BANK_NAMES[bank], Вид='not-json' if page is None else 'not-array',
-                     Статус=200, ОписаниеБанка='')
-            out.rules.add('rule_failure_class')
+            _fail_not_json(out, bank, 'not-json' if page is None else 'not-array')
             break
         earliest = None
         start_local, upper_local = kyiv.unix_to_local(frm), kyiv.unix_to_local(to)
@@ -494,30 +610,53 @@ def _mono(rec, p, out, disabled):
     out.complete = out.complete and complete
     out.items = n
     _mono_items(out, items, p, disabled, corp)
+    if corp and not out.failure_class:
+        _corp_balances(rec, p, out)
+
+
+def _corp_balances(rec, p, out):
+    """Обмін `balances` (банківська межа юросіб): після виписки. Збій — відмова за п. 8, прочитане лишається."""
+    exs = [e for e in rec.exchanges if e['request']['path'].endswith('/balances')]
+    if not exs:
+        raise RecordingMismatch('у записі юросіб немає balances')
+    ex = exs[0]
+    if ex['response'] and ex['response']['status'] == 429 and len(exs) > 1:
+        ex = exs[1]                                         # один повтор після 429
+    if ex['failure'] or ex['response']['status'] != 200:
+        _failure(out, ex, 'mono-corp')
+        return
+    try:
+        balances = R.body_json(ex)
+    except R.NotJson:
+        balances = None
+    if not isinstance(balances, list):
+        _fail_not_json(out, 'mono-corp', 'not-json' if balances is None else 'not-array')
+        return
+    out.bank_boundary = rule_bank_boundary_corp(balances, p)
 
 
 def _mono_items(out, items, p, disabled, corp):
-    bank = 'mono-corp' if corp else 'mono-fop'
+    def ident_of(it):
+        return C.to_str(it.raw.get('id'))
+
+    def is_final(it):
+        if corp:
+            return C.to_str(it.raw.get('status')) == 'DONE'
+        return it.raw.get('hold') is not True
+
+    def is_reversal(it):
+        return corp and it.raw.get('reverse') is True
+
+    skip = rule_dedupe_by_id(out, items, ident_of, is_final, is_reversal)
     by_id = {}
     for it in items:
-        by_id.setdefault(C.to_str(it.raw.get('id')), []).append(it)
-
-    def is_reversal(r):
-        return corp and r.get('reverse') is True
-
-    seen = {}
+        if is_final(it):
+            by_id.setdefault(ident_of(it), []).append(it)
     for it in items:
+        if it.n in skip:
+            continue
         r, n = it.raw, it.n
-        ident = C.to_str(r.get('id'))
-        v = rule_dedupe_by_id(seen, it, ident)
-        if v == 'dup':
-            out.duplicates += 1
-            out.rules.add('rule_dedupe_by_id')
-            continue
-        if v == 'conflict' and not is_reversal(r) and not is_reversal(seen[ident].raw):
-            out.diag('Ошибка', n, 'conflicting-duplicate', None, Ид=ident)
-            out.rules.add('rule_dedupe_by_id')
-            continue
+        ident = ident_of(it)
         moment_sec = r.get('completedTime') if corp and r.get('completedTime') is not None else r.get('time')
         try:
             moment = dev8_local_time(int(moment_sec), p, disabled)
@@ -538,7 +677,7 @@ def _mono_items(out, items, p, disabled, corp):
                 rule_unknown_state(out, n, status, ident)
                 continue
             elif r.get('reverse') is True:
-                collides = any(o is not it and not is_reversal(o.raw) for o in by_id[ident])
+                collides = any(o is not it and not is_reversal(o) for o in by_id.get(ident, []))
                 verdict = dev4_reversal(out, disabled, n, 'reverse', ident, collides, 'silent')
         elif r.get('hold') is True:
             verdict = dev2_nonfinal(out, disabled, n, 'hold', created, ident, 'silent')
@@ -546,6 +685,9 @@ def _mono_items(out, items, p, disabled, corp):
             continue
         amount = Decimal(str(r.get('amount'))) / 100
         code = _mono_currency(r.get('currencyCode'))
+        if code is None:
+            out.diag('Ошибка', n, 'unknown-currency', None, Ид=ident, Код=C.to_str(r.get('currencyCode')))
+            continue
         out.ops.append({
             'ПорядковыйНомер': n, 'НомерСчета': p.account, 'Валюта': code, 'ДатаОперации': C.iso(moment),
             'НомерДокумента': ident, 'ДатаДокумента': C.iso_day(moment), 'Сумма': C.amount_str(abs(amount)),
@@ -559,10 +701,12 @@ def _mono_items(out, items, p, disabled, corp):
 
 
 def _mono_currency(v):
+    """Числовий `currencyCode` monobank (980 / '980') -> три цифри через ту саму таблицю, що `ЧисловойКодВалюты`;
+    немає поля -> '' (валюта рахунку); невідомий код -> None."""
     if v is None:
         return ''
     s = C.to_str(v).strip()
-    return s.zfill(3) if s.isdigit() else (C.numeric_currency(s) or '')
+    return C.numeric_currency(s.zfill(3) if s.isdigit() else s)
 
 
 # ====================================================================== перевірка запитів запису

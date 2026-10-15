@@ -13,6 +13,7 @@ from . import kyiv, recording as rec_mod
 
 BANKS = ('privat', 'mono-fop', 'mono-corp')
 PRIVAT_PATH = '/api/statements/transactions'
+PRIVAT_SETTINGS_PATH = '/api/statements/settings'
 FOP_CLIENT_INFO = '/personal/client-info'
 PAGE_SIZE_MONO = 500            # РазмерСтраницы() обох monobank-модулів (MF:479-481, MU:537-539)
 FOP_WINDOW_SECONDS = 2678400    # ДлинаОтрезкаСекунд() (MF:472-476)
@@ -38,6 +39,9 @@ class Params:
     # --- режим «очікуване»
     privat_id: object = 'REF+REFN'              # вибір D36 п. 6 (до виміру): 'REF+REFN' | 'TECHNICAL_TRANSACTION_ID' | 'ID' | None
     fop_pause_after_client_info: int = 60       # секунди; D36 п. 9 (до виміру: чи дає банк виписку одразу)
+    # тлумачення полів банківської межі (D36 п. 10); до виміру задачі 1 — те, що дає ранішу межу
+    privat_final_date_inclusive: bool = False   # чи остаточний сам день date_final_statement (False: ні)
+    corp_absent_day_is_final: bool = False      # чи остаточний день, якого немає у відповіді balances (False: ні)
 
     def to_json(self):
         return {'НомерСчета': self.account, 'НачалоПериода': iso(self.period_start), 'КонецПериода': iso(self.period_end)}
@@ -114,7 +118,11 @@ def amount_str(d):
 # ---------------------------------------------------------------------- час
 def session_local(sec, tz):
     """`МестноеВремя(Дата("19700101") + sec)` попередника: пояс сеансу `tz` ('Europe/Kiev' або 'UTC')."""
-    return kyiv.unix_to_local(sec) if tz == 'Europe/Kiev' else kyiv.unix_to_utc(sec)
+    if tz == 'Europe/Kiev':
+        return kyiv.unix_to_local(sec)
+    if tz == 'UTC':
+        return kyiv.unix_to_utc(sec)
+    raise ValueError('невідомий пояс сеансу %r: оракул знає лише Europe/Kiev і UTC' % (tz,))
 
 
 # ---------------------------------------------------------------------- обхід запису
@@ -157,17 +165,18 @@ def account_equal(a, b):
 
 
 # ---------------------------------------------------------------------- валюти
-# Числовий код ISO 4217 за буквеним (спільний розбір D27, відступ 6). Перелік — валюти, які реально бувають у
-# виписках; невідомий буквений код — рядок діагностики, а не вигаданий код.
-ISO4217 = {'UAH': '980', 'USD': '840', 'EUR': '978', 'GBP': '826', 'PLN': '985', 'CHF': '756', 'CZK': '203',
-           'CAD': '124', 'CNY': '156', 'JPY': '392', 'SEK': '752', 'NOK': '578', 'DKK': '208', 'HUF': '348',
-           'RON': '946', 'BGN': '975', 'TRY': '949', 'AED': '784', 'KZT': '398', 'GEL': '981', 'AZN': '944',
-           'MDL': '498', 'BYN': '933', 'RUB': '643'}
+# Перелік — РІВНО той, що знає 1С-функція `СМП_ЧтениеВыписокОбщее.ЧисловойКодВалюты` (`ТаблицаКодовВалют`): джерело
+# одне, оракул його відтворює, а `tests/test_api_currency.py` читає BSL-джерело й звіряє два переліки. Розширювати
+# перелік тут не можна — лише в BSL-функції (за рішенням планувальника), тоді тест змусить оновити й цей.
+ISO4217 = {'UAH': '980', 'USD': '840', 'EUR': '978', 'GBP': '826', 'PLN': '985', 'CHF': '756'}
 
 
 def numeric_currency(code):
-    """-> числовий код (рядок із 3 цифр) або None, якщо код невідомий."""
-    c = trim(to_str(code))
-    if re.fullmatch(r'\d{3}', c):
-        return c
-    return ISO4217.get(c.upper())
+    """Відтворює `ЧисловойКодВалюты`: регістр і пробіли по краях не важливі; порожній вхід -> '' (валюта рахунку);
+    три цифри — лише якщо такий код є в таблиці; буквений код — за таблицею; невідомий -> None (рядок `Ошибка`)."""
+    c = trim(to_str(code)).upper()
+    if c == '':
+        return ''
+    if len(c) == 3 and c.isdigit():
+        return c if c in ISO4217.values() else None
+    return ISO4217.get(c)
