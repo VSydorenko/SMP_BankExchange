@@ -97,8 +97,8 @@ def run(rec, p):
 
 # ====================================================================== ПриватБанк
 def privat_base_account(p):
-    """НомерСчета рахунку в базі за вибраним форматом (питання власнику: 14 цифр чи IBAN)."""
-    return p.account[-14:] if p.old_account_format == '14' else p.account
+    """НомерСчета рахунку в базі: завжди IBAN (слова власника; у run1 AUT_MY_ACC -- IBAN у 87 з 87)."""
+    return p.account
 
 
 def old_privat(rec, p):

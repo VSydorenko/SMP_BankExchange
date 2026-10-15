@@ -18,13 +18,14 @@
 | dev6 | буквений код валюти ПриватБанку перетворює спільний розбір, не довідник валют |
 | dev7 | ідентифікатор операції ПриватБанку (вибір D36 п. 6 — параметр `privat_id`) |
 | dev8 | усі дати — київський місцевий час з явним поясом, не пояс сеансу |
-| dev9 | технічне: `limit` і пауза ПриватБанку; повтор після 429 за заголовком; пауза після client-info; |
+| dev9 | технічне: `limit` і пауза ПриватБанку; повтор після 429 за заголовком; пауза після client-info (за замовчуванням 0); |
 |      | кількість і зміст операцій від цього не змінюються |
 
 **Контрактні правила** (не відступи, а розвиток D28/D36 п. 8 для API): `rule_failure_class`, `rule_complete`,
 `rule_trust_boundary`, `rule_unknown_state`, `rule_unknown_direction`, `rule_page_without_id`, `rule_dedupe_by_id`.
 Їхні рішення — окремий рядок звіту виконавця: планувальник підтверджує або відкидає.
 """
+import json
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 
@@ -280,7 +281,7 @@ def rule_privat_api_error(js):
 
 def rule_trust_boundary(out, p):
     """Межа довіри (D36 п. 10): найраніша з `КонецПериода`, моменту першої неостаточної операції й банківської межі
-    (ПриватБанк — `date_final_statement`; юросіб — початок першого дня без `isFinal`; ФОП — лише `hold`); не раніша за
+    (подобові баланси: ПриватБанк — `is_final_bal` у `/balance`, юросіб — `isFinal` у `balances`, початок першого дня без ознаки; ФОП — лише `hold`); не раніша за
     `НачалоПериода`. При непорожньому класі відмови — `НачалоПериода`: нічого не підтверджено."""
     if out.failure_class:
         return p.period_start
@@ -301,30 +302,43 @@ def rule_work_balance(settings):
     return C.trim(C.to_str(settings.get('work_balance'))).upper() == 'Y'
 
 
-def rule_bank_boundary_privat(settings_day, p):
-    """ПриватБанк: `date_final_statement` — «дата, включно з якої є підсумкова виписка». Чи остаточний сам цей день —
-    не виміряно; до виміру день вважається НЕ остаточним (межа = його початок), параметр `privat_final_date_inclusive`."""
-    start = settings_day.replace(hour=0, minute=0, second=0)
-    return start + timedelta(days=1) if p.privat_final_date_inclusive else start
-
-
-def rule_bank_boundary_corp(balances, p):
-    """monobank юросіб: початок ПЕРШОГО дня запитаного періоду без `isFinal = true` (не кінець останнього остаточного
-    дня: межа не мусить перескочити діру). День, якого немає у відповіді, до виміру вважається не остаточним
-    (`corp_absent_day_is_final`). -> datetime або None, якщо всі дні остаточні."""
-    final = {}
-    for b in balances:
-        if isinstance(b, dict) and b.get('date'):
-            final[C.to_str(b['date'])] = b.get('isFinal') is True
+def _first_nonfinal_day(final, p):
+    """Початок ПЕРШОГО дня запитаного періоду без ознаки остаточності. День, якого немає у відповіді, -- неостаточний
+    (`absent_day_is_final`, до виміру False). Не кінець останнього остаточного дня: межа не мусить перескочити діру.
+    -> datetime або None, якщо всі дні остаточні."""
     day = datetime(p.period_start.year, p.period_start.month, p.period_start.day)
     last = datetime(p.period_end.year, p.period_end.month, p.period_end.day)
     while day <= last:
         key = day.strftime('%Y-%m-%d')
-        ok = final[key] if key in final else p.corp_absent_day_is_final
+        ok = final[key] if key in final else p.absent_day_is_final
         if not ok:
             return day
         day += timedelta(days=1)
     return None
+
+
+def rule_bank_boundary_privat(balances, p):
+    """ПриватБанк (D36 п. 10): початок першого дня без `is_final_bal = true` у `/balance` за період. День балансу -- поле
+    `dpd` (`DD.MM.YYYY HH:MM:SS`; виміряно run1: 44 рядки на 44 доби, від нових до старих). `date_final_statement` з
+    `/settings` у межі НЕ бере участі: у run1 воно лежало за 184 доби до кінця періоду (журнал 05а, пункт 6)."""
+    final = {}
+    for b in balances:
+        if isinstance(b, dict) and b.get('dpd'):
+            try:
+                day = C.parse_1c_date(C.to_str(b['dpd']))
+            except ValueError:
+                continue
+            final[day.strftime('%Y-%m-%d')] = b.get('is_final_bal') is True
+    return _first_nonfinal_day(final, p)
+
+
+def rule_bank_boundary_corp(balances, p):
+    """monobank юросіб (D36 п. 10): початок першого дня без `isFinal = true` у `balances`; день без рядка -- неостаточний."""
+    final = {}
+    for b in balances:
+        if isinstance(b, dict) and b.get('date'):
+            final[C.to_str(b['date'])] = b.get('isFinal') is True
+    return _first_nonfinal_day(final, p)
 
 
 def rule_complete(out):
@@ -398,6 +412,12 @@ def _privat_state(raw):
     return C.to_str(raw.get('PR_PR')) or 'r'
 
 
+def privat_has_next(js):
+    """Кінець читання ПриватБанку (D36 п. 11) -- за `exist_next_page`. `next_page_id` банк віддає й на ОСТАННІЙ сторінці
+    (run1, журнал 05а, пункт 8), тож його наявність кінця не означає."""
+    return bool(js.get('exist_next_page'))
+
+
 def _privat(rec, p, out, disabled):
     items = []
     n = 0
@@ -429,7 +449,7 @@ def _privat(rec, p, out, disabled):
         for tx in js.get('transactions') or []:
             n += 1
             items.append(Item(n, tx, ex['seq']))
-        if js.get('exist_next_page'):
+        if privat_has_next(js):
             if js.get('next_page_id') in (None, ''):
                 rule_page_without_id(out, ex)
                 break
@@ -440,13 +460,17 @@ def _privat(rec, p, out, disabled):
             raise RecordingMismatch('запис ПриватБанку кінчається, а exist_next_page лишився true')
     out.items = n
     _privat_items(out, items, p, disabled)
+    if not out.failure_class:
+        _privat_balance(rec, p, out)
 
 
 def _privat_settings(rec, p, out):
-    """Обмін `/settings` (банківська межа): перший запит читання. Збій — відмова за п. 8. -> True, якщо читати далі."""
+    """Обмін `/settings` -- НЕОБОВ'ЯЗКОВИЙ: лише ознака `work_balance = Y` (іде регламент банку, `rule_work_balance`). Його
+    `date_final_statement` у межі довіри участі не бере (D36 п. 10). Немає обміну -- перевірки немає.
+    -> True, якщо читати далі."""
     exs = C.exchanges_for(rec, C.PRIVAT_SETTINGS_PATH)
     if not exs:
-        raise RecordingMismatch('у записі ПриватБанку немає /settings')
+        return True
     ex = exs[0]
     if ex['failure'] or ex['response']['status'] != 200:
         _failure(out, ex, 'privat')
@@ -460,9 +484,7 @@ def _privat_settings(rec, p, out):
         cls, facts = rule_privat_api_error(js)
         _fail(out, cls, facts)
         return False
-    try:
-        day = C.parse_1c_date(C.to_str(js['settings']['date_final_statement']))
-    except (KeyError, TypeError, ValueError):
+    if not isinstance(js, dict) or not isinstance(js.get('settings'), dict):
         _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'bad-settings', 'Статус': 200, 'ОписаниеБанка': ''})
         return False
     if rule_work_balance(js['settings']):
@@ -470,8 +492,31 @@ def _privat_settings(rec, p, out):
               'work-balance')
         out.rules.add('rule_work_balance')
         return False
-    out.bank_boundary = rule_bank_boundary_privat(day, p)
     return True
+
+
+def _privat_balance(rec, p, out):
+    """Обмін `/balance` за період (банківська межа ПриватБанку): після транзакцій. Збій -- відмова за п. 8, прочитане лишається."""
+    exs = C.exchanges_for(rec, C.PRIVAT_BALANCE_PATH)
+    if not exs:
+        raise RecordingMismatch('у записі ПриватБанку немає /balance')
+    ex = exs[0]
+    if ex['failure'] or ex['response']['status'] != 200:
+        _failure(out, ex, 'privat')
+        return
+    try:
+        js = R.body_json(ex)
+    except R.NotJson:
+        _fail_not_json(out, 'privat')
+        return
+    if isinstance(js, dict) and js.get('status') == 'ERROR':
+        cls, facts = rule_privat_api_error(js)
+        _fail(out, cls, facts)
+        return
+    if not isinstance(js, dict) or not isinstance(js.get('balances'), list):
+        _fail_not_json(out, 'privat', 'not-object')
+        return
+    out.bank_boundary = rule_bank_boundary_privat(js['balances'], p)
 
 
 def _privat_items(out, items, p, disabled):
@@ -553,6 +598,14 @@ def _privat_items(out, items, p, disabled):
 
 
 # ====================================================================== monobank
+def requested_limit(ex):
+    """`limit` запиту виписки юросіб (немає -- 10, за замовчуванням документації corp-api)."""
+    for k, v in R.query_pairs(ex):
+        if k == 'limit' and v.isdigit():
+            return int(v)
+    return 10
+
+
 def _mono(rec, p, out, disabled):
     corp = rec.bank == 'mono-corp'
     bank = rec.bank
@@ -611,19 +664,17 @@ def _mono(rec, p, out, disabled):
             items.append(Item(n, tx, ex['seq']))
             t = kyiv.unix_to_local(int(tx.get('time')))
             earliest = t if earliest is None or t < earliest else earliest
-        if len(page) < C.PAGE_SIZE_MONO:
+        limit = requested_limit(ex) if corp else C.PAGE_SIZE_MONO
+        if len(page) < limit:                       # D36 п. 11: коротша за запитаний ліміт -- остання (ФОП: гіпотеза документації)
             if corp:
                 break
             continue
-        if earliest is None or earliest <= start_local:
-            if corp:
-                complete = False
-                break
-            continue
-        if earliest >= upper_local:
-            complete = False
-            if corp:
-                break
+        if earliest is None or earliest <= start_local or earliest >= upper_local:
+            # повна сторінка, а продовжити нічим (верхню межу не посунути): ознаки кінця немає -> неповне, «повторити» (п. 11)
+            _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-cannot-continue', 'Статус': 200, 'ОписаниеБанка': ''},
+                  'page-cannot-continue')
+            out.rules.add('rule_end_of_read')
+            break
     out.complete = out.complete and complete
     out.items = n
     _mono_items(out, items, p, disabled, corp)
@@ -726,6 +777,24 @@ def _mono_currency(v):
     return C.numeric_currency(s.zfill(3) if s.isdigit() else s)
 
 
+def ops_equal_ignoring_order_within_moment(a, b):
+    """Порівняння операцій двох читань одного періоду без залежності від порядку всередині однакового моменту.
+    run1 (журнал 05а, пункт 8): склейка сторінок ПриватБанку (`limit=5`) і єдиний запит розходяться у 2 з 87 позицій -- пари
+    однакового `DATE_TIME_DAT_OD_TIM_P` (до хвилини). Сам еталон одного запису ФІКСУЄ порядок записаних сторінок
+    (`ПорядковыйНомер` = позиція у відповідях: відтворення дає конекторові ті самі сторінки в тому ж порядку); ця функція --
+    для порівняння читань з різним розміром сторінки. `ПорядковыйНомер` при цьому не порівнюється."""
+    def norm(ops):
+        groups, order = {}, []
+        for o in ops:
+            m = o['ДатаОперации']
+            if m not in groups:
+                groups[m] = []
+                order.append(m)
+            groups[m].append(json.dumps({k: v for k, v in o.items() if k != 'ПорядковыйНомер'}, sort_keys=True, ensure_ascii=False))
+        return [(m, sorted(groups[m])) for m in order]
+    return norm(a) == norm(b)
+
+
 # ====================================================================== перевірка запитів запису
 def expected_windows(p, bank):
     """Відрізки читання, які зробив би конектор: ФОП — до 31 доби (місцевий час), юросіб — один."""
@@ -744,6 +813,8 @@ def verify_requests(rec, p):
     starts = []
     for e in C.statement_exchanges(rec):
         w = R.statement_window(e)
+        if w[1] > w[2]:                      # навмисно хибний період (помилка 400 «початок пізніше за кінець»)
+            return []
         if not starts or starts[-1][0] != w[1]:
             starts.append((w[1], w[2]))
     problems = []

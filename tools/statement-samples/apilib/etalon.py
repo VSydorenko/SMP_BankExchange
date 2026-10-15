@@ -23,7 +23,6 @@
      "ОтступыПрименены": ["dev2", …] },
   "oldProcessing": {                               // режим «стара обробка»: лише поля ключа D17
      "Параметры": {...}, "ПоляКлюча": [ {"ПорядковыйНомер","ДатаДокумента","НомерДокумента","КонтрагентНомерСчета","Сумма"} ],
-     "ПоФорматуСчета": {"14": [...], "iban": [...]},     // лише ПриватБанк: ключі при двох форматах НомерСчета в базі
      "Исключение": null | {"kind","text"}, "Полная": …,
      "ПропущеноБезСледа": [ {"Причина","Ид","ПорядковыйНомер"} ], "Допущения": ["PB-REGL", …] } }
 ```
@@ -33,10 +32,8 @@
   `bad-amount`, `bad-date`, `unknown-currency`, `conflicting-duplicate` (Ошибка); `account-not-found`, `read-failed`, `work-balance` —
   збій читання з непорожнім класом (Предупреждение: неповне читання, курсор утримується).
   `Факты` — те, що текст для людини мусить назвати (банк, статус, опис банку) і чого в ньому не мусить бути (токена).
-* **`dependsOn`** — що з зафіксованого ще не виміряно й може змінити еталон: `НомерСчетаВБазе` (формат `НомерСчета`
-  рахунку ПриватБанку в базі — питання власнику), `ИдентификаторПриват` (вибір D36 п. 6), `РеверсСлучай` (випадок
-  а/б D36 п. 5 — вимір задачі 1), `ПаузаПослеClientInfo` (D36 п. 9), `РазмерСтраницыMono` (500 документація не
-  підтверджує), `ФильтрВалютыПриват` (відступ 1 для валюти), `ТлумачениеГраницы` (як тлумачити `date_final_statement` і день без `isFinal`; береться раніша межа).
+* **`dependsOn`** — що з зафіксованого ще не виміряно й може змінити еталон: `ИдентификаторПриват` (вибір D36 п. 6), `РеверсСлучай` (випадок
+  а/б D36 п. 5 — вимір задачі 1), `ПаузаПослеClientInfo` (D36 п. 9), `РазмерСтраницыMono` (ФОП: «коротша за 500 — остання» — гіпотеза документації; юросіб — ліміт з виміру, не залежність), `ФильтрВалютыПриват` (відступ 1 для валюти), `ТлумачениеГраницы` (як тлумачити день без рядка балансу; береться раніша межа).
 * **`ЧужиеСчета`** — як у еталоні зразків: операції, чий власний рахунок не збігається з `Параметры.НомерСчета`;
   рівень діагностики для них пише точка читання (D30), конектор лише віддає операцію.
 * `Запросы` — КОПІЯ запитів запису (метод, хост, шлях, пари запиту), а не обчислення з параметрів: для синтетики це
@@ -48,7 +45,6 @@
 import json
 
 from . import common as C, expected as E, oracle_old as O
-from dataclasses import replace
 
 FORMAT = 'smp-api-etalon'
 VERSION = 1
@@ -56,8 +52,7 @@ VERSION = 1
 
 def _old_section(rec, p):
     res = O.run(rec, p)
-    sec = {'Параметры': {'ФорматНомераСчета': p.old_account_format if rec.bank == 'privat' else '',
-                         'НомерСчетаУстаревший': p.old_account_obsolete,
+    sec = {'Параметры': {'НомерСчетаУстаревший': p.old_account_obsolete,
                          'ВалютаСчета': p.old_account_currency, 'ПоясСеанса': p.old_session_tz},
            'ПоляКлюча': _key(res),
            'Исключение': res.error, 'Полная': res.complete,
@@ -72,33 +67,31 @@ def _key(res):
 
 
 def build(scn, disabled=frozenset()):
-    rec = scn.recording()
-    p = scn.params
+    """Еталон синтетичного запису."""
+    return build_from(scn.recording(), scn.params, sid=scn.sid, title=scn.title, focus=scn.focus, macro=scn.name,
+                      synthetic=True, disabled=disabled)
+
+
+def build_from(rec, p, *, sid, title, focus, macro, synthetic, disabled=frozenset()):
+    """Еталон запису (синтетичного чи знеособленого справжнього): тільки оракул, руками й BSL не рахується."""
     exp = E.run(rec, p, disabled)
     old, old_res = _old_section(rec, p)
     depends = set()
-    if rec.bank == 'privat':
-        variants = {}
-        for fmt in ('14', 'iban'):
-            variants[fmt] = _key(O.run(rec, replace(p, old_account_format=fmt)))
-        old['ПоФорматуСчета'] = variants
-        if variants['14'] != variants['iban']:
-            depends.add('НомерСчетаВБазе')
-        if exp.ops or any(d['Суть'] == 'reversal-state-change' for d in exp.diags):
-            depends.add('ИдентификаторПриват')
+    if rec.bank == 'privat' and (exp.ops or any(d['Суть'] == 'reversal-state-change' for d in exp.diags)):
+        depends.add('ИдентификаторПриват')           # тимчасово `ID` до run2 (D36 п. 6)
     if any(d['Суть'] == 'reversal-state-change' for d in exp.diags) or 'dev4' in exp.applied:
         depends.add('РеверсСлучай')
     if any(x['Причина'] == 'after-client-info' for x in exp.pauses):
         depends.add('ПаузаПослеClientInfo')
-    if rec.bank != 'privat' and any(_page_len(e) >= C.PAGE_SIZE_MONO for e in C.statement_exchanges(rec)):
-        depends.add('РазмерСтраницыMono')
+    if rec.bank == 'mono-fop' and any(_page_len(e) >= C.PAGE_SIZE_MONO for e in C.statement_exchanges(rec)):
+        depends.add('РазмерСтраницыMono')            # ФОП: «коротша за 500 -- остання» -- гіпотеза документації
     if exp.bank_boundary is not None and exp.bank_boundary < p.period_end:
         depends.add('ТлумачениеГраницы')
     if rec.bank == 'privat' and any(o['Валюта'] not in ('980', '') for o in exp.ops):
         depends.add('ФильтрВалютыПриват')
-    d = {'format': FORMAT, 'formatVersion': VERSION, 'bank': rec.bank, 'id': scn.sid, 'synthetic': True, 'title': scn.title,
-         'reviewFocus': scn.focus, 'recording': {'макет': scn.name, 'обменов': len(rec.exchanges)},
-         'parameters': scn.params.to_json(), 'dependsOn': sorted(depends),
+    d = {'format': FORMAT, 'formatVersion': VERSION, 'bank': rec.bank, 'id': sid, 'synthetic': synthetic, 'title': title,
+         'reviewFocus': focus, 'recording': {'макет': macro, 'обменов': len(rec.exchanges)},
+         'parameters': p.to_json(), 'dependsOn': sorted(depends),
          'expected': {'ЧтениеПолное': exp.complete, 'ГраницаДоверия': C.iso(exp.trust), 'КлассОтказа': exp.failure_class,
                       'Операции': exp.ops, 'Диагностика': exp.diags,
                       'ЧужиеСчета': [{'НомерСчета': a, 'НомераСтрок': ns} for a, ns in exp.foreign.items()],

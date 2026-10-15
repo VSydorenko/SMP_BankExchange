@@ -14,8 +14,28 @@ from . import kyiv, recording as rec_mod
 BANKS = ('privat', 'mono-fop', 'mono-corp')
 PRIVAT_PATH = '/api/statements/transactions'
 PRIVAT_SETTINGS_PATH = '/api/statements/settings'
+PRIVAT_BALANCE_PATH = '/api/statements/balance'
 FOP_CLIENT_INFO = '/personal/client-info'
-PAGE_SIZE_MONO = 500            # РазмерСтраницы() обох monobank-модулів (MF:479-481, MU:537-539)
+PAGE_SIZE_MONO = 500            # РазмерСтраницы() обох monobank-модулів (MF:479-481, MU:537-539); ФОП: ліміту в запиті немає,
+                                # «сторінка коротша за 500 -- остання» -- ДОКУМЕНТАЛЬНА гіпотеза (у run1 насичення не досягнуто)
+# Юросіб (D36 п. 11): кінець -- сторінка коротша за ЗАПИТАНИЙ ліміт, тож ліміт не більший за виміряну нижню межу максимуму
+# сторінки. run1 (журнал 05а, пункт 8): limit=500 віддав 33 операції за раз -- банк повністю віддав сторінку в 33. Понад 33 --
+# ризик, що банк сам обріже сторінку й коротша сторінка посеред даних обірве читання мовчки.
+CORP_MEASURED_MAX_PAGE = 33
+CORP_WORKING_LIMIT = 30
+
+
+def corp_limit_problems(limit=None):
+    """Сторож робочого ліміту юросіб: ліміт не більший за виміряну нижню межу максимуму сторінки."""
+    limit = CORP_WORKING_LIMIT if limit is None else limit
+    if limit > CORP_MEASURED_MAX_PAGE:
+        return ['ліміт юросіб %d більший за виміряну нижню межу максимуму сторінки %d' % (limit, CORP_MEASURED_MAX_PAGE)]
+    return []
+
+
+def page_limit(bank):
+    """Розмір сторінки, який запитує конектор: юросіб -- робочий ліміт; ФОП -- ліміту немає (документальні 500)."""
+    return CORP_WORKING_LIMIT if bank == 'mono-corp' else PAGE_SIZE_MONO
 FOP_WINDOW_SECONDS = 2678400    # ДлинаОтрезкаСекунд() (MF:472-476)
 UNICODE_SPACES = ' \t\r\n\xa0'
 
@@ -30,18 +50,17 @@ class Params:
     period_start: datetime
     period_end: datetime
     # --- режим «стара обробка»
-    old_account_format: str = '14'              # '14' | 'iban': як лежить НомерСчета рахунку ПриватБанку в базі
     old_account_obsolete: str = ''              # НомерСчетаУстаревший (PB:427-428); порожній — не заповнений
     old_account_currency: object = None         # ВалютаДенежныхСредств.Код; None — не заповнена
     old_session_tz: str = 'Europe/Kiev'         # пояс сеансу, яким рахує `МестноеВремя` попередник monobank
     old_currency_catalog: dict = field(default_factory=lambda: {'USD': '840', 'EUR': '978'})   # довідник Валюты
     old_cached_account_id: bool = False         # ИД облікового запису заповнений: client-info не кличеться (MF:373-376)
     # --- режим «очікуване»
-    privat_id: object = 'REF+REFN'              # вибір D36 п. 6 (до виміру): 'REF+REFN' | 'TECHNICAL_TRANSACTION_ID' | 'ID' | None
-    fop_pause_after_client_info: int = 60       # секунди; D36 п. 9 (до виміру: чи дає банк виписку одразу)
-    # тлумачення полів банківської межі (D36 п. 10); до виміру задачі 1 — те, що дає ранішу межу
-    privat_final_date_inclusive: bool = False   # чи остаточний сам день date_final_statement (False: ні)
-    corp_absent_day_is_final: bool = False      # чи остаточний день, якого немає у відповіді balances (False: ні)
+    # ідентифікатор ПриватБанку (D36 п. 6): тимчасово `ID` (у run1 = TECHNICAL_TRANSACTION_ID, 30 символів) до run2
+    privat_id: object = 'ID'                    # 'ID' | 'TECHNICAL_TRANSACTION_ID' | 'REF+REFN' | None
+    fop_pause_after_client_info: int = 0        # секунди; виміряно (run1, п. 11): виписка через 0,3 с після client-info -- 200, без 429
+    # банківська межа (D36 п. 10): початок першого дня без ознаки остаточності; день без рядка балансу -- неостаточний
+    absent_day_is_final: bool = False
 
     def to_json(self):
         return {'НомерСчета': self.account, 'НачалоПериода': iso(self.period_start), 'КонецПериода': iso(self.period_end)}

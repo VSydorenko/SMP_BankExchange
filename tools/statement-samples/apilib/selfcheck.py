@@ -31,14 +31,12 @@ def _utc_plus3(sec):
     return datetime(1970, 1, 1) + timedelta(seconds=sec) + timedelta(hours=3)
 
 
-def _privat_rec(tx, next_id=None):
+def _privat_rec(tx):
     p = Params(account=_privat_iban(OWN14), period_start=datetime(2020, 1, 7), period_end=datetime(2020, 1, 7, 23, 59, 59),
                old_account_currency='980')
     b = S.Builder('privat', 'doc', p)
-    b.settings(S.resp_json(200, S.privat_settings_body('28.03.2020 00:00:00')))   # приклад settings із документації
-    b.privat(S.resp_json(200, S.privat_page([tx], nxt=next_id)))
-    if next_id:
-        b.privat(S.resp_json(200, S.privat_page([], exist=False)), follow=next_id)
+    b.privat_pages([[tx]])
+    b.privat_balance(S.resp_json(200, S.privat_balance_body(p)))
     m = S.R.make_manifest('privat', 'doc-privat', b.ex)
     return S.R.Recording(m, b.ex), p
 
@@ -65,13 +63,13 @@ def _expect(cond, msg):
 
 # ---------------------------------------------------------------------- ПриватБанк
 def check_privat_example_expected():
-    rec, p = _privat_rec(D.PRIVAT_TX, D.PRIVAT_NEXT_PAGE_ID)
+    rec, p = _privat_rec(D.PRIVAT_TX)
     e = E.run(rec, p)
     _expect(len(e.ops) == 1 and not e.diags, 'приклад ПриватБанку: одна операція без діагностики')
     o = e.ops[0]
     want = {'НомерСчета': p.account, 'Валюта': '980', 'ДатаОперации': '2020-01-07T02:58:00', 'НомерДокумента': 'K0108B1WKX',
             'ДатаДокумента': '2020-01-07', 'Сумма': '0.01', 'Направление': 'Поступило',
-            'ИдентификаторОперации': 'DNCHK0108B1WKX1',                      # документація: REF+REFN
+            'ИдентификаторОперации': '557091731',                              # ID (тимчасово, до run2; D36 п. 6)
             'КонтрагентНаименование': 'ПРОЦ ВИТР ЗА СТРОК КОШТ СУБ(UAH)', 'КонтрагентНомерСчета': '70214924104032',
             'КонтрагентКод': '41234569', 'КонтрагентМФО': '305299',
             'НазначениеПлатежа': 'Нарахування вiдсоткiв згiдно з депозитним договором N...'}
@@ -81,7 +79,9 @@ def check_privat_example_expected():
 
 
 def check_privat_example_old():
-    rec, p = _privat_rec(D.PRIVAT_TX, D.PRIVAT_NEXT_PAGE_ID)
+    # документація дає AUT_MY_ACC із 14 цифр, а в run1 (87 з 87) це IBAN, як і рахунок у базі (R12: запис -- факт):
+    # стара обробка порівнює рахунок точно, тож у прикладі власний рахунок підставлено IBAN
+    rec, p = _privat_rec(dict(D.PRIVAT_TX, AUT_MY_ACC=_privat_iban(OWN14)))
     res = O.run(rec, p)
     _expect(res.error is None and len(res.rows) == 1, 'стара обробка: одна операція')
     f = res.rows[0].fields
@@ -177,7 +177,8 @@ def check_documented_limits():
         worst = max(worst, kyiv.local_to_unix(b) - kyiv.local_to_unix(a))
         day += timedelta(days=1)
     _expect(worst <= D.MONO_PERSONAL_MAX_RANGE_SECONDS, 'довжина відрізка ФОП в UTC ≤ 2682000 с (найгірше %d)' % worst)
-    _expect(C.PAGE_SIZE_MONO <= D.MONO_CORP_LIMIT_MAX, 'limit юросіб ≤ 500')
+    _expect(C.PAGE_SIZE_MONO <= D.MONO_CORP_LIMIT_MAX and C.CORP_WORKING_LIMIT <= D.MONO_CORP_LIMIT_MAX, 'limit юросіб ≤ 500')
+    _expect(not C.corp_limit_problems(), 'робочий ліміт юросіб не більший за виміряну нижню межу максимуму сторінки')
     _expect(S.PRIVAT_LIMIT <= D.PRIVAT_LIMIT_RECOMMENDED_MAX, 'limit ПриватБанку ≤ 100')
     sc = S.by_name('СинтОкна')
     pauses = E.run(sc.recording(), sc.params).pauses

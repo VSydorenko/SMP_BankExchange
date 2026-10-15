@@ -96,6 +96,7 @@ class Fakes:
         self.m = {'code': {}, 'core': {}, 'word': {}, 'text': {}, 'scramble': {}, 'issued': []}
         self._issued = set()
         self.used_words = set()
+        self._ident_used = set()
 
     # ----- персистентність
     def dump(self):
@@ -105,6 +106,7 @@ class Fakes:
         self.m = m
         self._issued = set(m.get('issued', []))
         self.used_words = {v.casefold() for v in m['word'].values()}
+        self._ident_used = set(m.get('ident', {}).values())
 
     # ----- цифри
     def _digits(self, n, first_nonzero=False):
@@ -305,6 +307,76 @@ class Fakes:
             n = sum(1 for k in self.m['text'] if k.startswith('doctype:')) + 1
             self.m['text'][key] = 'вид документа %d' % n
         return self.m['text'][key]
+
+    # ----- ідентифікатори (записи відповідей API) і числа з тексту JSON
+    HEX_LOWER = '0123456789abcdef'
+    HEX_UPPER = '0123456789ABCDEF'
+
+    def _ident_shape(self, raw):
+        """Випадкове значення тієї самої форми: цифра -> цифра, літера -> літера того ж регістру й письма, решта (розділювачі,
+        зірочки, `=`) лишається. Рядок, що складається лише з hex-символів (UUID, GUID), лишається hex. Перша цифра
+        ненульова, якщо була ненульовою."""
+        alnum = [c for c in raw if c.isalnum()]
+        hex_lower = bool(alnum) and all(c in self.HEX_LOWER for c in alnum) and any(c.isalpha() for c in alnum)
+        hex_upper = bool(alnum) and all(c in self.HEX_UPPER for c in alnum) and any(c.isalpha() for c in alnum)
+        out, first_digit = [], True
+        for ch in raw:
+            if ch.isdigit():
+                pool = '123456789' if (first_digit and ch != '0') else '0123456789'
+                first_digit = False
+                out.append(self.rng.choice(pool))
+            elif ch.isalpha():
+                if hex_lower:
+                    out.append(self.rng.choice('abcdef'))
+                elif hex_upper:
+                    out.append(self.rng.choice('ABCDEF'))
+                elif LATIN_RX.match(ch):
+                    out.append(self.rng.choice(LAT_UP if ch.isupper() else LAT_UP.lower()))
+                else:
+                    out.append(self.rng.choice(UKR_UP if ch.isupper() else UKR_UP.lower()))
+            else:
+                out.append(ch)
+        return ''.join(out)
+
+    def ident(self, value, refs=()):
+        """Ідентифікатор (операції, запису, сторінки, рахунку банку): вигаданий тієї самої форми й довжини; одне значення --
+        одна заміна на весь прогін, різні значення -- різні заміни. Якщо значення починається з одного з `refs` (REF
+        ПриватБанку, з якого починається ідентифікатор операції), заміна починається із заміни цього `ref`: зв'язок
+        «починається з» зберігається."""
+        v = value
+        table = self.m.setdefault('ident', {})
+        if v in table:
+            return table[v]
+        if not any(c.isalnum() for c in v):
+            return v
+        pref = next((r for r in sorted(refs, key=len, reverse=True) if r and len(v) > len(r) and v.startswith(r)), None)
+        for _ in range(1000):
+            if pref:
+                new = self.ident(pref, refs) + self._ident_shape(v[len(pref):])
+            else:
+                new = self._ident_shape(v)
+            if new != v and new not in self._ident_used:
+                break
+        else:
+            raise RuntimeError('не вдалося підібрати вигаданий ідентифікатор')
+        self._ident_used.add(new)
+        table[v] = new
+        return new
+
+    def number(self, token):
+        """Число з тексту JSON (ціле чи з дробом, можливо зі знаком): та сама кількість цифр і розділювачі на місці, цифри
+        випадкові, ціла частина без провідного нуля, якщо його не було; одне значення -- одна заміна."""
+        table = self.m.setdefault('number', {})
+        if token in table:
+            return table[token]
+        digits = sum(1 for c in token if c.isdigit())
+        for _ in range(1000):
+            new = self._ident_shape(token) if digits else token
+            new = ''.join(ch if not ch.isalpha() else token[i] for i, ch in enumerate(new))     # 'e'/'E' експоненти лишаються
+            if new != token or digits < 2:
+                break
+        table[token] = new
+        return new
 
     # ----- диспетчер
     def apply(self, role, text, key=None):
