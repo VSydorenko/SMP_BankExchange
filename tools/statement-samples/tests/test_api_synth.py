@@ -104,7 +104,8 @@ class Shape(unittest.TestCase):
             e = E.run(s.recording(), s.params)
             if e.failure_class:
                 self.assertFalse(e.complete, s.name)
-                self.assertIsNone(e.trust, s.name)
+                self.assertEqual(e.trust, s.params.period_start, s.name)      # межа визначена: курсор не посунеться
+                self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags if d['Суть'] in ('read-failed', 'account-not-found')), s.name)
                 self.assertTrue(any(d['Суть'] in ('read-failed', 'account-not-found') for d in e.diags), s.name)
                 self.assertIn(e.failure_class, (E.CLS_RETRY, E.CLS_HUMAN))
             else:
@@ -113,7 +114,7 @@ class Shape(unittest.TestCase):
     def test_diagnostic_facts_are_a_closed_list(self):
         """Текст для людини будується лише з названих фактів (банк, статус, опис банку, ідентифікатор): заголовків запиту й
         облікових даних у діагностиці немає за побудовою."""
-        allowed = {'Банк', 'Вид', 'Статус', 'ОписаниеБанка', 'Состояние', 'Ид', 'Момент', 'Значение', 'Код'}
+        allowed = {'Банк', 'Вид', 'Статус', 'ОписаниеБанка', 'Состояние', 'Ид', 'Момент', 'Значение', 'Код', 'КодСервиса'}
         for s in ALL:
             for d in E.run(s.recording(), s.params).diags:
                 self.assertLessEqual(set(d['Факты']), allowed, s.name)
@@ -178,7 +179,7 @@ class KeyCompatibility(unittest.TestCase):
             e = E.run(rec, s.params)
             old = O.run(rec, s.params)
             ops = {o['ПорядковыйНомер']: o for o in e.ops}
-            diag_numbers = {d['ПорядковыйНомер'] for d in e.diags}
+            diag_numbers = {d['ПорядковыйНомер'] for d in e.diags} | set(e.duplicate_numbers)
             for r in old.rows:
                 f = r.fields
                 if r.n not in ops:

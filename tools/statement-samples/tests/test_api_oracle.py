@@ -21,7 +21,8 @@ DAY = datetime(2026, 10, 15)
 
 
 def tx(when=datetime(2026, 10, 15, 10, 0, 0), tran='C', state='r', amount='10.00', own=OWN14, cnt='26009999999999',
-       ccy='UAH', num='N1', ref='REFA', refn='1', tid='111', osnd='призначення', **kw):
+       ccy='UAH', num='N1', ref=None, refn='1', tid='111', osnd='призначення', **kw):
+    ref = ref or 'REF' + tid
     d = {'AUT_MY_ACC': own, 'AUT_CNTR_ACC': cnt, 'AUT_CNTR_NAM': 'Контрагент', 'AUT_CNTR_CRF': '12345678', 'AUT_CNTR_MFO': '305299',
          'CCY': ccy, 'PR_PR': state, 'NUM_DOC': num, 'OSND': osnd, 'SUM': amount, 'REF': ref, 'REFN': refn,
          'DATE_TIME_DAT_OD_TIM_P': when.strftime('%d.%m.%Y %H:%M:%S'), 'ID': tid, 'TRANTYPE': tran,
@@ -30,16 +31,17 @@ def tx(when=datetime(2026, 10, 15, 10, 0, 0), tran='C', state='r', amount='10.00
     return d
 
 
-def privat(pages, **kw):
+def privat(pages, final='30.10.2026 00:00:00', **kw):
     p = Params(**{'account': IBAN, 'period_start': DAY, 'period_end': datetime(2026, 10, 15, 23, 59, 59),
                   'old_account_currency': '980', **kw})
     b = S.Builder('privat', 't', p)
+    b.settings(S.resp_json(200, S.privat_settings_body(final)))
     for i, (txs, nxt) in enumerate(pages):
         b.privat(S.resp_json(200, S.privat_page(txs, nxt=nxt)), follow=(pages[i - 1][1] if i else None))
     return R.Recording(R.make_manifest('privat', 't', b.ex), b.ex), p
 
 
-def mono(bank, items, start=DAY, end=datetime(2026, 10, 15, 23, 59, 59), **kw):
+def mono(bank, items, start=DAY, end=datetime(2026, 10, 15, 23, 59, 59), flags=None, **kw):
     iban = IBAN
     p = Params(**{'account': iban, 'period_start': start, 'period_end': end, 'old_account_currency': '980', **kw})
     b = S.Builder(bank, 't', p)
@@ -47,6 +49,8 @@ def mono(bank, items, start=DAY, end=datetime(2026, 10, 15, 23, 59, 59), **kw):
     if bank == 'mono-fop':
         b.client_info(S.resp_json(200, {'accounts': [{'id': 'acc-id', 'iban': iban}]}))
     b.statement(S.to_unix(start), S.to_unix(end), S.resp_json(200, sorted(items, key=lambda x: -x['time'])))
+    if bank == 'mono-corp':
+        b.balances(S.resp_json(200, S.corp_balances_body(p, flags)))
     return R.Recording(R.make_manifest(bank, 't', b.ex), b.ex), p
 
 
@@ -192,11 +196,13 @@ class Expected(unittest.TestCase):
             return E.run(R.Recording(R.make_manifest('mono-corp', 't', b.ex), b.ex), p)
         cases = [(S.resp_json(500, {'errorDescription': 'x'}), None, 'Повторить'), (S.resp_html(200), None, 'Повторить'),
                  (S.resp_json(503, {}), None, 'Повторить'), (S.resp_json(403, {'errorDescription': 'no'}), None, 'ДействиеЧеловека'),
-                 (S.resp_json(404, {}), None, 'ДействиеЧеловека'), (None, {'kind': 'timeout', 'text': 't'}, 'Повторить')]
+                 (S.resp_json(404, {}), None, 'ДействиеЧеловека'), (None, {'kind': 'timeout', 'text': 't'}, 'Повторить'),
+                 (S.resp_json(408, {}), None, 'Повторить'), (S.resp_json(401, {}), None, 'ДействиеЧеловека'),
+                 (S.resp_json(400, {}), None, 'ДействиеЧеловека'), (S.resp_json(422, {}), None, 'ДействиеЧеловека')]
         for resp, fail, cls in cases:
             e = run_with(resp, fail)
-            self.assertEqual((e.failure_class, e.complete, len(e.ops), e.trust), (cls, False, 500, None), (resp, fail))
-            self.assertEqual(e.diags[0]['Суть'], 'read-failed')
+            self.assertEqual((e.failure_class, e.complete, len(e.ops), e.trust), (cls, False, 500, DAY), (resp, fail))
+            self.assertEqual((e.diags[0]['Суть'], e.diags[0]['Уровень']), ('read-failed', 'Предупреждение'))   # неповне читання, не втрата
             self.assertEqual(e.diags[0]['Факты']['Банк'], 'monobank юросіб')
 
     def test_zero_amount_is_passed_to_the_platform_not_hidden(self):
@@ -221,7 +227,8 @@ class Expected(unittest.TestCase):
     def test_pauses_are_technical_only(self):
         rec, p = privat([([tx()], 'n1'), ([tx(tid='2')], None)])
         e = E.run(rec, p)
-        self.assertEqual(e.pauses, [{'ПослеЗапроса': 1, 'Секунд': 1, 'Причина': 'privat-1-per-second'}])
+        self.assertEqual(e.pauses, [{'ПослеЗапроса': 1, 'Секунд': 1, 'Причина': 'privat-1-per-second'},
+                                    {'ПослеЗапроса': 2, 'Секунд': 1, 'Причина': 'privat-1-per-second'}])      # settings + 2 сторінки
         e0 = E.run(rec, p, {'dev9'})
         self.assertEqual(e0.pauses, [])
         self.assertEqual(e0.ops, e.ops)                    # кількість і зміст операцій від dev9 не залежать

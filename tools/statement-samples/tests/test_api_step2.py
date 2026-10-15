@@ -52,9 +52,12 @@ class Roles(unittest.TestCase):
                     self.assertEqual(schema.unknown_fields('privat', 'page', js) , [], s.name)
                     for t in js.get('transactions', []):
                         self.assertEqual(schema.unknown_fields('privat', 'tx', t), [], s.name)
+                    if 'settings' in js:
+                        self.assertEqual(schema.unknown_fields('privat', 'settings', js['settings']), [], s.name)
                 elif isinstance(js, list):
                     for t in js:
-                        self.assertEqual(schema.unknown_fields(s.bank, 'tx', t), [], s.name)
+                        section = 'balance' if 'isFinal' in t else 'tx'
+                        self.assertEqual(schema.unknown_fields(s.bank, section, t), [], s.name)
                 elif s.bank == 'mono-fop' and 'accounts' in js:
                     self.assertEqual(schema.unknown_fields('mono-fop', 'client', js), [], s.name)
                     for a in js['accounts']:
