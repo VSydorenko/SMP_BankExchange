@@ -14,15 +14,19 @@
 
 
 class CorpBank:
-    def __init__(self, ops, to_inclusive=False):
+    def __init__(self, ops, to_inclusive=False, from_inclusive=None):
         """`ops` -- операції (словники StatementItem з `time`), порядок усередині секунди зберігається. `to_inclusive=True` --
-        ЗІПСОВАНА модель для контролю (межова секунда повертається): у вимірі вона хибна."""
+        ЗІПСОВАНА модель для контролю (межова секунда повертається): у вимірі вона хибна; у записах «межі періоду» -- модель найгіршого випадку.
+        `from_inclusive`: None -- нижньої межі в моделі немає (виміряного немає); True / False -- включний / виключний `from`
+        (не виміряно, лише записи меж періоду)."""
         self.ops = list(ops)
         self.to_inclusive = to_inclusive
+        self.from_inclusive = from_inclusive
 
     def statement(self, frm, to, limit):
         """Сторінка відповіді на запит виписки: найновіші `limit` операцій з `time` < `to` (від нових до старих)."""
-        below = [o for o in self.ops if (o['time'] <= to if self.to_inclusive else o['time'] < to)]
+        below = [o for o in self.ops if (o['time'] <= to if self.to_inclusive else o['time'] < to)
+                 and (self.from_inclusive is None or (o['time'] >= frm if self.from_inclusive else o['time'] > frm))]
         return sorted(below, key=lambda o: -o['time'])[:limit]
 
 
@@ -32,15 +36,16 @@ class FopBank(CorpBank):
       «відсортованих з кінця періоду»);
     * обрізання за `limit` -- ДОКУМЕНТАЛЬНА гіпотеза (500: go-mono v0.5.3, спільнотна документація; журнал 05а, «Задача 5, до старту»), у
       run1 не виміряна (найбільша відповідь -- 31 операція); у запиті ФОП ліміту немає, тож `limit` тут -- місткість сторінки моделі;
-    * виключність `to` -- НЕ виміряна для ФОП: перенесена з юросіб (`9e1eb08`), тому продовження конектора (Мин(E + 1, U)) від неї не залежить;
+    * операція з `time = to` не повертається -- виміряно для юросіб (журнал 05а, `9e1eb08`), для ФОП перенесено (не виміряно); виключна межа чи
+      дробові секунди -- не з'ясовано. Продовження конектора (Мин(E + 1, U)) від цього не залежить; `to_inclusive=True` -- модель найгіршого
+      випадку для записів меж періоду;
     * нижня межа `from` -- НЕ виміряна: операції з `time` < `from` не повертаються, `time` = `from` повертається (припущення; операцій на
       секунді межі відрізків: у `СинтГраницаОтрезков` модель найгіршого випадку (`from` виключний, `from_inclusive=False`); `СинтПолнаяНаНачале` припускає включний).
     Модель відтворює справжній запис `fop_statement_segment_01` (одна сторінка, 31 операція, той самий порядок), див. tests/test_api_bankmodel.py."""
 
     def __init__(self, ops, to_inclusive=False, from_inclusive=True):
         """`from_inclusive=False` -- модель найгіршого випадку для перекриття відрізків (`from` виключний, не виміряно)."""
-        super().__init__(ops, to_inclusive)
-        self.from_inclusive = from_inclusive
+        super().__init__(ops, to_inclusive, from_inclusive)
 
     def statement(self, frm, to, limit):
         """Сторінка відповіді: найновіші `limit` операцій з `frm` <= `time` < `to` (від нових до старих)."""

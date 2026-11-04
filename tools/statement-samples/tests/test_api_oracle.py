@@ -246,7 +246,7 @@ class Conservation(unittest.TestCase):
     @staticmethod
     def accounted(e):
         numbers = [o['ПорядковыйНомер'] for o in e.ops] + [d['ПорядковыйНомер'] for d in e.diags if d['ПорядковыйНомер'] > 0]
-        return len(numbers) == len(set(numbers)) and len(numbers) + e.duplicates + e.silent == e.items
+        return len(numbers) == len(set(numbers)) and len(numbers) + e.duplicates + e.silent + len(e.out_of_period) == e.items
 
     def test_every_synthetic_record_is_accounted_for(self):
         for s in S.all_scenarios():

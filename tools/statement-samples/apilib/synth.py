@@ -251,6 +251,16 @@ def to_unix(local):
     return kyiv.local_to_unix(local)
 
 
+def W(p):
+    """Межі першого запиту виписки monobank для параметрів читання: (`НачалоПериода` - 1 с, Мин(`КонецПериода` + 1 с, момент читання))."""
+    return C.request_bounds(p)
+
+
+def bounds(start, end, moment=None):
+    """Те саме за початком і кінцем періоду (місцевий час) і моментом читання (UTC)."""
+    return C.request_bounds(Params(account='', period_start=start, period_end=end, reading_moment=moment or C.DEFAULT_READING_MOMENT))
+
+
 def next_to(earliest_unix):
     """`to` наступного запиту після повної сторінки: УниверсальноеВремя(МестноеВремя(найраніший time)) (MF:456, 462)."""
     return kyiv.local_to_unix(kyiv.unix_to_local(earliest_unix))
@@ -324,13 +334,13 @@ def utc(y, mo, d, h=0, mi=0, s=0):
     return int((datetime(y, mo, d, h, mi, s) - kyiv.EPOCH).total_seconds())
 
 
-def corp_paged(b, p, ops, limit, first_headers=(), stop_after=None):
+def corp_paged(b, p, ops, limit, first_headers=(), stop_after=None, **model):
     """Обміни виписки юросіб, які дав би банк (модель `bankmodel.CorpBank`, лише виміряне) на запити конектора за D36 п. 11
     (`44d22a1` і рішення за рев'ю): `to` наступного запиту = Мин(найраніша `time` сторінки + 1, поточна `to`) (межова секунда
     охоплюється вдруге, повтори відкидає конектор за `id`); повна сторінка, що лежить в одній секунді (продовження збіглося б із поточним), -- застряглий курсор:
-    читання йде далі з `to` = ця секунда (виключна). Кінець -- сторінка, коротша за `limit`, або `to` не вище за початок."""
-    bank = bankmodel.CorpBank(ops)
-    frm, upper, first = to_unix(p.period_start), to_unix(p.period_end), True
+    читання йде далі з `to` = ця секунда (операцію з `time = to` банк не повертає). Кінець -- сторінка, коротша за `limit`, або `to` не вище за початок."""
+    bank = bankmodel.CorpBank(ops, **model)
+    (frm, upper), first = W(p), True
     while True:
         page = bank.statement(frm, upper, limit)
         b.statement(frm, upper, resp_json(200, page, first_headers if first else ()))
@@ -346,12 +356,12 @@ def corp_paged(b, p, ops, limit, first_headers=(), stop_after=None):
         upper = nxt
 
 
-def fop_paged(b, p, ops, limit, stop_after=None, from_inclusive=True):
+def fop_paged(b, p, ops, limit, stop_after=None, from_inclusive=True, to_inclusive=False):
     """Обміни виписки ФОП, які дав би банк (модель `bankmodel.FopBank`) на запити конектора: відрізки ≤ 31 доби, усередині кожного --
     сторінки за D36 п. 11, як у юросіб (`corp_paged`); відрізки -- від найновішого, сусідні перекриваються на секунду (`C.fop_windows`): `to` продовження = Мин(найраніша `time` + 1, поточна `to`), застрягання -- крок
     Мин(E, U - 1). У запиті ФОП ліміту немає: `limit` -- поріг повної сторінки (шов розміру сторінки, `Params.page_limit`)."""
-    bank = bankmodel.FopBank(ops, from_inclusive=from_inclusive)
-    for frm, upper in C.fop_windows(to_unix(p.period_start), to_unix(p.period_end)):
+    bank = bankmodel.FopBank(ops, to_inclusive=to_inclusive, from_inclusive=from_inclusive)
+    for frm, upper in C.fop_windows(*W(p)):
         while True:
             page = bank.statement(frm, upper, limit)
             b.statement(frm, upper, resp_json(200, page))
@@ -591,7 +601,8 @@ def _fop_scenarios():
     sc = []
 
     def new(sid, title, focus, start=_day(2026, 10, 14), end=_day(2026, 10, 15, 23, 59, 59), account=None, **kw):
-        p = Params(account=account or iban, period_start=start, period_end=end, old_account_currency='980', **kw)
+        p = Params(account=account or iban, period_start=start, period_end=end, old_account_currency='980',
+                   **dict({'reading_moment': C.DEFAULT_READING_MOMENT}, **kw))
         s = Scenario('mono-fop', sid, title, focus, p)
         b = Builder('mono-fop', sid, p)
         b.p_acct = acct_id
@@ -608,7 +619,7 @@ def _fop_scenarios():
     cnt = lambda: (g.iban(), g.edrpou(), g.name())
 
     def one(b, items, start, end):
-        b.statement(to_unix(start), to_unix(end), resp_json(200, desc_ordered(items)))
+        b.statement(*bounds(start, end), resp_json(200, desc_ordered(items)))
 
     # --- Статусы
     s, b = new('СинтСтатусы', 'monobank ФОП: hold і проведені, обидва напрями (hold і від\'ємні суми -- документальний, не спостерігалось)', [2])
@@ -646,7 +657,7 @@ def _fop_scenarios():
     start, end = _day(2026, 9, 5, 6, 30), _day(2026, 10, 15, 14, 20, 7)
     s, b = new('СинтОкна', 'monobank ФОП: період 40 діб -- два відрізки з перекриттям на секунду, межа посеред доби, старіший порожній', [3], start=start, end=end)
     info(b)
-    wins = C.fop_windows(to_unix(start), to_unix(end))
+    wins = C.fop_windows(*bounds(start, end))
     b.statement(wins[0][0], wins[0][1], resp_json(200, desc_ordered([
         ftx(g, t=utc(2026, 10, 10, 9), amount=-5000, desc='Покупка', cnt=cnt()),
         ftx(g, t=utc(2026, 10, 12, 9), amount=9000, desc='Надходження', cnt=cnt())])))
@@ -694,15 +705,15 @@ def _fop_scenarios():
     s.exchanges = b.ex
     sc.append(s)
 
-    # Повна сторінка, усі операції на `time` = `to` запиту: сторінка записана вручну (модель з виключним `to` таких операцій не повернула б;
+    # Повна сторінка, усі операції на `time` = `to` запиту: сторінка записана вручну (модель, що не повертає операцію з `time = to`, таких операцій не повернула б;
     # семантика `to` для цього випадку не виміряна). Межа продовження = поточна відразу; крок Мин(E, U - 1); старіші операції читаються далі.
     s, b = paged('СинтПолнаяНаTo', 'monobank ФОП: повна сторінка, усі операції на time = to запиту -- застряглий курсор, крок Мин(E, U - 1), старіші операції в конверті (D36 п. 11)')
     info(b)
-    top = to_unix(s.params.period_end)
+    top = W(s.params)[1]
     on_to = [ftx(g, t=top, amount=-(100 + i), desc='на to %d' % i, tid=fid('T', i)) for i in range(lim)]
     below_to = [ftx(g, t=top - 100 - 10 * i, amount=-(400 + i), desc='нижче %d' % i, tid=fid('U', i)) for i in range(3)]
-    b.statement(to_unix(s.params.period_start), top, resp_json(200, on_to))
-    b.statement(to_unix(s.params.period_start), top - 1, resp_json(200, bankmodel.FopBank(on_to + below_to).statement(0, top - 1, lim)))
+    b.statement(W(s.params)[0], top, resp_json(200, on_to))
+    b.statement(W(s.params)[0], top - 1, resp_json(200, bankmodel.FopBank(on_to + below_to).statement(0, top - 1, lim)))
     s.exchanges = b.ex
     sc.append(s)
 
@@ -726,14 +737,14 @@ def _fop_scenarios():
     fop_paged(b, s.params, first_page, lim, stop_after=2)
     bad_to = anomaly_t + 1
     outside = [ftx(g, t=bad_to + 1 + i, amount=-(500 + i), desc='поза to %d' % i, tid=fid('I', i)) for i in range(lim)]
-    b.statement(to_unix(s.params.period_start), bad_to, resp_json(200, sorted(outside, key=lambda o: -o['time'])))
+    b.statement(W(s.params)[0], bad_to, resp_json(200, sorted(outside, key=lambda o: -o['time'])))
     s.exchanges = b.ex
     sc.append(s)
 
     # Контроль до запобіжника: операції рівно на `time` = `to` і `time` = `from` -- НЕ аномалія (звичайні дані, кожна рівно раз)
     s, b = new('СинтОперацияНаTo', 'monobank ФОП: операції на time = to і time = from запиту -- не аномалія, звичайні дані; кожна рівно раз', [3])
     info(b)
-    eq_from, eq_to = to_unix(s.params.period_start), to_unix(s.params.period_end)
+    eq_from, eq_to = W(s.params)
     edge = [ftx(g, t=eq_to, amount=-1000, desc='на to', tid=fid('Q', 1)), ftx(g, t=utc(2026, 10, 14, 8), amount=2000, desc='всередині', tid=fid('Q', 2)),
             ftx(g, t=eq_from, amount=-3000, desc='на from', tid=fid('Q', 3))]
     b.statement(eq_from, eq_to, resp_json(200, sorted(edge, key=lambda o: -o['time'])))
@@ -746,7 +757,7 @@ def _fop_scenarios():
     no_time = [ftx(g, t=0, amount=-(100 + i), desc='без часу %d' % i, tid=fid('X', i)) for i in range(lim)]
     for x in no_time:
         x.pop('time')
-    b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(200, no_time))
+    b.statement(*W(s.params), resp_json(200, no_time))
     s.exchanges = b.ex
     sc.append(s)
 
@@ -767,11 +778,26 @@ def _fop_scenarios():
     # конверті рівно раз. Без перекриття вона б загубилась.
     s, b = new('СинтГраницаОтрезков', 'monobank ФОП: операція на секунді межі відрізків -- від виключного from її повертає лише старіший відрізок (перекриття на секунду)', [3], start=start, end=end)
     info(b)
-    boundary_t = C.fop_windows(to_unix(start), to_unix(end))[0][0]
+    boundary_t = C.fop_windows(*bounds(start, end))[0][0]
     on_edge = [ftx(g, t=utc(2026, 10, 12, 9), amount=-1000, desc='новіша', tid=fid('G', 1)),
                ftx(g, t=boundary_t, amount=-2000, desc='на межі відрізків', tid=fid('G', 2)),
                ftx(g, t=utc(2026, 9, 10, 9), amount=3000, desc='старіша', tid=fid('G', 3))]
     fop_paged(b, s.params, on_edge, C.PAGE_SIZE_MONO, from_inclusive=False)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Межі періоду (D36 п. 11, 71b3771 і a90f7ea): `НачалоПериода` і `КонецПериода` -- включні моменти; запит іде від `НачалоПериода` - 1 с до
+    # `КонецПериода` + 1 с. Модель найгіршого випадку: обидві межі запиту включні, тож банк повертає й операцію на `НачалоПериода` - 1 с, і
+    # на `КонецПериода` + 1 с -- конектор відкидає їх мовчки, а операції рівно на `НачалоПериода` і `КонецПериода` лишає.
+    s, b = new('СинтГраницыПериода', 'monobank ФОП: операції рівно на НачалоПериода і КонецПериода лишаються, на НачалоПериода - 1 с і КонецПериода + 1 с (межі запиту) відкидаються мовчки', [3])
+    info(b)
+    s0, e0 = to_unix(s.params.period_start), to_unix(s.params.period_end)
+    edge = [ftx(g, t=e0 + 1, amount=-1100, desc='між КонецПериода і межею запиту', tid=fid('D', 1)),
+            ftx(g, t=e0, amount=-1200, desc='рівно на КонецПериода', tid=fid('D', 2)),
+            ftx(g, t=utc(2026, 10, 14, 8), amount=1300, desc='всередині', tid=fid('D', 3)),
+            ftx(g, t=s0, amount=-1400, desc='рівно на НачалоПериода', tid=fid('D', 4)),
+            ftx(g, t=s0 - 1, amount=-1500, desc='між НачалоПериода - 1 с і НачалоПериода', tid=fid('D', 5))]
+    fop_paged(b, s.params, edge, C.PAGE_SIZE_MONO, from_inclusive=True, to_inclusive=True)
     s.exchanges = b.ex
     sc.append(s)
 
@@ -862,7 +888,7 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
             start_, end_ = _day(2026, 9, 5), _day(2026, 10, 15)
             s, b = new(sid, title, [4], start=start_, end=end_)
             info(b)
-            wins = C.fop_windows(to_unix(start_), to_unix(end_))
+            wins = C.fop_windows(*bounds(start_, end_))
             octo = utc(2026, 10, 10, 8)
             b.statement(wins[0][0], wins[0][1], resp_json(200, desc_ordered(
                 [ftx(g, t=octo + 100 * (i + 1), amount=-(500 + i), desc='запис %d' % i, cnt=cnt()) for i in range(2)])))
@@ -871,10 +897,10 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
             s, b = new(sid, title, [4])
             if full:
                 page = full_page('E')
-                b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(200, page))
-                b.statement(to_unix(s.params.period_start), min(x['time'] for x in page) + 1, resp, failure)    # D36 п. 11 (44d22a1): to = time + 1
+                b.statement(*W(s.params), resp_json(200, page))
+                b.statement(W(s.params)[0], min(x['time'] for x in page) + 1, resp, failure)    # D36 п. 11 (44d22a1): to = time + 1
             else:
-                b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp, failure)
+                b.statement(*W(s.params), resp, failure)
         s.exchanges = b.ex
         sc.append(s)
 
@@ -894,32 +920,32 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
         s, b = new('СинтПериод400', 'monobank ФОП: початок пізніше за кінець -- HTTP 400, лише errorDescription (спостережено)', [4],
                    start=_day(2026, 10, 15, 23, 59, 59), end=_day(2026, 10, 14))
         info(b)
-        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),
+        b.statement(*W(s.params),
                     resp_json(400, {'errorDescription': "Value 'to' must be greater than 'from'"}))
         s.exchanges = b.ex
         sc.append(s)
         # конектор бере ідентифікатор із client-info за IBAN, тож «чужий» ідентифікатор у запиті не з'явиться; виписку на рахунок із
         # client-info банк відхиляє тим самим тілом (спостережено у run1 для чужого / неіснуючого ідентифікатора)
         s, b = start('СинтЧужойСчет400', 'monobank ФОП: виписка на рахунок із client-info відхилена -- HTTP 400, errorDescription (форма спостережена)', [4])
-        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(400, {'errorDescription': 'invalid account'}))
+        b.statement(*W(s.params), resp_json(400, {'errorDescription': 'invalid account'}))
         s.exchanges = b.ex
         sc.append(s)
     else:
         s, b = new('СинтТокен400', 'monobank юросіб: недійсний токен -- HTTP 400, text/plain, без errorCode (спостережено)', [4])
-        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),
+        b.statement(*W(s.params),
                     {'status': 400, 'headers': [('content-type', 'text/plain; charset=utf-8')],
                      'body': json.dumps({'errorDescription': 'invalid token'}, separators=(',', ':')).encode('utf-8')})
         s.exchanges = b.ex
         sc.append(s)
         s, b = new('СинтТокен403', 'monobank юросіб: недійсний токен -- HTTP 403, errorCode forbidden [документальний, не спостерігалось]', [4])
-        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),
+        b.statement(*W(s.params),
                     resp_json(403, {'errorCode': 'forbidden', 'errorDescription': 'Invalid or expired token'}))
         s.exchanges = b.ex
         sc.append(s)
         # параметри читання з початком пізніше за кінець (як у справжньому записі): конектор шле їх як є, запит у записі збігається
         s, b = new('СинтПериод400', 'monobank юросіб: початок пізніше за кінець -- HTTP 400, BAD_REQUEST (спостережено)', [4],
                    start=_day(2026, 10, 15, 23, 59, 59), end=_day(2026, 10, 14))
-        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),
+        b.statement(*W(s.params),
                     resp_json(400, {'errorCode': 'BAD_REQUEST', 'errorDescription': 'From date should be less than to date'}))
         s.exchanges = b.ex
         sc.append(s)
@@ -927,17 +953,30 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
     hdr = [('x-rate-limit-retry-after-seconds', '5')] if not fop else []   # ФОП: заголовка паузи документація не описує
     body429 = {'errorDescription': 'Too many requests'} if fop else {'errorCode': 'tooManyRequests', 'errorDescription': 'Too many requests'}
     s, b = start('СинтЛимит429', '%s: 429 із заголовком паузи, повтор вдається [документальний, не спостерігалось]' % bank, [4])
-    b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(429, body429, hdr))
+    b.statement(*W(s.params), resp_json(429, body429, hdr))
     one(b, good_page(), s.params.period_start, s.params.period_end)
     s.exchanges = b.ex
     sc.append(s)
 
     s, b = start('СинтЛимит429Дважды', '%s: 429 і після повтору -- читання неповне [документальний, не спостерігалось]' % bank, [4])
     for _ in range(2):
-        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(429, body429, hdr))
+        b.statement(*W(s.params), resp_json(429, body429, hdr))
     s.exchanges = b.ex
     sc.append(s)
 
+    # Пауза за заголовком понад стелю конектора (D36 п. 8, a90f7ea): без сну й повтору, `Повторить`, діагностика називає запитану паузу
+    big = [('retry-after', '3600')] if fop else [('x-rate-limit-retry-after-seconds', '3600')]
+    s, b = start('СинтЛимит429Потолок', '%s: 429 з паузою 3600 с понад стелю -- без сну й повтору, «повторити» [документальний, не спостерігалось]' % bank, [4])
+    b.statement(*W(s.params), resp_json(429, body429, big))
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Нерозібраний заголовок (HTTP-дата) -- пауза за замовчуванням 60 с, повтор вдається
+    s, b = start('СинтЛимит429Дата', '%s: 429, retry-after -- HTTP-дата (не розібрано): пауза за замовчуванням, повтор вдається [документальний, не спостерігалось]' % bank, [4])
+    b.statement(*W(s.params), resp_json(429, body429, [('retry-after', 'Wed, 21 Oct 2026 07:28:00 GMT')]))
+    one(b, good_page(), s.params.period_start, s.params.period_end)
+    s.exchanges = b.ex
+    sc.append(s)
 
 # ---------------------------------------------------------------------- monobank юросіб
 def _corp_scenarios():
@@ -946,7 +985,8 @@ def _corp_scenarios():
     sc = []
 
     def new(sid, title, focus, start=_day(2026, 10, 14), end=_day(2026, 10, 15, 23, 59, 59), account=None, **kw):
-        p = Params(account=account or iban, period_start=start, period_end=end, old_account_currency='980', **kw)
+        p = Params(account=account or iban, period_start=start, period_end=end, old_account_currency='980',
+                   **dict({'reading_moment': C.DEFAULT_READING_MOMENT}, **kw))
         s = Scenario('mono-corp', sid, title, focus, p)
         return s, Builder('mono-corp', sid, p)
 
@@ -954,7 +994,7 @@ def _corp_scenarios():
     cnt = lambda: (g.edrpou(), g.iban(), g.name())
 
     def one(b, items, start, end, hdr=()):
-        b.statement(to_unix(start), to_unix(end), resp_json(200, desc_ordered(items), hdr))
+        b.statement(*bounds(start, end), resp_json(200, desc_ordered(items), hdr))
 
     s, b = new('СинтСтатусы', 'monobank юросіб: DONE, PENDING, DECLINED, реверс окремим записом і зміною стану', [2])
     orig = ctx_(g, t=t0 + 100, amount=-46500, desc='Оплата рахунку', done=t0 + 160, cnt=cnt(), tid='ab12cd34-ef56-4a78-b9c0-d1e2f3a4b5c6')
@@ -1024,14 +1064,14 @@ def _corp_scenarios():
     # неповне читання; читання йде далі з межею в цю секунду (тут старших операцій немає). Припущення, не виміряне: операція
     # на секунді `from` повертається (нижня межа `from` у моделі не змодельована).
     # Повна сторінка, усі операції на `time` = `to` запиту (межа продовження = поточна відразу; крок після застрягання -- Мин(E, U - 1),
-    # без «- 1» читання повторювало б той самий запит). Сторінка записана вручну: модель виміряного (`to` виключний) операцій на
+    # без «- 1» читання повторювало б той самий запит). Сторінка записана вручну: модель виміряного (операцію з `time = to` банк не повертає) операцій на
     # `time` = `to` не повернула б; семантика `to` для цього випадку не виміряна. Старші операції читаються далі.
     s, b = new('СинтПолнаяНаTo', 'monobank юросіб: повна сторінка, усі операції на time = to запиту -- застряглий курсор, крок Мин(E, U - 1), старіші операції в конверті (D36 п. 11)', [3])
-    top = to_unix(s.params.period_end)
+    top = W(s.params)[1]
     on_to = [ctx_(g, t=top, amount=-(100 + i), desc='на to %d' % i, tid=seqid('T', i)) for i in range(lim)]
     below_to = [ctx_(g, t=top - 100 - 10 * i, amount=-(400 + i), desc='нижче %d' % i, tid=seqid('U', i)) for i in range(3)]
-    b.statement(to_unix(s.params.period_start), top, resp_json(200, on_to))
-    b.statement(to_unix(s.params.period_start), top - 1, resp_json(200, bankmodel.CorpBank(on_to + below_to).statement(0, top - 1, lim)))
+    b.statement(W(s.params)[0], top, resp_json(200, on_to))
+    b.statement(W(s.params)[0], top - 1, resp_json(200, bankmodel.CorpBank(on_to + below_to).statement(0, top - 1, lim)))
     s.exchanges = b.ex
     sc.append(s)
 
@@ -1050,14 +1090,14 @@ def _corp_scenarios():
     corp_paged(b, s.params, first_page, lim, stop_after=1)
     bad_to = anomaly_t + 1                                       # to другого запиту = найраніша time першої сторінки + 1
     outside = [ctx_(g, t=bad_to + 1 + i, amount=-(500 + i), desc='поза to %d' % i, tid=seqid('I', i)) for i in range(lim)]
-    b.statement(to_unix(s.params.period_start), bad_to, resp_json(200, sorted(outside, key=lambda o: -o['time'])))
+    b.statement(W(s.params)[0], bad_to, resp_json(200, sorted(outside, key=lambda o: -o['time'])))
     s.exchanges = b.ex
     sc.append(s)
 
     # Контроль до запобіжника: операції рівно на `time` = `to` і `time` = `from` -- НЕ аномалія (виключність межі й дробові секунди не
     # виміряно; повтори відкидає id). Звичайні дані без відмови, кожна операція в конверті рівно один раз.
     s, b = new('СинтОперацияНаTo', 'monobank юросіб: операції на time = to і time = from запиту -- не аномалія, звичайні дані; кожна рівно раз', [3])
-    eq_from, eq_to = to_unix(s.params.period_start), to_unix(s.params.period_end)
+    eq_from, eq_to = W(s.params)
     edge = [ctx_(g, t=eq_to, amount=-1000, desc='на to', done=eq_to, tid=seqid('Q', 1)),
             ctx_(g, t=utc(2026, 10, 14, 8), amount=2000, desc='всередині', done=utc(2026, 10, 14, 8) + 5, tid=seqid('Q', 2)),
             ctx_(g, t=eq_from, amount=-3000, desc='на from', done=eq_from, tid=seqid('Q', 3))]
@@ -1066,11 +1106,23 @@ def _corp_scenarios():
     s.exchanges = b.ex
     sc.append(s)
 
+    # Межі періоду (D36 п. 11, 71b3771 і a90f7ea): див. ФОП. Модель найгіршого випадку -- обидві межі запиту включні.
+    s, b = new('СинтГраницыПериода', 'monobank юросіб: операції рівно на НачалоПериода і КонецПериода лишаються, на НачалоПериода - 1 с і КонецПериода + 1 с (межі запиту) відкидаються мовчки', [3])
+    s0, e0 = to_unix(s.params.period_start), to_unix(s.params.period_end)
+    edge = [ctx_(g, t=e0 + 1, amount=-1100, desc='між КонецПериода і межею запиту', tid=seqid('D', 1)),
+            ctx_(g, t=e0, amount=-1200, desc='рівно на КонецПериода', tid=seqid('D', 2)),
+            ctx_(g, t=utc(2026, 10, 14, 8), amount=1300, desc='всередині', tid=seqid('D', 3)),
+            ctx_(g, t=s0, amount=-1400, desc='рівно на НачалоПериода', tid=seqid('D', 4)),
+            ctx_(g, t=s0 - 1, amount=-1500, desc='між НачалоПериода - 1 с і НачалоПериода', tid=seqid('D', 5))]
+    corp_paged(b, s.params, edge, C.CORP_WORKING_LIMIT, from_inclusive=True, to_inclusive=True)
+    s.exchanges = b.ex
+    sc.append(s)
+
     # Повна сторінка без читаного `time` (поза виміряним; відповідь записана вручну як аномалія, модель банку не застосовується): курсора
     # немає, хоча «є ще» -- читання неповне, «повторити» (D36 п. 11); кожен рядок без часу -- Ошибка bad-date, операцій немає.
     s, b = new('СинтПолнаяБезВремени', 'monobank юросіб: повна сторінка без читаного time -- курсора немає, «повторити» (поза виміряним)', [3])
     no_time = [ctx_(g, t=0, amount=-(100 + i), desc='без часу %d' % i, tid=seqid('X', i), drop=('time',)) for i in range(lim)]
-    b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(200, no_time))
+    b.statement(*W(s.params), resp_json(200, no_time))
     s.exchanges = b.ex
     sc.append(s)
 
@@ -1148,7 +1200,8 @@ def _corp_scenarios():
     sc.append(s)
 
     with_balances = {'СинтСтатусы', 'СинтПовтор', 'СинтПоля', 'СинтСтраницы', 'СинтКратнаяСтраница', 'СинтВремяВесна',
-                     'СинтВремяОсень', 'СинтВалюта', 'СинтПусто', 'СинтЛимит429', 'СинтСекундаРаспалась'}
+                     'СинтВремяОсень', 'СинтВалюта', 'СинтПусто', 'СинтЛимит429', 'СинтСекундаРаспалась', 'СинтГраницыПериода',
+                     'СинтЛимит429Дата'}
     for s in sc:
         if s.sid in with_balances:
             b = Builder('mono-corp', s.sid, s.params)
@@ -1156,13 +1209,13 @@ def _corp_scenarios():
             b.balances(resp_json(200, corp_balances_body(s.params)))
 
     s, b = new('СинтСчетНеНайден404', 'monobank юросіб: IBAN не знайдено -- 404 notFound [документальний, не спостерігалось]', [4])
-    b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),
+    b.statement(*W(s.params),
                 resp_json(404, {'errorCode': 'notFound', 'errorDescription': 'Account not found'}))
     s.exchanges = b.ex
     sc.append(s)
 
     s, b = new('СинтЧужойСчет400', 'monobank юросіб: чужий / неіснуючий IBAN -- HTTP 400, BAD_REQUEST (спостережено)', [4])
-    b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),
+    b.statement(*W(s.params),
                 resp_json(400, {'errorCode': 'BAD_REQUEST', 'errorDescription': 'Account not found'}))
     s.exchanges = b.ex
     sc.append(s)

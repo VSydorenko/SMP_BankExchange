@@ -74,7 +74,8 @@ def run1_sets(bank, anon_root):
                 derived = readings.model_paged_corp(rec)
                 p = C.Params(account=et['parameters']['НомерСчета'],
                              period_start=datetime.strptime(et['parameters']['НачалоПериода'], '%Y-%m-%dT%H:%M:%S'),
-                             period_end=datetime.strptime(et['parameters']['КонецПериода'], '%Y-%m-%dT%H:%M:%S'), old_account_currency='980')
+                             period_end=datetime.strptime(et['parameters']['КонецПериода'], '%Y-%m-%dT%H:%M:%S'), old_account_currency='980',
+                             reading_moment=(datetime.strptime(et['parameters']['МоментЧтения'], '%Y-%m-%dT%H:%M:%S') if et['parameters'].get('МоментЧтения') else None))
                 did = ident + '_Модель30'
                 d, _, _ = etalon.build_from(derived, p, sid=did, title='справжні операції запису %s, сторінки від моделі банку (limit %d)' % (ident, C.CORP_WORKING_LIMIT),
                                             focus=et.get('reviewFocus', []), macro=et.get('recording', {}).get('макет', did), synthetic=False)

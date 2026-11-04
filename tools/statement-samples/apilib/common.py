@@ -38,6 +38,20 @@ def page_limit(bank):
     return CORP_WORKING_LIMIT if bank == 'mono-corp' else PAGE_SIZE_MONO
 
 
+def reading_unix(p):
+    """Момент читання в секундах Unix (UTC)."""
+    return int(((p.reading_moment or DEFAULT_READING_MOMENT) - kyiv.EPOCH).total_seconds())
+
+
+def request_bounds(p):
+    """Межі ПЕРШОГО запиту виписки monobank (D36 п. 11, спеки 71b3771 і a90f7ea), секунди Unix: нижня -- `НачалоПериода` - 1 с; верхня --
+    Мин(`КонецПериода` + 1 с, момент читання). Обидві межі періоду включні; операції поза періодом у межах запиту відкидаються мовчки."""
+    if p.reading_moment is None:
+        # запис без моменту читання -- старі перевірки оракула на документальних прикладах (до 71b3771 і a90f7ea): межі запиту = межі періоду
+        return kyiv.local_to_unix(p.period_start), kyiv.local_to_unix(p.period_end)
+    return kyiv.local_to_unix(p.period_start) - 1, min(kyiv.local_to_unix(p.period_end) + 1, reading_unix(p))
+
+
 def fop_page_limit(p):
     """Повна сторінка ФОП: поріг, з якого продовжуємо читання (D36 п. 11). ДОКУМЕНТАЛЬНА гіпотеза -- 500 (go-mono v0.5.3, спільнотна
     документація; журнал 05а, «Задача 5, до старту»), не виміряне правило. `Params.page_limit` -- шов розміру сторінки в тесті
@@ -46,6 +60,11 @@ def fop_page_limit(p):
 
 
 FOP_WINDOW_SECONDS = 2678400    # ДлинаОтрезкаСекунд() (MF:472-476)
+# Стеля паузи за заголовком банку (D36 п. 8, спека a90f7ea): не менша за документований інтервал ФОП між запитами виписки (60 с), інакше
+# звичайне обмеження частоти ставало б відмовою; 120 с -- подвійний запас. Банк просить більше -- `Повторить` без очікування.
+PAUSE_CEILING_SECONDS = 120
+# Фіксований момент транспорту для записів (UTC, лише monobank): пізніший за кінці періодів усіх записів, крім ЗапErrorsFuturePeriod.
+DEFAULT_READING_MOMENT = datetime(2026, 11, 4, 0, 0, 0)
 UNICODE_SPACES = ' \t\r\n\xa0'
 
 
@@ -72,11 +91,15 @@ class Params:
     absent_day_is_final: bool = False
     # шов розміру сторінки ФОП (тест): поріг «повної сторінки»; None -- робочий (документальні 500). У запиті ФОП ліміту немає
     page_limit: object = None
+    # момент читання `Транспорт.ТекущийМомент()` (UTC, naive); None -- банк без правила верхньої межі (Приват), у еталон не пишеться
+    reading_moment: object = None
 
     def to_json(self):
         d = {'НомерСчета': self.account, 'НачалоПериода': iso(self.period_start), 'КонецПериода': iso(self.period_end)}
         if self.page_limit:
             d['РазмерСтраницы'] = self.page_limit
+        if self.reading_moment is not None:
+            d['МоментЧтения'] = iso(self.reading_moment)
         return d
 
 

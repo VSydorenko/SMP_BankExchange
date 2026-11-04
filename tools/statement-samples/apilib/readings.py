@@ -25,8 +25,10 @@ class Reading:
     params: Params
 
     def recording(self):
-        m = R.make_manifest(self.bank, 'reading-' + self.scenario, self.exchanges, note='reading: ' + self.scenario)
-        return R.Recording(m, self.exchanges)
+        # номери обмінів -- підряд (читання складене з обмінів різних сценаріїв і змодельованих)
+        exchanges = [dict(e, seq=k) for k, e in enumerate(self.exchanges, 1)]
+        m = R.make_manifest(self.bank, 'reading-' + self.scenario, exchanges, note='reading: ' + self.scenario)
+        return R.Recording(m, exchanges)
 
     @property
     def name(self):
@@ -102,8 +104,11 @@ def readings(rec):
             if not st or bal is None:
                 continue
             acct, frm, to = R.statement_window(st[0])
-            p = Params(account=acct, period_start=kyiv.unix_to_local(frm), period_end=kyiv.unix_to_local(to), old_account_currency='980')
-            out.append(Reading(reading_id(bank, sc), bank, sc, st + ([bal] if _ok(st[-1]) else []), p))
+            p = Params(account=acct, period_start=kyiv.unix_to_local(frm), period_end=kyiv.unix_to_local(to), old_account_currency='980',
+                       reading_moment=_moment_of(sc))
+            # читання під межі запиту D36 п. 11 (71b3771, a90f7ea): запити похідні, тіла відповідей ті самі
+            bal_ex = _modeled_corp_balances(bal, acct, p) if _is_future(sc) else bal
+            out.append(Reading(reading_id(bank, sc), bank, sc, _rebound(st, p) + ([bal_ex] if _ok(st[-1]) else []), p))
     else:
         info = _first(rec, lambda e: e['request']['path'] == C.FOP_CLIENT_INFO and _ok(e))
         for sc, exs in _groups(rec):
@@ -122,10 +127,63 @@ def readings(rec):
                 end = kyiv.unix_to_local(max(R.statement_window(e)[2] for e in st))
             else:
                 start = end = datetime(2000, 1, 1)
-            p = Params(account=iban, period_start=start, period_end=end, old_account_currency='980')
+            p = Params(account=iban, period_start=start, period_end=end, old_account_currency='980', reading_moment=_moment_of(sc))
             exchanges = ([ci] if not own_info else []) + exs
-            out.append(Reading(reading_id(bank, sc), bank, sc, [e for e in exchanges if e['request']['path'] == C.FOP_CLIENT_INFO
-                                                                  or R.statement_window(e)], p))
+            infos = [e for e in exchanges if e['request']['path'] == C.FOP_CLIENT_INFO]
+            out.append(Reading(reading_id(bank, sc), bank, sc, infos + _rebound([e for e in exchanges if R.statement_window(e)], p, fop=True), p))
+    return out
+
+
+def _is_future(scenario):
+    return 'future_period' in scenario
+
+
+def _moment_of(scenario):
+    """Фіксований момент транспорту читання (UTC). Майбутній період: момент усередині періоду (journal 05а, раунд `from`), щоб запит
+    `(НачалоПериода - 1 с, момент)` був впорядкованим, а відповідь банку -- справжня (200, порожній масив)."""
+    return FUTURE_READING_MOMENT if _is_future(scenario) else C.DEFAULT_READING_MOMENT
+
+
+FUTURE_READING_MOMENT = datetime(2026, 11, 20, 0, 0, 0)
+
+
+def _modeled_corp_balances(bal, acct, p):
+    """Обмін `balances` юросіб під читання майбутнього періоду -- ЗМОДЕЛЬОВАНИЙ (у записі такого обміну немає): мінімум, потрібний запиту -- рядок на
+    кожну добу періоду, усі `isFinal = true`, щоб банківська межа не затьмарювала правило моменту читання. Заголовки -- справжнього `balances`."""
+    from . import synth
+    body = json.dumps(synth.corp_balances_body(p), ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+    return R.make_exchange(bal['seq'], 'modeled_balances',
+                           {'method': 'GET', 'host': bal['request']['host'], 'path': '/ext/v1/accounts/%s/balances' % acct,
+                            'query': 'dateFrom=%s&dateTo=%s' % (p.period_start.strftime('%Y-%m-%d'), p.period_end.strftime('%Y-%m-%d'))},
+                           {'status': 200, 'headers': [tuple(h) for h in bal['response']['headers']], 'body': body})
+
+
+def _rebound(statements, p, fop=False):
+    """Запити виписки читання під межі D36 п. 11: `from` = `НачалоПериода` - 1 с, перший `to` = Мин(`КонецПериода` + 1 с, момент читання). Лише шлях
+    запиту; тіла відповідей не змінюються. Для ФОП, якщо межі запиту не вміщаються у відрізок, додається ЗМОДЕЛЬОВАНИЙ обмін старшого відрізка
+    (порожній масив, 200): у справжньому записі ці секунди не запитувались. -> нові обміни."""
+    lo, hi = C.request_bounds(p)
+    orig_from = min(R.statement_window(e)[1] for e in statements) if statements else None
+    wins = C.fop_windows(lo, hi) if fop else [(lo, hi)]
+    out = []
+    for k, e in enumerate(statements):
+        acct, frm, to = R.statement_window(e)
+        ne = json.loads(json.dumps(e))
+        nfrm = lo if frm == orig_from else frm
+        nto = wins[0][1] if k == 0 else to
+        if fop and k == 0:
+            nfrm = wins[0][0]
+        ne['request']['path'] = ne['request']['path'].rsplit('/', 3)[0] + '/%s/%d/%d' % (acct, nfrm, nto)
+        out.append(ne)
+    if fop and statements and len(wins) > 1:
+        base = out[0]
+        for j, (wf, wt) in enumerate(wins[1:], 1):
+            extra = R.make_exchange(base['seq'] + j, 'modeled_older_segment',
+                                    {'method': 'GET', 'host': base['request']['host'],
+                                     'path': base['request']['path'].rsplit('/', 3)[0] + '/%s/%d/%d' % (R.statement_window(base)[0], wf, wt)},
+                                    {'status': 200, 'headers': [tuple(h) for h in base['response']['headers']], 'body': b'[]'},
+                                    started=base['startedUtc'])
+            out.append(extra)
     return out
 
 
@@ -161,7 +219,11 @@ def replay_exclusion(bank, rec, params):
         except R.NotJson:
             continue
         times = [x.get('time') for x in page if isinstance(x, dict) and isinstance(x.get('time'), int)] if isinstance(page, list) else []
-        if times and R.statement_window(nxt)[2] == min(times):
+        # межа продовження конектора: Мин(E + 1, U); застрягання (межа = U) -- крок Мин(E, U - 1), він законний
+        want = min(min(times) + 1, R.statement_window(prev)[2]) if times else None
+        if want is not None and want >= R.statement_window(prev)[2]:
+            want = min(min(times), R.statement_window(prev)[2] - 1)
+        if times and R.statement_window(nxt)[2] == min(times) and want != min(times):
             return 'рекордер продовжував з `to` = межова секунда; конектор за D36 п. 11 (44d22a1) запитує `to` + 1'
     if stmts:
         last = stmts[-1]

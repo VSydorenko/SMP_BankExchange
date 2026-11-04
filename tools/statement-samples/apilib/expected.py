@@ -49,6 +49,7 @@ CLS_RETRY = 'Повторить'
 CLS_HUMAN = 'ДействиеЧеловека'
 PRIVAT_LIMIT = 100                  # dev9: «рекомендовано не більше 100» (privat.txt, параметр limit)
 PRIVAT_PAUSE_SECONDS = 1            # dev9: «не частіше 1 запиту в секунду»
+PAUSE_CEILING = C.PAUSE_CEILING_SECONDS
 MONO_PAUSE_SECONDS = 60             # MF:485-490: ліміт monobank ФОП — 1 запит на 60 с
 BANK_NAMES = {'privat': 'ПриватБанк', 'mono-fop': 'monobank ФОП', 'mono-corp': 'monobank юросіб'}
 OP_COLUMNS = ['ПорядковыйНомер', 'НомерСчета', 'Валюта', 'ДатаОперации', 'НомерДокумента', 'ДатаДокумента', 'Сумма',
@@ -99,6 +100,7 @@ class Expected:
     nonfinal: list = field(default_factory=list)     # моменти неостаточних операцій
     bank_boundary: object = None                     # межа остаточності від банку (balances), D36 п. 10
     used: list = field(default_factory=list)         # обміни запису, які оракул СПОЖИВ, у порядку споживання
+    out_of_period: list = field(default_factory=list)  # номери записів поза періодом (відкинуто мовчки), D36 п. 11
 
     def diag(self, level, n, essence, dev=None, **facts):
         self.diags.append({'Уровень': level, 'ПорядковыйНомер': n, 'Суть': essence, 'Отступ': dev or '', 'Факты': facts})
@@ -242,7 +244,7 @@ def dev9_pauses(rec, p, enabled, out):
             if r['status'] == 429:
                 add(k, _retry_seconds(e), 'after-429', False)
             elif r['status'] == 200 and R.header(e, 'x-rate-limit-remaining') == '0':
-                add(k, _retry_seconds(e), 'limit-exhausted', False)
+                add(k, min(_retry_seconds(e), PAUSE_CEILING), 'limit-exhausted', False)      # випереджальна пауза обмежена стелею
     return res
 
 
@@ -300,6 +302,8 @@ def rule_trust_boundary(out, p):
     if out.failure_class:
         return p.period_start
     cands = [p.period_end] + list(out.nonfinal)
+    if p.reading_moment is not None:
+        cands.append(kyiv.unix_to_local(C.reading_unix(p)))          # D36 п. 10 (a90f7ea): не пізніша за момент читання
     if out.bank_boundary is not None:
         cands.append(out.bank_boundary)
     return max(p.period_start, min(cands))
@@ -394,6 +398,15 @@ def rule_page_without_id(out, ex):
     """exist_next_page без next_page_id: читати далі нічим — читання неповне, «повторити», `Предупреждение`."""
     _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'page-without-id', 'Статус': 200, 'ОписаниеБанка': ''})
     out.rules.add('rule_page_without_id')
+
+
+def rule_pause_over_ceiling(out, ex, bank, ask):
+    """Пауза за заголовком банку (`retry-after`, `x-rate-limit-retry-after-seconds`) понад стелю конектора (D36 п. 8, спека a90f7ea): конектор
+    не чекає -- `Повторить`, читання неповне, діагностика називає запитану паузу. Нерозібраний заголовок (HTTP-дата) -- пауза за
+    замовчуванням 60 с (`_retry_seconds`), стелі не перевищує."""
+    _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'pause-over-ceiling', 'Статус': ex['response']['status'],
+                           'ОписаниеБанка': C.error_description(ex), 'Пауза': ask}, 'pause-over-ceiling')
+    out.rules.add('rule_pause_over_ceiling')
 
 
 def rule_cursor_stuck(out, bound_unix, count):
@@ -665,7 +678,8 @@ def _mono(rec, p, out, disabled):
     if not stmts:
         raise RecordingMismatch('у записі немає запитів виписки')
     # ФОП: відрізки ≤ 31 доби (кожен читається сторінками за D36 п. 11 -- як юросіб); юросіб: один відрізок, межі беруться із запиту
-    windows = [] if corp else C.fop_windows(kyiv.local_to_unix(p.period_start), kyiv.local_to_unix(p.period_end))
+    lo, hi = C.request_bounds(p)
+    windows = [(lo, hi)] if corp else C.fop_windows(lo, hi)           # межі запиту із запасом (71b3771, a90f7ea)
     seg = 0                                                  # поточний відрізок ФОП
     items, n, complete, i = [], 0, True, 0
     continuing = False                                       # запит продовження в тому самому відрізку ще попереду
@@ -674,14 +688,19 @@ def _mono(rec, p, out, disabled):
         i += 1
         use(out, ex)
         acct, frm, to = R.statement_window(ex)
-        if not corp and not continuing:
+        if not continuing:
             if seg >= len(windows) or (frm, to) != windows[seg]:
-                raise RecordingMismatch('перший запит відрізка ФОП запису (%d..%d) не збігається з відрізком читання' % (frm, to))
+                raise RecordingMismatch('перший запит відрізка запису (%d..%d) не збігається з межами запиту читання (%r)' % (frm, to, windows[seg:seg + 1]))
         continuing = False
         if ex['response'] and ex['response']['status'] == 429:
             # dev9: один повтор після 429 за заголовком (юросіб це вже мав, ФОП — ні)
             if 'dev9' in disabled and not corp:
                 _failure(out, ex, bank)
+                break
+            ask = _retry_seconds(ex)
+            if ask > C.PAUSE_CEILING_SECONDS:
+                rule_pause_over_ceiling(out, ex, bank, ask)              # D36 п. 8 (a90f7ea): без сну й без повтору
+                out.applied.add('dev9') if not corp else None           # ФОП: обробка 429 -- відступ dev9
                 break
             if i < len(stmts):
                 ex = stmts[i]
@@ -725,7 +744,7 @@ def _mono(rec, p, out, disabled):
             continue
         # D36 п. 11 (44d22a1): продовження за часом знову охоплює секунду найранішої операції (`to` = time + 1; банк `to` не
         # включає); повтори відкидає дедуплікація за id. Запит продовження, що збігся б із поточним (вся повна сторінка в одній
-        # секунді), -- застряглий курсор: «дія людини», читання йде далі з `to` = ця секунда (виключна). Для ФОП -- всередині відрізка.
+        # секунді), -- застряглий курсор: «дія людини», читання йде далі з `to` = ця секунда (операцію з `time = to` банк не повертає). Для ФОП -- всередині відрізка.
         if earliest_unix is None:
             _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-without-time', 'Статус': 200, 'ОписаниеБанка': ''},
                   'page-without-time')
@@ -797,6 +816,16 @@ def _mono_items(out, items, p, disabled, corp):
     def is_reversal(it):
         return corp and it.raw.get('reverse') is True
 
+    # D36 п. 11 (71b3771, a90f7ea): `НачалоПериода` і `КонецПериода` -- включні моменти; операції поза ними, але в межах запиту, відкидаються
+    # мовчки (без рядка діагностики), `ПорядковыйНомер` решти не змінюється. Час, що не читається, лишається (скаже bad-date).
+    start_unix, end_unix = kyiv.local_to_unix(p.period_start), kyiv.local_to_unix(p.period_end)
+
+    def in_period(it):
+        t = it.raw.get('time') if isinstance(it.raw, dict) else None
+        return p.reading_moment is None or not isinstance(t, int) or start_unix <= t <= end_unix
+
+    out.out_of_period = [it.n for it in items if not in_period(it)]
+    items = [it for it in items if in_period(it)]
     skip = rule_dedupe_by_id(out, items, ident_of, is_final, is_reversal)
     by_id = {}
     for it in items:
@@ -881,8 +910,8 @@ def ops_equal_ignoring_order_within_moment(a, b):
 def expected_windows(p, bank):
     """Відрізки читання, які зробив би конектор: ФОП — до 31 доби (місцевий час), юросіб — один."""
     if bank == 'mono-fop':
-        return [(kyiv.unix_to_local(a), kyiv.unix_to_local(b)) for a, b in C.fop_windows(kyiv.local_to_unix(p.period_start), kyiv.local_to_unix(p.period_end))]
-    return [(p.period_start, p.period_end)]
+        return C.fop_windows(*C.request_bounds(p))
+    return [C.request_bounds(p)]
 
 
 def verify_requests(rec, p):
@@ -891,7 +920,7 @@ def verify_requests(rec, p):
     для справжніх записів — лише інформація (рекордер міг ходити інакше)."""
     if rec.bank == 'privat' or not C.statement_exchanges(rec):
         return []
-    want = [(kyiv.local_to_unix(a), kyiv.local_to_unix(b)) for a, b in expected_windows(p, rec.bank)]
+    want = expected_windows(p, rec.bank)
     starts = []
     for e in C.statement_exchanges(rec):
         w = R.statement_window(e)

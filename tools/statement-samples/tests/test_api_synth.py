@@ -105,8 +105,8 @@ class Shape(unittest.TestCase):
             if e.failure_class:
                 self.assertFalse(e.complete, s.name)
                 self.assertEqual(e.trust, s.params.period_start, s.name)      # межа визначена: курсор не посунеться
-                self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags if d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds', 'page-without-time')), s.name)
-                self.assertTrue(any(d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds', 'page-without-time') for d in e.diags), s.name)
+                self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags if d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds', 'page-without-time', 'pause-over-ceiling')), s.name)
+                self.assertTrue(any(d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds', 'page-without-time', 'pause-over-ceiling') for d in e.diags), s.name)
                 self.assertIn(e.failure_class, (E.CLS_RETRY, E.CLS_HUMAN))
             else:
                 self.assertTrue(e.complete, s.name)
@@ -114,7 +114,7 @@ class Shape(unittest.TestCase):
     def test_diagnostic_facts_are_a_closed_list(self):
         """Текст для людини будується лише з названих фактів (банк, статус, опис банку, ідентифікатор): заголовків запиту й
         облікових даних у діагностиці немає за побудовою."""
-        allowed = {'Банк', 'Вид', 'Статус', 'ОписаниеБанка', 'Состояние', 'Ид', 'Момент', 'Значение', 'Код', 'КодСервиса', 'Секунда', 'Секунда2', 'Количество'}
+        allowed = {'Банк', 'Вид', 'Статус', 'ОписаниеБанка', 'Состояние', 'Ид', 'Момент', 'Значение', 'Код', 'КодСервиса', 'Секунда', 'Секунда2', 'Количество', 'Пауза'}
         for s in ALL:
             for d in E.run(s.recording(), s.params).diags:
                 self.assertLessEqual(set(d['Факты']), allowed, s.name)
@@ -183,10 +183,11 @@ class KeyCompatibility(unittest.TestCase):
             # аномалія меж (відповідь поза межами запиту): сторінка в конверт не береться, одним рядком без номера операції; попередник
             # (без перевірки меж) її завантажив би -- це ухвалений відступ задачі 4 (рішення за рев'ю), а не розбіжність ключа
             anomaly = any(d['Суть'] == 'out-of-bounds' for d in e.diags)
+            outside = set(e.out_of_period)            # поза періодом (в межах запиту): відкинуто мовчки, D36 п. 11 (71b3771, a90f7ea)
             for r in old.rows:
                 f = r.fields
                 if r.n not in ops:
-                    if not anomaly:
+                    if not anomaly and r.n not in outside:
                         self.assertIn(r.n, diag_numbers, (s.name, r.n))
                     continue
                 o = ops[r.n]
