@@ -122,6 +122,7 @@
 			<CommonModule>СМП_ЗаписьДокументовБанка</CommonModule>
 			<CommonModule>СМП_КоннекторБанкаМонобанк</CommonModule>
 			<CommonModule>СМП_КоннекторБанкаМонобанкЮр</CommonModule>
+			<CommonModule>СМП_КоннекторБанкаПриватБанк</CommonModule>
 			<CommonModule>СМП_КоннекторыБанковОбщее</CommonModule>
 			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
 			<CommonModule>СМП_ТранспортHTTPСервер</CommonModule>
