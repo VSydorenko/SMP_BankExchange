@@ -6,13 +6,14 @@
 виміру, -- ГІПОТЕЗА, ЩО ЗАКРИВАЄ run1 (кожен запис несе цю позначку в назві й у `note` маніфесту, `HYPOTHESIS`). Форми помилок (429, 5xx, 401, `invalid_grant`,
 HTML) swagger не описує -- вони взяті з Keycloak / загальної форми і теж гіпотеза. Усі значення вигадані (`Gen('pumb')`).
 
-ПАГІНАЦІЯ. Р4 (рішення консультанта): основа читання -- `searcher` БЕЗ пагінації; відповідь, не менша за `C.PUMB_RESPONSE_THRESHOLD` (гіпотеза до run2), ділить період навпіл
+ПАГІНАЦІЯ. Р4 (рішення консультанта): основа читання -- `searcher` БЕЗ пагінації; відповідь, не менша за `C.PUMB_RESPONSE_THRESHOLD` (1191, спостережений максимум run2), ділить період навпіл
 (D36 п. 11); тому записи ділення (кілька запитів `searcher` без `pagingRequest`) тут Є. Випадки, що мали сенс лише для сторінок (обрив на сторінці N, курсор, повна сторінка без
 ознаки кінця, стеля сторінок), -- у `NOT_APPLICABLE_NO_PAGING` з причиною; паузи понад стелю -- в `AWAITING_RUN1`. Тест вимагає, щоб жоден запис цього модуля не мав
 `pagingRequest`. Запис, де оракул ЯВНО відмовляє, -- `refused_scenarios()`.
 
-ЗАПИТ `searcher` -- за гіпотезою: `fromDate` = `НачалоПериода` - 1 с, `toDate` = Мин(`КонецПериода` + 1 с, момент читання) (запас у секунду, бо включність меж не виміряна;
-рішення -- задача 3 і вимір run1); без фільтрів станів і типу (відступ 3; тип -- В4), без `pagingRequest`; `documentAccounts` -- `accountId` рядком (як у рекордері).
+ЗАПИТ `searcher` -- цілі календарні доби, обидві межі включно (D36 п. 11, run2 70fb320): `fromDate` = доба `НачалоПериода` 00:00:00, `toDate` = доба Мин(`КонецПериода`, момент читання) 23:59:59;
+точний період дає фільтр конектора за `operationDate` (мовчки); без фільтрів станів і типу (відступ 3; тип -- В4), без `pagingRequest`; `documentAccounts` -- `accountId` рядком (як у рекордері).
+Відповіді на порозі й вище -- лише лічильник для ділення, у конверт не беруться, тому `filler` -- мінімальні документи (розмір запису); прийняті відповіді -- повні документи.
 """
 from datetime import datetime, timedelta
 
@@ -35,9 +36,11 @@ CASES = [
     ('без пагінації: відповідь нижче порога -- один запит', 'СинтПУМБНижеПорога'), ('без пагінації: відповідь на порозі -- ділення навпіл', 'СинтПУМБПорогДелит'),
     ('без пагінації: ділення рекурсивно, кілька рівнів', 'СинтПУМБДелитГлубоко'), ('без пагінації: доба на порозі -- дія людини', 'СинтПУМБСуткиНаПороге'),
     ('без пагінації: єдина доба на порозі -- дія людини', 'СинтПУМБСуткиСразуНаПороге'),
-    ('без пагінації: відповідь між спостереженим максимумом і 100 (імітація обрізаної стелею) -- ділиться', 'СинтПУМБОтсечёнСтеля'),
+    ('без пагінації: відповідь понад спостережений максимум (імітація обрізаної стелею) -- ділиться', 'СинтПУМБОтсечёнСтеля'),
     ('direction проти боку за запитаним рахунком; переказ між своїми', 'СинтПУМБПереводМеждуСвоими'),
-    ('STM у відповіді -- не операції, один рядок Предупреждение', 'СинтПУМБSTM'), ('CUR без IBAN: номер рахунку = запитаному', 'СинтПУМБНомерСчета'),
+    ('STM у відповіді -- не операції і без Предупреждение', 'СинтПУМБSTM'),
+    ('кілька рахунків під IBAN: пара (IBAN, валюта) однозначна', 'СинтПУМБМультиВалюта'), ('кілька рахунків під IBAN: пари немає', 'СинтПУМБМультиВалютаНетПары'),
+    ('кілька рахунків під IBAN: ВалютаСчета порожнє', 'СинтПУМБМультиВалютаПусто'), ('CUR без IBAN: номер рахунку = запитаному', 'СинтПУМБНомерСчета'),
     ('документ без свого рахунку -- діагностика', 'СинтПУМБНетСвоегоСчета'),
     ('аномалія меж', 'СинтПУМБАномалияПосле'),
     ('стани', 'СинтПУМБНеокончательные'), ('скасовані', 'СинтПУМБОтменённые'),
@@ -66,11 +69,11 @@ def _fmt(dt):
 
 
 def request_bounds(p):
-    """Межі запиту `searcher` за гіпотезою: (`НачалоПериода` - 1 с, Мин(`КонецПериода` + 1 с, момент читання у київському часі)); період після моменту -- запитів немає (None)."""
+    """Межі запиту `searcher`: (доба `НачалоПериода` 00:00:00, доба Мин(`КонецПериода`, момент читання у київському часі) 23:59:59); період після моменту -- запитів немає (None)."""
     moment = kyiv.to_local(p.reading_moment)
     if p.period_end < p.period_start or p.period_start > moment:
         return None
-    return C.pumb_request_bounds(p.period_start, p.period_end, moment)
+    return C.pumb_request_bounds(p.period_start, min(p.period_end, moment))
 
 
 class Own:
@@ -82,8 +85,8 @@ class Own:
         self.code = g.edrpou()
         self.mfo = '322001'
 
-    def account_item(self, currency='UAH', number=None, alt=''):
-        return {'id': ACCOUNT_ID + 1, 'accountId': ACCOUNT_ID, 'mfo': self.mfo, 'currency': currency, 'number': self.iban[-14:], 'name': 'Поточний', 'state': 1,
+    def account_item(self, currency='UAH', number=None, alt='', account_id=ACCOUNT_ID):
+        return {'id': account_id + 1, 'accountId': account_id, 'mfo': self.mfo, 'currency': currency, 'number': self.iban[-14:], 'name': 'Поточний', 'state': 1,
                 'hostId': 3, 'branchId': 'XYZ', 'clientId': 'CL%d' % (ACCOUNT_ID + 2), 'clientName': self.name, 'clientOkpo': self.code, 'isDefault': True,
                 'iban': number or self.iban, 'altNumber': alt or None, 'balance': '1000.00', 'rest': '1000.00'}
 
@@ -131,6 +134,7 @@ class Reading:
     def __init__(self, sid, own, p):
         self.sid, self.own, self.p = sid, own, p
         self.ex = []
+        self.acc_id = ACCOUNT_ID                  # accountId, що іде в documentAccounts (за парою IBAN і валюта -- не завжди перший з рахунків IBAN)
 
     def _add(self, request, response=None, failure=None):
         seq = len(self.ex) + 1
@@ -145,12 +149,12 @@ class Reading:
 
     def search_body(self):
         lo, hi = request_bounds(self.p)
-        return {'fromDate': _fmt(lo), 'toDate': _fmt(hi), 'documentAccounts': [str(ACCOUNT_ID)]}
+        return {'fromDate': _fmt(lo), 'toDate': _fmt(hi), 'documentAccounts': [str(self.acc_id)]}
 
     def search_for(self, lo, hi, docs):
-        """Запит половини [lo, hi] піддобу за правилом меж (`C.pumb_request_bounds`) і відповідь `docs`."""
-        a, b = C.pumb_request_bounds(lo, hi, kyiv.to_local(self.p.reading_moment))
-        self.search(_json(200, docs), body={'fromDate': _fmt(a), 'toDate': _fmt(b), 'documentAccounts': [str(ACCOUNT_ID)]})
+        """Запит піддобу [lo, hi] за правилом меж (`C.pumb_request_bounds`, кінець не пізніший за момент читання) і відповідь `docs`."""
+        a, b = C.pumb_request_bounds(lo, min(hi, kyiv.to_local(self.p.reading_moment)))
+        self.search(_json(200, docs), body={'fromDate': _fmt(a), 'toDate': _fmt(b), 'documentAccounts': [str(self.acc_id)]})
 
     def search(self, response=None, failure=None, body=None):
         import json
@@ -173,7 +177,8 @@ def _scenarios(refused):
     from .synth import Gen, Scenario
     g = Gen('pumb')
     own = Own(g)
-    base = Params(account=own.iban, period_start=_day(1), period_end=_day(1, 23, 59, 59), reading_moment=C.DEFAULT_READING_MOMENT)
+    # ВалютаСчета: точка читання для API кладе її ЗАВЖДИ. Базово 980; конектор читає її лише коли під IBAN кілька рахунків (СинтПУМБВалютныйСчет: один рахунок USD, поле 980 -- не читається)
+    base = Params(account=own.iban, period_start=_day(1), period_end=_day(1, 23, 59, 59), reading_moment=C.DEFAULT_READING_MOMENT, account_currency_code='980')
     sc, rf = [], []
 
     def new(sid, title, focus, **kw):
@@ -200,8 +205,9 @@ def _scenarios(refused):
                     pdoc(g, own, 5, when=at(13), state='SYSTEM_ERROR', amount='50.00')]))
     s, r = new('СинтПУМБСтатусНеизвестен', 'ПУМБ: стан поза enum swagger -- рядок Ошибка, а не мовчазне відкидання', [3])
     done(s, r.full([pdoc(g, own, 1, when=at(9), amount='10.00'), pdoc(g, own, 2, when=at(10), state='ARCHIVED', amount='20.00')]))
-    s, r = new('СинтПУМБГраницаНаНачале', 'ПУМБ: неостаточний документ рівно на початку періоду -- межа довіри = НачалоПериода (не раніше); неостаточний у запасі перед початком (не в періоді) не тримає межі', [3])
-    done(s, r.full([pdoc(g, own, 1, when=at(0, 0, 0), state='ACCEPTED', amount='10.00'), pdoc(g, own, 2, when=_day(31, 23, 59, 59, month=10), state='ACCEPTED', amount='20.00'),
+    s, r = new('СинтПУМБГраницаНаНачале', 'ПУМБ: період 09:00:00-23:59:59 доби; неостаточний документ рівно на початку періоду -- межа довіри = НачалоПериода (не раніше); неостаточний тієї ж доби, але до початку періоду (в межах доби запиту), не тримає межі', [3],
+               period_start=at(9, 0, 0))
+    done(s, r.full([pdoc(g, own, 1, when=at(9, 0, 0), state='ACCEPTED', amount='10.00'), pdoc(g, own, 2, when=at(8, 59, 59), state='ACCEPTED', amount='20.00'),
                     pdoc(g, own, 3, when=at(10), amount='30.00')]))
 
     # ---- відсутні поля (swagger не позначає обов'язкових)
@@ -225,13 +231,14 @@ def _scenarios(refused):
     done(s, r.full([pdoc(g, own, 1, when=at(9), desc=('Оплата за послуги за договором. ' * 40)[:1200])]))
 
     # ---- межі запиту: доба, запас у секунду, аномалія, час
-    s, r = new('СинтПУМБГраницаСуток', 'ПУМБ: межа доби -- документи на 00:00:00 і 23:59:59 періоду беруться; рівно на межах запиту (початок - 1 с, кінець + 1 с) -- у запасі, відкидаються мовчки (не аномалія)', [2])
-    done(s, r.full([pdoc(g, own, 1, when=_day(31, 23, 59, 59, month=10), amount='10.00'), pdoc(g, own, 2, when=at(0, 0, 0), amount='20.00'),
-                    pdoc(g, own, 3, when=at(23, 59, 59), amount='30.00', out=False), pdoc(g, own, 4, when=_day(2, 0, 0, 0), amount='40.00')]))
-    s, r = new('СинтПУМБАномалияПосле', 'ПУМБ: документ ПІСЛЯ верхньої межі запиту -- аномалія меж: Повторить, читання неповне, сторінка в конверт не береться', [2])
-    done(s, r.full([pdoc(g, own, 1, when=at(10)), pdoc(g, own, 2, when=_day(2, 0, 0, 1))]))
-    s, r = new('СинтПУМБАномалияДо', 'ПУМБ: документ ПЕРЕД нижньою межею запиту -- аномалія меж: Повторить, читання неповне', [2])
-    done(s, r.full([pdoc(g, own, 1, when=at(10)), pdoc(g, own, 2, when=_day(31, 23, 59, 58, month=10))]))
+    s, r = new('СинтПУМБГраницаСуток', 'ПУМБ: період 09:00:00-17:59:59 однієї доби -- запит іде цілою добою, точний період дає фільтр конектора: документи 09:00:00 і 17:59:59 беруться, 08:59:59 і 18:00:00 тієї ж доби відкидаються мовчки (не аномалія, не діагностика)', [2],
+               period_start=at(9, 0, 0), period_end=at(17, 59, 59))
+    done(s, r.full([pdoc(g, own, 1, when=at(0, 0, 0), amount='5.00'), pdoc(g, own, 2, when=at(8, 59, 59), amount='10.00'), pdoc(g, own, 3, when=at(9, 0, 0), amount='20.00'),
+                    pdoc(g, own, 4, when=at(17, 59, 59), amount='30.00', out=False), pdoc(g, own, 5, when=at(18, 0, 0), amount='40.00'), pdoc(g, own, 6, when=at(23, 59, 59), amount='50.00')]))
+    s, r = new('СинтПУМБАномалияПосле', 'ПУМБ: документ ПІСЛЯ останньої доби запиту (02.11 00:00:00 при запиті 01.11) -- аномалія меж: Повторить, читання неповне, сторінка в конверт не береться', [2])
+    done(s, r.full([pdoc(g, own, 1, when=at(10)), pdoc(g, own, 2, when=_day(2, 0, 0, 0))]))
+    s, r = new('СинтПУМБАномалияДо', 'ПУМБ: документ ПЕРЕД першою добою запиту (31.10 23:59:59 при запиті 01.11) -- аномалія меж: Повторить, читання неповне', [2])
+    done(s, r.full([pdoc(g, own, 1, when=at(10)), pdoc(g, own, 2, when=_day(31, 23, 59, 59, month=10))]))
     s, r = new('СинтПУМБВремяВесна', 'ПУМБ: перехід на літній час (29.03.2026) -- operationDate як місцевий рядок: 00:30, 02:59:59, 04:00:00, 23:59:59 (03:xx не існує)', [2],
                period_start=datetime(2026, 3, 28), period_end=datetime(2026, 3, 30, 23, 59, 59))
     done(s, r.full([pdoc(g, own, 1, when=datetime(2026, 3, 28, 0, 30), amount='10.00'), pdoc(g, own, 2, when=datetime(2026, 3, 29, 2, 59, 59), amount='20.00'),
@@ -290,63 +297,71 @@ def _scenarios(refused):
     r.auth(); r.accounts(); r.search(failure={'kind': 'timeout', 'text': 'The request was canceled due to the configured timeout of 100 seconds elapsing'})
     done(s, r)
 
-    # ---- без пагінації (Р4): ділення навпіл (D36 п. 11), поріг -- C.PUMB_RESPONSE_THRESHOLD (гіпотеза до run2)
+    # ---- без пагінації (Р4): ділення навпіл (D36 п. 11), поріг -- C.PUMB_RESPONSE_THRESHOLD (1191, спостережений максимум run2)
     T = C.PUMB_RESPONSE_THRESHOLD
     two_days = dict(period_start=_day(1), period_end=_day(2, 23, 59, 59))
     three_days = dict(period_start=_day(1), period_end=_day(3, 23, 59, 59))
+    mate_lean = party(g)
+
+    def filler(count, day):
+        """`count` мінімальних документів доби `day` -- відповідь, що лише досягає порога (у конверт не береться: ділення перечитає її половинами)."""
+        return [{'docId': 5000 + i, 'operationDate': _fmt(_day(day, 12))} for i in range(count)]
 
     def bulk(count, n0, day):
-        """`count` документів PROCESSED на день `day`, по одному на хвилину від 01:00 (ідентифікатори n0 + i)."""
-        return [pdoc(g, own, n0 + i, when=_day(day, 1) + timedelta(minutes=i), out=bool(i % 2), amount='%d.00' % (1 + i % 7)) for i in range(count)]
+        """`count` повних, але лінійних документів PROCESSED доби `day`, по одному на хвилину від 00:00 (відповідь нижче порога -- береться в операції)."""
+        return [pdoc(g, own, n0 + i, when=_day(day) + timedelta(minutes=i), out=bool(i % 2), amount='%d.00' % (1 + i % 7), cp=mate_lean, desc='Оплата %d' % i,
+                     drop=('hostId', 'viewTemplateId', 'signTemplateId', 'createdOn', 'isImported', 'origin', 'system', 'isRead', 'accountId', 'type', 'number', 'date',
+                           'senderName', 'correspondentName', 'senderTaxId', 'correspondentTaxId', 'senderBankMfo', 'correspondentBankMfo')) for i in range(count)]
 
-    s, r = new('СинтПУМБНижеПорога', 'ПУМБ: відповідь на 1 менша за поріг -- один запит за весь період, без ділення', [4], **two_days)
-    r.auth(); r.accounts(); r.search_for(s.params.period_start, s.params.period_end, bulk(T - 1, 1000, 1))
+    s, r = new('СинтПУМБНижеПорога', 'ПУМБ: відповідь на 1 менша за поріг (1190) -- один запит за весь період, без ділення; усі документи беруться в операції', [4], **two_days)
+    r.auth(); r.accounts(); r.search_for(s.params.period_start, s.params.period_end, bulk(T - 1, 5000, 1))   # docId 7201..8390: не збігається з accountId (3300, 3311) -- Т2 шукає їх як окремі числа
     done(s, r)
     A = pdoc(g, own, 1, when=at(10), amount='11.00')
     B = pdoc(g, own, 2, when=_day(1, 23, 59, 59), amount='22.00')
     Cc = pdoc(g, own, 3, when=_day(2, 0, 0, 0), amount='33.00', out=False)
     D = pdoc(g, own, 4, when=_day(2, 12), amount='44.00')
-    s, r = new('СинтПУМБПорогДелит', 'ПУМБ: відповідь рівно на порозі -- період ділиться навпіл (діб 2: 1 + 1); межові документи 01.11 23:59:59 і 02.11 00:00:00 потрапляють у запас обох запитів, але в операції -- по одному разу', [4], **two_days)
+    s, r = new('СинтПУМБПорогДелит', 'ПУМБ: відповідь рівно на порозі (1191) -- період ділиться навпіл (діб 2: 1 + 1); запит кожної половини -- її доба: 01.11 23:59:59 і 02.11 00:00:00 потрапляють лише в запит своєї доби, по одному разу', [4], **two_days)
     r.auth(); r.accounts()
-    r.search_for(s.params.period_start, s.params.period_end, bulk(T, 1000, 1))                  # увесь період: відповідь на порозі -- не береться
-    r.search_for(_day(1), _day(1, 23, 59, 59), [A, B, Cc])                                       # перша половина; Cc -- запас верхньої межі
-    r.search_for(_day(2), _day(2, 23, 59, 59), [B, Cc, D])                                       # друга половина; B -- запас нижньої межі
+    r.search_for(s.params.period_start, s.params.period_end, filler(T, 1))                  # увесь період: відповідь на порозі -- не береться
+    r.search_for(_day(1), _day(1, 23, 59, 59), [A, B])                                       # перша половина (доба 01.11)
+    r.search_for(_day(2), _day(2, 23, 59, 59), [Cc, D])                                      # друга половина (доба 02.11)
     done(s, r)
     s, r = new('СинтПУМБДелитГлубоко', 'ПУМБ: ділення рекурсивно -- 3 доби: на порозі (1 + 2), друга половина (2 доби) знову на порозі (1 + 1); запити в порядку обходу: усе, 01.11, 02-03.11, 02.11, 03.11', [4], **three_days)
     r.auth(); r.accounts()
-    r.search_for(s.params.period_start, s.params.period_end, bulk(T, 1000, 1))
+    r.search_for(s.params.period_start, s.params.period_end, filler(T, 1))
     r.search_for(_day(1), _day(1, 23, 59, 59), [pdoc(g, own, 1, when=at(9), amount='10.00')])
-    r.search_for(_day(2), _day(3, 23, 59, 59), bulk(T, 2000, 2))
+    r.search_for(_day(2), _day(3, 23, 59, 59), filler(T, 2))
     r.search_for(_day(2), _day(2, 23, 59, 59), [pdoc(g, own, 2, when=_day(2, 9), amount='20.00')])
     r.search_for(_day(3), _day(3, 23, 59, 59), [pdoc(g, own, 3, when=_day(3, 9), amount='30.00')])
     done(s, r)
     s, r = new('СинтПУМБСуткиНаПороге', 'ПУМБ: після ділення друга доба (02.11) сама дає відповідь на порозі -- ДействиеЧеловека, читання неповне, діагностика називає добу й кількість; прочитане першої доби лишається', [4], **two_days)
     r.auth(); r.accounts()
-    r.search_for(s.params.period_start, s.params.period_end, bulk(T, 1000, 1))
+    r.search_for(s.params.period_start, s.params.period_end, filler(T, 1))
     r.search_for(_day(1), _day(1, 23, 59, 59), [pdoc(g, own, 1, when=at(9), amount='10.00')])
-    r.search_for(_day(2), _day(2, 23, 59, 59), bulk(T, 3000, 2))
+    r.search_for(_day(2), _day(2, 23, 59, 59), filler(T, 2))
     done(s, r)
     s, r = new('СинтПУМБСуткиСразуНаПороге', 'ПУМБ: період в одну добу, відповідь на порозі -- ділити нічого: ДействиеЧеловека без жодної операції', [4])
-    r.auth(); r.accounts(); r.search_for(s.params.period_start, s.params.period_end, bulk(T, 1000, 1))
+    r.auth(); r.accounts(); r.search_for(s.params.period_start, s.params.period_end, filler(T, 1))
     done(s, r)
 
-    s, r = new('СинтПУМБОтсечёнСтеля', 'ПУМБ: відповідь на 80 документів -- між спостереженим максимумом (67, поріг) і 100: імітація відповіді, обрізаної невідомою стелею банку; ДІЛИТЬСЯ (поріг понад спостережене був би мовчазною втратою)', [4], **two_days)
+    s, r = new('СинтПУМБОтсечёнСтеля', 'ПУМБ: відповідь на 1500 документів -- понад спостережений максимум (1191, поріг): імітація відповіді, обрізаної невідомою стелею банку C >= 1191; ДІЛИТЬСЯ (поріг понад спостережене був би мовчазною втратою)', [4], **two_days)
     r.auth(); r.accounts()
-    r.search_for(s.params.period_start, s.params.period_end, bulk(80, 1000, 1))
-    r.search_for(_day(1), _day(1, 23, 59, 59), [A, B, Cc])
-    r.search_for(_day(2), _day(2, 23, 59, 59), [B, Cc, D])
+    r.search_for(s.params.period_start, s.params.period_end, filler(1500, 1))
+    r.search_for(_day(1), _day(1, 23, 59, 59), [A, B])
+    r.search_for(_day(2), _day(2, 23, 59, 59), [Cc, D])
     done(s, r)
 
-    # ---- STM (гіпотеза Р11) і фільтр за рахунком
+    # ---- STM (щоденний запис залишку рахунку, виміряно run1b/run2) і фільтр за рахунком
     def stm(n):
         return pdoc(g, own, n, when=at(0, 0, 0), type='STM', direction='INBOUND', amount='500.00', drop=('senderIBAN', 'correspondentIBAN'))
-    s, r = new('СинтПУМБSTM', 'ПУМБ: документи STM (щоденний запис залишку, гіпотеза Р11) -- не операції; один рядок Предупреждение на читання з кількістю; решта документів -- як звичайно', [4])
+    s, r = new('СинтПУМБSTM', 'ПУМБ: документи STM (щоденний запис залишку рахунку, виміряно run1b/run2) -- не операції і без Предупреждение; решта документів -- як звичайно', [4])
     done(s, r.full([pdoc(g, own, 1, when=at(9), amount='10.00'), stm(2), stm(3), pdoc(g, own, 4, when=at(15), out=False, amount='40.00'), stm(5)]))
     alt = '26009000000042'
-    s, r = new('СинтПУМБНомерСчета', 'ПУМБ: документи без IBAN нашої сторони, але з номером рахунку = number (CUR, відправник) чи altNumber (CUR_ADV, одержувач) запитаного -- операції; номер чужий і IBAN немає -- Ошибка no-iban', [4])
+    s, r = new('СинтПУМБНомерСчета', 'ПУМБ: документи без IBAN нашої сторони, але з номером рахунку = number (CUR, відправник) чи altNumber (CUR_ADV, одержувач) запитаного -- операції; номер чужий і IBAN немає (з direction і без нього) -- Ошибка no-iban, не операція', [4])
     done(s, r.full([pdoc(g, own, 1, when=at(9), type='CUR', amount='10.00', senderAccountNumber=own.iban[-14:], drop=('senderIBAN',)),
                     pdoc(g, own, 2, when=at(10), type='CUR_ADV', out=False, amount='20.00', correspondentAccountNumber=alt, drop=('senderIBAN', 'correspondentIBAN')),
-                    pdoc(g, own, 3, when=at(11), type='CUR_ADV', amount='30.00', senderAccountNumber='26000000000000', drop=('senderIBAN', 'correspondentIBAN'))],
+                    pdoc(g, own, 3, when=at(11), type='CUR_ADV', amount='30.00', senderAccountNumber='26000000000000', drop=('senderIBAN', 'correspondentIBAN')),
+                    pdoc(g, own, 4, when=at(12), type='CUR_ADV', amount='40.00', senderAccountNumber='26000000000000', drop=('senderIBAN', 'correspondentIBAN', 'direction'))],     # без direction: фільтр рахунку -- єдина перепона
                    accounts=[own.account_item(alt=alt)]))
     other_own = Own(g).iban                                            # IBAN іншого рахунку цієї ж компанії (переказ між своїми)
     s, r = new('СинтПУМБПереводМеждуСвоими', 'ПУМБ: переказ між своїми рахунками -- бік за запитаним рахунком, direction мусить збігтися: правильний (OUTBOUND / INBOUND) -- операції; хибний -- Ошибка direction-mismatch', [4])
@@ -357,6 +372,20 @@ def _scenarios(refused):
     done(s, r.full([pdoc(g, own, 1, when=at(9), amount='10.00'),
                     pdoc(g, own, 2, when=at(10), amount='20.00', senderIBAN=party(g)['iban'], correspondentIBAN=party(g)['iban'], senderAccountNumber='26000000000001', correspondentAccountNumber='26000000000002'),
                     pdoc(g, own, 3, when=at(11), amount='30.00', out=False, senderIBAN=party(g)['iban'], correspondentIBAN=party(g)['iban'])]))
+
+    # ---- кілька рахунків під одним IBAN (D36 п. 2, 8; виміряно run2: 14 рахунків, 11 IBAN): вибір за парою (IBAN, валюта) з Параметры.ВалютаСчета
+    multi = [own.account_item(currency='USD', account_id=ACCOUNT_ID + 11), own.account_item(currency='UAH', account_id=ACCOUNT_ID)]      # гривневий -- ДРУГИМ: вибір «перший за IBAN» хибний
+    s, r = new('СинтПУМБМультиВалюта', 'ПУМБ: під IBAN два рахунки (USD першим, UAH другим), ВалютаСчета = 980 -- пара (IBAN, валюта) однозначна: береться гривневий (accountId у documentAccounts), операції', [5])
+    r.acc_id = ACCOUNT_ID
+    done(s, r.full([pdoc(g, own, 1, when=at(9), amount='10.00'), pdoc(g, own, 2, when=at(10), out=False, amount='20.00')], accounts=multi))
+    s, r = new('СинтПУМБМультиВалютаНетПары', 'ПУМБ: під IBAN два рахунки (USD, UAH), ВалютаСчета = 978 -- пари немає: ДействиеЧеловека до запиту виписки, searcher не йде', [5],
+               account_currency_code='978')
+    r.auth(); r.accounts(multi)
+    done(s, r)
+    s, r = new('СинтПУМБМультиВалютаПусто', 'ПУМБ: під IBAN два рахунки (USD, UAH), ВалютаСчета порожнє -- ДействиеЧеловека до запиту виписки, searcher не йде', [5],
+               account_currency_code='')
+    r.auth(); r.accounts(multi)
+    done(s, r)
 
     # ---- відмова оракула (формат дати -- гіпотеза: відсутня дата -- явна відмова, а не здогад)
     s, r = new('СинтПУМББезДатыОперации', 'ПУМБ: документ без operationDate -- оракул ЯВНО відмовляє (формат дати -- гіпотеза до виміру), еталона немає', [2])

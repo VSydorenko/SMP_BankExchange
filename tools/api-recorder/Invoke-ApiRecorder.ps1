@@ -1290,7 +1290,7 @@ function Invoke-PumbBoundaryPairs {
 }
 
 # =============================================================================================
-# run2 ПУМБ: читання рівно у формі конектора (без pagingRequest, без documentState/documentType, межі запиту A2, X-Flow-ID конектора),
+# run2 ПУМБ: читання рівно у формі конектора (без pagingRequest, без documentState/documentType, межі запиту — цілі календарні доби, X-Flow-ID конектора),
 # ділення періоду навпіл за добами при відповіді не менше порога, ознаки STM, звірка для власника
 # =============================================================================================
 # X-Flow-ID конектора: GUID запиту : GUID сесії читання : EX (GUID — малі літери з дефісами, як Строка(УникальныйИдентификатор)).
@@ -1305,7 +1305,7 @@ function Get-PumbHalves {
     , @(@{ From = $A; To = $mid.AddSeconds(-1) }, @{ From = $mid; To = $B })
 }
 
-# Читання connector_read: межі запиту [lo - 1 с, Мин(hi + 1 с, момент)]; відповідь не менше Threshold — не береться, період навпіл (ранішня половина першою);
+# Читання connector_read: межі запиту — цілі доби [доба lo 00:00:00, доба hi 23:59:59] (hi не пізніший за момент); відповідь не менше Threshold — не береться, період навпіл (ранішня половина першою);
 # доба на порозі — зупинка. Прийняті документи — лише у вікні [lo, hi] піддобу, без дублікатів за id. -NoSplit: один запит без ділення (стеля кількості).
 # Повертає: Docs, FirstCount (розмір першої відповіді), Requests, Splits, Complete.
 function Read-PumbConnector {
@@ -1319,8 +1319,8 @@ function Read-PumbConnector {
     while ($stack.Count -gt 0) {
         if ($res.Requests -ge $MaxRequests) { Add-Note $Ctx "досягнуто запобіжника кількості запитів ($MaxRequests) — читання неповне"; $res.Complete = $false; break }
         $sub = $stack.Pop(); $lo = [datetime]$sub.From; $hi = [datetime]$sub.To
-        $qFrom = $lo.AddSeconds(-1)
-        $qTo = $hi.AddSeconds(1); if ($qTo -gt $Moment) { $qTo = $Moment }
+        $qFrom = $lo.Date
+        $qTo = $hi.Date.AddDays(1).AddSeconds(-1)
         $s = Send-PumbSearch $Ctx (New-PumbSearchBody $AccId (Format-PumbDate $qFrom) (Format-PumbDate $qTo) $null $null $null) -FlowId (New-PumbFlowId $Ctx.FlowSession)
         $res.Requests++
         Add-Count $Ctx 'X-Flow-ID' 'GUID:GUID:EX'
@@ -1412,7 +1412,7 @@ function Invoke-PumbRun {
     foreach ($p in 'Token', 'TokenExpiry', 'Logins', 'Reauths', 'Cfg', 'FlowSession') { Add-Member -InputObject $Ctx -NotePropertyName $p -NotePropertyValue $null -Force }
     $Ctx.Logins = 0; $Ctx.Reauths = 0; $Ctx.Cfg = $Cfg
     $Ctx.FlowSession = [guid]::NewGuid().ToString()   # GUID сесії читання для X-Flow-ID у формі конектора (випадковий, не секрет)
-    $connThreshold = [int]($Cfg.ConnectorThreshold ?? 67); $connMaxReq = [int]($Cfg.ConnectorMaxRequests ?? 200)
+    $connThreshold = [int]($Cfg.ConnectorThreshold ?? 1191); $connMaxReq = [int]($Cfg.ConnectorMaxRequests ?? 200)
     $moment = ConvertFrom-UnixKyiv ([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())
     $script:pumbConn = [ordered]@{}   # n -> @{ Pre; AccId; Res } результат connector_read по рахунку
     $small = [int]($Cfg.SmallPageSize ?? 5); $work = [int]($Cfg.WorkPageSize ?? 100); $maxPages = [int]($Cfg.MaxPages ?? 60)
@@ -1569,7 +1569,8 @@ function Invoke-PumbRun {
         }
         if (Test-ScenarioOn $Cfg 'XFlowProbe') {
             Invoke-Scenario $Ctx "${pre}_xflow_probe" {
-                $s = Send-PumbSearch $Ctx (New-PumbSearchBody $accId (Format-PumbDate $P.From.AddSeconds(-1)) (Format-PumbDate $(if ($pEnd.AddSeconds(1) -gt $moment) { $moment } else { $pEnd.AddSeconds(1) })) $null $null $null) -FlowId '5:6:EX'
+                $xTop = if ($pEnd -lt $moment) { $pEnd } else { $moment }
+                $s = Send-PumbSearch $Ctx (New-PumbSearchBody $accId (Format-PumbDate $P.From.Date) (Format-PumbDate $xTop.Date.AddDays(1).AddSeconds(-1)) $null $null $null) -FlowId '5:6:EX'
                 Add-Count $Ctx 'X-Flow-ID' '5:6:EX'
                 if ($null -eq $s.Items) { Add-Note $Ctx "відповідь не масив (HTTP $($s.R.Status))"; return }
                 Add-PumbItemsDigest $Ctx @($s.Items) -NoSums
@@ -2045,7 +2046,7 @@ function Invoke-SelfTestMode {
     & $check 'ПУМБ, КОНТРОЛЬ витоку рахунків: чистий вивід — код 0; IBAN у консолі — код 3; accountId у stderr — код 3; LEAK-DETECTED.txt без значень' (
         ($codeAcOk -eq 0) -and ($codeAcLeak -eq 3) -and ($codeAcErr -eq 3) -and $leakTxtAc.Contains('console.log') -and -not $leakTxtAc.Contains($acIban[1]))
 
-    # --- ПУМБ run2: читання у формі конектора на змоканому searcher (70 документів: 67 не-STM + 3 STM за три доби → відповідь на порозі 67 → ділення) ---
+    # --- ПУМБ run2: читання у формі конектора на змоканому searcher (70 документів: 67 не-STM + 3 STM за три доби → відповідь на порозі 67 (шов ConnectorThreshold у тестовому конфігу; робочий поріг 1191) → ділення) ---
     $c2Iban = 'UA444444444444444444444444444'; $c2Id = '7200001'
     $c2Docs = [System.Collections.Generic.List[object]]::new()
     $c2N = @{ N = 0 }
@@ -2064,7 +2065,7 @@ function Invoke-SelfTestMode {
     }
     $c2Fmt = [System.Globalization.CultureInfo]::InvariantCulture
     $c2Scen = @{ SearcherSmall = $false; SearcherWork = $false; SearcherNoPaging = $false; StatesAll = $false; TypesNone = $false; TypesCurrency = $false; PagingProbes = $false; DateFormats = $false; PeriodTransactions = $false; Saturated = $false; Reversal = $false; Errors = $false }
-    $c2Raw = @{ ClientId = 'C2-FAKE-CLIENT'; ClientSecret = 'C2-FAKE-SECRET-0001'; Login = 'c2-fake-login'; Password = 'C2-FAKE-PASSWORD-0002'; Accounts = 'all'; Period = @{ From = '2020-01-01'; To = '2020-01-03' }; Scenarios = $c2Scen }
+    $c2Raw = @{ ClientId = 'C2-FAKE-CLIENT'; ClientSecret = 'C2-FAKE-SECRET-0001'; Login = 'c2-fake-login'; Password = 'C2-FAKE-PASSWORD-0002'; Accounts = 'all'; Period = @{ From = '2020-01-01'; To = '2020-01-03' }; ConnectorThreshold = 67; Scenarios = $c2Scen }
     $c2Res = Resolve-BankConfig 'Pumb' $c2Raw $false
     $c2Dir = Join-Path $Dir 'run2-connector'
     if (Test-Path $c2Dir) { Remove-Item $c2Dir -Recurse -Force }
@@ -2097,9 +2098,9 @@ function Invoke-SelfTestMode {
     # порядок запитів: connector_read (3: уся доба, ранішня половина, пізніша), xflow_probe (1), пари меж (4), longest_period (1)
     $c2Form = $c2Sent.Count -eq 9 -and (@(0..2) | ForEach-Object { $b = $c2Bodies[$_]; (@($b.Keys) -join ',') -ceq 'fromDate,toDate,documentAccounts' -and (@($b['documentAccounts']) -join ',') -ceq $c2Id }) -notcontains $false
     & $check 'ПУМБ run2, connector_read: тіло рівно як у конектора (fromDate, toDate, documentAccounts; без pagingRequest, documentState, documentType)' $c2Form "(запитів: $($c2Sent.Count))"
-    $c2Bounds = $c2Sent.Count -ge 3 -and $c2Bodies[0]['fromDate'] -ceq '31.12.2019 23:59:59' -and $c2Bodies[0]['toDate'] -ceq '04.01.2020 00:00:00' -and
-    $c2Bodies[1]['fromDate'] -ceq '31.12.2019 23:59:59' -and $c2Bodies[1]['toDate'] -ceq '02.01.2020 00:00:00' -and $c2Bodies[2]['fromDate'] -ceq '01.01.2020 23:59:59' -and $c2Bodies[2]['toDate'] -ceq '04.01.2020 00:00:00'
-    & $check 'ПУМБ run2, межі A2 і ділення: відповідь 70 >= 67 → дві половини за добами (1 доба + 2 доби), запас секунда з обох боків, верх не пізніше кінця періоду + 1 с' $c2Bounds
+    $c2Bounds = $c2Sent.Count -ge 3 -and $c2Bodies[0]['fromDate'] -ceq '01.01.2020 00:00:00' -and $c2Bodies[0]['toDate'] -ceq '03.01.2020 23:59:59' -and
+    $c2Bodies[1]['fromDate'] -ceq '01.01.2020 00:00:00' -and $c2Bodies[1]['toDate'] -ceq '01.01.2020 23:59:59' -and $c2Bodies[2]['fromDate'] -ceq '02.01.2020 00:00:00' -and $c2Bodies[2]['toDate'] -ceq '03.01.2020 23:59:59'
+    & $check 'ПУМБ run2, межі цілими добами і ділення: відповідь 70 >= 67 (шов) → дві половини за добами (1 доба + 2 доби), fromDate = доба 00:00:00, toDate = доба 23:59:59, запасу в секунду немає' $c2Bounds
     $flowRe = '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}:[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}:EX$'
     $c2Flows = @($c2Sent | Select-Object -First 3 | ForEach-Object { $_.Flow })
     & $check 'ПУМБ run2, X-Flow-ID конектора: GUID:GUID:EX, сесія однакова, GUID запиту різні; xflow_probe — 5:6:EX з тим самим тілом, що перший запит' (
@@ -2113,7 +2114,7 @@ function Invoke-SelfTestMode {
     & $check 'ПУМБ run2, boundary_pairs: fromDate = t і t + 1, toDate = t і t - 1 у формі конектора; у зведенні лише так/ні (мок включний: так, ні, так, ні)' ($c2Pairs -and ($c2Hit -join ',') -ceq 'так,ні,так,ні')
     $c2Long = $c2Ctx.Stats['pumb_a1_longest_period']
     & $check 'ПУМБ run2, longest_period: один запит без ділення на 366 діб; у зведенні лише кількість документів у відповіді' (
-        $c2Sent.Count -ge 9 -and $c2Sent[8].Body.Contains('"fromDate":"02.01.2019 23:59:59"') -and $c2Long.Exchanges -eq 1 -and $c2Long.Counts['документів у відповіді (стеля кількості?)']['70'] -eq 1)
+        $c2Sent.Count -ge 9 -and $c2Sent[8].Body.Contains('"fromDate":"03.01.2019 00:00:00"') -and $c2Long.Exchanges -eq 1 -and $c2Long.Counts['документів у відповіді (стеля кількості?)']['70'] -eq 1)
     $c2Stm = $c2Ctx.Stats['pumb_a1_connector_stm_signs'].Counts['ознаки STM']
     & $check 'ПУМБ run2, ознаки STM: 2 пари сусідніх днів, 2 ненульові різниці, обидві = рух того ж дня, жодна = рух попереднього' (
         $c2Stm['пар сусідніх днів із STM'] -eq 2 -and $c2Stm['пар із ненульовою різницею STM'] -eq 2 -and $c2Stm['з них різниця = рух того ж дня'] -eq 2 -and $c2Stm['з них різниця = рух попереднього дня'] -eq 0)

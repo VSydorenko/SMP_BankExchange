@@ -137,9 +137,11 @@ def pumb_split(rec):
         body = _pumb_body(se[0])
         accounts = (_json(acc) or []) if _ok(acc) else []
         accid = str(body['documentAccounts'][0])
-        iban = next((a.get('iban') or '' for a in accounts if isinstance(a, dict) and str(a.get('accountId')) == accid), '')
+        mine = next((a for a in accounts if isinstance(a, dict) and str(a.get('accountId')) == accid), {})
+        iban = mine.get('iban') or ''
+        # ВалютаСчета читання -- валюта того рахунку, який читали (accountId запиту): під IBAN їх може бути кілька (D36 п. 2); числовий код ISO 4217, '' -- валюта не розпізнана
         p = Params(account=iban, period_start=C.pumb_date(body['fromDate']), period_end=C.pumb_date(body['toDate']),
-                   reading_moment=C.DEFAULT_READING_MOMENT)
+                   reading_moment=C.DEFAULT_READING_MOMENT, account_currency_code=C.numeric_currency(C.to_str(mine.get('currency'))) or '')
         out.append(Reading(reading_id('pumb', sc), 'pumb', sc, [auth, acc, *se], p))
     return out, skipped
 

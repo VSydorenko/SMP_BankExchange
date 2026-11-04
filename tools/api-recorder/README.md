@@ -208,7 +208,7 @@ pwsh -NoProfile -File .\Invoke-ApiRecorder.ps1 -CheckRun -Bank pumb -RunLabel <�
 
 ### run2 ПУМБ: читання у формі конектора
 
-Сценарії `Scenarios` блоку `Pumb` (за замовчуванням увімкнені): `ConnectorRead` — searcher рівно як у конектора (без `pagingRequest` і фільтрів, межі «початок − 1 с … Мін(кінець + 1 с, момент)», `X-Flow-ID` у формі `GUID:GUID:EX`;
+Сценарії `Scenarios` блоку `Pumb` (за замовчуванням увімкнені): `ConnectorRead` — searcher рівно як у конектора (без `pagingRequest` і фільтрів, межі — цілі календарні доби «доба початку 00:00:00 … доба Мін(кінець, момент) 23:59:59», `X-Flow-ID` у формі `GUID:GUID:EX`;
 відповідь не менше `ConnectorThreshold` ділить період навпіл за добами, запобіжник `ConnectorMaxRequests`); `XFlowProbe` — перший запит із `X-Flow-ID` попередника `5:6:EX`; `ConnectorBoundary` — пари `fromDate = t`, `t + 1` і
 `toDate = t`, `t − 1` на операції, єдиній у своїй секунді (у зведенні лише «операція у відповіді: так/ні»); `LongestPeriod` — один запит на `LongestPeriodDays` діб для найактивнішого рахунку (у зведенні лише кількість);
 `StmSigns` — кількості днів, де `STM(d) − STM(d−1)` ненульова і дорівнює чистому руху не-STM документів того ж або попереднього дня; `Reconcile` — `reconcile.txt` для власника: найактивніший рахунок, окремо UAH, CUR, STM,

@@ -34,8 +34,8 @@ def reading(docs, acct_status=200, search_status=200, auth_status=200, search_bo
     start, end = C.pumb_date(DAY0), C.pumb_date(DAY1)
     if search_body is not None:                              # свій запит тесту: період із його тіла, як було
         start, end = C.pumb_date(search_body['fromDate']), C.pumb_date(search_body['toDate'])
-    else:                                  # перший запит -- форма конектора: межі A2 (початок - 1 с, Мин(кінець + 1 с, момент читання)) і три поля (оракул звіряє й перший запит)
-        lo, hi = C.pumb_request_bounds(start, end, kyiv.to_local(C.DEFAULT_READING_MOMENT))
+    else:                                  # перший запит -- форма конектора: цілі доби (доба початку 00:00:00, доба Мин(кінець, момент читання) 23:59:59) і три поля (оракул звіряє й перший запит)
+        lo, hi = C.pumb_request_bounds(start, min(end, kyiv.to_local(C.DEFAULT_READING_MOMENT)))
         search_body = {'fromDate': lo.strftime('%d.%m.%Y %H:%M:%S'), 'toDate': hi.strftime('%d.%m.%Y %H:%M:%S'), 'documentAccounts': [str(ACCT['accountId'])]}
     body = search_body
     auth = R.make_exchange(1, 'pumb_auth', {'method': 'POST', 'host': 'auth.fuib.com', 'path': '/auth/realms/VegaNet/protocol/openid-connect/token',
@@ -138,9 +138,8 @@ class PumbExpected(unittest.TestCase):
         self.assertEqual((e.failure_class, e.requests), ('ДействиеЧеловека', []))
         e = E.run(rec, Params(account=IBAN, period_start=datetime(2026, 12, 1), period_end=datetime(2026, 12, 2), reading_moment=p.reading_moment))
         self.assertEqual((e.complete, e.trust, e.ops, e.requests), (True, datetime(2026, 12, 1), [], []))
-        # п. 11: аномалія меж -- операція поза межами ЗАПИТУ (fromDate/toDate з тіла searcher): повторити, читання неповне, межа = початок, сторінку не беремо, без значень у діагностиці;
-        # рівність межі аномалією не є (включність не виміряна)
-        for when in ('02.11.2026 00:00:01', '31.10.2026 23:59:58'):          # на секунду за межею ЗАПИТУ (31.10 23:59:59 ... 02.11 00:00:00: запас A2)
+        # п. 11: аномалія меж -- операція, ДЕНЬ якої поза днями ЗАПИТУ (fromDate/toDate з тіла searcher: цілі доби): повторити, читання неповне, межа = початок, сторінку не беремо, без значень у діагностиці
+        for when in ('02.11.2026 00:00:00', '31.10.2026 23:59:59'):          # перша секунда наступної і остання секунда попередньої доби відносно запиту 01.11
             rec, p = reading([doc(1), doc(2, when=when)])
             e = E.run(rec, p)
             self.assertEqual((e.failure_class, e.complete, e.trust, e.ops), ('Повторить', False, p.period_start, []), when)
@@ -148,9 +147,9 @@ class PumbExpected(unittest.TestCase):
                              [('Предупреждение', 'out-of-bounds', {'Банк': 'ПУМБ', 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''})])
         rec, p = reading([doc(1, when=DAY0), doc(2, when=DAY1)])
         self.assertEqual([o['ПорядковыйНомер'] for o in E.run(rec, p).ops], [1, 2])
-        rec, p = reading([doc(1, when='31.10.2026 23:59:59'), doc(2, when='02.11.2026 00:00:00')])                  # рівно на межі запиту (запас): не аномалія, за періодом відкидається мовчки
-        e = E.run(rec, p)
-        self.assertEqual((e.failure_class, e.ops, e.out_of_period), ('', [], [1, 2]))
+        rec, p = reading([doc(1, when='01.11.2026 08:59:59'), doc(2, when='01.11.2026 18:00:00'), doc(3, when='01.11.2026 09:00:00')])      # та сама доба запиту, але поза періодом 09:00:00-17:59:59: не аномалія, відкидається мовчки
+        e = E.run(rec, Params(account=IBAN, period_start=datetime(2026, 11, 1, 9), period_end=datetime(2026, 11, 1, 17, 59, 59), reading_moment=p.reading_moment))
+        self.assertEqual((e.failure_class, [o['ПорядковыйНомер'] for o in e.ops], e.out_of_period, e.diags), ('', [3], [1, 2], []))
         # формат operationDate -- гіпотеза: інший формат -- явна відмова, не здогад
         rec, p = reading([doc(1, when='2026-11-01T10:00:00')])
         with self.assertRaises(C.PumbDateFormat):

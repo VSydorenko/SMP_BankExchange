@@ -87,15 +87,16 @@ class Coverage(unittest.TestCase):
             for k, e in enumerate(searches):
                 body = json.loads(R.request_body_text(e))
                 self.assertEqual(set(body), {'fromDate', 'toDate', 'documentAccounts'}, s.sid)    # без фільтра станів, типу й pagingRequest
-                lo = (p.period_start - timedelta(seconds=1)).strftime('%d.%m.%Y %H:%M:%S')       # запас у секунду -- гіпотеза до виміру
-                hi = min(p.period_end + timedelta(seconds=1), moment).strftime('%d.%m.%Y %H:%M:%S')
+                lo = p.period_start.strftime('%d.%m.%Y') + ' 00:00:00'                              # цілі календарні доби, обидві межі включно (D36 п. 11, run2): запасу в секунду немає
+                hi = min(p.period_end, moment).strftime('%d.%m.%Y') + ' 23:59:59'
                 if k == 0:
                     self.assertEqual((body['fromDate'], body['toDate']), (lo, hi), s.sid)           # перший запит -- увесь період
-                else:                                                                              # половини: від опівночі до 23:59:59 доби (запас -1 с / +1 с), всередині періоду
-                    f, t = C.pumb_date(body['fromDate']) + timedelta(seconds=1), C.pumb_date(body['toDate']) - timedelta(seconds=1)
-                    self.assertEqual((f.time(), t.time().replace(microsecond=0)), (datetime(2026, 1, 1).time(), datetime(2026, 1, 1, 23, 59, 59).time()), s.sid)
-                    self.assertTrue(p.period_start <= f <= t <= p.period_end, s.sid)
-                self.assertEqual(body['documentAccounts'], [str(SP.ACCOUNT_ID)])
+                else:                                                                              # половини: від 00:00:00 першої до 23:59:59 останньої доби, у днях періоду
+                    f, t = C.pumb_date(body['fromDate']), C.pumb_date(body['toDate'])
+                    self.assertEqual((f.time(), t.time()), (datetime(2026, 1, 1).time(), datetime(2026, 1, 1, 23, 59, 59).time()), s.sid)
+                    self.assertTrue(p.period_start.date() <= f.date() <= t.date() <= p.period_end.date(), s.sid)
+                if 'МультиВалюта' not in s.sid:
+                    self.assertEqual(body['documentAccounts'], [str(SP.ACCOUNT_ID)])
 
     def test_nothing_unmodelled_hides_in_green(self):
         # (1) жоден запис синтетики не має pagingRequest (Р4); (2) запис, що його має, оракул відхиляє, а `pumb_split` називає «не змодельовано»
@@ -144,9 +145,9 @@ class HandExpected(unittest.TestCase):
         self.assertEqual(e.trust, BY['СинтПУМБОтменённые'].params.period_end)                  # скасована межу не тримає
         e = run('СинтПУМБСтатусНеизвестен')
         self.assertEqual((numbers(e.ops), [(d['Уровень'], d['Суть']) for d in e.diags]), ([1], [('Ошибка', 'unknown-state')]))
-        # межа довіри на початку: не раніша за НачалоПериода; неостаточний у запасі перед початком -- поза періодом, межі не тримає, операції не дає
+        # межа довіри на початку: не раніша за НачалоПериода (09:00:00); неостаточний тієї ж доби до початку періоду -- поза періодом, межі не тримає, операції не дає
         e = run('СинтПУМБГраницаНаНачале')
-        self.assertEqual((e.trust, e.out_of_period, numbers(e.diags), numbers(e.ops)), (datetime(2026, 11, 1), [2], [1], [3]))
+        self.assertEqual((e.trust, e.out_of_period, numbers(e.diags), numbers(e.ops)), (datetime(2026, 11, 1, 9, 0, 0), [2], [1], [3]))
 
     def test_missing_fields_amount_identifier_purpose(self):
         e = run('СинтПУМБПоляОтсутствуют')
@@ -172,8 +173,9 @@ class HandExpected(unittest.TestCase):
 
     def test_bounds_time_and_periods(self):
         e = run('СинтПУМБГраницаСуток')
-        self.assertEqual((numbers(e.ops), e.out_of_period, e.silent), ([2, 3], [1, 4], 0))           # запас між межами запиту й періодом -- мовчки, не аномалія
+        self.assertEqual((numbers(e.ops), e.out_of_period, e.silent), ([3, 4], [1, 2, 5, 6], 0))     # запит -- ціла доба; документи тієї ж доби поза періодом 09:00:00-17:59:59 -- мовчки, не аномалія
         self.assertEqual([o['ДатаДокумента'] for o in e.ops], ['2026-11-01', '2026-11-01'])
+        self.assertEqual([o['ДатаОперации'] for o in e.ops], ['2026-11-01T09:00:00', '2026-11-01T17:59:59'])
         e = run('СинтПУМБВремяВесна')
         self.assertEqual([o['ДатаОперации'] for o in e.ops], ['2026-03-28T00:30:00', '2026-03-29T02:59:59', '2026-03-29T04:00:00', '2026-03-29T23:59:59'])
         e = run('СинтПУМБВремяОсень')
@@ -189,49 +191,57 @@ class HandExpected(unittest.TestCase):
         e = run('СинтПУМБМоментВнутриПериода')
         self.assertEqual((e.complete, e.trust), (True, datetime(2026, 11, 20, 2, 0, 0)))             # межа = момент читання за Києвом, не КонецПериода
 
-    # ---- без пагінації (Р4), D36 п. 11: очікуване РУКАМИ. Період 01-02.11.2026 (2 доби); запит -- (початок - 1 с, Мин(кінець + 1 с, момент)); половини за добами без проміжку й перекриття.
+    # ---- без пагінації (Р4), D36 п. 11: очікуване РУКАМИ. Період 01-02.11.2026 (2 доби); запит -- цілі доби (00:00:00 першої, 23:59:59 останньої; кінець не пізніший за момент); половини за добами без проміжку й перекриття.
     @staticmethod
     def bodies(e):
         return [(r['Тело']['fromDate'], r['Тело']['toDate']) for r in e.requests if r['Путь'].endswith('/document/searcher')]
 
     def test_by_hand_no_pagination_threshold_halving(self):
-        self.assertEqual(C.PUMB_RESPONSE_THRESHOLD, 67)                            # = найбільший спостережений розмір відповіді (run1b); поріг 100 -- мовчазна втрата обрізаної стелею відповіді; ручне очікуване нижче -- з цим числом
-        # відповідь НИЖЧЕ порога (66): один запит за весь період
+        self.assertEqual(C.PUMB_RESPONSE_THRESHOLD, 1191)                          # = найбільший спостережений розмір відповіді (run2 LongestPeriod, 70fb320); поріг понад спостережене -- мовчазна втрата обрізаної стелею відповіді; ручне очікуване нижче -- з цим числом
+        # відповідь НИЖЧЕ порога (1190): один запит за весь період
         e = run('СинтПУМБНижеПорога')
-        self.assertEqual((len(e.ops), e.complete, e.failure_class, self.bodies(e)), (66, True, '', [('31.10.2026 23:59:59', '03.11.2026 00:00:00')]))
-        # відповідь НА порозі (100): період ділиться навпіл -- 01.11 і 02.11; запити: усе, перша, друга; запас у секунду з обох боків, межі періодів половин -- без проміжку й перекриття
+        self.assertEqual((len(e.ops), e.complete, e.failure_class, self.bodies(e)), (1190, True, '', [('01.11.2026 00:00:00', '02.11.2026 23:59:59')]))
+        # відповідь НА порозі (1191): період ділиться навпіл -- 01.11 і 02.11; запити: усе, перша, друга; кожна половина запитується своєю добою
         e = run('СинтПУМБПорогДелит')
-        self.assertEqual(self.bodies(e), [('31.10.2026 23:59:59', '03.11.2026 00:00:00'), ('31.10.2026 23:59:59', '02.11.2026 00:00:00'), ('01.11.2026 23:59:59', '03.11.2026 00:00:00')])
-        # документи: перша половина [A 01.11 10:00, B 01.11 23:59:59, C 02.11 00:00:00 (запас)] -> номери 1-3; друга [B (запас), C, D 02.11 12:00] -> 4-6. Межові B і C -- по одній операції
-        self.assertEqual((numbers(e.ops), e.out_of_period, e.items), ([1, 2, 5, 6], [3, 4], 6))
+        self.assertEqual(self.bodies(e), [('01.11.2026 00:00:00', '02.11.2026 23:59:59'), ('01.11.2026 00:00:00', '01.11.2026 23:59:59'), ('02.11.2026 00:00:00', '02.11.2026 23:59:59')])
+        # документи: перша половина [A 01.11 10:00, B 01.11 23:59:59] -> номери 1-2; друга [C 02.11 00:00:00, D 02.11 12:00] -> 3-4. Межові B і C потрапляють лише в запит своєї доби -- по одній операції
+        self.assertEqual((numbers(e.ops), e.out_of_period, e.items), ([1, 2, 3, 4], [], 4))
         self.assertEqual([(o['ИдентификаторОперации'], o['ДатаОперации'], o['Сумма'], o['Направление']) for o in e.ops],
                          [('2201', '2026-11-01T10:00:00', '11.00', 'Списано'), ('2202', '2026-11-01T23:59:59', '22.00', 'Списано'),
                           ('2203', '2026-11-02T00:00:00', '33.00', 'Поступило'), ('2204', '2026-11-02T12:00:00', '44.00', 'Списано')])
         self.assertEqual((e.complete, e.failure_class, e.trust, e.diags), (True, '', BY['СинтПУМБПорогДелит'].params.period_end, []))
-        # відповідь на 80 документів (між спостереженим максимумом 67 і 100 -- імітація обрізаної стелею): ДІЛИТЬСЯ так само, як на порозі
+        # відповідь на 1500 документів (понад спостережений максимум -- імітація обрізаної стелею C): ДІЛИТЬСЯ так само, як на порозі
         e = run('СинтПУМБОтсечёнСтеля')
-        self.assertEqual((self.bodies(e), numbers(e.ops), e.out_of_period), (self.bodies(run('СинтПУМБПорогДелит')), [1, 2, 5, 6], [3, 4]))
+        self.assertEqual((self.bodies(e), numbers(e.ops), e.out_of_period), (self.bodies(run('СинтПУМБПорогДелит')), [1, 2, 3, 4], []))
         # рекурсія: 3 доби -> 1 + 2 (n // 2 діб у першій); друга (02-03.11) знову на порозі -> 02.11 і 03.11; порядок запитів -- обхід, ранішня половина першою
         e = run('СинтПУМБДелитГлубоко')
-        self.assertEqual(self.bodies(e), [('31.10.2026 23:59:59', '04.11.2026 00:00:00'), ('31.10.2026 23:59:59', '02.11.2026 00:00:00'), ('01.11.2026 23:59:59', '04.11.2026 00:00:00'),
-                                         ('01.11.2026 23:59:59', '03.11.2026 00:00:00'), ('02.11.2026 23:59:59', '04.11.2026 00:00:00')])
+        self.assertEqual(self.bodies(e), [('01.11.2026 00:00:00', '03.11.2026 23:59:59'), ('01.11.2026 00:00:00', '01.11.2026 23:59:59'), ('02.11.2026 00:00:00', '03.11.2026 23:59:59'),
+                                         ('02.11.2026 00:00:00', '02.11.2026 23:59:59'), ('03.11.2026 00:00:00', '03.11.2026 23:59:59')])
         self.assertEqual(([o['ИдентификаторОперации'] for o in e.ops], numbers(e.ops), e.complete), (['2201', '2202', '2203'], [1, 2, 3], True))
         # доба на порозі (02.11 після ділення): ДействиеЧеловека, неповне, межа довіри за п. 10 -- НачалоПериода, діагностика називає добу (дату) і кількість, прочитане першої доби лишається
         e = run('СинтПУМБСуткиНаПороге')
         self.assertEqual((e.failure_class, e.complete, e.trust, numbers(e.ops)), (E.CLS_HUMAN, False, BY['СинтПУМБСуткиНаПороге'].params.period_start, [1]))
-        self.assertEqual([(d['Уровень'], d['Суть'], d['Факты']['Сутки'], d['Факты']['Документов']) for d in e.diags], [('Предупреждение', 'day-at-threshold', '02.11.2026', 67)])
+        self.assertEqual([(d['Уровень'], d['Суть'], d['Факты']['Сутки'], d['Факты']['Документов']) for d in e.diags], [('Предупреждение', 'day-at-threshold', '02.11.2026', 1191)])
         e = run('СинтПУМБСуткиСразуНаПороге')                                      # період в одну добу: ділити нічого -- одразу дія людини, без операцій
         self.assertEqual((e.failure_class, e.complete, e.ops, [d['Факты']['Сутки'] for d in e.diags]), (E.CLS_HUMAN, False, [], ['01.11.2026']))
 
     def test_by_hand_stm_and_account_filter(self):
-        # STM (гіпотеза Р11): не операції, ОДИН рядок Предупреждение на читання з кількістю (3), без значень; решта -- як звичайно
+        # STM (щоденний запис залишку, виміряно run1b/run2): не операції і БЕЗ Предупреждение; решта -- як звичайно
         e = run('СинтПУМБSTM')
-        self.assertEqual((numbers(e.ops), [(d['Уровень'], d['Суть'], d['ПорядковыйНомер'], d['Факты']) for d in e.diags], e.complete), ([1, 4], [('Предупреждение', 'stm-skipped', 0, {'Количество': 3})], True))
+        self.assertEqual((numbers(e.ops), e.diags, e.complete, len(e.skipped_stm)), ([1, 4], [], True, 3))
         self.assertEqual([d['Суть'] for d in run('СинтПУМБSTM', {'pumb9'}).diags], ['no-iban'] * 3)      # відступ вимкнено -- STM йдуть як звичайні документи (без IBAN -- Ошибка)
         # номер рахунку: CUR без IBAN відправника, номер = number запитаного -> Списано; CUR_ADV без IBAN обох, номер одержувача = altNumber -> Поступило; чужий номер без IBAN -- no-iban
         e = run('СинтПУМБНомерСчета')
         self.assertEqual((numbers(e.ops), [o['Направление'] for o in e.ops], {o['НомерСчета'] for o in e.ops}), ([1, 2], ['Списано', 'Поступило'], {BY['СинтПУМБНомерСчета'].params.account}))
-        self.assertEqual([(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags], [('Ошибка', 'no-iban', 3)])
+        self.assertEqual([(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags], [('Ошибка', 'no-iban', 3), ('Ошибка', 'no-iban', 4)])       # 4: без IBAN, чужий номер, БЕЗ direction -- так само не операція (фільтр рахунку -- єдина перепона)
+        # кілька рахунків під одним IBAN (D36 п. 2, 8): пара (IBAN, валюта) однозначна -- береться гривневий (другий у списку), searcher іде з його accountId; пари немає чи поле порожнє -- ДействиеЧеловека до searcher
+        e = run('СинтПУМБМультиВалюта')
+        self.assertEqual((numbers(e.ops), e.complete, e.failure_class, [r['Тело']['documentAccounts'] for r in e.requests if r['Путь'].endswith('/document/searcher')]), ([1, 2], True, '', [[str(SP.ACCOUNT_ID)]]))
+        for sid in ('СинтПУМБМультиВалютаНетПары', 'СинтПУМБМультиВалютаПусто'):
+            e = run(sid)
+            self.assertEqual((e.failure_class, e.complete, e.ops, e.trust, [d['Суть'] for d in e.diags], len(e.requests)), (E.CLS_HUMAN, False, [], BY[sid].params.period_start, ['account-ambiguous'], 2), sid)
+        e = run('СинтПУМБВалютныйСчет')                                            # один рахунок під IBAN: поле ВалютаСчета (980) не читається, рахунок USD береться
+        self.assertEqual((e.failure_class, e.complete, len(e.requests)), ('', True, 3))
         # документ без свого рахунку: діагностика (рівень -- як у чужої валюти), не операція; факт -- лише ідентифікатор
         e = run('СинтПУМБНетСвоегоСчета')
         # один рядок на читання з КІЛЬКІСТЮ (не рядок на документ); без значень

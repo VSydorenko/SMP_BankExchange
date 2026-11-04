@@ -103,8 +103,8 @@ class Expected:
     used: list = field(default_factory=list)         # обміни запису, які оракул СПОЖИВ, у порядку споживання
     account_currency: object = None                  # валюта рахунку ПриватБанку з /balance (буквений код); None -- невідома
     out_of_period: list = field(default_factory=list)  # номери записів поза періодом (відкинуто мовчки), D36 п. 11
+    skipped_stm: list = field(default_factory=list)    # ПУМБ: номери документів STM -- щоденні записи залишку (виміряно run1b/run2), не операції; ЛІЧИЛЬНИК для звірки «нічого не зникає мовчки», рядка діагностики немає
     foreign_docs: list = field(default_factory=list)   # ПУМБ: номери документів, чий рахунок сторін не збігся ні з IBAN, ні з номером запитаного (не операції; один рядок Предупреждение на читання з кількістю, відступ pumb1)
-    skipped_stm: list = field(default_factory=list)    # ПУМБ: номери документів STM (не операції; один рядок Предупреждение на читання, відступ pumb9)
 
     def diag(self, level, n, essence, dev=None, **facts):
         self.diags.append({'Уровень': level, 'ПорядковыйНомер': n, 'Суть': essence, 'Отступ': dev or '', 'Факты': facts})
@@ -1109,9 +1109,8 @@ PUMB_DEVIATIONS = {
     'pumb6': 'ідентифікатор операції -- docId (виміряно: присутній 595 із 595, id майже завжди null); порожній docId -- Ошибка bad-identifier; стабільність -- run2',
     'pumb7': 'усі дати -- київський час з явним поясом; формат operationDate -- гіпотеза, інший формат -- відмова',
     'pumb8': 'без пагінації (Р4): запит за весь період, відповідь на порозі ділить період навпіл до доби (D36 п. 11); запит з pagingRequest оракул відхиляє явно',
-    'pumb9': 'гіпотеза Р11 (відкрите): документи STM -- щоденні записи залишку рахунку, не рух грошей; не операції, один рядок Предупреждение на читання з кількістю; після закриття Р11 (run2 п. 4, звірка власника) попередження прибирається',
+    'pumb9': 'STM -- щоденний запис залишку рахунку (виміряно run1b і run2: Р11 закрито), не рух грошей: не операція і без Предупреждение; попередник їх вантажив як операції',
 }
-PUMB_STM_TEXT = 'пропущено N щоденних записів залишку рахунку (STM); банк віддає їх разом із документами, як операції вони не вантажаться'   # текст Предупреждение (N -- Количество); гіпотеза Р11; після закриття Р11 (run2 п. 4, звірка власника) попередження прибирається
 PUMB_CANCELLED = frozenset({'REJECTED', 'REJECTED_BY_ACCO', 'REJECTED_BY_OPER', 'SYSTEM_ERROR'})
 PUMB_NONFINAL = frozenset({'INPUT', 'ACCEPTING', 'ACCEPTED', 'READY_TO_SEND', 'SENDING', 'TAKE_IN', 'ROUTED', 'UPLOADED', 'ACCEPTED_BY_ACCO',
                            'ACCEPTED_BY_OPER', 'SENT_TO_EPS'})          # стани за swagger (enum VeganetDocumentItem.state); PROCESSED -- проведений
@@ -1242,7 +1241,8 @@ def rule_no_iban(out, n, ident):
 
 def pumb_out_of_bounds(search, docs):
     """Аномалія меж (D36 п. 11): `operationDate` документа раніше за `fromDate` або пізніше за `toDate` ЗАПИТУ (межі -- з тіла запиту searcher, той самий строгий формат).
-    Рівність межі -- НЕ аномалія (включність меж не виміряна). Запас між межами запиту й періодом -- не аномалія, а мовчазне відкидання (див. `_pumb`)."""
+    Межі запиту -- цілі доби (`C.pumb_request_bounds`: 00:00:00 першої і 23:59:59 останньої), тож аномалія -- лише документ, ДЕНЬ `operationDate` якого поза днями запиту; документ тієї ж доби, але поза
+    періодом (піддобою), -- не аномалія, а мовчазне відкидання фільтром конектора (див. `_pumb`)."""
     body = json.loads(R.request_body_text(search))
     lo, hi = C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))
     return any(isinstance(r, dict) and not (lo <= C.pumb_date(r.get('operationDate')) <= hi) for r in docs)
@@ -1290,6 +1290,24 @@ def pumb1_account_side(own, mine, doc):
     return None
 
 
+def pumb_select_account(out, accounts, p):
+    """Рахунок банку за запитаним IBAN (D36 п. 2, 8 @ 21f0ab0). Під IBAN може бути кілька рахунків у різних валютах (виміряно run2: 14 рахунків, 11 IBAN). Один -- беремо його (поле
+    `ВалютаСчета` не читається); кілька -- за парою (IBAN, числовий код валюти `/account`) з `Параметры.ВалютаСчета`; немає IBAN -- `account-not-found`; поле порожнє / пари немає /
+    пара неоднозначна -- `account-ambiguous`, «дія людини» ДО запиту виписки. Обидва випадки -- один клас «рахунку немає в банку». -> рахунок чи None (відмова записана)."""
+    same = [a for a in accounts if isinstance(a, dict) and a.get('iban') == p.account]
+    if not same:
+        _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb']}, 'account-not-found')
+        return None
+    if len(same) == 1:
+        return same[0]
+    want = C.to_str(p.account_currency_code)
+    by_pair = [a for a in same if want and C.numeric_currency(C.to_str(a.get('currency'))) == want]
+    if len(by_pair) == 1:
+        return by_pair[0]
+    _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb']}, 'account-ambiguous')
+    return None
+
+
 def _pumb(rec, p, out, disabled):
     bank = 'pumb'
     exs = list(rec.exchanges)
@@ -1324,9 +1342,8 @@ def _pumb(rec, p, out, disabled):
     if not isinstance(accounts, list):
         _fail_not_json(out, bank)
         return
-    mine = next((a for a in accounts if isinstance(a, dict) and a.get('iban') == p.account), None)
+    mine = pumb_select_account(out, accounts, p)
     if mine is None:
-        _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES[bank]}, 'account-not-found')
         return
     if not searches:
         raise RecordingMismatch('у записі ПУМБ немає запиту searcher')
@@ -1345,9 +1362,9 @@ def _pumb(rec, p, out, disabled):
             search = searches[used]
             used += 1
             use(out, search)
-            if used > 1 or p.strict_first_request:                         # КОЖЕН запит (і перший) -- межі за правилом A2 і форма тіла конектора; перший запит справжнього запису (форма рекордера) відхиляється
+            if used > 1 or p.strict_first_request:                         # КОЖЕН запит (і перший) -- межі цілими добами і форма тіла конектора; перший запит запису у формі рекордера (до run2) відхиляється
                 body = json.loads(R.request_body_text(search))
-                want = C.pumb_request_bounds(lo, hi, moment_local)
+                want = C.pumb_request_bounds(lo, hi)
                 if (C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))) != want or set(body) != {'fromDate', 'toDate', 'documentAccounts'}:
                     raise RecordingMismatch(C.PUMB_AWAITING_RUN2 if used == 1 else 'межі запиту searcher не збігаються з половиною періоду')
             if search['failure'] or search['response']['status'] != 200:
@@ -1381,11 +1398,9 @@ def _pumb(rec, p, out, disabled):
                 _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, (lo, hi) if filtered else None)
         if used < len(searches):
             raise RecordingMismatch('у записі ПУМБ більше запитів searcher, ніж робить модель читання')
-    finally:                                                           # рядки на читання (по одному на правило, з кількістю) -- і коли читання зупинилось відмовою: прочитане лишається
+    finally:                                                           # рядок на читання (з кількістю) -- і коли читання зупинилось відмовою: прочитане лишається
         if out.foreign_docs:
             out.diag('Предупреждение', 0, 'foreign-account', 'pumb1', Количество=len(out.foreign_docs))   # рахунок сторін не збігся ні з IBAN, ні з номером запитаного рахунку; текст -- точка читання
-        if out.skipped_stm:
-            out.diag('Предупреждение', 0, 'stm-skipped', 'pumb9', Количество=len(out.skipped_stm))      # гіпотеза Р11; текст -- `PUMB_STM_TEXT`
 
 
 def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
@@ -1394,7 +1409,7 @@ def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
         out.out_of_period.append(n)                              # D36 п. 11: поза [Начало, Конец] (піддобу), але в межах запиту -- відкидається мовчки
         return
     if r.get('type') == 'STM' and 'pumb9' not in disabled:
-        out.skipped_stm.append(n)                                # гіпотеза Р11: щоденний запис залишку, не операція; рядок Предупреждение -- один на читання
+        out.skipped_stm.append(n)                                # STM -- щоденний запис залишку рахунку (виміряно run1b/run2), не рух грошей: не операція і без Предупреждение
         out.applied.add('pumb9')
         return
     number, ident = pumb6_identifier(out, disabled, r)
