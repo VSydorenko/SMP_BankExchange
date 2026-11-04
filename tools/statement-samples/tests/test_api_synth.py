@@ -180,10 +180,14 @@ class KeyCompatibility(unittest.TestCase):
             old = O.run(rec, s.params)
             ops = {o['ПорядковыйНомер']: o for o in e.ops}
             diag_numbers = {d['ПорядковыйНомер'] for d in e.diags} | set(e.duplicate_numbers)
+            # аномалія меж (відповідь поза межами запиту): сторінка в конверт не береться, одним рядком без номера операції; попередник
+            # (без перевірки меж) її завантажив би -- це ухвалений відступ задачі 4 (рішення за рев'ю), а не розбіжність ключа
+            anomaly = any(d['Суть'] == 'out-of-bounds' for d in e.diags)
             for r in old.rows:
                 f = r.fields
                 if r.n not in ops:
-                    self.assertIn(r.n, diag_numbers, (s.name, r.n))
+                    if not anomaly:
+                        self.assertIn(r.n, diag_numbers, (s.name, r.n))
                     continue
                 o = ops[r.n]
                 self.assertEqual(o['ДатаДокумента'], f['ДатаДокумента'].strftime('%Y-%m-%d'), (s.name, r.n))

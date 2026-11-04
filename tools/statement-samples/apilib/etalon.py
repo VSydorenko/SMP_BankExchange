@@ -83,7 +83,7 @@ def build_from(rec, p, *, sid, title, focus, macro, synthetic, disabled=frozense
         depends.add('РеверсСлучай')
     if any(x['Причина'] == 'after-client-info' for x in exp.pauses):
         depends.add('ПаузаПослеClientInfo')
-    if rec.bank == 'mono-fop' and any(_page_len(e) >= C.PAGE_SIZE_MONO for e in C.statement_exchanges(rec)):
+    if rec.bank == 'mono-fop' and any(_page_len(e) >= C.fop_page_limit(p) for e in C.statement_exchanges(rec)):
         depends.add('РазмерСтраницыMono')            # ФОП: «коротша за 500 -- остання» -- гіпотеза документації
     if exp.bank_boundary is not None and exp.bank_boundary < p.period_end:
         depends.add('ТлумачениеГраницы')

@@ -664,12 +664,20 @@ def _mono(rec, p, out, disabled):
     stmts = C.statement_exchanges(rec)
     if not stmts:
         raise RecordingMismatch('у записі немає запитів виписки')
+    # ФОП: відрізки ≤ 31 доби (кожен читається сторінками за D36 п. 11 -- як юросіб); юросіб: один відрізок, межі беруться із запиту
+    windows = [] if corp else [(kyiv.local_to_unix(a), kyiv.local_to_unix(b)) for a, b in C.fop_windows(p.period_start, p.period_end)]
+    seg = 0                                                  # поточний відрізок ФОП
     items, n, complete, i = [], 0, True, 0
+    continuing = False                                       # запит продовження в тому самому відрізку ще попереду
     while i < len(stmts):
         ex = stmts[i]
         i += 1
         use(out, ex)
         acct, frm, to = R.statement_window(ex)
+        if not corp and not continuing:
+            if seg >= len(windows) or (frm, to) != windows[seg]:
+                raise RecordingMismatch('перший запит відрізка ФОП запису (%d..%d) не збігається з відрізком читання' % (frm, to))
+        continuing = False
         if ex['response'] and ex['response']['status'] == 429:
             # dev9: один повтор після 429 за заголовком (юросіб це вже мав, ФОП — ні)
             if 'dev9' in disabled and not corp:
@@ -692,11 +700,8 @@ def _mono(rec, p, out, disabled):
         if not isinstance(page, list):
             _fail_not_json(out, bank, 'not-json' if page is None else 'not-array')
             break
-        earliest = None
         earliest_unix = None
-        start_local, upper_local = kyiv.unix_to_local(frm), kyiv.unix_to_local(to)
-        if corp and any(isinstance(tx, dict) and isinstance(tx.get('time'), int) and (tx['time'] > to or tx['time'] < frm)
-                        for tx in page):
+        if any(isinstance(tx, dict) and isinstance(tx.get('time'), int) and (tx['time'] > to or tx['time'] < frm) for tx in page):
             # ПОЗА виміряним (запобіжник, D36 п. 8 і рішення за рев'ю задачі 4): відповідь виходить за межі запиту -- `time` > `to` або
             # `time` < `from` (`time` = `to` НЕ аномалія: виключність межі й дробові секунди не виміряно, повтори відкидає `id`).
             # Читання неповне, «повторити»; ЦЯ сторінка в конверт не береться, раніше прочитані лишаються.
@@ -711,48 +716,45 @@ def _mono(rec, p, out, disabled):
                 tu = int(tx.get('time'))
             except (TypeError, ValueError):
                 continue                                       # час не читається: рядок скаже bad-date у _mono_items, на курсор не впливає
-            t = kyiv.unix_to_local(tu)
-            earliest = t if earliest is None or t < earliest else earliest
             earliest_unix = tu if earliest_unix is None or tu < earliest_unix else earliest_unix
-        limit = requested_limit(ex) if corp else C.PAGE_SIZE_MONO
+        limit = requested_limit(ex) if corp else C.fop_page_limit(p)
         if len(page) < limit:                       # D36 п. 11: коротша за запитаний ліміт -- остання (ФОП: гіпотеза документації)
             if corp:
                 break
+            seg += 1                                # кінець відрізка ФОП: далі наступний відрізок
             continue
-        if corp:
-            # D36 п. 11 (44d22a1): продовження за часом знову охоплює секунду найранішої операції (`to` = time + 1; банк `to` не
-            # включає); повтори відкидає дедуплікація за id. Запит продовження, що збігся б із поточним (вся повна сторінка в одній
-            # секунді), -- застряглий курсор: «дія людини», читання йде далі з `to` = ця секунда (виключна).
-            if earliest_unix is None:
-                _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-without-time', 'Статус': 200, 'ОписаниеБанка': ''},
-                      'page-without-time')
-                out.rules.add('rule_end_of_read')
-                break
-            # межа продовження = Мин(найраніша time + 1, поточна `to`): межа ніколи не зростає, і застрягання (наступна межа = поточна)
-            # визначається за будь-якої семантики `to`
-            nxt = min(earliest_unix + 1, to)
-            if nxt >= to:
-                # застрягання: межа продовження = поточна (E >= U - 1). Крок після нього -- Мин(E, U - 1), строго менша за U за будь-якої
-                # семантики `to`; неповними лишаються секунди між новою й поточною межею (одна, якщо межа виключна, до двох, якщо включна)
-                rule_cursor_stuck(out, to, len(page))
-                nxt = min(earliest_unix, to - 1)
-            if nxt <= frm:
-                break                                # читати нічого (межа дійшла до початку), без відмови
-            if i < len(stmts) and R.statement_window(stmts[i])[2] != nxt:
-                raise RecordingMismatch('запит продовження запису (to = %d) не збігається з правилом D36 п. 11 (to = %d)'
-                                        % (R.statement_window(stmts[i])[2], nxt))
-            continue                                 # запис кінчається до ознаки кінця -- скаже while-else нижче
-        if earliest is None or earliest <= start_local or earliest >= upper_local:
-            # повна сторінка, а продовжити нічим (верхню межу не посунути): ознаки кінця немає -> неповне, «повторити» (п. 11)
-            _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-cannot-continue', 'Статус': 200, 'ОписаниеБанка': ''},
-                  'page-cannot-continue')
+        # D36 п. 11 (44d22a1): продовження за часом знову охоплює секунду найранішої операції (`to` = time + 1; банк `to` не
+        # включає); повтори відкидає дедуплікація за id. Запит продовження, що збігся б із поточним (вся повна сторінка в одній
+        # секунді), -- застряглий курсор: «дія людини», читання йде далі з `to` = ця секунда (виключна). Для ФОП -- всередині відрізка.
+        if earliest_unix is None:
+            _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-without-time', 'Статус': 200, 'ОписаниеБанка': ''},
+                  'page-without-time')
             out.rules.add('rule_end_of_read')
             break
+        # межа продовження = Мин(найраніша time + 1, поточна `to`): межа ніколи не зростає, і застрягання (наступна межа = поточна)
+        # визначається за будь-якої семантики `to`
+        nxt = min(earliest_unix + 1, to)
+        if nxt >= to:
+            # застрягання: межа продовження = поточна (E >= U - 1). Крок після нього -- Мин(E, U - 1), строго менша за U за будь-якої
+            # семантики `to`; неповними лишаються секунди між новою й поточною межею (одна, якщо межа виключна, до двох, якщо включна)
+            rule_cursor_stuck(out, to, len(page))
+            nxt = min(earliest_unix, to - 1)
+        if nxt <= frm:
+            if corp:
+                break                                # читати нічого (межа дійшла до початку), без відмови
+            seg += 1                                 # відрізок ФОП вичерпано, далі наступний
+            continue
+        if i < len(stmts) and R.statement_window(stmts[i])[2] != nxt:
+            raise RecordingMismatch('запит продовження запису (to = %d) не збігається з правилом D36 п. 11 (to = %d)'
+                                    % (R.statement_window(stmts[i])[2], nxt))
+        continuing = True                            # запис кінчається до ознаки кінця -- скаже перевірка після циклу
     else:
-        if corp:
+        if continuing:
             # запис кінчається повною сторінкою, яку можна було продовжити: наступного обміну в записі немає, а ознаки кінця не було --
             # читання оракулом не закінчується, мовчки вважати його повним не можна
-            raise RecordingMismatch('запис юросіб кінчається повною сторінкою без ознаки кінця й без наступного обміну')
+            raise RecordingMismatch('запис %s кінчається повною сторінкою без ознаки кінця й без наступного обміну' % bank)
+        if not corp and seg < len(windows):
+            raise RecordingMismatch('запис ФОП кінчається до останнього відрізка читання (%d з %d)' % (seg, len(windows)))
     out.complete = out.complete and complete
     out.items = n
     _mono_items(out, items, p, disabled, corp)

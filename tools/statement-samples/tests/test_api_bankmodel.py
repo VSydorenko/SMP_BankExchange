@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Контроль моделі банку monobank юросіб (`apilib/bankmodel.py`): модель, що реалізує лише виміряне, відтворює справжній запис
+"""Контроль моделей банку monobank (`apilib/bankmodel.py`): юросіб і ФОП. Юросіб: модель, що реалізує лише виміряне, відтворює справжній запис
 `corp_a1_statement_small_limit` на запитах рекордера (to = час межової операції) -- сторінки 10/10/10/3, ті самі операції в тому
 самому порядку; зіпсована модель (`to` включний) це відтворення валить. Один тест. Запис -- знеособлений вихід run1 у
 гітігнорованій `temp/` (його немає в клонах без прогону), тож без нього тест пропускається."""
@@ -53,6 +53,30 @@ class BankModel(unittest.TestCase):
         real_bal = next(e for e in real.exchanges if e['request']['path'].endswith('/balances'))
         self.assertEqual([e['response']['bodyBase64'] for e in derived.exchanges if e['request']['path'].endswith('/balances')],
                          [real_bal['response']['bodyBase64']])
+
+
+READING_FOP = os.path.join(os.path.dirname(READING), '..', 'mono-fop', 'ЗапStatementSegment01')
+
+
+class FopBankModel(unittest.TestCase):
+    @unittest.skipUnless(os.path.isdir(READING_FOP), 'немає знеособленого запису run1 (temp/api-anon/run1)')
+    def test_fop_model_reproduces_the_recorded_segment_and_a_broken_model_does_not(self):
+        """ФОП: модель з місткістю сторінки 500 відтворює справжній запис `fop_statement_segment_01` (одна сторінка, 31 операція, від нових
+        до старих) на запиті рекордера; модель із зіпсованим порядком (від старих до нових) його не відтворює. Продовження за
+        часом на справжніх даних ФОП не виміряне (найбільша відповідь -- 31 операція), тож контроль лише цей."""
+        rec = R.Recording.from_dir(READING_FOP)
+        statements = [e for e in rec.exchanges if R.statement_window(e)]
+        self.assertEqual(len(statements), 1)
+        recorded = R.body_json(statements[0])
+        self.assertGreater(len(recorded), 1)
+        _, frm, to = R.statement_window(statements[0])
+        self.assertEqual(bankmodel.FopBank(recorded).statement(frm, to, 500), recorded)
+
+        class Ascending(bankmodel.FopBank):
+            def statement(self, frm, to, limit):
+                return list(reversed(super().statement(frm, to, limit)))
+
+        self.assertNotEqual(Ascending(recorded).statement(frm, to, 500), recorded)       # контроль уміє впасти
 
 
 if __name__ == '__main__':

@@ -136,6 +136,8 @@ def replay_exclusion(bank, rec, params):
     Правило поки лише для monobank юросіб (задача 4 плану 05а); розмір сторінки (limit) причиною не є: його задає шов
     розміру сторінки в тесті, а запис з limit, відмінним від робочого, читається зі швом на його limit.
     `params` -- `parameters` еталона (`НачалоПериода`, `КонецПериода`: рядки ГГГГ-ММ-ДДTгг:хх:сс)."""
+    if bank == 'mono-fop':
+        return _replay_exclusion_fop(rec, params)
     if bank != 'mono-corp':
         return ''
     day = lambda text: text[:10]
@@ -178,6 +180,26 @@ def replay_exclusion(bank, rec, params):
             limit = next((int(v) for k, v in R.query_pairs(e) if k == 'limit' and v.isdigit()), 10)
             if limit > C.CORP_WORKING_LIMIT:
                 return 'limit %d понад робочий (%d); шов розміру сторінки лише менший за робочий ліміт' % (limit, C.CORP_WORKING_LIMIT)
+    return ''
+
+
+def _replay_exclusion_fop(rec, params):
+    """monobank ФОП (задача 5 плану 05а): конектор бере ідентифікатор рахунку з `client-info` за IBAN читання. Запит виписки запису з
+    ідентифікатором, якому не відповідає жоден рахунок із цим IBAN (рекордер питав «чужий / неіснуючий» ідентифікатор), конектор
+    не відтворить. Інші розбіжності (відрізки, продовження) ловить оракул: він відмовляється рахувати запис, що кінчається не так, як
+    конектор (`RecordingMismatch`), і `sets` такого читання не бачить."""
+    info = next((e for e in rec.exchanges if e['request']['path'] == C.FOP_CLIENT_INFO and e['response'] and e['response']['status'] == 200), None)
+    if info is None:
+        return ''
+    try:
+        accounts = R.body_json(info).get('accounts') or []
+    except (R.NotJson, AttributeError):
+        return ''
+    own = next((a.get('id') for a in accounts if isinstance(a, dict) and a.get('iban') == params['НомерСчета']), None)
+    for e in rec.exchanges:
+        w = R.statement_window(e)
+        if w and own is not None and w[0] != own:
+            return 'ідентифікатор рахунку в запиті виписки запису не належить рахунку з IBAN читання (рекордер питав чужий ідентифікатор); конектор бере його з client-info за IBAN'
     return ''
 
 

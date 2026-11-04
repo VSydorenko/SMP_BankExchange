@@ -140,7 +140,7 @@ class Dedupe(unittest.TestCase):
         b.p_acct = 'acc-id'
         b.client_info(S.resp_json(200, {'accounts': [{'id': 'acc-id', 'iban': IBAN}]}))
         b.statement(S.to_unix(p.period_start), S.to_unix(p.period_end), S.resp_json(200, sorted(page1, key=lambda x: -x['time'])))
-        b.statement(S.to_unix(p.period_start), S.next_to(base), S.resp_json(200, [fop('X', base, -5)]))
+        b.statement(S.to_unix(p.period_start), base + 1, S.resp_json(200, [fop("X", base, -5)]))   # D36 п. 11: to = time + 1
         e = E.run(R.Recording(R.make_manifest('mono-fop', 't', b.ex), b.ex), p)
         self.assertIn('X', [o['НомерДокумента'] for o in e.ops])
 
