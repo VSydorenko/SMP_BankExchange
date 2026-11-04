@@ -64,7 +64,8 @@ def _expect(cond, msg):
 
 # ---------------------------------------------------------------------- ПриватБанк
 def check_privat_example_expected():
-    rec, p = _privat_rec(D.PRIVAT_TX)
+    # власний рахунок у прикладі документації -- 14 цифр, а в run1 (87 з 87) це IBAN: конектор віддає AUT_MY_ACC як є, відбирає чужі точка читання
+    rec, p = _privat_rec(dict(D.PRIVAT_TX, AUT_MY_ACC=_privat_iban(OWN14)))
     e = E.run(rec, p)
     _expect(len(e.ops) == 1 and not e.diags, 'приклад ПриватБанку: одна операція без діагностики')
     o = e.ops[0]

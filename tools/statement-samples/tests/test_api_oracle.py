@@ -245,7 +245,9 @@ class Conservation(unittest.TestCase):
 
     @staticmethod
     def accounted(e):
-        numbers = [o['ПорядковыйНомер'] for o in e.ops] + [d['ПорядковыйНомер'] for d in e.diags if d['ПорядковыйНомер'] > 0]
+        # рядок date-mismatch -- застереження до операції, яка лишається в конверті, а не окремий запис
+        numbers = [o['ПорядковыйНомер'] for o in e.ops] + [d['ПорядковыйНомер'] for d in e.diags
+                                                          if d['ПорядковыйНомер'] > 0 and d['Суть'] != 'date-mismatch']
         return len(numbers) == len(set(numbers)) and len(numbers) + e.duplicates + e.silent + len(e.out_of_period) == e.items
 
     def test_every_synthetic_record_is_accounted_for(self):

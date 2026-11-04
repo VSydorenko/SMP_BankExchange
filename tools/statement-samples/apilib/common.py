@@ -235,6 +235,23 @@ def request_windows(p, fop):
     return fop_windows(s, e, m) if fop else [request_bounds(p)]
 
 
+PRIVAT_WORKING_LIMIT = 100       # limit запиту транзакцій ПриватБанку: «рекомендовано не більше 100» (privat.txt, параметр limit); кінець читання -- exist_next_page, тож межі виміряного максимуму сторінки немає
+PRIVAT_PAUSE_SECONDS = 1         # «рекомендовано не частіше 1 запиту в секунду» (privat.txt)
+
+
+def privat_days(p):
+    """Дні запиту ПриватБанку (D36 п. 11, спека d392bc4): цілими днями від дня `НачалоПериода` до дня Мин(`КонецПериода`, момент читання); обидві
+    дати банк включає (журнал 05а `f751d01`), запасу в день немає. -> (початок, кінець) -- `datetime` на початку доби -- або None, якщо запитів
+    немає (`НачалоПериода` пізніший за момент читання: порожнє повне читання; перевернутий період відхиляє точка читання до конектора).
+    Порівняння в одній шкалі: момент читання (UTC) переводиться в київський час. Запис без моменту читання -- межі періоду як є (старі перевірки)."""
+    start, end = p.period_start, p.period_end
+    if p.reading_moment is not None:
+        if end < start or kyiv.local_to_unix(start) > reading_unix(p):
+            return None
+        end = min(end, kyiv.unix_to_local(reading_unix(p)))
+    return datetime(start.year, start.month, start.day), datetime(end.year, end.month, end.day)
+
+
 def error_description(ex):
     """Опис помилки від банку з тіла: `errorDescription` (monobank), `message` (ПриватБанк); немає — порожньо."""
     try:

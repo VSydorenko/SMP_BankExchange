@@ -107,7 +107,7 @@ class SettingsIsMandatory(unittest.TestCase):
 
     def test_every_synthetic_privat_reading_starts_with_settings(self):
         for s in S.all_scenarios():
-            if s.bank == 'privat':
+            if s.bank == 'privat' and s.exchanges:                             # без обмінів: період навпаки чи цілком у майбутньому
                 self.assertEqual(s.exchanges[0]['request']['path'], C.PRIVAT_SETTINGS_PATH, s.name)
                 self.assertEqual([x['request']['path'] for x in s.exchanges].count(C.PRIVAT_SETTINGS_PATH), 1, s.name)
 

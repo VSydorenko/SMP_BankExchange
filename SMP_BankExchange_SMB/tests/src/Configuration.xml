@@ -84,6 +84,7 @@
 			<CommonModule>СМП_ТестыЗаписиОснованиеПоручение</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораМонобанк</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораМонобанкЮр</CommonModule>
+			<CommonModule>СМП_ТестыКоннектораПриватБанк</CommonModule>
 			<CommonModule>СМП_ТестыКоннекторовОбщее</CommonModule>
 			<CommonModule>СМП_ТестыКонтрактаВыписки</CommonModule>
 			<CommonModule>СМП_ТестыКонтрольХарнеса</CommonModule>
@@ -106,6 +107,7 @@
 			<CommonModule>СМП_ТестыЭталонаВыгрузки</CommonModule>
 			<DataProcessor>СМП_ТестКоннектор</DataProcessor>
 			<DataProcessor>СМП_ТестКоннекторРазмерСтраницы</DataProcessor>
+			<DataProcessor>СМП_ТестКоннекторРазмерСтраницыПриват</DataProcessor>
 			<DataProcessor>СМП_ТестКоннекторРазмерСтраницыФОП</DataProcessor>
 			<DataProcessor>СМП_ТестТранспортВоспроизведение</DataProcessor>
 			<DataProcessor>СМП_ТестЧитатель</DataProcessor>

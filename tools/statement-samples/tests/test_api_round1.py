@@ -295,7 +295,7 @@ class TrustBoundary(unittest.TestCase):
             if base != mut:
                 changed.add((s.bank, s.sid))
         self.assertEqual(changed, {('mono-corp', 'СинтГраницаДыра'), ('mono-corp', 'СинтГраницаРаньшеНачала'), ('privat', 'СинтГраницаДыра'),
-                                   ('privat', 'СинтГраницаНетДня')})
+                                   ('privat', 'СинтГраницаНетДня'), ('privat', 'СинтГраницаРаньшеНачала')})
 
     def test_corp_absent_day_interpretation_and_all_final(self):
         s = SCN[('mono-corp', 'СинтГраницаДыра')]
@@ -322,7 +322,7 @@ class TrustBoundary(unittest.TestCase):
 
     def test_every_successful_privat_record_ends_with_balance(self):
         for s in SCN.values():
-            if s.bank != 'privat':
+            if s.bank != 'privat' or not s.exchanges:                     # без обмінів: період навпаки чи цілком у майбутньому -- запитів немає
                 continue
             e = E.run(s.recording(), s.params)
             paths = [x['request']['path'] for x in s.exchanges]

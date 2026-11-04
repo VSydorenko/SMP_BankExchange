@@ -9,7 +9,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from apilib import etalon, readings, recording as R, sets, synth
+from apilib import common as C, etalon, readings, recording as R, sets, synth
 
 
 def fake_anon_root(root):
@@ -109,9 +109,29 @@ class ReplayExclusion(unittest.TestCase):
         stuck = next(x for x in synth.all_scenarios() if x.bank == 'mono-corp' and x.sid == 'СинтПолнаяНаНачале')
         self.assertEqual(readings.replay_exclusion('mono-corp', stuck.recording(), etalon.build(stuck)[0]['parameters']), '')
 
-    def test_other_banks_are_not_filtered(self):
-        s, rec = self.corp()
+    def privat(self, sid='СинтСтраницыСлед'):
+        s = next(x for x in synth.all_scenarios() if x.bank == 'privat' and x.sid == sid)
+        return s, s.recording()
+
+    def test_privat_connector_shaped_record_is_kept(self):
+        s, rec = self.privat()
         self.assertEqual(readings.replay_exclusion('privat', rec, etalon.build(s)[0]['parameters']), '')
+
+    def test_privat_requests_the_connector_does_not_make_are_excluded(self):
+        # контроль: запис із запитом, якого конектор не зробить (немає limit; немає endDate; acc -- повний IBAN; чужі дні), виключається з причиною
+        for drop, want in ((lambda q: q.replace('&limit=100', ''), 'limit'), (lambda q: q.replace('&endDate=15-10-2026', ''), 'endDate'),
+                           (lambda q: q.replace('acc=', 'acc=UA00'), 'acc'), (lambda q: q.replace('startDate=15-10-2026', 'startDate=14-10-2026'), 'startDate')):
+            s, rec = self.privat()
+            tx = next(e for e in rec.exchanges if e['request']['path'] == C.PRIVAT_PATH)
+            tx['request']['query'] = drop(tx['request']['query'])
+            reason = readings.replay_exclusion('privat', rec, etalon.build(s)[0]['parameters'])
+            self.assertIn(want, reason)
+
+    def test_privat_reversed_and_future_periods_are_excluded(self):
+        s, rec = self.privat()
+        params = dict(etalon.build(s)[0]['parameters'])
+        self.assertIn('навпаки', readings.replay_exclusion('privat', rec, dict(params, НачалоПериода='2026-10-16T00:00:00')))
+        self.assertIn('майбутньому', readings.replay_exclusion('privat', rec, dict(params, НачалоПериода='2030-01-01T00:00:00', КонецПериода='2030-01-02T00:00:00')))
 
 if __name__ == '__main__':
     unittest.main()

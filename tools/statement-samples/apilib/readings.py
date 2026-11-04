@@ -92,7 +92,7 @@ def readings(rec):
             end = datetime.strptime(q.get('endDate') or qb['endDate'], '%d-%m-%Y').replace(hour=23, minute=59, second=59)
             rows = (_json(bal) or {}).get('balances') or []
             account = rows[0]['acc'] if rows else ''
-            p = Params(account=account, period_start=start, period_end=end, old_account_currency='980')
+            p = Params(account=account, period_start=start, period_end=end, old_account_currency='980', reading_moment=C.DEFAULT_READING_MOMENT)
             # R14: `/settings` -- перший обмін кожного читання (той самий прогін); `/balance` -- лише коли транзакції прочитано
             # без відмови: після відмови конектор запитів більше не робить (I1)
             seq = ([settings] if settings is not None else []) + tx + ([bal] if _ok(tx[-1]) else [])
@@ -161,12 +161,14 @@ def replay_exclusion(bank, rec, params):
     Правило поки лише для monobank юросіб (задача 4 плану 05а); розмір сторінки (limit) причиною не є: його задає шов
     розміру сторінки в тесті, а запис з limit, відмінним від робочого, читається зі швом на його limit.
     `params` -- `parameters` еталона (`НачалоПериода`, `КонецПериода`: рядки ГГГГ-ММ-ДДTгг:хх:сс)."""
-    if bank in ('mono-fop', 'mono-corp'):
+    if bank in ('mono-fop', 'mono-corp', 'privat'):
         # ISO-рядки порівнюються лексикографічно (однакова форма ГГГГ-ММ-ДДTгг:хх:сс)
         if params['КонецПериода'] < params['НачалоПериода']:
             return 'період задано навпаки: точку читання відхиляє до конектора (D36 п. 11, 0d071e2), запитів немає; відповідь банку на перевернутий запит -- факт журналу, у Т1 не потрібна'
         if params.get('МоментЧтения') and params['НачалоПериода'] > params['МоментЧтения']:
             return 'період цілком у майбутньому відносно моменту читання: за D36 п. 11 запитів немає, записана відповідь банку не використовується; покривають синтетичні записи'
+    if bank == 'privat':
+        return _replay_exclusion_privat(rec, params)
     if bank == 'mono-fop':
         return _replay_exclusion_fop(rec, params)
     if bank != 'mono-corp':
@@ -215,6 +217,23 @@ def replay_exclusion(bank, rec, params):
             limit = next((int(v) for k, v in R.query_pairs(e) if k == 'limit' and v.isdigit()), 10)
             if limit > C.CORP_WORKING_LIMIT:
                 return 'limit %d понад робочий (%d); шов розміру сторінки лише менший за робочий ліміт' % (limit, C.CORP_WORKING_LIMIT)
+    return ''
+
+
+def _replay_exclusion_privat(rec, params):
+    """ПриватБанк (задача 6 плану 05а): конектор шле `acc` (14 останніх цифр рахунку читання), дні запиту за D36 п. 11 (d392bc4), `limit` і `followId` за правилами
+    (`expected.verify_privat_requests`). Читання запису, чий запит конектор не відтворить запит у запит, -- виключення з причиною: рекордер знімав сценарії без
+    `limit` чи `endDate`, з повним IBAN у `acc` чи з чужим рахунком. Запис, що кінчається сторінкою з `exist_next_page = true` без наступного обміну, відсікає
+    оракул (`RecordingMismatch`)."""
+    from . import expected as E
+    if not params['НомерСчета']:
+        return 'у записі немає рахунку читання'
+    p = Params(account=params['НомерСчета'], period_start=datetime.strptime(params['НачалоПериода'], '%Y-%m-%dT%H:%M:%S'),
+               period_end=datetime.strptime(params['КонецПериода'], '%Y-%m-%dT%H:%M:%S'),
+               reading_moment=datetime.strptime(params['МоментЧтения'], '%Y-%m-%dT%H:%M:%S') if params.get('МоментЧтения') else None)
+    problems = E.verify_privat_requests(rec, p)
+    if problems:
+        return 'конектор не відтворить запит запису: ' + problems[0]
     return ''
 
 

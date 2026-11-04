@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Очікуване синтетичних записів D36 п. 11 (юросіб і ФОП) -- РУКАМИ, за формулами спеки й рішень архітектора, а не оракулом: оракул може їх
+"""Очікуване синтетичних записів D36 п. 11 (юросіб, ФОП і ПриватБанк) -- РУКАМИ, за формулами спеки й рішень архітектора, а не оракулом: оракул може їх
 рахувати, але цей тест звіряє його результат із ручним очікуваним (розбіжність -- питання, а не підгонка).
 
 Формули (E -- найраніша `time` повної сторінки, U -- поточна верхня межа `to`):
@@ -22,7 +22,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from apilib import expected as E, kyiv, synth as S
+from apilib import expected as E, kyiv, recording as R, synth as S
 
 L = 30                                    # робочий limit
 SID = S.seqid
@@ -257,6 +257,111 @@ class ByHandFop(unittest.TestCase):
         start = S.utc(2026, 11, 13, 22)
         self.check('СинтМоментВнутриПериода', ops={}, requests=[(start - 1, S.utc(2026, 11, 20))], cls='', complete=True,
                    trust=datetime(2026, 11, 20, 2, 0, 0), pauses=[])
+
+
+class ByHandPrivat(unittest.TestCase):
+    """ПриватБанк (задача 6): очікуване записане РУКАМИ за спекою (D36 п. 8, 10, 11, `d392bc4`), а не оракулом. Запити -- рядки `acc=…&startDate=…&endDate=…&limit=100
+    [&followId=…]`: цілі дні від дня `НачалоПериода` до дня Мин(`КонецПериода`, момент читання), `acc` -- 14 останніх цифр (як попередник); `/settings` -- перший
+    обмін кожного читання, `/balance` -- останній (за ті самі дні); пауза 1 с перед кожним запитом, крім першого (рекомендація банку), після 429 -- за заголовком.
+    Операції -- `номер: (сума, напрямок)`; номер -- позиція запису в порядку читання з одиниці (відкинуті поза періодом лишаються зайнятими). Момент читання
+    записів -- 04.11.2026 00:00 UTC = 02:00 за Києвом (літній час скінчився 25.10)."""
+
+    def check(self, sid, *, ops, requests, cls, complete, trust, pauses, diags=()):
+        s = scenario(sid, 'privat')
+        e = E.run(s.recording(), s.params)
+        self.assertEqual({o['ПорядковыйНомер']: (o['Сумма'], o['Направление']) for o in e.ops}, ops, sid)
+        acc = s.params.account[-14:]
+        want = [(path, ('acc=%s&%s' % (acc, query)) if query else '') for path, query in requests]
+        got = [(r['Путь'].rsplit('/', 1)[-1], '&'.join('%s=%s' % (k, v) for k, v in r['Запрос'])) for r in e.requests]
+        self.assertEqual(got, want, sid)
+        self.assertEqual((e.failure_class, e.complete, e.trust), (cls, complete, trust), sid)
+        self.assertEqual([x['Секунд'] for x in e.pauses], pauses, sid)
+        key = lambda d: (d[1], d[0])
+        self.assertEqual(sorted([(d['Уровень'], d['ПорядковыйНомер'], d['Факты']) for d in e.diags], key=key), sorted(diags, key=key), sid)
+        return s, e
+
+    def ids(self, sid):
+        """`ID` операцій записаних сторінок транзакцій за позицією (дані, а не правило)."""
+        s = scenario(sid, 'privat')
+        rows = []
+        for x in s.exchanges:
+            if x['request']['path'].endswith('/transactions') and x['response'] and x['response']['status'] == 200:
+                rows += R.body_json(x).get('transactions') or []
+        return [r['ID'] for r in rows]
+
+    def test_privat_expectations_written_by_hand(self):
+        warn = 'Предупреждение'
+        bank = 'ПриватБанк'
+        lim = 'limit=100'
+        one_day = lambda d: 'startDate=%s&endDate=%s' % (d, d)
+
+        # період 15.10 10:00:00 .. 18:30:00: запит одним днем 15-10-2026; операції о 10:00 і 18:30 (рівно на межах) лишаються, о 09:59 і 18:31 відкинуто мовчки
+        self.check('СинтГраницыПериода', ops={2: ('2.02', 'Списано'), 3: ('3.03', 'Поступило'), 4: ('4.04', 'Списано')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('balance', one_day('15-10-2026'))],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 18, 30, 0), pauses=[1, 1])
+
+        # DAT_OD і DATE_TIME у різних днях: період за днем DAT_OD і часом DATE_TIME. 1 -- звичайна; 2 -- DAT_OD 15.10, час 03:10 від DATE_TIME 16.10: лишається
+        # (15.10 03:10 у періоді), ДатаОперации 16.10 03:10, Предупреждение; 3 -- DAT_OD 13.10: поза періодом, відкинуто мовчки; 4 -- DAT_KL 13.10 не береться до уваги,
+        # лишається; 5 -- немає DAT_OD: помилка
+        ids = self.ids('СинтДатыРазошлись')
+        s, e = self.check('СинтДатыРазошлись', ops={1: ('11.00', 'Списано'), 2: ('22.00', 'Поступило'), 4: ('44.00', 'Списано')},
+                          requests=[('settings', ''), ('transactions', 'startDate=14-10-2026&endDate=15-10-2026&' + lim),
+                                    ('balance', 'startDate=14-10-2026&endDate=15-10-2026')],
+                          cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1],
+                          diags=[(warn, 2, {'Ид': ids[1], 'ДеньОД': '15.10.2026', 'ДеньВремени': '16.10.2026'}), ('Ошибка', 5, {'Ид': ids[4]})])
+        self.assertEqual({o['ПорядковыйНомер']: o['ДатаОперации'] for o in e.ops}[2], '2026-10-16T03:10:00')
+
+        # період цілком у майбутньому (14.11 пізніший за момент 04.11): запитів немає, порожнє повне читання, межа довіри = НачалоПериода
+        self.check('СинтПериодЦеликомБудущий', ops={}, requests=[], cls='', complete=True, trust=datetime(2026, 11, 14), pauses=[])
+
+        # момент читання 20.11 00:00 UTC = 02:00 за Києвом усередині періоду 14.11-14.12: запит і баланс до 20-11-2026, межа довіри = момент
+        self.check('СинтМоментВнутриПериода', ops={1: ('66.00', 'Поступило')},
+                   requests=[('settings', ''), ('transactions', 'startDate=14-11-2026&endDate=20-11-2026&' + lim),
+                             ('balance', 'startDate=14-11-2026&endDate=20-11-2026')],
+                   cls='', complete=True, trust=datetime(2026, 11, 20, 2, 0, 0), pauses=[1, 1])
+
+        # період навпаки: точка читання відхиляє до конектора -- запитів немає, «дія людини», межа довіри = НачалоПериода
+        self.check('СинтПериодНаоборот', ops={}, requests=[], cls='ДействиеЧеловека', complete=False, trust=datetime(2026, 10, 15, 23, 59, 59),
+                   pauses=[], diags=[(warn, 0, {})])
+
+        # межа довіри не раніше НачалоПериода: перший день неостаточний (00:00), але період починається о 10:00
+        self.check('СинтГраницаРаньшеНачала', ops={1: ('42.00', 'Поступило')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('balance', one_day('15-10-2026'))],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 10, 0, 0), pauses=[1, 1])
+
+        # 429 з retry-after 5: пауза 5 с (замість звичайної 1 с), повтор того самого запиту вдається
+        self.check('СинтЛимит429', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('transactions', one_day('15-10-2026') + '&' + lim),
+                             ('balance', one_day('15-10-2026'))],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 5, 1])
+
+        # пауза понад стелю (3600 с > 120 с): без повтору й без сну, «повторити», баланс не запитується
+        self.check('СинтЛимит429Потолок', ops={},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim)],
+                   cls='Повторить', complete=False, trust=datetime(2026, 10, 15), pauses=[1],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'pause-over-ceiling', 'Статус': 429, 'ОписаниеБанка': 'Too many requests', 'Пауза': 3600})])
+
+        # курсор не просувається: друга сторінка повертає next_page_id, що вже був followId, при exist_next_page = true -- обидві сторінки в конверті, неповне
+        ids = self.ids('СинтКурсорНеСдвинулся')
+        self.check('СинтКурсорНеСдвинулся', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано'), 3: ('30.00', 'Поступило')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim),
+                             ('transactions', one_day('15-10-2026') + '&' + lim + '&followId=' + ids[1])],
+                   cls='Повторить', complete=False, trust=datetime(2026, 10, 15), pauses=[1, 1],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'cursor-repeated', 'Статус': 200, 'ОписаниеБанка': ''})])
+
+        # exist_next_page = true без next_page_id: продовжити нічим -- неповне, «повторити», без нескінченного циклу
+        self.check('СинтБезСледующей', ops={1: ('9.00', 'Поступило')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim)],
+                   cls='Повторить', complete=False, trust=datetime(2026, 10, 15), pauses=[1],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'page-without-id', 'Статус': 200, 'ОписаниеБанка': ''})])
+
+        # остання сторінка з next_page_id і exist_next_page = false -- кінець: три сторінки, followId кожної -- next_page_id (ID останньої операції) попередньої
+        ids = self.ids('СинтСтраницыСлед')
+        base = 'startDate=15-10-2026&endDate=15-10-2026&' + lim
+        self.check('СинтСтраницыСлед', ops={k: ('%d.00' % (10 * ((k - 1) // 3) + (k - 1) % 3 + 1), 'Поступило') for k in range(1, 10)},
+                   requests=[('settings', ''), ('transactions', base), ('transactions', base + '&followId=' + ids[2]),
+                             ('transactions', base + '&followId=' + ids[5]), ('balance', 'startDate=15-10-2026&endDate=15-10-2026')],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1, 1, 1])
 
 
 if __name__ == '__main__':

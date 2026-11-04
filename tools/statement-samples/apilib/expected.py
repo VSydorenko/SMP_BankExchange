@@ -26,6 +26,7 @@
 Їхні рішення — окремий рядок звіту виконавця: планувальник підтверджує або відкидає.
 """
 import json
+import re
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 
@@ -221,7 +222,11 @@ def dev9_pauses(rec, p, enabled, out):
 
     if rec.bank == 'privat':
         for k in range(1, last):
-            add(k, PRIVAT_PAUSE_SECONDS, 'privat-1-per-second', True)
+            resp = ex[k - 1]['response']
+            if resp and resp['status'] == 429:
+                add(k, _retry_seconds(ex[k - 1]), 'after-429', True)         # 429: пауза за заголовком (не менша за звичайну)
+            else:
+                add(k, PRIVAT_PAUSE_SECONDS, 'privat-1-per-second', True)
     elif rec.bank == 'mono-fop':
         seen_stmt = False
         for k, e in enumerate(ex, 1):
@@ -459,7 +464,56 @@ def privat_has_next(js):
     return bool(js.get('exist_next_page'))
 
 
+_DAY_RX = re.compile(r'^(\d{1,2})\.(\d{1,2})\.(\d{4})$')
+
+
+def _parse_day(s):
+    """`DAT_OD` ПриватБанку (`DD.MM.YYYY`, без часу, run1: 87 з 87) -> `datetime` на початку доби; не дата -- ValueError."""
+    m = _DAY_RX.match(C.trim(s or ''))
+    if not m:
+        raise ValueError('не дата')
+    d, mo, y = (int(g) for g in m.groups())
+    return datetime(y, mo, d)
+
+
+def _norm_account(x):
+    """Нормалізація номера рахунку точкою читання (`НормализованныйНомерСчета`): без пробілів і без різниці регістру. Рахунок за 14 цифрами
+    конектор не порівнює: чужі рахунки відбирає точка читання (відступ 1 плану)."""
+    return x.upper().replace(' ', '').replace('\xa0', '').replace('\t', '')
+
+
+def _privat_take(out, exs, pos):
+    """Наступний обмін шляху з одним повтором після 429 (як юросіб): пауза за заголовком, понад стелю -- `Повторить` без повтору й сну.
+    -> обмін або None (відмова виставлена)."""
+    if pos[0] >= len(exs):
+        raise RecordingMismatch('у записі ПриватБанку немає наступного обміну')
+    ex = exs[pos[0]]
+    pos[0] += 1
+    use(out, ex)
+    if ex['response'] and ex['response']['status'] == 429:
+        ask = _retry_seconds(ex)
+        if ask > C.PAUSE_CEILING_SECONDS:
+            rule_pause_over_ceiling(out, ex, 'privat', ask)
+            out.applied.add('dev9')
+            return None
+        if pos[0] >= len(exs):
+            raise RecordingMismatch('запис ПриватБанку кінчається на 429 без повтору')
+        ex = exs[pos[0]]
+        pos[0] += 1
+        use(out, ex)
+        out.applied.add('dev9')
+    return ex
+
+
 def _privat(rec, p, out, disabled):
+    if p.reading_moment is not None and p.period_end < p.period_start:
+        # Точка читання відхиляє перевернутий період ДО конектора: запитів немає, клас «дія людини»
+        _fail(out, CLS_HUMAN, {}, 'period-reversed')
+        out.rules.add('rule_period_reversed')
+        return
+    if C.privat_days(p) is None:
+        out.items = 0                       # D36 п. 11: НачалоПериода пізніший за момент читання -- запитів немає, порожнє повне читання
+        return
     items = []
     n = 0
     if not _privat_settings(rec, p, out):
@@ -467,8 +521,13 @@ def _privat(rec, p, out, disabled):
     exs = C.exchanges_for(rec, C.PRIVAT_PATH)
     if not exs:
         raise RecordingMismatch('у записі немає запитів транзакцій ПриватБанку')
-    for ex in exs:
-        use(out, ex)
+    pos, follow_used = [0], set()
+    while True:
+        if pos[0] >= len(exs):
+            raise RecordingMismatch('запис ПриватБанку кінчається, а exist_next_page лишився true')
+        ex = _privat_take(out, exs, pos)
+        if ex is None:
+            break
         if ex['failure'] or ex['response']['status'] != 200:
             _failure(out, ex, 'privat')
             break
@@ -491,19 +550,28 @@ def _privat(rec, p, out, disabled):
         for tx in js.get('transactions') or []:
             n += 1
             items.append(Item(n, tx, ex['seq']))
-        if privat_has_next(js):
-            if js.get('next_page_id') in (None, ''):
-                rule_page_without_id(out, ex)
-                break
-        else:
+        if not privat_has_next(js):
             break
-    else:
-        if not out.failure_class:
-            raise RecordingMismatch('запис ПриватБанку кінчається, а exist_next_page лишився true')
+        cursor = js.get('next_page_id')
+        if cursor in (None, ''):
+            rule_page_without_id(out, ex)
+            break
+        if cursor in follow_used:
+            rule_cursor_repeated(out)
+            break
+        follow_used.add(cursor)
     out.items = n
     _privat_items(out, items, p, disabled)
     if not out.failure_class:
         _privat_balance(rec, p, out)
+
+
+def rule_cursor_repeated(out):
+    """`exist_next_page = true`, а `next_page_id` уже використаний як `followId` у цьому читанні: курсор банку не просувається, читати далі нічим
+    (інакше читання не скінчилося б). Те саме, що «є ще без курсора»: неповне читання, `Повторить`. Правило поза переліком спеки -- рішення
+    виконавця, питання контролеру (журнал 05а, задача 6)."""
+    _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'cursor-repeated', 'Статус': 200, 'ОписаниеБанка': ''})
+    out.rules.add('rule_cursor_repeated')
 
 
 def _privat_settings(rec, p, out):
@@ -514,8 +582,9 @@ def _privat_settings(rec, p, out):
     exs = C.exchanges_for(rec, C.PRIVAT_SETTINGS_PATH)
     if not exs or rec.exchanges[0] is not exs[0]:
         raise RecordingMismatch('у записі ПриватБанку /settings не перший обмін')
-    ex = exs[0]
-    use(out, ex)
+    ex = _privat_take(out, exs, [0])
+    if ex is None:
+        return False
     if ex['failure'] or ex['response']['status'] != 200:
         _failure(out, ex, 'privat')
         return False
@@ -540,12 +609,13 @@ def _privat_settings(rec, p, out):
 
 
 def _privat_balance(rec, p, out):
-    """Обмін `/balance` за період (банківська межа ПриватБанку): після транзакцій. Збій -- відмова за п. 8, прочитане лишається."""
+    """Обмін `/balance` за ті самі дні, що й транзакції (банківська межа ПриватБанку): після транзакцій. Збій -- відмова за п. 8, прочитане лишається."""
     exs = C.exchanges_for(rec, C.PRIVAT_BALANCE_PATH)
     if not exs:
         raise RecordingMismatch('у записі ПриватБанку немає /balance')
-    ex = exs[0]
-    use(out, ex)
+    ex = _privat_take(out, exs, [0])
+    if ex is None:
+        return
     if ex['failure'] or ex['response']['status'] != 200:
         _failure(out, ex, 'privat')
         return
@@ -574,6 +644,20 @@ def _privat_items(out, items, p, disabled):
     def is_reversal(it):
         return _privat_state(it.raw) == 't'
 
+    # D36 п. 11 (d392bc4): період ПриватБанку -- день `DAT_OD`, у межах дня -- час `DATE_TIME_DAT_OD_TIM_P`; `НачалоПериода` і `КонецПериода` включні.
+    # Операція поза періодом (але в днях запиту) відкидається мовчки, її `ПорядковыйНомер` лишається зайнятим. Рядок, що не читається, лишається
+    # (скаже bad-date). `DAT_KL` не використовується (розходиться з `DAT_OD` у 4 операціях run1).
+    def placement(it):
+        try:
+            moment = C.parse_1c_date(C.to_str(it.raw.get('DATE_TIME_DAT_OD_TIM_P')))
+            od = _parse_day(C.to_str(it.raw.get('DAT_OD')))
+        except ValueError:
+            return None
+        return od + timedelta(hours=moment.hour, minutes=moment.minute, seconds=moment.second)
+
+    if p.reading_moment is not None:
+        out.out_of_period = [it.n for it in items if placement(it) is not None and not (p.period_start <= placement(it) <= p.period_end)]
+        items = [it for it in items if it.n not in set(out.out_of_period)]
     skip = rule_dedupe_by_id(out, items, ident_of, is_final, is_reversal)
     by_ident = {}
     for it in items:
@@ -588,9 +672,13 @@ def _privat_items(out, items, p, disabled):
         ident_for_diag = ident_of(it) or C.to_str(d.get('TECHNICAL_TRANSACTION_ID'))
         try:
             moment = C.parse_1c_date(C.to_str(d.get('DATE_TIME_DAT_OD_TIM_P')))
+            od_day = _parse_day(C.to_str(d.get('DAT_OD'))) if p.reading_moment is not None else None
         except ValueError:
             out.diag('Ошибка', n, 'bad-date', None, Ид=ident_for_diag)
             continue
+        if od_day is not None and od_day != datetime(moment.year, moment.month, moment.day):
+            out.diag('Предупреждение', n, 'date-mismatch', None, Ид=ident_for_diag, ДеньОД=od_day.strftime('%d.%m.%Y'),
+                     ДеньВремени=moment.strftime('%d.%m.%Y'))
         verdict = 'emit'
         if state == 'p':
             verdict = dev2_nonfinal(out, disabled, n, 'p', moment, ident_for_diag, 'emit')
@@ -606,12 +694,10 @@ def _privat_items(out, items, p, disabled):
         if verdict != 'emit':
             continue
         own = C.to_str(d.get('AUT_MY_ACC'))
-        if not C.account_equal(p.account, own):
+        if _norm_account(own) != _norm_account(p.account):
             if dev1_foreign_account(out, disabled, n, own, None) == 'silent':
                 continue
-            number = own
-        else:
-            number = p.account
+        number = own
         tran = d.get('TRANTYPE')
         if tran not in ('D', 'C'):
             rule_unknown_direction(out, n, C.to_str(tran), ident_for_diag)
@@ -923,7 +1009,9 @@ def verify_requests(rec, p):
     """Чи відрізки запису збігаються з тим, що зробив би конектор: `from` першого запиту кожного відрізка й `to` першого
     відрізка (далі `to` зсувається за сторінками). -> перелік розбіжностей. Для синтетики — самоперевірка генератора;
     для справжніх записів — лише інформація (рекордер міг ходити інакше)."""
-    if rec.bank == 'privat' or not C.statement_exchanges(rec):
+    if rec.bank == 'privat':
+        return verify_privat_requests(rec, p)
+    if not C.statement_exchanges(rec):
         return []
     want = expected_windows(p, rec.bank)
     starts = []
@@ -938,4 +1026,48 @@ def verify_requests(rec, p):
         problems.append('from відрізків: запис %r, очікувано %r' % ([s[0] for s in starts], [w[0] for w in want]))
     elif starts and starts[0][1] != want[0][1]:
         problems.append('to першого відрізка: запис %r, очікувано %r' % (starts[0][1], want[0][1]))
+    return problems
+
+
+def verify_privat_requests(rec, p):
+    """Запити запису ПриватБанку проти правил конектора (D36 п. 11, d392bc4), незалежно від генератора: `acc` -- 14 останніх цифр рахунку; `startDate` і
+    `endDate` -- дні `C.privat_days`; `limit` -- ціле від 1 до робочого (шов розміру сторінки), однаковий у всіх запитах транзакцій читання; `followId` першого
+    запиту немає, наступного -- `next_page_id` попередньої сторінки (повтор після 429 -- той самий запит); `/balance` -- ті самі `acc` і дати, без `limit`;
+    `/settings` -- без запиту. Період навпаки й цілком майбутній -- запитів немає. -> перелік розбіжностей."""
+    days = C.privat_days(p)
+    if days is None:
+        return ['запити є, а період навпаки чи цілком у майбутньому: запитів бути не мусить'] if rec.exchanges else []
+    problems = []
+    dates = {'startDate': days[0].strftime('%d-%m-%Y'), 'endDate': days[1].strftime('%d-%m-%Y')}
+    limits, follow, prev, prev_query = set(), None, None, None
+    for e in rec.exchanges:
+        path, q = e['request']['path'], dict(R.query_pairs(e))
+        if path == C.PRIVAT_SETTINGS_PATH:
+            if q:
+                problems.append('/settings несе запит')
+            continue
+        if q.get('acc') != p.account[-14:]:
+            problems.append('%s: acc запису не збігається з 14 останніми цифрами рахунку читання' % path.rsplit('/', 1)[-1])
+        for k, v in dates.items():
+            if q.get(k) != v:
+                problems.append('%s: %s запису (%s) не збігається з днем читання (%s)' % (path.rsplit('/', 1)[-1], k, q.get(k), v))
+        if path == C.PRIVAT_BALANCE_PATH:
+            if set(q) != {'acc', 'startDate', 'endDate'}:
+                problems.append('/balance: параметри запиту %s' % sorted(q))
+            continue
+        if q.get('limit', '').isdigit() and 1 <= int(q['limit']) <= C.PRIVAT_WORKING_LIMIT:
+            limits.add(q['limit'])
+        else:
+            problems.append('транзакції: limit %r поза 1..%d' % (q.get('limit'), C.PRIVAT_WORKING_LIMIT))
+        retry = e['request'] and prev_query is not None and q == prev_query and prev is not None and prev['response'] and prev['response']['status'] == 429
+        if not retry and q.get('followId') != follow:
+            problems.append('транзакції: followId запису (%s) не збігається з next_page_id попередньої сторінки (%s)' % (q.get('followId'), follow))
+        prev, prev_query = e, q
+        try:
+            js = R.body_json(e)
+            follow = js.get('next_page_id') if isinstance(js, dict) and e['response'] and e['response']['status'] == 200 else follow
+        except R.NotJson:
+            pass
+    if len(limits) > 1:
+        problems.append('limit змінюється посеред читання: %s' % sorted(limits))
     return problems

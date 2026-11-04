@@ -26,7 +26,7 @@ import sslib.gen as sgen
 
 BANK_KEYS = {'privat': 'Приват', 'mono-fop': 'МоноФОП', 'mono-corp': 'МоноЮр'}
 HOSTS = {'privat': 'acp.privatbank.ua', 'mono-fop': 'api.monobank.ua', 'mono-corp': 'corp-api.monobank.ua'}
-PRIVAT_LIMIT = 100
+PRIVAT_LIMIT = C.PRIVAT_WORKING_LIMIT
 UA_PHRASES = [p for k in ('services', 'goods', 'other', 'tax') for p in sgen.PHRASES[k]]
 
 
@@ -142,10 +142,15 @@ class Builder:
                                        started='2026-10-15T09:%02d:%02d.000Z' % (seq // 60, seq % 60)))
 
     # ---- запити
+    def privat_dates(self):
+        """Дати запиту ПриватБанку `startDate`, `endDate` (D36 п. 11, d392bc4): цілі дні від дня `НачалоПериода` до дня Мин(`КонецПериода`, момент
+        читання). Запис без моменту читання -- межі періоду як є."""
+        days = C.privat_days(self.p) or (self.p.period_start, self.p.period_end)
+        return days[0].strftime('%d-%m-%Y'), days[1].strftime('%d-%m-%Y')
+
     def privat(self, resp=None, follow=None, failure=None):
         p = self.p
-        q = 'acc=%s&startDate=%s&endDate=%s&limit=%d' % (p.account[-14:], p.period_start.strftime('%d-%m-%Y'),
-                                                          p.period_end.strftime('%d-%m-%Y'), PRIVAT_LIMIT)
+        q = 'acc=%s&startDate=%s&endDate=%s&limit=%d' % ((p.account[-14:],) + self.privat_dates() + (PRIVAT_LIMIT,))
         if follow:
             q += '&followId=' + follow
         self.add({'path': C.PRIVAT_PATH, 'query': q}, resp, failure)
@@ -161,8 +166,7 @@ class Builder:
     def privat_balance(self, resp=None, failure=None):
         p = self.p
         self.add({'path': C.PRIVAT_BALANCE_PATH,
-                  'query': 'acc=%s&startDate=%s&endDate=%s' % (p.account[-14:], p.period_start.strftime('%d-%m-%Y'),
-                                                               p.period_end.strftime('%d-%m-%Y'))}, resp, failure)
+                  'query': 'acc=%s&startDate=%s&endDate=%s' % ((p.account[-14:],) + self.privat_dates())}, resp, failure)
 
     def settings(self, resp=None, failure=None):
         self.add({'path': C.PRIVAT_SETTINGS_PATH, 'query': ''}, resp, failure)
@@ -225,8 +229,9 @@ def privat_balance_body(p, flags=None, absent=()):
     """Відповідь `/api/statements/balance` ПриватБанку (run1, пункт 6): `balances[]` -- по рядку на добу періоду, від НОВИХ до
     старих; день рядка -- `dpd` (`DD.MM.YYYY 00:00:00`); `is_final_bal` -- bool. `flags` -- {день 'YYYY-MM-DD': is_final_bal};
     за замовчуванням усі дні остаточні; `absent` -- дні, яких у відповіді немає. Суми -- вигадані."""
-    rows, day = [], datetime(p.period_start.year, p.period_start.month, p.period_start.day)
-    last = datetime(p.period_end.year, p.period_end.month, p.period_end.day)
+    days = C.privat_days(p) or (p.period_start, p.period_end)         # ті самі дні, що в запиті транзакцій (D36 п. 11)
+    rows, day = [], datetime(days[0].year, days[0].month, days[0].day)
+    last = datetime(days[1].year, days[1].month, days[1].day)
     while day <= last:
         key = day.strftime('%Y-%m-%d')
         if key not in absent:
@@ -275,18 +280,19 @@ def next_to(earliest_unix):
 # ====================================================================== побудова записів транзакцій
 def ptx(g, own, *, when, tran, state='r', amount='100.00', ccy='UAH', ref=None, refn='1', num=None, osnd=None,
         cnt_acc=None, cnt_name='', cnt_crf='', cnt_mfo='305299', my_name='ТОВ "Вигадана Назва"', my_crf='', my_mfo='305299',
-        pid=None, tech=None, drop=()):
+        pid=None, tech=None, drop=(), od=None, kl=None):
     """Транзакція ПриватБанку за схемою `privat.txt` і run1. `own` та `cnt_acc` -- IBAN (run1: `AUT_MY_ACC` і `AUT_CNTR_ACC`
     -- IBAN у 87 з 87). `ID` = `TECHNICAL_TRANSACTION_ID` (run1: 87 з 87, 30 символів) і починається з `REF` (14 символів);
-    `tech` задає ІНШЕ значення -- лише для синтетики «на випадок, не спостерігалось». `drop` -- поля, яких немає."""
+    `tech` задає ІНШЕ значення -- лише для синтетики «на випадок, не спостерігалось». `drop` -- поля, яких немає. `od` / `kl` -- інший день
+    `DAT_OD` / `DAT_KL`, ніж у `DATE_TIME_DAT_OD_TIM_P` (run1: `DAT_KL` на день раніше в 4 операціях з 87; `DAT_OD` збігається завжди)."""
     ref = ref or 'DN' + g.refid(12)
     pid = pid or ref + g.digits(30 - len(ref))
     d = {'AUT_MY_CRF': my_crf, 'AUT_MY_MFO': my_mfo, 'AUT_MY_ACC': own, 'AUT_MY_NAM': my_name,
          'AUT_MY_MFO_NAME': 'АТ КБ "ПРИВАТБАНК"', 'AUT_MY_MFO_CITY': 'Київ',
          'AUT_CNTR_CRF': cnt_crf, 'AUT_CNTR_MFO': cnt_mfo, 'AUT_CNTR_ACC': cnt_acc or g.iban(), 'AUT_CNTR_NAM': cnt_name,
          'AUT_CNTR_MFO_NAME': 'АТ КБ "ПРИВАТБАНК"', 'AUT_CNTR_MFO_CITY': 'Київ', 'CCY': ccy, 'FL_REAL': 'r',
-         'PR_PR': state, 'DOC_TYP': 'm', 'NUM_DOC': num or ('K' + g.digits(9)), 'DAT_KL': when.strftime('%d.%m.%Y'),
-         'DAT_OD': when.strftime('%d.%m.%Y'), 'OSND': osnd if osnd is not None else g.phrase(), 'SUM': amount,
+         'PR_PR': state, 'DOC_TYP': 'm', 'NUM_DOC': num or ('K' + g.digits(9)), 'DAT_KL': (kl or when).strftime('%d.%m.%Y'),
+         'DAT_OD': (od or when).strftime('%d.%m.%Y'), 'OSND': osnd if osnd is not None else g.phrase(), 'SUM': amount,
          'SUM_E': amount, 'REF': ref, 'REFN': refn, 'TIM_P': when.strftime('%H:%M'),
          'DATE_TIME_DAT_OD_TIM_P': _fmt_1c(when), 'ID': pid, 'TRANTYPE': tran, 'DLR': 'J' + g.digits(8),
          'TECHNICAL_TRANSACTION_ID': tech or pid, 'UETR': g.uuid(), 'ULTMT': 'N'}
@@ -416,7 +422,7 @@ ORIG_REF = 'DNORIGAB1CDE1A'
 def _privat_params(g):
     core = g.acc14()
     return Params(account=g.iban('305299', core), period_start=_day(2026, 10, 15), period_end=_day(2026, 10, 15, 23, 59, 59),
-                  old_account_currency='980')
+                  old_account_currency='980', reading_moment=C.DEFAULT_READING_MOMENT)
 
 
 def _privat_scenarios():
@@ -596,6 +602,75 @@ def _privat_scenarios():
                period_start=_day(2026, 10, 13), period_end=_day(2026, 10, 15, 23, 59, 59))
     b.privat_pages([[ptx(g, acct, when=_day(2026, 10, 13, 8), tran='D', amount='10.00', **cnt())]])
     done(s, b, absent=['2026-10-14'])
+
+    # Межа довіри не раніше початку періоду (D36 п. 10): період з 10:00, а перший день без is_final_bal -- початок цього дня (00:00) раніше
+    s, b = new('СинтГраницаРаньшеНачала', 'ПриватБанк: період з 10:00, перший день неостаточний -- банківська межа (00:00) раніше за початок періоду, '
+                                          'межа довіри = НачалоПериода', [2], period_start=_day(2026, 10, 15, 10))
+    b.privat_pages([[ptx(g, acct, when=_day(2026, 10, 15, 12), tran='C', amount='42.00', **cnt())]])
+    done(s, b, flags={'2026-10-15': False})
+
+    # Межі періоду (D36 п. 11): запит цілими днями, точний період -- фільтр за часом операції; НачалоПериода і КонецПериода включні. Час операцій Привата -- з
+    # точністю до хвилини (секунди 00), тому межі періоду тут -- рівні хвилини; операції поза періодом у днях запиту відкидаються мовчки
+    s, b = new('СинтГраницыПериода', 'ПриватБанк: операції рівно на НачалоПериода і КонецПериода лишаються, на хвилину раніше й пізніше (дні запиту '
+                                     'ті самі) відкидаються мовчки', [1, 3],
+               period_start=_day(2026, 10, 15, 10, 0), period_end=_day(2026, 10, 15, 18, 30, 0))
+    b.privat_pages([[ptx(g, acct, when=_day(2026, 10, 15, 9, 59), tran='C', amount='1.01', **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 15, 10, 0), tran='D', amount='2.02', **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 15, 14, 0), tran='C', amount='3.03', **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 15, 18, 30), tran='D', amount='4.04', **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 15, 18, 31), tran='C', amount='5.05', **cnt())]])
+    done(s, b)
+
+    # Розбіжність днів DAT_OD і DATE_TIME_DAT_OD_TIM_P (D36 п. 11, d392bc4; у run1 розбіжностей 0 з 87 і 0 з 113 -- синтетика): період за днем DAT_OD і
+    # часом DATE_TIME_DAT_OD_TIM_P; операція лишається в періоді за днем DAT_OD і дає Предупреждение, ДатаОперации -- DATE_TIME як є (ключ D17).
+    # DAT_KL межею не є (run1: на день раніше в 4 операціях з 87). Рядок без DAT_OD -- Ошибка bad-date.
+    s, b = new('СинтДатыРазошлись', 'ПриватБанк: DAT_OD і DATE_TIME_DAT_OD_TIM_P у різних днях -- період за DAT_OD (операція A лишається, B відкидається), '
+                                    'DAT_KL ігнорується, немає DAT_OD -- помилка', [1],
+               period_start=_day(2026, 10, 14), period_end=_day(2026, 10, 15, 23, 59, 59))
+    b.privat_pages([[ptx(g, acct, when=_day(2026, 10, 14, 9, 0), tran='D', amount='11.00', **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 16, 3, 10), tran='C', amount='22.00', od=_day(2026, 10, 15), kl=_day(2026, 10, 14), **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 14, 1, 0), tran='C', amount='33.00', od=_day(2026, 10, 13), **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 14, 0, 20), tran='D', amount='44.00', kl=_day(2026, 10, 13), **cnt()),
+                     ptx(g, acct, when=_day(2026, 10, 14, 15, 0), tran='C', amount='55.00', drop=('DAT_OD',), **cnt())]])
+    done(s, b)
+
+    # Період цілком у майбутньому (НачалоПериода пізніший за момент читання): запитів немає, порожнє повне читання, межа довіри = НачалоПериода
+    s, b = new('СинтПериодЦеликомБудущий', 'ПриватБанк: НачалоПериода пізніший за момент читання -- запитів немає, порожнє повне читання, межа довіри = '
+                                           'НачалоПериода', [3], settings=False, period_start=_day(2026, 11, 14), period_end=_day(2026, 12, 14))
+    s.exchanges = []
+    sc.append(s)
+
+    # Момент читання всередині періоду: дні запиту до дня моменту (20.11), межа довіри = момент читання (02:00 за Києвом)
+    s, b = new('СинтМоментВнутриПериода', 'ПриватБанк: момент читання всередині періоду -- запит і баланс до дня моменту, межа довіри = момент читання', [3],
+               period_start=_day(2026, 11, 14), period_end=_day(2026, 12, 14), reading_moment=datetime(2026, 11, 20, 0, 0, 0))
+    b.privat_pages([[ptx(g, acct, when=_day(2026, 11, 14, 10), tran='C', amount='66.00', **cnt())]])
+    done(s, b)
+
+    # Період навпаки відхиляє точка читання до конектора: запитів немає, «дія людини»
+    s, b = new('СинтПериодНаоборот', 'ПриватБанк: період задано навпаки (кінець раніший за початок) -- запитів немає, «дія людини» (точка читання)', [4],
+               settings=False, period_start=_day(2026, 10, 15, 23, 59, 59), period_end=_day(2026, 10, 14))
+    s.exchanges = []
+    sc.append(s)
+
+    # 429 (документація Привату його не описує, заголовок паузи -- як у monobank): пауза за заголовком, один повтор; понад стелю -- без сну й повтору
+    s, b = new('СинтЛимит429', 'ПриватБанк: 429 із retry-after, повтор вдається [документальний, не спостерігалось]', [4])
+    b.privat(resp_json(429, {'message': 'Too many requests'}, [('retry-after', '5')]))
+    b.privat(resp_json(200, privat_page(two())))
+    done(s, b)
+
+    s, b = new('СинтЛимит429Потолок', 'ПриватБанк: 429 з retry-after 3600 с понад стелю -- без сну й повтору, «повторити» [документальний, не спостерігалось]', [4])
+    b.privat(resp_json(429, {'message': 'Too many requests'}, [('retry-after', '3600')]))
+    done(s, b, balance=False)
+
+    # Курсор не просувається: exist_next_page = true, а next_page_id уже був followId -- читати далі нічим (скінченність циклу)
+    s, b = new('СинтКурсорНеСдвинулся', 'ПриватБанк: друга сторінка повертає next_page_id, що вже був followId, при exist_next_page = true -- неповне читання', [3])
+    first = two()
+    b.privat(resp_json(200, privat_page(first, exist=True)))
+    second = [ptx(g, acct, when=day.replace(hour=12), tran='C', amount='30.00', **cnt())]
+    stale = privat_page(second, exist=True)
+    stale['next_page_id'] = first[-1]['ID']
+    b.privat(resp_json(200, stale), follow=first[-1]['ID'])
+    done(s, b, balance=False)
     return sc
 
 
