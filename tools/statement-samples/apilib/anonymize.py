@@ -22,7 +22,8 @@ from sslib.checks import DIG, WORD
 from . import jsonspan, recording as R, schema
 
 IBAN_RX = re.compile(r'UA\d{27}')
-FREE_TEXT_KEEP = ('message', 'errorDescription')       # KEEP-поля з вільним текстом: зачищаються від відомих токенів рахунків
+FREE_TEXT_KEEP = ('message', 'errorDescription')       # KEEP-поля з вільним текстом (зачищалися від IBAN); тепер зачищається КОЖНЕ рядкове поле KEEP (`Bank.clean_text`)
+SWEEP_MIN = 6                                          # найкоротше значення ролі ID / ACC, яке підмінюється всередині рядків KEEP (коротші лише ловить перевірка (а))
 REPLACED = ('CODE', 'ACC', 'NAME', 'BANKNAME', 'PURPOSE', 'SCRAMBLE', 'ID')
 PRIVAT_KEEP_QUERY = ('startDate', 'endDate', 'limit')
 CORP_KEEP_QUERY = ('limit', 'direction', 'dateFrom', 'dateTo')
@@ -59,9 +60,10 @@ def query_pairs_raw(query):
 class Bank:
     """Знеособлення одного банку: одна мапа на всі його записи."""
 
-    def __init__(self, bank, fakes, refs=(), ibans=()):
+    def __init__(self, bank, fakes, refs=(), ibans=(), ids=(), accs=()):
         self.bank, self.fakes, self.refs, self.ibans = bank, fakes, tuple(sorted(refs, key=len, reverse=True)), tuple(ibans)
-        self.sweep = []                      # [(сирий токен, вигаданий)] для вільного тексту KEEP-полів
+        self.ids, self.accs = tuple(ids), tuple(accs)    # сирі значення ролей ID і ACC запису (для зачистки полів KEEP)
+        self.sweep = []                      # [(сирий токен, вигаданий)] для рядкових полів KEEP
 
     # ----------------------------------------------------------- значення
     def acc(self, s):
@@ -106,11 +108,25 @@ class Bank:
         return s
 
     def build_sweep(self):
+        """Зачистка полів KEEP: сире значення ролі ID чи ACC, що стоїть підрядком у БУДЬ-ЯКОМУ рядковому полі KEEP (приклад -- `NUM_DOC` ПриватБанку містить `DLR` чи `REF`), замінюється
+        ТІЄЮ САМОЮ заміною з мапи, що й у своєму полі: ключ D17 і зв'язок ID <-> REF лишаються узгодженими. Значення з <= 2 різних символів і коротші за `SWEEP_MIN` не чіпаються
+        (тривіальні рядки не ідентифікують; решту коротких ловить перевірка (а))."""
         pairs = []
         for iban in self.ibans:
             pairs.append((iban, self.acc(iban)))
             pairs.append((iban[-14:], self.acc(iban[-14:])))
-        self.sweep = sorted(pairs, key=lambda p: -len(p[0]))
+        for v in self.accs:
+            if len(v) >= SWEEP_MIN and len(set(v)) > 2:
+                pairs.append((v, self.acc(v)))
+        for v in self.ids:
+            if len(v) >= SWEEP_MIN and len(set(v)) > 2:
+                pairs.append((v, self.ident(v)))
+        seen, out = set(), []
+        for raw, fake in sorted(pairs, key=lambda p: -len(p[0])):
+            if raw not in seen:
+                seen.add(raw)
+                out.append((raw, fake))
+        self.sweep = out
 
     # ----------------------------------------------------------- запит
     def request(self, req):
@@ -171,10 +187,9 @@ class Bank:
             return None
         if nd.kind == 'str':
             if role == 'KEEP':
-                if key in FREE_TEXT_KEEP:
-                    clean = self.clean_text(nd.value)
-                    if clean != nd.value:
-                        return json.dumps(clean, ensure_ascii=escaped)
+                clean = self.clean_text(nd.value)
+                if clean != nd.value:
+                    return json.dumps(clean, ensure_ascii=escaped)
                 return None
             new = self.value(role, nd.value)
             return None if new == nd.value else json.dumps(new, ensure_ascii=escaped)
@@ -235,6 +250,38 @@ def prescan(bank, rec):
     return refs, ibans, words, nums
 
 
+def prescan_values(bank, rec):
+    """Сирі значення ролей ID і ACC (у тілах, шляхах, запитах) для зачистки полів KEEP. -> (ids, accs)."""
+    ids, accs = set(), set()
+    for ex in rec.exchanges:
+        req = ex['request']
+        segs = req['path'].split('/')
+        for i, role in path_segments(bank, req['path']).items():
+            (accs if role == 'ACC' else ids).add(segs[i])
+        for k, _, v in query_pairs_raw(req['query']):
+            if bank == 'privat' and k == 'acc':
+                accs.add(v)
+            elif bank == 'privat' and k == 'followId':
+                ids.add(v)
+        if not ex['response']:
+            continue
+        try:
+            root = jsonspan.parse(R.body_text(ex))
+        except jsonspan.JsonSpanError:
+            continue
+        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
+            if nd.kind != 'str' or nd.value.strip() == '':
+                continue
+            v = nd.value.strip()
+            if role == 'ID':
+                ids.add(v)
+            elif role == 'ACC':
+                accs.add(v)
+                if IBAN_RX.fullmatch(v):
+                    accs.add(v[-14:])
+    return ids, accs
+
+
 def make_fakes(cfg, words, nums, map_path):
     fk = gen.Fakes(forbidden_words=words, forbidden_numbers=nums, allowed_words=cfg.get('allowed_words', []))
     if map_path and os.path.exists(map_path):
@@ -251,8 +298,9 @@ def anonymize_bank(bank, raw_dir, out_dir, map_path, cfg=None):
     if rec.bank != bank:
         raise schema.UnknownField('%s: у маніфесті інший банк' % bank)
     refs, ibans, words, nums = prescan(bank, rec)
+    ids, accs = prescan_values(bank, rec)
     fk = make_fakes(cfg, words, nums, map_path)
-    b = Bank(bank, fk, refs, ibans)
+    b = Bank(bank, fk, refs, ibans, ids, accs)
     b.build_sweep()
     new = [b.exchange(ex) for ex in rec.exchanges]
     anon = R.Recording(copy.deepcopy(rec.manifest), new)
@@ -269,6 +317,7 @@ def load_bank(bank, raw_dir, map_path, cfg=None):
     cfg = cfg or cfgmod.load()
     rec = R.Recording.from_dir(raw_dir)
     refs, ibans, words, nums = prescan(bank, rec)
+    ids, accs = prescan_values(bank, rec)
     fk = make_fakes(cfg, words, nums, map_path)
-    b = Bank(bank, fk, refs, ibans)
+    b = Bank(bank, fk, refs, ibans, ids, accs)
     return rec, b

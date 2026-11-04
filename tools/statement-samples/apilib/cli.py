@@ -115,10 +115,10 @@ def cmd_guard_files(a):
 
 def cmd_sets(a):
     """12 файлів наборів для макетів тестового розширення (R15): записи й еталони пакетами, синтетика і run1."""
-    for name, kind, n, size in sets_mod.build(a.anon_root, a.out):
+    for name, kind, n, size in sets_mod.build(a.anon_root, a.out, a.anon_root_run3):
         print('%-40s %-10s записів %3d  байтів %8d' % (name, kind, n, size))
-    for bank, ident, reason in sets_mod.EXCLUDED:
-        print('виключено з run1: %s %s -- %s' % (bank, ident, reason))
+    for bank, ident, reason, kind in sets_mod.EXCLUDED:
+        print('виключено з %s: %s %s -- %s' % (kind, bank, ident, reason))
     return 0
 
 
@@ -159,9 +159,9 @@ def _run_a(a):
         raw, anon, mp = _paths(a, bank)
         res = step2.check_a(bank, raw, anon)
         ctl = step2.check_a(bank, raw, anon, control=True)
-        lines.append('a %s: обмінів %d; токенів %s; збігів: підрядки %d, числа %d, назви %d, незмінені на місці %d '
+        lines.append('a %s: обмінів %d; токенів %s; збігів: підрядки %d, числа %d, назви %d, короткі ID/ACC/NAME (з %d) %d, незмінені на місці %d '
                      '(коротких без збігу: %d, без пари: %d)' % (
-                         bank, res['exchanges'], res['tokens'], res['hits_whole'], res['hits_nums'], res['hits_names'],
+                         bank, res['exchanges'], res['tokens'], res['hits_whole'], res['hits_nums'], res['hits_names'], res['short_tokens'], res['hits_short'],
                          res['unchanged_long'], res['unchanged_short_info'], res['misaligned']))
         lines.append('a %s: вузькі винятки за парою полів (у сирому записі): %s; значень поза дозволеними полями: %d' % (
             bank, res['pair_counts'] or '{}', res['pair_leaks']))
@@ -232,7 +232,7 @@ def cmd_etalons(a):
     total = 0
     for bank in _banks(a):
         raw, anon, mp = _paths(a, bank)
-        n, skipped = step2.write_etalons(bank, anon, a.anon_root)
+        n, skipped = step2.write_etalons(bank, anon, a.anon_root, a.label)
         print('etalons %s: записано %d; пропущено %d (%s)' % (bank, n, len(skipped), ', '.join('%s:%s' % x for x in skipped)))
         total += n
     return 0
@@ -290,6 +290,7 @@ def main(argv):
     p.set_defaults(fn=cmd_guard_files)
     p = sub.add_parser('sets')
     p.add_argument('--anon-root', required=True, help='знеособлений вихід run1 (etalons/, readings/)')
+    p.add_argument('--anon-root-run3', help='знеособлений вихід run3 (etalons/, readings/); без нього макетів Run3 немає')
     p.add_argument('--out', required=True)
     p.set_defaults(fn=cmd_sets)
     p = sub.add_parser('pack')

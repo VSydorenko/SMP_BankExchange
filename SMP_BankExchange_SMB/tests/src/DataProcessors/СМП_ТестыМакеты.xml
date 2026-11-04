@@ -79,6 +79,12 @@
 			<Template>СМП_ТестЭталоныМоноФОПRun1</Template>
 			<Template>СМП_ТестЭталоныМоноЮрСинт</Template>
 			<Template>СМП_ТестЭталоныМоноЮрRun1</Template>
+			<Template>СМП_ТестОтветыПриватRun3</Template>
+			<Template>СМП_ТестОтветыМоноФОПRun3</Template>
+			<Template>СМП_ТестОтветыМоноЮрRun3</Template>
+			<Template>СМП_ТестЭталоныПриватRun3</Template>
+			<Template>СМП_ТестЭталоныМоноФОПRun3</Template>
+			<Template>СМП_ТестЭталоныМоноЮрRun3</Template>
 		</ChildObjects>
 	</DataProcessor>
 </MetaDataObject>

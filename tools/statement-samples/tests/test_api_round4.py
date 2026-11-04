@@ -157,7 +157,7 @@ class MultipleBalanceRowsPerDay(unittest.TestCase):
 
 
 class NarrowPairException(unittest.TestCase):
-    """I3: виняток (а) -- лише для пари полів DLR ⊂ NUM_DOC; значення, що сховалося в іншому KEEP-полі, -- витік."""
+    """I3 (раунд run3 змінено): значення ролі ID, що стоїть підрядком у KEEP-полі (DLR у NUM_DOC), знеособлювач підміняє тією ж заміною; сире значення в будь-якому KEEP-полі -- витік."""
 
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
@@ -176,31 +176,27 @@ class NarrowPairException(unittest.TestCase):
     def res(self, target=None):
         return step2.check_a('privat', self.env.raw, target or self.env.anon)
 
-    def test_pair_is_allowed_counted_and_reported(self):
+    def anon_tx(self):
+        return R.body_json(R.Recording.from_dir(self.env.anon).exchanges[self.page - 1])['transactions'][0]
+
+    def test_dlr_inside_num_doc_is_replaced_by_the_same_map_value(self):
+        """Раунд run3: виняток DLR_in_NUM_DOC знято. Знеособлювач підміняє значення ролі ID, що стоїть підрядком у KEEP-полі, ТІЄЮ САМОЮ заміною з мапи, що й у своєму полі: у знеособленому
+        NUM_DOC лежить вигаданий DLR (зв'язок зберігається), а сирого немає; перевірка (а) чиста й винятку за парою DLR / NUM_DOC не веде."""
+        t = self.anon_tx()
+        self.assertIn(t['DLR'], t['NUM_DOC'])
+        self.assertNotIn(self.dlr, t['NUM_DOC'])
         r = self.res()
         self.assertEqual(r['hits'], 0)
-        self.assertGreaterEqual(r['pair_counts'].get('DLR_in_NUM_DOC', 0), 1)
+        self.assertNotIn('DLR_in_NUM_DOC', r['pair_counts'])
+
+    def test_the_raw_value_left_in_num_doc_is_red(self):
+        """Контроль: сире значення ролі ID у NUM_DOC знеособленого запису (заміну вимкнено чи відкочено) -- витік, перевірка (а) його знаходить."""
+        t = self.anon_tx()
+        mutate_body(self.env.anon, self.page, lambda s: s.replace('"NUM_DOC":"%s"' % t['NUM_DOC'], '"NUM_DOC":"Z%s"' % self.dlr, 1))
+        self.assertGreater(self.res()['hits'], 0)
 
     def test_the_value_hidden_in_another_keep_field_is_red(self):
         mutate_body(self.env.anon, self.page, lambda s: s.replace('"type":"transactions"', '"type":"%s"' % self.dlr, 1))
-        r = self.res()
-        self.assertGreater(r['pair_leaks'], 0)
-        self.assertGreater(r['hits'], 0)
-
-    def test_the_value_in_num_doc_itself_is_not_a_leak(self):
-        first = R.body_json(R.Recording.from_dir(self.env.anon).exchanges[self.page - 1])['transactions'][0]
-        mutate_body(self.env.anon, self.page, lambda s: s.replace('"NUM_DOC":"%s"' % first['NUM_DOC'], '"NUM_DOC":"Z%s"' % self.dlr, 1))
-        self.assertEqual(self.res()['pair_leaks'], 0)
-
-    def test_without_the_pair_the_same_value_in_keep_is_red(self):
-        """Контроль: якщо DLR у сирому записі НЕ є частиною NUM_DOC, його поява в NUM_DOC знеособленого -- уже витік."""
-        shutil.rmtree(self.tmp)
-        self.tmp = tempfile.mkdtemp()
-        self.env = Env('privat', 'СинтСтраницыСлед', self.tmp)
-        raw = R.Recording.from_dir(self.env.raw)
-        t = R.body_json(raw.exchanges[self.page - 1])['transactions'][0]
-        self.env.anonymize()
-        mutate_body(self.env.anon, self.page, lambda s: s.replace('"NUM_DOC":"%s"' % t['NUM_DOC'], '"NUM_DOC":"Z%s"' % t['DLR'], 1))
         self.assertGreater(self.res()['hits'], 0)
 
 

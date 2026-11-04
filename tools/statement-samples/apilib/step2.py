@@ -100,40 +100,36 @@ class Sensitive:
         self.nums = set()             # числа від 5 цифр
         self.names = set()            # власні назви (слова з великої літери)
         self.positional = []          # [(індекс обміну, шлях у дереві, роль, значення)] -- для порівняння на своєму місці
+        self.short = set()            # цілі значення ролей ID / ACC / NAME коротші за MIN_WHOLE (не більш як 2 різних символи -- винятком): пошук у значеннях полів, без нижньої межі довжини
         self.generic = set()          # загальні фрази словника замін
         self.pair_exempt = {}         # токен -> {поля, у яких він МОЖЕ лишитися}: вузькі винятки за парою полів
         self.pair_counts = {}         # назва пари -> кількість випадків у сирому записі (іде у звіт)
 
     def exempt(self, v):
-        """Не витік: значення з однієї повторюваної цифри/літери (нульовий «неіснуючий» рахунок) і загальна фраза, яку генератор
-        видає сам. Решта винятків -- лише за ПАРОЮ полів (`PAIRS`), див. `pair_leaks`."""
+        """Не витік: значення не більш як з ДВОХ різних символів (нульовий «неіснуючий» рахунок, круглі суми на кшталт 1 і вісім нулів: такий рядок не ідентифікує, а як фрагмент
+        base64 трапляється в чужих тілах) і загальна фраза, яку генератор видає сам. ЄДИНИЙ виняток такого роду; він названий тут і в README інструменту. Решта винятків -- лише за ПАРОЮ полів (`PAIRS`), див. `pair_leaks`."""
         v = str(v).strip()
-        return len(set(v)) <= 1 or v in self.generic
+        return len(set(v)) <= 2 or v in self.generic
 
     def counts(self):
         return {'whole': len(self.whole), 'nums': len(self.nums), 'names': len(self.names), 'positional': len(self.positional)}
 
 
 # Винятки (а) за парою полів: (назва пари, поле-джерело(а), поля KEEP, де значення МОЖЕ лишитися за політикою D22).
-# DLR ПриватБанку -- частина номера документа (NUM_DOC, KEEP за D22); обороти/залишки дня дорівнюють сумі єдиної операції
-# (SUM / SUM_E, KEEP). Поза цими полями значення -- витік.
-PAIRS = (('DLR_in_NUM_DOC', ('DLR',), ('NUM_DOC',)),
-         ('turnover_equals_SUM', ('balanceIn', 'balanceInEq', 'balanceOut', 'balanceOutEq', 'turnoverCred', 'turnoverCredEq',
-                                 'turnoverDebt', 'turnoverDebtEq'), ('SUM', 'SUM_E')))
+# Обороти/залишки дня дорівнюють сумі єдиної операції (SUM / SUM_E, KEEP): це роль SCRAMBLE (гроші), не ID/ACC/NAME. Поза цими полями значення -- витік.
+# DLR ПриватБанку (роль ID), що стоїть підрядком у NUM_DOC, винятком БІЛЬШЕ НЕ Є (раніше було `DLR_in_NUM_DOC`): знеособлювач замінює його в NUM_DOC тією ж заміною з мапи.
+PAIRS = (('turnover_equals_SUM', ('balanceIn', 'balanceInEq', 'balanceOut', 'balanceOutEq', 'turnoverCred', 'turnoverCredEq',
+                                  'turnoverDebt', 'turnoverDebtEq'), ('SUM', 'SUM_E')),)
 
 
 def collect_pairs(sens, objs):
     """Вузькі винятки за парою полів в ОДНОМУ об'єкті/рядку (`objs`: {(обмін, шлях): {поле: значення}})."""
     money = {v for f in objs.values() for k in ('SUM', 'SUM_E') if (v := f.get(k))}
     for f in objs.values():
-        dlr = (f.get('DLR') or '').strip()
-        if dlr and dlr in (f.get('NUM_DOC') or ''):
-            sens.pair_exempt.setdefault(dlr, set()).update(('NUM_DOC',))
-            sens.pair_counts['DLR_in_NUM_DOC'] = sens.pair_counts.get('DLR_in_NUM_DOC', 0) + 1
-        for k in PAIRS[1][1]:
+        for k in PAIRS[0][1]:
             v = (f.get(k) or '').strip()
             if v and v in money:
-                sens.pair_exempt.setdefault(v, set()).update(PAIRS[1][2])
+                sens.pair_exempt.setdefault(v, set()).update(PAIRS[0][2])
                 sens.pair_counts['turnover_equals_SUM'] = sens.pair_counts.get('turnover_equals_SUM', 0) + 1
 
 
@@ -205,6 +201,8 @@ def collect(bank, rec, cfg):
         if role in NAME_ROLES:
             lower_words |= {w.casefold() for w in WORD.findall(v) if w[0].islower()}
     for role, v in texts:
+        if role in ('ID', 'ACC', 'NAME', 'BANKNAME') and 0 < len(v.strip()) < MIN_WHOLE and len(set(v.strip())) > 2:
+            sens.short.add(v.strip())
         if role in ('ID', 'ACC', 'CODE', 'SCRAMBLE') and len(v) >= MIN_WHOLE:
             sens.whole.add(v)
         if role == 'ACC':
@@ -295,6 +293,43 @@ def scan_lexemes(blob, nums, names):
     return got_nums, got_names
 
 
+def scan_short(rec, tokens):
+    """Короткі (< MIN_WHOLE) значення ролей ID / ACC / NAME у БУДЬ-ЯКОМУ полі знеособленого запису: шлях і запит (розкодовані), текст збою, кожне рядкове значення тіла (після JSON-розкодування екранувань), підрядком і без нижньої межі довжини. -> множина знайдених токенів (значень не друкуємо)."""
+    found = set()
+    if not tokens:
+        return found
+
+    def hit(text):
+        for t in tokens:
+            if t in text:
+                found.add(t)
+
+    def walk(o):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                hit(str(k))
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+        elif isinstance(o, str):
+            hit(o)
+        elif o is not None:
+            hit(str(o))
+    for ex in rec.exchanges:
+        req = ex['request']
+        hit(urllib.parse.unquote(req['path'] + '?' + req['query']))
+        if not ex['response']:
+            hit(ex['failure']['text'])
+            continue
+        text = R.body_text(ex)
+        try:
+            walk(json.loads(text))
+        except ValueError:
+            hit(text)
+    return found
+
+
 def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
     """Перевірка (а). `control=True` -- та сама перевірка, але «знеособлений» запис = сирий: мусить дати збіги."""
     cfg = cfg or cfgmod.load()
@@ -318,9 +353,10 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
                 else:
                     unchanged_short += 1
     pair = pair_leaks(bank, R.Recording.from_dir(target), sens.pair_exempt)
-    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair
+    short = scan_short(R.Recording.from_dir(target), sens.short)
+    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair + len(short)
     return {'pair_counts': dict(sens.pair_counts), 'pair_leaks': pair, 'bank': bank, 'control': control, 'exchanges': len(raw.exchanges), 'tokens': sens.counts(),
-            'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names),
+            'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names), 'hits_short': len(short), 'short_tokens': len(sens.short),
             'unchanged_long': unchanged_long, 'unchanged_short_info': unchanged_short, 'misaligned': misaligned,
             'hits': hits, 'problems': ['збіги: %d' % hits] if hits else []}
 
@@ -450,10 +486,10 @@ def _check_body(bank, tag, x, y, b, counts, bad):
             continue
         if role == 'KEEP':
             key = next((w for w in reversed(where) if isinstance(w, str)), '')
-            if a.kind == 'str' and key in A.FREE_TEXT_KEEP and b.clean_text(a.value) != a.value:
-                counts['free_text_cleaned'] += 1
+            if a.kind == 'str' and b.clean_text(a.value) != a.value:
+                counts['free_text_cleaned'] += 1                       # рядкове поле KEEP зі значенням ролі ID / ACC: очікується зачистка тією ж заміною
                 if b.clean_text(a.value) != c.value:
-                    bad(here + ': вільний текст')
+                    bad(here + ': зачищене поле KEEP')
             elif a.value != c.value:
                 bad(here + ': KEEP змінено')
             else:
@@ -542,8 +578,7 @@ class Diff:
         mp = self.mp
         r = {'НомерСчета': mp.acc, 'КонтрагентНомерСчета': mp.acc, 'КонтрагентКод': mp.code,
              'КонтрагентНаименование': mp.name, 'ИдентификаторОперации': mp.ident, 'Ид': mp.ident}
-        if self.bank != 'privat':
-            r['НомерДокумента'] = mp.ident
+        r['НомерДокумента'] = mp.ident if self.bank != 'privat' else mp.text         # Привата: NUM_DOC (KEEP) зачищається від значень ролей ID / ACC (тією ж заміною з мапи)
         return r
 
     def cmp(self, a, b, path):
@@ -663,13 +698,13 @@ def check_c(bank, raw_dir, anon_dir, map_path, cfg=None):
 
 
 # ======================================================================== випуск еталонів
-def write_etalons(bank, anon_dir, out_root):
+def write_etalons(bank, anon_dir, out_root, label='run1'):
     """Читання знеособленого запису + еталони (оракулом). -> (записано, пропущено з причиною)."""
     anon = R.Recording.from_dir(anon_dir)
     written, skipped = 0, []
     for r in RD.readings(anon):
         try:
-            d, _, _ = etalon.build_from(r.recording(), r.params, sid=r.id, title='знеособлений запис run1: ' + r.scenario, focus=[],
+            d, _, _ = etalon.build_from(r.recording(), r.params, sid=r.id, title='знеособлений запис %s: %s' % (label, r.scenario), focus=[],
                                         macro=r.name, synthetic=False)
         except Exception as e:                              # noqa: BLE001
             skipped.append((r.id, type(e).__name__))

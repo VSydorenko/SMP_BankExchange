@@ -25,10 +25,10 @@ from datetime import datetime
 from . import common as C, etalon, readings, recording as R, synth
 
 # Читання run1, виключені з наборів, бо конектор не відтворює їхніх запитів (`readings.replay_exclusion`): (банк, ід, причина).
-EXCLUDED = []
+EXCLUDED = []                      # (банк, ід, причина, вид набору)
 RECORD_SET = 'smp-api-record-set'
 ETALON_SET = 'smp-api-etalon-set'
-KINDS = {'synthetic': 'Синт', 'run1': 'Run1'}
+KINDS = {'synthetic': 'Синт', 'run1': 'Run1', 'run3': 'Run3'}
 BANKS = ('privat', 'mono-fop', 'mono-corp')
 
 
@@ -50,8 +50,8 @@ def synthetic_sets(bank):
     return recs, ets
 
 
-def run1_sets(bank, anon_root):
-    EXCLUDED[:] = [x for x in EXCLUDED if x[0] != bank]
+def run1_sets(bank, anon_root, kind='run1'):
+    EXCLUDED[:] = [x for x in EXCLUDED if not (x[0] == bank and x[3] == kind)]
     """Читання знеособленого запису, що мають еталон (`etalons/СМП_ТестЭталон<Банк><Ид>.json`)."""
     key = synth.BANK_KEYS[bank]
     prefix = 'СМП_ТестЭталон' + key
@@ -66,9 +66,9 @@ def run1_sets(bank, anon_root):
         if et['bank'] != bank:
             continue
         rec = R.Recording.from_dir(os.path.join(anon_root, 'readings', bank, ident))
-        reason = readings.replay_exclusion(bank, rec, et['parameters'])
+        reason = readings.measurement_exclusion(ident) or readings.replay_exclusion(bank, rec, et['parameters'])
         if reason:
-            EXCLUDED.append((bank, ident, reason))
+            EXCLUDED.append((bank, ident, reason, kind))
             if reason.startswith('limit '):
                 # справжні операції, сторінки від моделі банку на робочому limit (`ЗапStatementLimit500_Модель30`): продуктовий шлях без шва
                 derived = readings.model_paged_corp(rec)
@@ -87,13 +87,15 @@ def run1_sets(bank, anon_root):
     return recs, ets
 
 
-def build(anon_root, out_dir):
+def build(anon_root, out_dir, anon_root3=None):
     """Пише 12 файлів у `out_dir`: `<Макет>.bin` (записи) і `<Макет>.txt` (еталони). -> [(макет, тип, кількість записів, байтів)]."""
     os.makedirs(out_dir, exist_ok=True)
     report = []
     for bank in BANKS:
         for kind in KINDS:
-            recs, ets = synthetic_sets(bank) if kind == 'synthetic' else run1_sets(bank, anon_root)
+            if kind == 'run3' and not anon_root3:
+                continue
+            recs, ets = synthetic_sets(bank) if kind == 'synthetic' else run1_sets(bank, anon_root3 if kind == 'run3' else anon_root, kind)
             if sorted(recs) != sorted(ets):
                 raise ValueError('набори записів і еталонів не збігаються: %s %s' % (bank, kind))
             rname, ename = names(bank, kind)

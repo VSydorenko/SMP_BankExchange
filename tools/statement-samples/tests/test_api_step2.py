@@ -522,7 +522,7 @@ class CliExitCodes(unittest.TestCase):
             self.assertEqual(run_cli(*env.args('check-a'))[0], 1)
             from unittest import mock
             with mock.patch.object(step2, 'scan_whole', lambda blob, tokens: set()), \
-                    mock.patch.object(step2, 'scan_lexemes', lambda blob, nums, names: (set(), set())):
+                    mock.patch.object(step2, 'scan_lexemes', lambda blob, nums, names: (set(), set())),                     mock.patch.object(step2, 'scan_short', lambda rec, tokens: set()):
                 self.assertEqual(run_cli(*env.args('check-a'))[0], 2)          # перевірка, що нічого не знаходить, -- не зелена
 
     def test_verify_writes_a_report_without_values(self):

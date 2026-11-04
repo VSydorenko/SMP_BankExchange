@@ -452,5 +452,33 @@ class ByHandPrivat(unittest.TestCase):
                    cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1, 1, 1])
 
 
+RUN3 = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), 'temp', 'api-anon', 'run3')
+
+
+@unittest.skipUnless(os.path.isdir(os.path.join(RUN3, 'etalons')), 'знеособленого run3 немає (temp/api-anon/run3): тест не виконано, а не зелений')
+class ByHandRun3Overlap(unittest.TestCase):
+    """Справжній запис юросіб `corp_a1_statement_small_limit_overlap` (run3, `limit` 10, продовження з `to` = найраніша `time` + 1): очікуване РУКАМИ з самих сторінок запису,
+    а не оракулом. Формули D36 п. 11: перший `to` = Мин(КонецПериода + 1 с, момент читання); далі `to` = Мин(E + 1, U); повтори межових операцій відкидаються за `id`."""
+
+    def test_continuation_requests_and_unique_operations_by_hand(self):
+        import json
+        from apilib import recording as RR
+        et = json.load(open(os.path.join(RUN3, 'etalons', 'СМП_ТестЭталонМоноЮрЗапStatementSmallLimitOverlap.json'), encoding='utf-8'))
+        rec = RR.Recording.from_dir(os.path.join(RUN3, 'readings', 'mono-corp', 'ЗапStatementSmallLimitOverlap'))
+        pages = [(RR.statement_window(e), RR.body_json(e)) for e in rec.exchanges if RR.statement_window(e)]
+        end = kyiv.local_to_unix(datetime.strptime(et['parameters']['КонецПериода'], '%Y-%m-%dT%H:%M:%S'))
+        upper = min(end + 1, int((datetime.strptime(et['parameters']['МоментЧтения'], '%Y-%m-%dT%H:%M:%S') - datetime(1970, 1, 1)).total_seconds()))
+        want_to = []
+        for (acct, frm, to), body in pages:
+            want_to.append(upper)
+            self.assertEqual(to, upper)                                              # запис записаний саме з такими межами (похідний запис: лише шлях запиту)
+            earliest = min(o['time'] for o in body)
+            upper = min(earliest + 1, upper)                                         # Мин(E + 1, U)
+        got = [int(r['Путь'].split('/')[-1]) for r in et['expected']['Запросы'] if '/statement/' in r['Путь']]
+        self.assertEqual(got, want_to)
+        ids = {o['id'] for _, body in pages for o in body if o['status'] == 'DONE'}
+        self.assertEqual(len(et['expected']['Операции']), len(ids))                  # повтори межових операцій відкинуто за id: операцій рівно стільки, скільки різних id
+
+
 if __name__ == '__main__':
     unittest.main()
