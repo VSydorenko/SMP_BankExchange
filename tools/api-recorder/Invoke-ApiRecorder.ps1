@@ -969,7 +969,9 @@ function Test-PumbLoginGate {
 # додаються до набору секретів; справжнє тіло автентифікації не друкується й не зберігається (повертається лише розібране в .AuthReal).
 function Invoke-PumbApi {
     param($Ctx, [string]$Method, [string]$HostName, [int]$Port, [string]$Path, $BodyBytes = $null, [string]$Token = '',
-        [switch]$Auth, [string]$DryStub = '[]', [switch]$NoRetry, [switch]$NoReauth)
+        [switch]$Auth, [string]$DryStub = '[]', [switch]$NoRetry, [switch]$NoReauth,
+        # Тіло в банк іде як є, а в запис не потрапляє (bodyOmitted з цією причиною): навмисно нерозбірне тіло знеособлювач не прийняв би.
+        [string]$OmitBodyReason = '')
     Assert-ReadOnlyRequest $Method $HostName $Path $Port
     $useCtxToken = (-not $Auth) -and (-not $Token)
     $retried429 = $false; $reauthed = $false
@@ -1013,9 +1015,9 @@ function Invoke-PumbApi {
             }
             else {
                 $reqBody = $null
-                if ($Method -ceq 'POST') { $reqBody = [byte[]]$BodyBytes }
+                if ($Method -ceq 'POST' -and -not $OmitBodyReason) { $reqBody = [byte[]]$BodyBytes }
                 [void](Save-Exchange $Ctx.Rec $Ctx.Cur.Name $HostName $Path '' $r.Status $r.Headers $r.Body $r.Failure $started ([int]$sw.ElapsedMilliseconds) `
-                        -Method $Method -Port $Port -RequestBody $reqBody)
+                        -Method $Method -Port $Port -RequestBody $reqBody -BodyOmittedReason $OmitBodyReason)
             }
             $line = if ($null -ne $r.Failure) { "збій мережі ($($r.Failure.Kind))" } elseif ($Auth) { "HTTP $($r.Status) (тіло автентифікації не друкується)" } else { "HTTP $($r.Status), $($r.Body.Length) байт" }
             Write-Host ("  [{0:D4}] {1} {2} -> {3}" -f $Ctx.Rec.Seq, $Method, $Path, $line)
@@ -1390,7 +1392,7 @@ function Invoke-PumbRun {
             Invoke-PumbPeriodTx $Ctx $script:FakePumbAccountId $pFrom $pTo
         }
         Invoke-Scenario $Ctx 'pumb_errors_body_not_json' {
-            [void](Invoke-PumbApi $Ctx 'POST' $script:PumbApiHost $script:PumbApiPort (& $apiPath '/document/searcher') ([System.Text.Encoding]::UTF8.GetBytes('this is not json')) -DryStub '{}')
+            [void](Invoke-PumbApi $Ctx 'POST' $script:PumbApiHost $script:PumbApiPort (& $apiPath '/document/searcher') ([System.Text.Encoding]::UTF8.GetBytes('this is not json')) -DryStub '{}' -OmitBodyReason 'навмисно не JSON: тіло вигадане, вимірюється лише відповідь')
         }
     }
 }
@@ -1698,6 +1700,25 @@ function Invoke-SelfTestMode {
         ($null -ne (Test-PumbLoginGate @{})) -and ($null -ne (Test-PumbLoginGate @{ LoginApproved = $false })) -and
         ($null -ne (Test-PumbLoginGate @{ LoginApproved = 'true' })) -and ($null -ne (Test-PumbLoginGate @{ LoginApproved = 1 })) -and ($null -eq (Test-PumbLoginGate $gateOpen)))
     & $check "'all' не включає ПУМБ (вхід у банк лише за явним -Bank pumb)" ((@(Get-SelectedBanks @('all')) -notcontains 'pumb') -and (@(Get-SelectedBanks @('pumb')) -contains 'pumb'))
+
+    # --- сценарій «тіло не JSON»: у банк іде те саме тіло, у запис — bodyOmitted з причиною (мок HTTP діє лише всередині цього блоку) ---
+    $njDir = Join-Path $Dir 'notjson-sample'
+    if (Test-Path $njDir) { Remove-Item $njDir -Recurse -Force }
+    $njRec = New-Recording $njDir 'pumb' 'nj' ([ordered]@{ 'Pumb.Password' = 'ВИГАДАНИЙ-ПАРОЛЬ-Nj4k8Lp2' })
+    $njCtx = New-Ctx 'pumb' 'service.fuib.com' 0.0 $njRec $njRec.Secrets $false
+    foreach ($pn in 'Token', 'TokenExpiry', 'Logins', 'Reauths', 'Cfg') { Add-Member -InputObject $njCtx -NotePropertyName $pn -NotePropertyValue $null -Force }
+    $njCtx.Token = 'FAKE-TOKEN-NOT-JSON-0000'
+    $njSent = [System.Collections.Generic.List[string]]::new()
+    & {
+        function Invoke-HttpSend { param([string]$Method, [string]$Uri, [hashtable]$Headers, [string]$ContentType, $Body = $null) $njSent.Add([System.Text.Encoding]::UTF8.GetString([byte[]]$Body)); [pscustomobject]@{ Status = 400; Headers = @(, @('Content-Type', 'application/json')); Body = [System.Text.Encoding]::UTF8.GetBytes('{"message":"bad json"}'); Failure = $null } }
+        Start-ScenarioStats $njCtx 'pumb_errors_body_not_json'
+        [void](Invoke-PumbApi $njCtx 'POST' 'service.fuib.com' 4103 "$pf/document/searcher" ([System.Text.Encoding]::UTF8.GetBytes('this is not json')) -OmitBodyReason 'навмисно не JSON: тіло вигадане, вимірюється лише відповідь')
+    } | Out-Null
+    Save-Manifest $njRec 'ok'
+    $njEx = Get-Content (Join-Path $njDir '0001.json') -Raw | ConvertFrom-Json -AsHashtable
+    & $check 'ПУМБ, сценарій «тіло не JSON»: у банк пішло те саме тіло, у записі — bodyOmitted з причиною, без bodyBase64' (
+        ($njSent.Count -eq 1) -and ($njSent[0] -ceq 'this is not json') -and $njEx.request.bodyOmitted -eq $true -and
+        ($njEx.request.bodyOmittedReason -like 'навмисно не JSON*') -and -not $njEx.request.ContainsKey('bodyBase64') -and $njEx.formatVersion -eq 2 -and $njEx.request.port -eq 4103)
 
     # --- запис ПУМБ у форматі v2, зроблений справжнім записувачем; значення вигадані ---
     $pSecrets = [ordered]@{ 'Pumb.ClientSecret' = 'ВИГАДАНИЙ-СЕКРЕТ-Zk3q9Lm2'; 'Pumb.Password' = 'ВИГАДАНИЙ-ПАРОЛЬ-Qw8r5Tn1' }
