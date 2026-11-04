@@ -34,10 +34,16 @@ class FopBank(CorpBank):
       run1 не виміряна (найбільша відповідь -- 31 операція); у запиті ФОП ліміту немає, тож `limit` тут -- місткість сторінки моделі;
     * виключність `to` -- НЕ виміряна для ФОП: перенесена з юросіб (`9e1eb08`), тому продовження конектора (Мин(E + 1, U)) від неї не залежить;
     * нижня межа `from` -- НЕ виміряна: операції з `time` < `from` не повертаються, `time` = `from` повертається (припущення; операцій на
-      секунді межі відрізків у записах немає, лише в `СинтПолнаяНаНачале`).
+      секунді межі відрізків: у `СинтГраницаОтрезков` модель найгіршого випадку (`from` виключний, `from_inclusive=False`); `СинтПолнаяНаНачале` припускає включний).
     Модель відтворює справжній запис `fop_statement_segment_01` (одна сторінка, 31 операція, той самий порядок), див. tests/test_api_bankmodel.py."""
+
+    def __init__(self, ops, to_inclusive=False, from_inclusive=True):
+        """`from_inclusive=False` -- модель найгіршого випадку для перекриття відрізків (`from` виключний, не виміряно)."""
+        super().__init__(ops, to_inclusive)
+        self.from_inclusive = from_inclusive
 
     def statement(self, frm, to, limit):
         """Сторінка відповіді: найновіші `limit` операцій з `frm` <= `time` < `to` (від нових до старих)."""
-        inside = [o for o in self.ops if o['time'] >= frm and (o['time'] <= to if self.to_inclusive else o['time'] < to)]
+        inside = [o for o in self.ops if (o['time'] >= frm if self.from_inclusive else o['time'] > frm)
+                  and (o['time'] <= to if self.to_inclusive else o['time'] < to)]
         return sorted(inside, key=lambda o: -o['time'])[:limit]

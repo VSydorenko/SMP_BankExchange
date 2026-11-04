@@ -167,18 +167,22 @@ def statement_exchanges(rec):
     return [e for e in rec.exchanges if rec_mod.statement_window(e)]
 
 
-def fop_windows(start, end):
-    """Відрізки читання monobank ФОП: ≤ 31 доби, рахунок у місцевому часі, як у попередника (MF:273-278, 351); відрізок може бути на годину
-    коротший чи довший за 31 добу реального часу на переході часу, що в межах документальних «31 доба + 1 година». Період, що не
-    додатний (початок не раніше за кінець), -- один відрізок «як є»: банк сам відповість 400, конектор не вгадує (як юросіб)."""
-    if start >= end:
-        return [(start, end)]
-    out, cur = [], start
-    while cur < end:
-        nxt = min(cur + timedelta(seconds=FOP_WINDOW_SECONDS), end)
-        out.append((cur, nxt))
-        cur = nxt
-    return out
+def fop_windows(start_unix, end_unix):
+    """Відрізки читання monobank ФОП у СЕКУНДАХ UNIX, від найновішого до найстарішого: довжина відрізка РАЗОМ з перекриттям не
+    більша за 31 × 86400 с (документація: не більше 31 доби + 1 година; чи межа «≤», чи «<», не виміряно, тож у місцевому календарі
+    на переході часу, де відрізок дав би 2682000 с, не рахуємо). Верхня межа старішого відрізка = `from` новішого + 1 с: сусідні
+    відрізки перекриваються на секунду, бо включність `from` / `to` для ФОП не виміряна, а операція на секунді межі без перекриття
+    могла б не потрапити в жоден відрізок; повтор відкидається за `id`. Період, що не додатний (початок не раніше за кінець), -- один
+    відрізок «як є»: банк сам відповість 400, конектор не вгадує (як юросіб). -> [(from, to)] у секундах Unix."""
+    if start_unix >= end_unix:
+        return [(start_unix, end_unix)]
+    out, upper = [], end_unix
+    while True:
+        frm = max(start_unix, upper - FOP_WINDOW_SECONDS)
+        out.append((frm, upper))
+        if frm <= start_unix:
+            return out
+        upper = frm + 1
 
 
 def error_description(ex):

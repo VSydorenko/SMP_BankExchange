@@ -346,13 +346,12 @@ def corp_paged(b, p, ops, limit, first_headers=(), stop_after=None):
         upper = nxt
 
 
-def fop_paged(b, p, ops, limit, stop_after=None):
+def fop_paged(b, p, ops, limit, stop_after=None, from_inclusive=True):
     """Обміни виписки ФОП, які дав би банк (модель `bankmodel.FopBank`) на запити конектора: відрізки ≤ 31 доби, усередині кожного --
-    сторінки за D36 п. 11, як у юросіб (`corp_paged`): `to` продовження = Мин(найраніша `time` + 1, поточна `to`), застрягання -- крок
+    сторінки за D36 п. 11, як у юросіб (`corp_paged`); відрізки -- від найновішого, сусідні перекриваються на секунду (`C.fop_windows`): `to` продовження = Мин(найраніша `time` + 1, поточна `to`), застрягання -- крок
     Мин(E, U - 1). У запиті ФОП ліміту немає: `limit` -- поріг повної сторінки (шов розміру сторінки, `Params.page_limit`)."""
-    bank = bankmodel.FopBank(ops)
-    for wf, wt in C.fop_windows(p.period_start, p.period_end):
-        frm, upper = to_unix(wf), to_unix(wt)
+    bank = bankmodel.FopBank(ops, from_inclusive=from_inclusive)
+    for frm, upper in C.fop_windows(to_unix(p.period_start), to_unix(p.period_end)):
         while True:
             page = bank.statement(frm, upper, limit)
             b.statement(frm, upper, resp_json(200, page))
@@ -643,16 +642,15 @@ def _fop_scenarios():
     s.exchanges = b.ex
     sc.append(s)
 
-    # --- Окна: 40 діб з початком о 06:30 -- межа відрізка посеред доби; перший відрізок порожній. Операцій на самій секунді межі
-    # відрізків немає: включність `from` / `to` для ФОП не виміряна (журнал 05а, «Задача 5»)
-    start, end = _day(2026, 9, 5, 6, 30), _day(2026, 10, 15, 23, 59, 59)
-    s, b = new('СинтОкна', 'monobank ФОП: період 40 діб з 06:30 -- два відрізки, межа посеред доби, перший порожній', [3], start=start, end=end)
+    # --- Окна: 40 діб, початок 06:30, кінець 14:20:07 -- межі відрізків посеред доби; відрізки йдуть від найновішого, найстаріший порожній
+    start, end = _day(2026, 9, 5, 6, 30), _day(2026, 10, 15, 14, 20, 7)
+    s, b = new('СинтОкна', 'monobank ФОП: період 40 діб -- два відрізки з перекриттям на секунду, межа посеред доби, старіший порожній', [3], start=start, end=end)
     info(b)
-    wins = C.fop_windows(start, end)
-    b.statement(to_unix(wins[0][0]), to_unix(wins[0][1]), resp_json(200, []))
-    b.statement(to_unix(wins[1][0]), to_unix(wins[1][1]), resp_json(200, desc_ordered([
+    wins = C.fop_windows(to_unix(start), to_unix(end))
+    b.statement(wins[0][0], wins[0][1], resp_json(200, desc_ordered([
         ftx(g, t=utc(2026, 10, 10, 9), amount=-5000, desc='Покупка', cnt=cnt()),
         ftx(g, t=utc(2026, 10, 12, 9), amount=9000, desc='Надходження', cnt=cnt())])))
+    b.statement(wins[1][0], wins[1][1], resp_json(200, []))
     s.exchanges = b.ex
     sc.append(s)
 
@@ -752,18 +750,28 @@ def _fop_scenarios():
     s.exchanges = b.ex
     sc.append(s)
 
-    # Відрізки й сторінки разом: початок о 06:30, перший відрізок -- повна сторінка + хвіст (операція за секунду до межі відрізка),
-    # другий -- операції після межі. Пауза 60 с перед кожним запитом виписки, крім першого
-    start, end = _day(2026, 9, 5, 6, 30), _day(2026, 10, 15, 23, 59, 59)
-    s, b = new('СинтОкнаСтраницы', 'monobank ФОП: два відрізки по 31 добі, межа посеред доби, у першому дві сторінки', [3], start=start, end=end, page_limit=lim)
+    # Відрізки й сторінки разом: найновіший відрізок -- повна сторінка + хвіст, старіший -- дві операції. Пауза 60 с перед кожним запитом
+    # виписки, крім першого. Період 05.09 06:30 .. 15.10 14:20:07, межа відрізків посеред доби
+    start, end = _day(2026, 9, 5, 6, 30), _day(2026, 10, 15, 14, 20, 7)
+    s, b = new('СинтОкнаСтраницы', 'monobank ФОП: два відрізки з перекриттям, у найновішому дві сторінки', [3], start=start, end=end, page_limit=lim)
     info(b)
-    wins = C.fop_windows(start, end)
-    boundary_unix = to_unix(wins[0][1])
-    first_seg = [ftx(g, t=utc(2026, 9, 10, 8) + 100 * i, amount=-(100 + i), desc='в%d' % i, tid=fid('W', i)) for i in range(1, lim + 1)]
-    first_seg += [ftx(g, t=boundary_unix - 1, amount=-777, desc='за секунду до межі', tid=fid('W', 99))]
-    second_seg = [ftx(g, t=boundary_unix + 1, amount=555, desc='за секунду після межі', tid=fid('Y', 1)),
-                  ftx(g, t=utc(2026, 10, 12, 9), amount=9000, desc='Надходження', tid=fid('Y', 2))]
-    fop_paged(b, s.params, first_seg + second_seg, lim)
+    newest_seg = [ftx(g, t=utc(2026, 10, 10, 8) + 100 * i, amount=-(100 + i), desc='в%d' % i, tid=fid('W', i)) for i in range(1, lim + 2)]
+    older_seg = [ftx(g, t=utc(2026, 9, 8, 9), amount=555, desc='старіша операція', tid=fid('Y', 1)),
+                 ftx(g, t=utc(2026, 9, 20, 9), amount=9000, desc='Надходження', tid=fid('Y', 2))]
+    fop_paged(b, s.params, newest_seg + older_seg, lim)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Операція на секунді межі відрізків (`from` новішого відрізка). Модель найгіршого випадку: `from` ВИКЛЮЧНИЙ (не виміряно), тож
+    # новіший відрізок цієї операції не повертає, а старіший (`to` = `from` новішого + 1) повертає -- завдяки перекриттю вона в
+    # конверті рівно раз. Без перекриття вона б загубилась.
+    s, b = new('СинтГраницаОтрезков', 'monobank ФОП: операція на секунді межі відрізків -- від виключного from її повертає лише старіший відрізок (перекриття на секунду)', [3], start=start, end=end)
+    info(b)
+    boundary_t = C.fop_windows(to_unix(start), to_unix(end))[0][0]
+    on_edge = [ftx(g, t=utc(2026, 10, 12, 9), amount=-1000, desc='новіша', tid=fid('G', 1)),
+               ftx(g, t=boundary_t, amount=-2000, desc='на межі відрізків', tid=fid('G', 2)),
+               ftx(g, t=utc(2026, 9, 10, 9), amount=3000, desc='старіша', tid=fid('G', 3))]
+    fop_paged(b, s.params, on_edge, C.PAGE_SIZE_MONO, from_inclusive=False)
     s.exchanges = b.ex
     sc.append(s)
 
@@ -848,17 +856,17 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
         return desc_ordered([ctx_(g, t=t0 + 7 * i, amount=-(10 + i), desc='x', tid=seqid(prefix, i)) for i in range(lim)])
 
     def failing(sid, title, resp=None, failure=None, full=False):
-        """Збій на «сторінці N». ФОП: період 40 діб, збій у другому відрізку (повна сторінка не потрібна, запис малий);
+        """Збій на «сторінці N». ФОП: період 40 діб, збій у другому (старішому) відрізку (повна сторінка не потрібна, запис малий);
         юросіб: одного відрізка немає -- збій на другій сторінці (повна сторінка) лише в `full`, інакше на першому запиті."""
         if fop:
             start_, end_ = _day(2026, 9, 5), _day(2026, 10, 15)
             s, b = new(sid, title, [4], start=start_, end=end_)
             info(b)
-            wins = C.fop_windows(start_, end_)
-            sept = utc(2026, 9, 10, 8)
-            b.statement(to_unix(wins[0][0]), to_unix(wins[0][1]), resp_json(200, desc_ordered(
-                [ftx(g, t=sept + 100 * (i + 1), amount=-(500 + i), desc='запис %d' % i, cnt=cnt()) for i in range(2)])))
-            b.statement(to_unix(wins[1][0]), to_unix(wins[1][1]), resp, failure)
+            wins = C.fop_windows(to_unix(start_), to_unix(end_))
+            octo = utc(2026, 10, 10, 8)
+            b.statement(wins[0][0], wins[0][1], resp_json(200, desc_ordered(
+                [ftx(g, t=octo + 100 * (i + 1), amount=-(500 + i), desc='запис %d' % i, cnt=cnt()) for i in range(2)])))
+            b.statement(wins[1][0], wins[1][1], resp, failure)
         else:
             s, b = new(sid, title, [4])
             if full:
@@ -890,9 +898,10 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
                     resp_json(400, {'errorDescription': "Value 'to' must be greater than 'from'"}))
         s.exchanges = b.ex
         sc.append(s)
-        s, b = start('СинтЧужойСчет400', 'monobank ФОП: неіснуючий ідентифікатор рахунку -- HTTP 400, errorDescription (спостережено)', [4])
-        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(400, {'errorDescription': 'invalid account'}),
-                    acct='x' * 20)
+        # конектор бере ідентифікатор із client-info за IBAN, тож «чужий» ідентифікатор у запиті не з'явиться; виписку на рахунок із
+        # client-info банк відхиляє тим самим тілом (спостережено у run1 для чужого / неіснуючого ідентифікатора)
+        s, b = start('СинтЧужойСчет400', 'monobank ФОП: виписка на рахунок із client-info відхилена -- HTTP 400, errorDescription (форма спостережена)', [4])
+        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(400, {'errorDescription': 'invalid account'}))
         s.exchanges = b.ex
         sc.append(s)
     else:

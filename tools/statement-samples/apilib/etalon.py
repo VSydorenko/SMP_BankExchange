@@ -76,6 +76,10 @@ def build_from(rec, p, *, sid, title, focus, macro, synthetic, disabled=frozense
     """Еталон запису (синтетичного чи знеособленого справжнього): тільки оракул, руками й BSL не рахується."""
     exp = E.run(rec, p, disabled)
     old, old_res = _old_section(rec, p)
+    if 'rule_response_out_of_bounds' in exp.rules:
+        # аномальна сторінка (відповідь поза межами запиту) в конверт не береться; попередник (без перевірки меж) завантажив би її --
+        # ухвалений відступ задачі 4, тож ключі її записів у «старій обробці» не порівнюються
+        old['ПоляКлюча'] = [k for k in old['ПоляКлюча'] if k['ПорядковыйНомер'] <= exp.items]
     depends = set()
     if rec.bank == 'privat' and (exp.ops or any(d['Суть'] == 'reversal-state-change' for d in exp.diags)):
         depends.add('ИдентификаторПриват')           # тимчасово `ID` до run2 (D36 п. 6)

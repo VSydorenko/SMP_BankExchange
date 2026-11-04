@@ -665,7 +665,7 @@ def _mono(rec, p, out, disabled):
     if not stmts:
         raise RecordingMismatch('у записі немає запитів виписки')
     # ФОП: відрізки ≤ 31 доби (кожен читається сторінками за D36 п. 11 -- як юросіб); юросіб: один відрізок, межі беруться із запиту
-    windows = [] if corp else [(kyiv.local_to_unix(a), kyiv.local_to_unix(b)) for a, b in C.fop_windows(p.period_start, p.period_end)]
+    windows = [] if corp else C.fop_windows(kyiv.local_to_unix(p.period_start), kyiv.local_to_unix(p.period_end))
     seg = 0                                                  # поточний відрізок ФОП
     items, n, complete, i = [], 0, True, 0
     continuing = False                                       # запит продовження в тому самому відрізку ще попереду
@@ -881,7 +881,7 @@ def ops_equal_ignoring_order_within_moment(a, b):
 def expected_windows(p, bank):
     """Відрізки читання, які зробив би конектор: ФОП — до 31 доби (місцевий час), юросіб — один."""
     if bank == 'mono-fop':
-        return C.fop_windows(p.period_start, p.period_end)
+        return [(kyiv.unix_to_local(a), kyiv.unix_to_local(b)) for a, b in C.fop_windows(kyiv.local_to_unix(p.period_start), kyiv.local_to_unix(p.period_end))]
     return [(p.period_start, p.period_end)]
 
 

@@ -169,25 +169,29 @@ class ByHandFop(unittest.TestCase):
                    pauses=[60])
 
     def test_fop_segments_and_pauses_by_hand(self):
-        # період 05.09.2026 06:30 .. 15.10.2026 23:59:59 за Києвом (літо, UTC+3): перший відрізок рівно 31 доба, межа посеред доби
+        # період 05.09.2026 06:30 .. 15.10.2026 14:20:07 за Києвом (літо, UTC+3). Відрізки від найновішого, довжина разом з перекриттям
+        # рівно 31 × 86400 с: [End - 31 доба, End], далі [Start, from новішого + 1] (перекриття на секунду)
         start = S.utc(2026, 9, 5, 3, 30)
-        boundary = start + 2678400
-        end = S.to_unix(datetime(2026, 10, 15, 23, 59, 59))
-        self.assertEqual(boundary, S.utc(2026, 10, 6, 3, 30))
-        end_of_period = datetime(2026, 10, 15, 23, 59, 59)
+        end = S.utc(2026, 10, 15, 11, 20, 7)
+        f0 = S.utc(2026, 9, 14, 11, 20, 7)
+        self.assertEqual(end - f0, 31 * 86400)
+        end_of_period = datetime(2026, 10, 15, 14, 20, 7)
         F = S.fid
-        # порожній перший відрізок, у другому дві операції; пауза лише між двома запитами виписки (після client-info її немає)
-        two = [o['ИдентификаторОперации'] for o in E.run(scenario('СинтОкна', 'mono-fop').recording(), scenario('СинтОкна', 'mono-fop').params).ops]
+        # старіший відрізок порожній; у новішому дві операції (за спаданням часу); пауза лише між двома запитами виписки
+        s = scenario('СинтОкна', 'mono-fop')
+        two = [o['ИдентификаторОперации'] for o in E.run(s.recording(), s.params).ops]
         self.assertEqual(len(two), 2)
-        self.check('СинтОкна', ops={1: two[0], 2: two[1]}, requests=[(start, boundary), (boundary, end)], cls='', complete=True,
+        self.check('СинтОкна', ops={1: two[0], 2: two[1]}, requests=[(f0, end), (start, f0 + 1)], cls='', complete=True,
                    trust=end_of_period, pauses=[60])
-        # два відрізки, у першому дві сторінки: W99 (за секунду до межі) і W30..W2, далі повтор W2 і W1; другий відрізок -- Y2 і Y1
-        ops = {1: F('W', 99)}
-        ops.update({k: F('W', 32 - k) for k in range(2, 31)})
+        # у новішому відрізку дві сторінки: W31..W2, далі повтор W2 і W1; у старішому Y2 (20.09), Y1 (08.09)
+        base = S.utc(2026, 10, 10, 8)
+        ops = {k: F('W', 32 - k) for k in range(1, 31)}
         ops.update({32: F('W', 1), 33: F('Y', 2), 34: F('Y', 1)})
-        w2 = S.utc(2026, 9, 10, 8) + 200
-        self.check('СинтОкнаСтраницы', ops=ops, requests=[(start, boundary), (start, w2 + 1), (boundary, end)], cls='', complete=True,
+        self.check('СинтОкнаСтраницы', ops=ops, requests=[(f0, end), (f0, base + 201), (start, f0 + 1)], cls='', complete=True,
                    trust=end_of_period, pauses=[60, 60])
+        # операція на секунді f0: від виключного from новіший відрізок її не повертає, старіший (to = f0 + 1) повертає -- рівно раз
+        self.check('СинтГраницаОтрезков', ops={1: F('G', 1), 2: F('G', 2), 3: F('G', 3)}, requests=[(f0, end), (start, f0 + 1)], cls='',
+                   complete=True, trust=end_of_period, pauses=[60])
 
 
 if __name__ == '__main__':
