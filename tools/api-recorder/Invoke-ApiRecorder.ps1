@@ -1425,7 +1425,8 @@ function Invoke-PumbRun {
     if (-not $Ctx.Token) { Write-Host '[увага] токен не отримано — решту сценаріїв пропущено'; if (-not $Ctx.Dry) { $Ctx.Failed = $true }; return }
 
     $script:pumbAcc = @{}
-    $script:pumbAll = [System.Collections.Generic.List[string]]::new()   # IBAN у порядку відповіді /account (для режиму 'all')
+    $script:pumbAll = [System.Collections.Generic.List[string]]::new()   # різні IBAN у порядку відповіді /account (лише для звіту)
+    $script:pumbAllAcc = [System.Collections.Generic.List[object]]::new()   # рахунки (accountId) у порядку відповіді /account — їх перебирає режим 'all'
     $maxAcc = [int]($Cfg.MaxAccountsN ?? 10)
     $stub = if ($Cfg.AccountsAll) { '[{"accountId":1,"iban":"' + $script:FakeIban + '","currency":"UAH"},{"accountId":2,"iban":"UA000000000000000000000000001","currency":"USD"}]' }
     else { '[{"accountId":1,"iban":"' + @($Cfg.Accounts)[0] + '","currency":"UAH"}]' }
@@ -1439,6 +1440,12 @@ function Invoke-PumbRun {
             if ($a -isnot [System.Collections.IDictionary]) { continue }
             $Ctx.Cur.Ops++
             Add-Count $Ctx 'currency' ([string]$a['currency'])
+            # режим all перебирає РАХУНКИ (accountId), а не IBAN: під одним IBAN буває кілька рахунків у різних валютах (run3: 14 рахунків, 11 IBAN)
+            if ($a['accountId']) {
+                $script:pumbAllAcc.Add(@{ Iban = [string]$a['iban']; Id = [string]$a['accountId']; Currency = [string]$a['currency'] })
+                Register-AccountValue $Ctx 'iban' ([string]$a['iban'])
+                Register-AccountValue $Ctx 'id' ([string]$a['accountId'])
+            }
             if ($a['iban'] -and -not $script:pumbAcc.ContainsKey([string]$a['iban'])) {
                 $script:pumbAcc[[string]$a['iban']] = @{ Id = [string]$a['accountId']; Currency = [string]$a['currency'] }
                 $script:pumbAll.Add([string]$a['iban'])
@@ -1448,13 +1455,13 @@ function Invoke-PumbRun {
             }
         }
         if ($Cfg.AccountsAll) {
-            $found = $script:pumbAll.Count
-            Add-Note $Ctx "режим «усі рахунки»: знайдено рахунків $found, взято $([math]::Min($found, $maxAcc)) (MaxAccounts = $maxAcc)"
+            $found = $script:pumbAllAcc.Count
+            Add-Note $Ctx "режим «усі рахунки»: знайдено рахунків $found (різних IBAN $($script:pumbAll.Count)), взято $([math]::Min($found, $maxAcc)) (MaxAccounts = $maxAcc)"
             if ($found -gt $maxAcc) { Add-Note $Ctx "рахунків більше за MaxAccounts: пропущено $($found - $maxAcc), беруться перші за порядком відповіді" }
         }
     }
 
-    $accList = if ($Cfg.AccountsAll) { @($script:pumbAll | Select-Object -First $maxAcc) } else { @($Cfg.Accounts) }
+    $accList = if ($Cfg.AccountsAll) { @($script:pumbAllAcc | Select-Object -First $maxAcc) } else { @($Cfg.Accounts) }
     if ($Cfg.AccountsAll -and $accList.Count -eq 0) {
         Invoke-Scenario $Ctx 'pumb_accounts_none' { Add-Note $Ctx "режим «усі рахунки»: у відповіді /account немає жодного рахунку — сценарії рахунків пропущено"; if (-not $Ctx.Dry) { $Ctx.Failed = $true } }
     }
@@ -1464,7 +1471,7 @@ function Invoke-PumbRun {
     foreach ($iban in $accList) {
         $n++
         $pre = "pumb_a$n"
-        $acc = $script:pumbAcc[[string]$iban]
+        $acc = if ($iban -is [System.Collections.IDictionary]) { $iban } else { $script:pumbAcc[[string]$iban] }
         if ($null -eq $acc -or -not $acc.Id) {
             Invoke-Scenario $Ctx "${pre}_missing" { Add-Note $Ctx 'рахунок із конфігурації не знайдено у відповіді /account — сценарії рахунку пропущено'; if (-not $Ctx.Dry) { $Ctx.Failed = $true } }
             continue
@@ -1987,7 +1994,7 @@ function Invoke-SelfTestMode {
     $acScen = @{ SearcherSmall = $true; TypesCurrency = $true; SearcherWork = $false; SearcherNoPaging = $false; StatesAll = $false; TypesNone = $false; PagingProbes = $false; DateFormats = $false; PeriodTransactions = $false; Saturated = $false; Reversal = $false; Errors = $false; ConnectorRead = $false; XFlowProbe = $false; ConnectorBoundary = $false; LongestPeriod = $false; StmSigns = $false; Reconcile = $false }
     $acRaw = @{ ClientId = 'AC-FAKE-CLIENT'; ClientSecret = 'AC-FAKE-SECRET-0001'; Login = 'ac-fake-login'; Password = 'AC-FAKE-PASSWORD-0002'; Accounts = 'all'; Period = @{ From = '2020-01-01'; To = '2020-01-03' }; Scenarios = $acScen }
     $acRun = {
-        param($Raw, [string]$Tag)
+        param($Raw, [string]$Tag, [switch]$SharedIban)
         $res = Resolve-BankConfig 'Pumb' $Raw $false
         if ($res.Problems.Count -gt 0) { throw "конфіг самотесту: $($res.Problems -join '; ')" }
         $d = Join-Path $Dir "allacc-$Tag"
@@ -1995,7 +2002,7 @@ function Invoke-SelfTestMode {
         $rec = New-Recording $d 'pumb' $Tag ([ordered]@{ 'Pumb.Password' = 'AC-FAKE-PASSWORD-0002' })
         $ctx = New-Ctx 'pumb' 'service.fuib.com' 0.0 $rec $rec.Secrets $false
         $sent = [System.Collections.Generic.List[string]]::new()
-        $accBody = '[' + ((0..2 | ForEach-Object { '{"accountId":' + $acId[$_] + ',"iban":"' + $acIban[$_] + '","currency":"' + $(if ($_ -eq 2) { 'USD' } else { 'UAH' }) + '","name":"AC-FAKE-NAME-' + $_ + '"}' }) -join ',') + ']'
+        $accBody = '[' + ((0..2 | ForEach-Object { '{"accountId":' + $acId[$_] + ',"iban":"' + $acIban[$(if ($SharedIban) { 0 } else { $_ })] + '","currency":"' + $(if ($_ -eq 2) { 'USD' } else { 'UAH' }) + '","name":"AC-FAKE-NAME-' + $_ + '"}' }) -join ',') + ']'
         $text = & {
             function Invoke-HttpSend {
                 param([string]$Method, [string]$Uri, [hashtable]$Headers, [string]$ContentType, $Body = $null)
@@ -2019,6 +2026,13 @@ function Invoke-SelfTestMode {
         ($scn -contains 'pumb_a3_searcher_types_cur') -and ($scn -notcontains 'pumb_a1_searcher_types_cur') -and ($scn -notcontains 'pumb_a2_searcher_types_cur') -and
         ($curBodies.Count -eq 1) -and ($curBodies[0] -match '"documentAccounts":\["7100003"\]') -and
         ($acId | ForEach-Object { $id = $_; @($all3.Sent | Where-Object { $_ -match ('"documentAccounts":\["' + $id + '"\]') }).Count -ge 1 }) -notcontains $false) "(сценаріїв: $($scn.Count))"
+    # спільний IBAN: 3 рахунки (UAH, UAH, USD) під ОДНИМ IBAN — режим all бере всі три (перебір accountId, не IBAN; run3 пропустив такі рахунки)
+    $allSh = & $acRun $acRaw 'allshared' -SharedIban
+    $scnSh = @($allSh.Ctx.Stats.Keys)
+    & $check "ПУМБ, Accounts = 'all': 3 рахунки під одним IBAN — читаються всі три (за accountId), у звіті «різних IBAN 1»" (
+        ($scnSh -contains 'pumb_a1_searcher_small') -and ($scnSh -contains 'pumb_a2_searcher_small') -and ($scnSh -contains 'pumb_a3_searcher_small') -and
+        ($acId | ForEach-Object { $id = $_; @($allSh.Sent | Where-Object { $_ -match ('"documentAccounts":\["' + $id + '"\]') }).Count -ge 1 }) -notcontains $false -and
+        $allSh.Console.Contains('знайдено рахунків 3 (різних IBAN 1)')) "(сценаріїв: $($scnSh.Count))"
     $acRaw2 = $acRaw.Clone(); $acRaw2.Accounts = @('ALL'); $acRaw2.MaxAccounts = 2
     $all2 = & $acRun $acRaw2 'all2'
     $scn2 = @($all2.Ctx.Stats.Keys)
@@ -2026,7 +2040,7 @@ function Invoke-SelfTestMode {
     $noVals = { param([string]$t) $bad = @($acIban + $acId + @('AC-FAKE-NAME') | Where-Object { $t.Contains($_) }); $bad.Count -eq 0 }
     & $check "ПУМБ, MaxAccounts = 2 (Accounts = @('ALL')): взято 2 із 3; у консолі й summary лише кількості, без IBAN, accountId і назв" (
         ($scn2 -contains 'pumb_a2_searcher_small') -and ($scn2 -notcontains 'pumb_a3_searcher_small') -and ($scn2 -notcontains 'pumb_a3_searcher_types_cur') -and
-        $all2.Console.Contains('знайдено рахунків 3, взято 2') -and $summary2.Contains('знайдено рахунків 3, взято 2') -and (& $noVals $all2.Console) -and (& $noVals $summary2) -and (& $noVals $all3.Console))
+        $all2.Console.Contains('знайдено рахунків 3 (різних IBAN 3), взято 2') -and $summary2.Contains('знайдено рахунків 3 (різних IBAN 3), взято 2') -and (& $noVals $all2.Console) -and (& $noVals $summary2) -and (& $noVals $all3.Console))
     $acWith = { param($H, [string]$K, $V) $c = $H.Clone(); $c[$K] = $V; $c }
     $badCfg = @(
         (Resolve-BankConfig 'Pumb' (& $acWith $acRaw 'Accounts' @('all', 'UA111111111111111111111111111')) $false),
