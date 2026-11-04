@@ -137,7 +137,15 @@
 							<v8:content>План завантаження</v8:content>
 						</v8:item>
 					</Title>
-					<ContextMenu name="ПланПроекцияКонтекстноеМеню" id="41"/>
+					<ContextMenu name="ПланПроекцияКонтекстноеМеню" id="41">
+						<ChildItems>
+							<Button name="ПланПроекцияКонтекстноеМенюИзменитьРеквизиты" id="402">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.ИзменитьРеквизиты</CommandName>
+								<ExtendedTooltip name="ПланПроекцияКонтекстноеМенюИзменитьРеквизитыРасширеннаяПодсказка" id="403"/>
+							</Button>
+						</ChildItems>
+					</ContextMenu>
 					<AutoCommandBar name="ПланПроекцияКоманднаяПанель" id="42">
 						<Autofill>false</Autofill>
 						<ChildItems>
@@ -160,6 +168,11 @@
 								<Type>CommandBarButton</Type>
 								<CommandName>Form.Command.ОткрытьСтрокуПлана</CommandName>
 								<ExtendedTooltip name="ПланПроекцияОткрытьСтрокуПланаРасширеннаяПодсказка" id="50"/>
+							</Button>
+							<Button name="ПланПроекцияИзменитьРеквизиты" id="400">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.ИзменитьРеквизиты</CommandName>
+								<ExtendedTooltip name="ПланПроекцияИзменитьРеквизитыРасширеннаяПодсказка" id="401"/>
 							</Button>
 						</ChildItems>
 					</AutoCommandBar>
@@ -396,7 +409,6 @@
 						</CheckBoxField>
 						<InputField name="ПланПроекцияСтатьяДДС" id="85">
 							<DataPath>ПланПроекция.СтатьяДДС</DataPath>
-							<ReadOnly>true</ReadOnly>
 							<Title>
 								<v8:item>
 									<v8:lang>ru</v8:lang>
@@ -409,10 +421,12 @@
 							</Title>
 							<ContextMenu name="ПланПроекцияСтатьяДДСКонтекстноеМеню" id="86"/>
 							<ExtendedTooltip name="ПланПроекцияСтатьяДДСРасширеннаяПодсказка" id="87"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияСтатьяДДСПриИзменении</Event>
+							</Events>
 						</InputField>
 						<InputField name="ПланПроекцияКорреспонденция" id="88">
 							<DataPath>ПланПроекция.Корреспонденция</DataPath>
-							<ReadOnly>true</ReadOnly>
 							<Title>
 								<v8:item>
 									<v8:lang>ru</v8:lang>
@@ -425,6 +439,9 @@
 							</Title>
 							<ContextMenu name="ПланПроекцияКорреспонденцияКонтекстноеМеню" id="89"/>
 							<ExtendedTooltip name="ПланПроекцияКорреспонденцияРасширеннаяПодсказка" id="90"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияКорреспонденцияПриИзменении</Event>
+							</Events>
 						</InputField>
 						<InputField name="ПланПроекцияДоговор" id="91">
 							<DataPath>ПланПроекция.Договор</DataPath>
@@ -473,6 +490,24 @@
 							</Title>
 							<ContextMenu name="ПланПроекцияПлатежноеПоручениеКонтекстноеМеню" id="98"/>
 							<ExtendedTooltip name="ПланПроекцияПлатежноеПоручениеРасширеннаяПодсказка" id="99"/>
+						</InputField>
+						<InputField name="ПланПроекцияСпособЗачета" id="420">
+							<DataPath>ПланПроекция.СпособЗачета</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Способ зачета</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Спосіб заліку</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияСпособЗачетаКонтекстноеМеню" id="421"/>
+							<ExtendedTooltip name="ПланПроекцияСпособЗачетаРасширеннаяПодсказка" id="422"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияСпособЗачетаПриИзменении</Event>
+							</Events>
 						</InputField>
 						<InputField name="ПланПроекцияОснова" id="100">
 							<DataPath>ПланПроекция.Основа</DataPath>
@@ -1063,6 +1098,16 @@
 						<v8:Type>xs:boolean</v8:Type>
 					</Type>
 				</Column>
+				<Column name="СпособЗачета" id="30">
+					<Type>
+						<v8:Type>cfg:EnumRef.СпособыЗачетаИРаспределенияПлатежей</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ОсноваДоступна" id="31">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
 			</Columns>
 		</Attribute>
 		<Attribute name="ИтогоСтрок" id="24">
@@ -1313,6 +1358,39 @@
 					</dcscor:item>
 				</dcsset:appearance>
 			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекцияОснова</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ОсноваДоступна</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">false</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>ЦветТекста</dcscor:parameter>
+						<dcscor:value xsi:type="v8ui:Color">web:Gray</dcscor:value>
+					</dcscor:item>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>Текст</dcscor:parameter>
+						<dcscor:value xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>определяется автоматически</v8:content>
+							</v8:item>
+							<v8:item>
+								<v8:lang>uk</v8:lang>
+								<v8:content>визначається автоматично</v8:content>
+							</v8:item>
+						</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
 		</ConditionalAppearance>
 	</Attributes>
 	<Commands>
@@ -1433,6 +1511,29 @@
 				</v8:item>
 			</ToolTip>
 			<Action>ОткрытьСтрокуПлана</Action>
+		</Command>
+		<Command name="ИзменитьРеквизиты" id="7">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Изменить реквизиты</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Змінити реквізити</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Изменить вид операции, статью ДДС, корреспонденцию и вид налога у выделенных строк.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Змінити вид операції, статтю ДДС, кореспонденцію та вид податку у виділених рядках.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ИзменитьРеквизитыСтрокПлана</Action>
 		</Command>
 	</Commands>
 	<Parameters>

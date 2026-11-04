@@ -34,6 +34,7 @@
 		<ChildObjects>
 			<Form>ФормаЗагрузки</Form>
 			<Form>ФормаСтрокиПлана</Form>
+			<Form>ФормаИзмененияРеквизитов</Form>
 			<Command uuid="c7da8744-cceb-49d3-81c0-973fc47ed572">
 				<Properties>
 					<Name>ЗагрузкаВыписки</Name>
