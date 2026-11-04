@@ -169,7 +169,8 @@ KEEP_NUM_FIELDS = {
     'mono-fop': frozenset({'amount', 'operationAmount', 'cashbackAmount', 'time'}),
     # ПУМБ: суми, дати/моменти й номери документів -- публічні за природою, як NUM_DOC / SUM / DAT_* ПриватБанку. МФО, коди, ідентифікатори й текстові поля -- не входять.
     'pumb': frozenset({'amount', 'number', 'documentNumber', 'date', 'createdOn', 'operationDate', 'documentDate', 'processDate', 'lastActivity',
-                       'dateFrom', 'dateTo', 'fromDate', 'toDate'}),
+                       'dateFrom', 'dateTo', 'fromDate', 'toDate',
+                       'openDate', 'operationDateWithMillis'}),     # A5 (run1b): дата, як `operationDate` (`createdOn` уже в переліку)
 }
 
 # Поля-особи (роль NAME, НЕ KEEP): їхні значення шукаються у знеособленому записі підрядком без нижньої межі довжини (див. `person_tokens`).

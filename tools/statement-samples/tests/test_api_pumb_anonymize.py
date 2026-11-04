@@ -22,6 +22,9 @@ SORTED_DATE = '01.11.2026 10:15:00'     # курсор-дата: форма «д
 SORTED = 'SV-4821907'               # sortedValue відповіді = orderedLastValue наступного запиту (роль ID: та сама заміна)
 PERSON = 'Зіркова Лілія Орестівна'
 PERSON_INI = 'Зіркова Л.О.'
+ALT = '26005551234567'                                   # account.altNumber (роль ACC, A5)
+TYPE_NAME = 'Рахунок Місячний Вітрило'                   # account.accountTypeName (роль NAME, A5)
+DETAIL = 'Відмовлено клієнту Островський Вітрило'        # error.detail (роль PURPOSE, A5)
 JSON_HDR = [('content-type', 'application/json;charset=utf-8')]
 IBAN = 'UA' + gen.iban_check_digits('UA', '3220010000026001234567890') + '3220010000026001234567890'
 
@@ -39,16 +42,20 @@ def _resp(obj, status=200, hdr=JSON_HDR):
     return {'status': status, 'headers': hdr, 'body': json.dumps(obj, ensure_ascii=False).encode('utf-8')}
 
 
-def fake_recording(searcher_body=None, raw_text=None):
+def fake_recording(searcher_body=None, raw_text=None, child=None, errors=None):
     account = {'id': 7000123456, 'accountId': ACC_ID, 'mfo': '322001', 'currency': 'UAH', 'number': '26001234567890',
                'name': 'Поточний Зіркова', 'state': 1, 'hostId': 3, 'branchId': 'XYZ', 'clientId': 'CL778899', 'clientName': PERSON,
-               'clientOkpo': '3098712345', 'isDefault': True, 'iban': IBAN, 'balance': '84213.55', 'rest': '84213.55'}
+               'clientOkpo': '3098712345', 'isDefault': True, 'iban': IBAN, 'balance': '84213.55', 'rest': '84213.55',
+               'altNumber': ALT, 'accountTypeName': TYPE_NAME, 'restWithHolds': 84213.55, 'createdOn': '01.01.2020 10:00:00', 'openDate': None,
+               'accountCardType': None, 'isDeleted': None, 'clientaccounttotype': 'CURRENT'}
     doc = {'id': LAST_ID + 1, 'hostId': 3, 'docId': 8800123456, 'date': '01.11.2026 10:15:00', 'state': 'PROCESSED', 'type': 'UAH',
            'firstSignature': PERSON, 'secondSignature': PERSON_INI, 'number': '4815', 'accountId': ACC_ID, 'amount': '1500.00',
            'currencyCode': 'UAH', 'description': 'Оплата за послуги Зіркова Л.О.', 'operationDate': '01.11.2026 10:15:00',
            'userIdentity': PERSON_INI, 'direction': 'INBOUND', 'senderName': 'Вигадана компанія', 'correspondentName': PERSON,
            'senderTaxId': '3122334455', 'senderAccountNumber': '26009876543210', 'responsible': PERSON_INI, 'senderIBAN': IBAN,
-           'pagingRowInfo': {'rowNumber': 1, 'rowIdentity': LAST_ID + 1, 'sortedValue': SORTED}}
+           'pagingRowInfo': {'rowNumber': 1, 'rowIdentity': LAST_ID + 1, 'sortedValue': SORTED},
+           'documentTreatyId': None, 'importId': None, 'linkedDocumentId': None, 'childDocuments': child, 'purposeType': 'PAYMENT', 'isPackage': False,
+           'operationDateWithMillis': '01.11.2026 10:15:00.123', 'veganetdocumentdtotype': 'VeganetPaymentDto'}
     doc2 = dict(doc, id=LAST_ID + 2, docId=8800123457, number='4816', operationDate=SORTED_DATE,
                 pagingRowInfo={'rowNumber': 2, 'rowIdentity': LAST_ID + 2, 'sortedValue': SORTED_DATE})
     ptx = {'header': {'dateFrom': '01.11.2026 00:00:00', 'dateTo': '01.11.2026 23:59:59', 'currency': 'UAH', 'accountName': 'Поточний Зіркова',
@@ -71,6 +78,8 @@ def fake_recording(searcher_body=None, raw_text=None):
         R.make_exchange(3, 'pumb_searcher', searcher, _resp([doc, doc2])),
         R.make_exchange(4, 'pumb_ptx', _post('/document/period-transactions', {'accountId': ACC_ID, 'dateFrom': '01.11.2026 00:00:00',
                                                                                 'dateTo': '01.11.2026 23:59:59'}), _resp(ptx)),
+        R.make_exchange(6, 'pumb_error', _post('/document/searcher', {'fromDate': '01.11.2026 00:00:00'}),
+                        _resp({'title': 'Bad Request', 'detail': DETAIL, 'instance': 'urn:err:4417', 'errors': errors}, 400)),
         R.make_exchange(5, 'pumb_ptx_masked', _post('/document/period-transactions', masked={
             'text': '{"accountId":"<masked>","dateFrom":"01.11.2026 00:00:00","dateTo":"01.11.2026 23:59:59"}', 'fields': ['accountId']}), _resp(ptx)),
     ]
@@ -92,6 +101,20 @@ class Env:
 def anon_exchange(env, seq):
     with open(os.path.join(env.anon, '%04d.json' % seq), encoding='utf-8') as f:
         return json.load(f)
+
+
+def anon_text(env):
+    """Усі файли знеособленого запису й розкодовані тіла відповідей -- один рядок (вигадані дані)."""
+    out = []
+    for n in sorted(os.listdir(env.anon)):
+        if n.endswith('.json') and n != 'recording.json':
+            with open(os.path.join(env.anon, n), encoding='utf-8') as f:
+                raw = f.read()
+            out.append(raw)
+            b = (json.loads(raw).get('response') or {}).get('bodyBase64')
+            if b:
+                out.append(base64.b64decode(b).decode('utf-8'))
+    return ''.join(out)
 
 
 class PumbRequestBodyAndPersons(unittest.TestCase):
@@ -160,6 +183,35 @@ class PumbRequestBodyAndPersons(unittest.TestCase):
                 self.assertNotIn('zzFRAGMENT', msg)
                 self.assertNotIn('5500123456', msg)
                 self.assertFalse(os.path.exists(env.anon))                              # нічого не записано
+
+    def test_iv_a5_new_fields_replaced_null_only_fields_stop_and_control_fails_when_roles_are_keep(self):
+        # поля, яких немає в swagger (run1b): значення ACC/NAME/PURPOSE у них не лишаються; «лише null» -- ненульове зупиняє (без значення в тексті)
+        with tempfile.TemporaryDirectory() as d:
+            env = Env(d)
+            env.anonymize()
+            res = env.check()
+            self.assertEqual(res['hits'], 0, res)
+            text = anon_text(env)
+            for raw in (ALT, 'Місячний', 'Островський'):
+                self.assertNotIn(raw, text, raw)
+            # дата-поля й дискримінатори -- KEEP: лишаються
+            self.assertIn('01.11.2026 10:15:00.123', text)
+            self.assertIn('VeganetPaymentDto', text)
+        for kw in ({'child': 'X-SECRET-77'}, {'errors': [{'k': 'X-SECRET-77'}]}, {'child': []}):
+            with tempfile.TemporaryDirectory() as d:
+                env = Env(d, **kw)
+                with self.assertRaises(schema.UnknownField) as cm:
+                    env.anonymize()
+                self.assertIn('лише null', str(cm.exception))
+                self.assertNotIn('SECRET', str(cm.exception))
+                self.assertFalse(os.path.exists(env.anon))
+        # КОНТРОЛЬ: якщо ролі нових полів -- KEEP, значення лишаються сирими й (а) їх знаходить
+        with tempfile.TemporaryDirectory() as d:
+            env = Env(d)
+            with mock.patch.dict(schema.PUMB_ACCOUNT, {'altNumber': 'KEEP', 'accountTypeName': 'KEEP'}), mock.patch.dict(schema.PUMB_ERROR, {'detail': 'KEEP'}):
+                env.anonymize()
+            res = env.check()
+            self.assertGreater(res['hits'], 0, res)
 
 
 if __name__ == '__main__':

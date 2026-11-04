@@ -673,3 +673,46 @@ KEEP за формою «дата/час чи число» (правило `sche
 ### Перевірка
 
 `selfcheck` код 0 (8 з 8); тести інструмента **277 OK, 1 skip** (було 276 + 1); регресія 5а — `regress5a.py` (114 сценаріїв) побайтово той самий вивід до й після (`cmp`, `PYTHONIOENCODING=utf-8 PYTHONHASHSEED=0`).
+
+## Задача 2a, Step 4, точка A5 — ролі полів run1/run1b, яких немає в swagger (база `2051aea`)
+
+**Чому.** Перше знеособлення справжнього запису зупинилось на `UnknownField` (`error.title`); повний перелік невідомих полів (лише назви, вид значення, кількість обмінів) зібрано скриптом без значень
+(scratchpad, `unknown_all.py`). Ролі затвердив консультант; жодне значення сирого запису тут не наведено.
+
+| Секція | Поле | Роль |
+|---|---|---|
+| `account` | `altNumber` | ACC |
+| `account` | `accountTypeName` | NAME (до виміру форми) |
+| `account` | `forecastWithHolds`, `restWithHolds`, `restWithHoldsUah`, `transactionHolds`, `transactionHoldsUah` | SCRAMBLE |
+| `account` | `createdOn`, `openDate` | KEEP-дата (`createdOn` уже в `KEEP_NUM_FIELDS`; `openDate` додано) |
+| `account` | `accountCardType`, `isDeleted`, `clientaccounttotype` | KEEP (дискримінатори/булеві) |
+| `doc` | `documentTreatyId`, `importId`, `linkedDocumentId` | ID |
+| `doc` | `childDocuments` | NULL («лише null») |
+| `doc` | `purposeType` | PURPOSE (до виміру) |
+| `doc` | `operationDateWithMillis` | KEEP-дата (додано в `KEEP_NUM_FIELDS`) |
+| `doc` | `veganetdocumentdtotype`, `isPackage` | KEEP |
+| `error` | `title`, `detail`, `instance` | PURPOSE |
+| `error` | `errors` | NULL («лише null») |
+
+**Механізм «лише null»** (`schema._walk`, роль `NULL`): значення `null` пропускається, будь-яке інше — `UnknownField` «очікується лише null» з назвою секції й поля, без значення.
+**Назване розширення явного переліку (а):** `KEEP_NUM_FIELDS['pumb']` + `openDate`, `operationDateWithMillis` — причина «дата/момент, як `operationDate`». Нових словників і пар немає.
+**Спостереження.** Значення `error.instance` (PURPOSE) у run1/run1b не дорівнює шляху запиту, не є його частиною й не починається з `/` (булеві ознаки, 33 обміни); збіг PURPOSE-значення зі шляхом
+(який лишається KEEP) дав би збіг у (а) — фікстура тесту взяла форму `urn:…` для цього; на справжніх даних — дивитись у verify.
+
+### Прогнози мутацій (записано ДО прогону)
+
+| № | Мутація | Прогноз |
+|---|---|---|
+| M22 | «лише null» мовчки пропускає ненульове (`continue` замість `raise`) | лише `test_iv…` червоний |
+| M23 | `altNumber` → KEEP | лише `test_iv…` червоний |
+| M24 | `accountTypeName` → KEEP | лише `test_iv…` червоний |
+| M25 | `error.detail` → KEEP | лише `test_iv…` червоний |
+
+### Результати (повний набір; `schema.py` повернено копією, `cmp` — збіг)
+
+M22, M23, M25 — як прогнозовано (лише `test_iv…`). **M24 — не як прогнозовано:** червоні ще й `test_i…` і `test_ii…` (фікстура поділена, нове поле тепер є в кожному зеленому парному прогоні, і (а) знаходить його сире значення
+скрізь) — сильніший контроль, ніж передбачалось.
+
+Тест: `test_iv_a5_…` у `test_api_pumb_anonymize.py` (розширення наявного): значення `altNumber`/`accountTypeName`/`detail` після знеособлення відсутні, дати й дискримінатори лишились; ненульові `childDocuments`/`errors`
+зупиняють без значення в повідомленні й без виходу; контроль — ролі нових полів KEEP → (а) знаходить збіги.
+`selfcheck` код 0; тести **278 OK, 1 skip**; регресія 5а — вивід `regress5a.py` побайтово той самий (`cmp`).

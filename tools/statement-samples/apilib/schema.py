@@ -76,7 +76,12 @@ PUMB_ACCOUNT = {
     'branchId': 'KEEP', 'clientId': 'ID', 'clientName': 'NAME', 'clientOkpo': 'CODE', 'isDefault': 'KEEP', 'canDebit': 'KEEP',
     'isCardAccount': 'KEEP', 'canCreatePdfPropertyAccount': 'KEEP', 'iban': 'ACC', 'isOwnerHost': 'KEEP', 'balance': 'SCRAMBLE',
     'rest': 'SCRAMBLE', 'holds': 'SCRAMBLE', 'balanceUah': 'SCRAMBLE', 'restUah': 'SCRAMBLE', 'holdsUah': 'SCRAMBLE',
-    'lastActivity': 'KEEP', 'forecast': 'SCRAMBLE', 'inWork': 'SCRAMBLE'}
+    'lastActivity': 'KEEP', 'forecast': 'SCRAMBLE', 'inWork': 'SCRAMBLE',
+    # run1b (A5, рішення консультанта): поля, яких немає в swagger. `altNumber` -- ACC; `accountTypeName` -- NAME (до виміру форми); суми з утриманнями -- SCRAMBLE;
+    # `createdOn`/`openDate` -- KEEP-дата (у `KEEP_NUM_FIELDS`); дискримінатори й булеві -- KEEP; `accountCardType`, `isDeleted`, `openDate` бувають null.
+    'altNumber': 'ACC', 'accountTypeName': 'NAME', 'forecastWithHolds': 'SCRAMBLE', 'restWithHolds': 'SCRAMBLE', 'restWithHoldsUah': 'SCRAMBLE',
+    'transactionHolds': 'SCRAMBLE', 'transactionHoldsUah': 'SCRAMBLE', 'createdOn': 'KEEP', 'openDate': 'KEEP', 'accountCardType': 'KEEP',
+    'isDeleted': 'KEEP', 'clientaccounttotype': 'KEEP'}
 # POST /document/searcher -> [VeganetDocumentItem]
 PUMB_DOC = {
     'id': 'ID', 'hostId': 'KEEP', 'docId': 'ID', 'viewTemplateId': 'KEEP', 'signTemplateId': 'KEEP', 'date': 'KEEP', 'state': 'KEEP',
@@ -86,7 +91,11 @@ PUMB_DOC = {
     'operationDate': 'KEEP', 'senderName': 'NAME', 'correspondentName': 'NAME', 'senderTaxId': 'CODE', 'correspondentTaxId': 'CODE',
     'senderBankMfo': 'KEEP', 'correspondentBankMfo': 'KEEP', 'senderBankName': 'BANKNAME', 'correspondentBankName': 'BANKNAME',
     'senderAccountNumber': 'ACC', 'correspondentAccountNumber': 'ACC', 'responsible': 'NAME', 'expenseItems': 'PURPOSE',
-    'isRead': 'KEEP', 'senderIBAN': 'ACC', 'correspondentIBAN': 'ACC', 'pagingRowInfo': 'OBJECT'}
+    'isRead': 'KEEP', 'senderIBAN': 'ACC', 'correspondentIBAN': 'ACC', 'pagingRowInfo': 'OBJECT',
+    # run1b (A5, рішення консультанта; назви полів -- як у записі, у т.ч. нижній регістр): `documentTreatyId`/`importId`/`linkedDocumentId` -- ID; `childDocuments` -- лише null
+    # (ненульове -- зупинка); `purposeType` -- PURPOSE (до виміру); `operationDateWithMillis` -- KEEP-дата (у `KEEP_NUM_FIELDS`); дискримінатор і булеве -- KEEP.
+    'documentTreatyId': 'ID', 'importId': 'ID', 'linkedDocumentId': 'ID', 'childDocuments': 'NULL', 'purposeType': 'PURPOSE',
+    'operationDateWithMillis': 'KEEP', 'veganetdocumentdtotype': 'KEEP', 'isPackage': 'KEEP'}
 PUMB_ROWINFO = {'rowNumber': 'KEEP', 'rowIdentity': 'ID', 'sortedValue': 'ID'}
 # POST /document/period-transactions -> EJBPeriodTransactionsResponse
 PUMB_PTX = {'header': 'OBJECT', 'transactions': 'ARRAY'}
@@ -101,7 +110,9 @@ PUMB_AUTH = {'access_token': 'SCRAMBLE', 'refresh_token': 'SCRAMBLE', 'id_token'
              'expires_in': 'KEEP', 'refresh_expires_in': 'KEEP', 'not-before-policy': 'KEEP', 'token_type': 'KEEP', 'scope': 'KEEP'}
 PUMB_AUTH_ERROR = {'error': 'KEEP', 'error_description': 'KEEP', 'error_uri': 'KEEP'}
 # Форми помилок Veganet swagger не описує: лише відоме (Keycloak) й мінімум службових полів; решта -- зупинка до запису.
-PUMB_ERROR = {'error': 'KEEP', 'error_description': 'KEEP', 'error_uri': 'KEEP', 'message': 'KEEP', 'status': 'KEEP', 'code': 'KEEP'}
+# run1b (A5): форма `title`/`detail`/`instance`/`errors` -- `title`, `detail`, `instance` -- PURPOSE (вільний текст; `instance` може нести шлях з ідентифікатором); `errors` -- лише null.
+PUMB_ERROR = {'error': 'KEEP', 'error_description': 'KEEP', 'error_uri': 'KEEP', 'message': 'KEEP', 'status': 'KEEP', 'code': 'KEEP',
+              'title': 'PURPOSE', 'detail': 'PURPOSE', 'instance': 'PURPOSE', 'errors': 'NULL'}
 # Тіла запитів (DocumentFilter, PagingRequest, EJBPeriodTransactionsRequest). Рекордер шле лише частину полів; решту swagger -- на випадок появи.
 PUMB_REQ_SEARCHER = {
     'documentDirection': 'ARRAY', 'documentState': 'ARRAY', 'documentType': 'ARRAY', 'fromDate': 'KEEP', 'toDate': 'KEEP', 'documentRead': 'KEEP',
@@ -255,6 +266,10 @@ def _walk(bank, section, root):
                 raise UnknownField('%s: невідоме поле %s.%s' % (bank, section, key))
             role = table[key]
             here = where + (key,)
+            if role == 'NULL':               # «лише null»: ненульове значення -- зупинка (імена, не значення)
+                if v.kind == 'lit' and v.value is None:
+                    continue
+                raise UnknownField('%s: поле %s.%s очікується лише null' % (bank, section, key))
             if role in ('ARRAY', 'OBJECT'):
                 if v.kind == 'lit' and v.value is None:
                     continue
