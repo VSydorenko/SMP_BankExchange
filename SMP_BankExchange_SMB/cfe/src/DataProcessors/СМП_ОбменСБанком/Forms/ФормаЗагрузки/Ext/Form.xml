@@ -35,7 +35,79 @@
 					<DataPath>БанковскийСчет</DataPath>
 					<ContextMenu name="БанковскийСчетКонтекстноеМеню" id="4"/>
 					<ExtendedTooltip name="БанковскийСчетРасширеннаяПодсказка" id="5"/>
+					<Events>
+						<Event name="OnChange">БанковскийСчетПриИзменении</Event>
+					</Events>
 				</InputField>
+				<InputField name="УчетнаяЗапись" id="10">
+					<DataPath>УчетнаяЗапись</DataPath>
+					<Visible>false</Visible>
+					<ContextMenu name="УчетнаяЗаписьКонтекстноеМеню" id="11"/>
+					<ExtendedTooltip name="УчетнаяЗаписьРасширеннаяПодсказка" id="12"/>
+					<Events>
+						<Event name="OnChange">УчетнаяЗаписьПриИзменении</Event>
+					</Events>
+				</InputField>
+				<InputField name="ИдентификаторФормата" id="13">
+					<DataPath>ИдентификаторФормата</DataPath>
+					<ListChoiceMode>true</ListChoiceMode>
+					<ContextMenu name="ИдентификаторФорматаКонтекстноеМеню" id="14"/>
+					<ExtendedTooltip name="ИдентификаторФорматаРасширеннаяПодсказка" id="15"/>
+					<Events>
+						<Event name="OnChange">ИдентификаторФорматаПриИзменении</Event>
+					</Events>
+				</InputField>
+				<LabelField name="ТекстВнешнейОбработки" id="16">
+					<DataPath>ТекстВнешнейОбработки</DataPath>
+					<Visible>false</Visible>
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Формат выписки</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Формат виписки</v8:content>
+						</v8:item>
+					</Title>
+					<ContextMenu name="ТекстВнешнейОбработкиКонтекстноеМеню" id="17"/>
+					<ExtendedTooltip name="ТекстВнешнейОбработкиРасширеннаяПодсказка" id="18"/>
+				</LabelField>
+				<LabelDecoration name="ДекорацияПредупрежденияФормата" id="19">
+					<Visible>false</Visible>
+					<TextColor>web:FireBrick</TextColor>
+					<Title formatted="false">
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content> </v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content> </v8:content>
+						</v8:item>
+					</Title>
+					<ContextMenu name="ДекорацияПредупрежденияФорматаКонтекстноеМеню" id="20"/>
+					<ExtendedTooltip name="ДекорацияПредупрежденияФорматаРасширеннаяПодсказка" id="21"/>
+				</LabelDecoration>
+				<InputField name="ИмяФайла" id="22">
+					<DataPath>ИмяФайла</DataPath>
+					<ChoiceButton>true</ChoiceButton>
+					<TextEdit>false</TextEdit>
+					<ContextMenu name="ИмяФайлаКонтекстноеМеню" id="23"/>
+					<ExtendedTooltip name="ИмяФайлаРасширеннаяПодсказка" id="24"/>
+					<Events>
+						<Event name="StartChoice">ИмяФайлаНачалоВыбора</Event>
+					</Events>
+				</InputField>
+				<Button name="ПрочитатьВыписку" id="25">
+					<CommandName>Form.Command.ПрочитатьВыписку</CommandName>
+					<ExtendedTooltip name="ПрочитатьВыпискуРасширеннаяПодсказка" id="26"/>
+				</Button>
+				<Button name="ОтменитьЧтение" id="27">
+					<CommandName>Form.Command.ОтменитьЧтение</CommandName>
+					<Visible>false</Visible>
+					<ExtendedTooltip name="ОтменитьЧтениеРасширеннаяПодсказка" id="28"/>
+				</Button>
 			</ChildItems>
 		</UsualGroup>
 		<UsualGroup name="ГруппаПлан" id="6">
@@ -67,6 +139,18 @@
 			<Group>Vertical</Group>
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ГруппаПодвалРасширеннаяПодсказка" id="9"/>
+			<ChildItems>
+				<InputField name="СводкаЧтения" id="29">
+					<DataPath>СводкаЧтения</DataPath>
+					<Visible>false</Visible>
+					<ReadOnly>true</ReadOnly>
+					<TitleLocation>None</TitleLocation>
+					<MultiLine>true</MultiLine>
+					<Height>6</Height>
+					<ContextMenu name="СводкаЧтенияКонтекстноеМеню" id="30"/>
+					<ExtendedTooltip name="СводкаЧтенияРасширеннаяПодсказка" id="31"/>
+				</InputField>
+			</ChildItems>
 		</UsualGroup>
 	</ChildItems>
 	<Attributes>
@@ -91,7 +175,187 @@
 				<v8:Type>cfg:CatalogRef.БанковскиеСчета</v8:Type>
 			</Type>
 		</Attribute>
+		<Attribute name="УчетнаяЗапись" id="12">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Учетная запись банка</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Обліковий запис банку</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>cfg:CatalogRef.СМП_УчетныеЗаписиБанков</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ИдентификаторФормата" id="13">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Формат выписки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Формат виписки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>100</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ВнешняяОбработка" id="14">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ТекстВнешнейОбработки" id="15">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Формат выписки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Формат виписки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ИмяФайла" id="16">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Файл выписки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Файл виписки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="АдресФайла" id="17">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="АдресПлана" id="18">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЧтениеИдет" id="19">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ИдентификаторЗадания" id="20">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>36</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="СводкаЧтения" id="21">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ДанныеФорматов" id="22">
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Идентификатор" id="1">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>100</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Подсказка" id="2">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Предупреждение" id="3">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
 	</Attributes>
+	<Commands>
+		<Command name="ПрочитатьВыписку" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Прочитать выписку</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Прочитати виписку</v8:content>
+				</v8:item>
+			</Title>
+			<Action>ПрочитатьВыписку</Action>
+		</Command>
+		<Command name="ОтменитьЧтение" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Отменить чтение</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Скасувати читання</v8:content>
+				</v8:item>
+			</Title>
+			<Action>ОтменитьЧтение</Action>
+		</Command>
+	</Commands>
 	<Parameters>
 		<Parameter name="БанковскийСчетОрганизации">
 			<Type>
