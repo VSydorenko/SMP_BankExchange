@@ -57,6 +57,7 @@ function New-Ctx {
         BaseHeaders = @{}; ContentType = ''; NextGap = 0.0; LastEnd = $null; PlannedSeconds = 0.0
         Stats = [ordered]@{}; Cur = $null; Owner = [System.Collections.Generic.List[string]]::new()
         Abort = ''; Failed = $false; Requests = 0
+        AccountSecrets = [ordered]@{}   # IBAN/accountId від банку: шукаються лише в консолі, stderr і summary (у записах вони є за задумом)
         Captured = [System.Collections.Generic.List[object]]::new()
     }
 }
@@ -110,13 +111,21 @@ function ConvertTo-DecimalSafe {
     [decimal]0
 }
 
+# Значення від банку, що не мають потрапити в консоль/stderr/summary. Дуже короткі (менше 6 символів) не беруться: збігалися б із випадковим текстом.
+function Register-AccountValue {
+    param($Ctx, [string]$Kind, [string]$Value)
+    if ($Value.Length -lt 6) { return }
+    foreach ($v in $Ctx.AccountSecrets.Values) { if ($v -ceq $Value) { return } }
+    $Ctx.AccountSecrets["Pumb.account.$Kind.$($Ctx.AccountSecrets.Count + 1)"] = $Value
+}
+
 function Invoke-Scenario {
     param($Ctx, [string]$Name, [scriptblock]$Block)
     if ($Ctx.Abort) { Write-Host "[пропуск] $Name — $($Ctx.Abort)"; return }
     Start-ScenarioStats $Ctx $Name
     try { & $Block }
     catch {
-        $m = Remove-SecretValues ([string]$_.Exception.Message) $Ctx.Secrets
+        $m = Remove-SecretValues (Remove-SecretValues ([string]$_.Exception.Message) $Ctx.Secrets) $Ctx.AccountSecrets
         if ($m -like 'SCENARIO_STOP:*') { Add-Note $Ctx ('Сценарій зупинено: ' + $m.Substring(14).Trim()) }
         else { $Ctx.Failed = $true; Add-Note $Ctx "Помилка рекордера в сценарії: $m" }
     }
@@ -308,7 +317,20 @@ function Resolve-BankConfig {
     }
     else {
         $accs = @($c.Accounts | Where-Object { -not (Test-Placeholder $_) })
-        if ($accs.Count -eq 0) {
+        # ПУМБ: Accounts = 'all' (рядок або масив з одного 'all') — усі рахунки з відповіді /account, не більше MaxAccounts (за замовчуванням 10)
+        $c.AccountsAll = $false
+        $c.MaxAccountsN = 10
+        if ($Key -eq 'Pumb' -and ($accs | Where-Object { ([string]$_) -ieq 'all' })) {
+            if ($accs.Count -ne 1) { $problems.Add("$label.Accounts: 'all' не поєднується з іншими значеннями (або 'all', або перелік IBAN).") }
+            else { $c.AccountsAll = $true; $accs = @() }
+            if ($null -ne $c.MaxAccounts) {
+                $mx = 0
+                if ([int]::TryParse([string]$c.MaxAccounts, [ref]$mx) -and $mx -ge 1) { $c.MaxAccountsN = $mx }
+                else { $problems.Add("$label.MaxAccounts: ціле число не менше 1.") }
+            }
+        }
+        if ($c.AccountsAll) { }
+        elseif ($accs.Count -eq 0) {
             if ($Dry) { $accs = @($script:FakeIban); $notes.Add("$label.Accounts — заглушки, для dry-run підставлено вигаданий IBAN") }
             else { $problems.Add("$label.Accounts: немає жодного заповненого IBAN (UA + 27 цифр).") }
         }
@@ -1261,7 +1283,10 @@ function Invoke-PumbRun {
     if (-not $Ctx.Token) { Write-Host '[увага] токен не отримано — решту сценаріїв пропущено'; if (-not $Ctx.Dry) { $Ctx.Failed = $true }; return }
 
     $script:pumbAcc = @{}
-    $stub = '[{"accountId":1,"iban":"' + @($Cfg.Accounts)[0] + '","currency":"UAH"}]'
+    $script:pumbAll = [System.Collections.Generic.List[string]]::new()   # IBAN у порядку відповіді /account (для режиму 'all')
+    $maxAcc = [int]($Cfg.MaxAccountsN ?? 10)
+    $stub = if ($Cfg.AccountsAll) { '[{"accountId":1,"iban":"' + $script:FakeIban + '","currency":"UAH"},{"accountId":2,"iban":"UA000000000000000000000000001","currency":"USD"}]' }
+    else { '[{"accountId":1,"iban":"' + @($Cfg.Accounts)[0] + '","currency":"UAH"}]' }
     Invoke-Scenario $Ctx 'pumb_account' {
         $r = Invoke-PumbApi $Ctx 'GET' $script:PumbApiHost $script:PumbApiPort (& $apiPath '/account') -DryStub $stub
         $j = ConvertFrom-BodyBytes $r.Body $r.Headers
@@ -1272,13 +1297,29 @@ function Invoke-PumbRun {
             if ($a -isnot [System.Collections.IDictionary]) { continue }
             $Ctx.Cur.Ops++
             Add-Count $Ctx 'currency' ([string]$a['currency'])
-            if ($a['iban'] -and -not $script:pumbAcc.ContainsKey([string]$a['iban'])) { $script:pumbAcc[[string]$a['iban']] = @{ Id = [string]$a['accountId']; Currency = [string]$a['currency'] } }
+            if ($a['iban'] -and -not $script:pumbAcc.ContainsKey([string]$a['iban'])) {
+                $script:pumbAcc[[string]$a['iban']] = @{ Id = [string]$a['accountId']; Currency = [string]$a['currency'] }
+                $script:pumbAll.Add([string]$a['iban'])
+                # IBAN і accountId від банку — у набір, який шукає перевірка консолі/stderr/summary (у самих записах вони є за задумом)
+                Register-AccountValue $Ctx 'iban' ([string]$a['iban'])
+                Register-AccountValue $Ctx 'id' ([string]$a['accountId'])
+            }
         }
+        if ($Cfg.AccountsAll) {
+            $found = $script:pumbAll.Count
+            Add-Note $Ctx "режим «усі рахунки»: знайдено рахунків $found, взято $([math]::Min($found, $maxAcc)) (MaxAccounts = $maxAcc)"
+            if ($found -gt $maxAcc) { Add-Note $Ctx "рахунків більше за MaxAccounts: пропущено $($found - $maxAcc), беруться перші за порядком відповіді" }
+        }
+    }
+
+    $accList = if ($Cfg.AccountsAll) { @($script:pumbAll | Select-Object -First $maxAcc) } else { @($Cfg.Accounts) }
+    if ($Cfg.AccountsAll -and $accList.Count -eq 0) {
+        Invoke-Scenario $Ctx 'pumb_accounts_none' { Add-Note $Ctx "режим «усі рахунки»: у відповіді /account немає жодного рахунку — сценарії рахунків пропущено"; if (-not $Ctx.Dry) { $Ctx.Failed = $true } }
     }
 
     $n = 0
     $firstAccId = $null
-    foreach ($iban in @($Cfg.Accounts)) {
+    foreach ($iban in $accList) {
         $n++
         $pre = "pumb_a$n"
         $acc = $script:pumbAcc[[string]$iban]
@@ -1457,6 +1498,26 @@ function Invoke-SecretCheck {
     }
     Write-Host ("Самоперевірка: токенів у {0} файлах не знайдено." -f $files.Count)
     0
+}
+
+# IBAN і accountId, видані банком у /account, не мають бути в консолі (console.log), summary-agent.txt і перенаправленому stderr.
+# У JSON-записах обмінів вони є за задумом, тому ці файли тут НЕ скануються. Повертає 0 або 3 (LEAK-DETECTED.txt без значень).
+function Invoke-AccountLeakCheck {
+    param([string]$RunDir, $AccountSecrets, [string]$BaseDir, [string[]]$StderrFiles = @())
+    if ($null -eq $AccountSecrets -or $AccountSecrets.Count -eq 0) { return 0 }
+    $files = [System.Collections.Generic.List[string]]::new()
+    foreach ($n in 'console.log', 'summary-agent.txt') { $p = Join-Path $RunDir $n; if (Test-Path -LiteralPath $p -PathType Leaf) { $files.Add($p) } }
+    foreach ($x in @($StderrFiles | Where-Object { $_ })) {
+        if (-not (Test-Path -LiteralPath $x -PathType Leaf)) { throw "Файлу для самоперевірки немає: $x" }
+        $files.Add($x)
+    }
+    $findings = Test-SecretsInFiles $files.ToArray() $AccountSecrets $BaseDir
+    if ($findings.Count -eq 0) { return 0 }
+    $lines = foreach ($f in $findings) { "файл: $($f.File); значення рахунку від банку: $($f.Secret); форма: $($f.Where), $($f.Form)" }
+    Write-Host '!!!!!!!! ЗНАЙДЕНО IBAN/accountId від банку в консолі, summary або stderr !!!!!!!!'
+    $lines | ForEach-Object { Write-Host "  $_" }
+    [System.IO.File]::AppendAllText((Join-Path $RunDir 'LEAK-DETECTED.txt'), "IBAN/accountId від банку знайдено поза записами (значень тут немає):`r`n" + ($lines -join "`r`n") + "`r`n", $script:Utf8NoBom)
+    3
 }
 
 # Сесія інтерактивна, лише якщо є кому відповісти: користувацький режим ОС, stdin не перенаправлений і pwsh запущено без -NonInteractive.
@@ -1719,6 +1780,71 @@ function Invoke-SelfTestMode {
     & $check 'ПУМБ, сценарій «тіло не JSON»: у банк пішло те саме тіло, у записі — bodyOmitted з причиною, без bodyBase64' (
         ($njSent.Count -eq 1) -and ($njSent[0] -ceq 'this is not json') -and $njEx.request.bodyOmitted -eq $true -and
         ($njEx.request.bodyOmittedReason -like 'навмисно не JSON*') -and -not $njEx.request.ContainsKey('bodyBase64') -and $njEx.formatVersion -eq 2 -and $njEx.request.port -eq 4103)
+
+    # --- ПУМБ, режим «усі рахунки» (Accounts = 'all') на змоканому /account: 3 вигадані рахунки (2 UAH, 1 USD); мок HTTP діє лише всередині блоку ---
+    $acIban = @('UA111111111111111111111111111', 'UA222222222222222222222222222', 'UA333333333333333333333333333')
+    $acId = @('7100001', '7100002', '7100003')
+    $acScen = @{ SearcherSmall = $true; TypesCurrency = $true; SearcherWork = $false; SearcherNoPaging = $false; StatesAll = $false; TypesNone = $false; PagingProbes = $false; DateFormats = $false; PeriodTransactions = $false; Saturated = $false; Reversal = $false; Errors = $false }
+    $acRaw = @{ ClientId = 'AC-FAKE-CLIENT'; ClientSecret = 'AC-FAKE-SECRET-0001'; Login = 'ac-fake-login'; Password = 'AC-FAKE-PASSWORD-0002'; Accounts = 'all'; Period = @{ From = '2020-01-01'; To = '2020-01-03' }; Scenarios = $acScen }
+    $acRun = {
+        param($Raw, [string]$Tag)
+        $res = Resolve-BankConfig 'Pumb' $Raw $false
+        if ($res.Problems.Count -gt 0) { throw "конфіг самотесту: $($res.Problems -join '; ')" }
+        $d = Join-Path $Dir "allacc-$Tag"
+        if (Test-Path $d) { Remove-Item $d -Recurse -Force }
+        $rec = New-Recording $d 'pumb' $Tag ([ordered]@{ 'Pumb.Password' = 'AC-FAKE-PASSWORD-0002' })
+        $ctx = New-Ctx 'pumb' 'service.fuib.com' 0.0 $rec $rec.Secrets $false
+        $sent = [System.Collections.Generic.List[string]]::new()
+        $accBody = '[' + ((0..2 | ForEach-Object { '{"accountId":' + $acId[$_] + ',"iban":"' + $acIban[$_] + '","currency":"' + $(if ($_ -eq 2) { 'USD' } else { 'UAH' }) + '","name":"AC-FAKE-NAME-' + $_ + '"}' }) -join ',') + ']'
+        $text = & {
+            function Invoke-HttpSend {
+                param([string]$Method, [string]$Uri, [hashtable]$Headers, [string]$ContentType, $Body = $null)
+                $o = '[]'
+                if ($Uri -like '*openid-connect/token*') { $o = '{"access_token":"AC-FAKE-ACCESS-TOKEN-ABCDEFGH","expires_in":300,"token_type":"Bearer"}' }
+                elseif ($Uri -like '*/account') { $o = $accBody }
+                elseif ($Method -ceq 'POST' -and $Uri -like '*/document/searcher') { $sent.Add([System.Text.Encoding]::UTF8.GetString([byte[]]$Body)) }
+                [pscustomobject]@{ Status = 200; Headers = @(, @('Content-Type', 'application/json')); Body = [System.Text.Encoding]::UTF8.GetBytes($o); Failure = $null }
+            }
+            Invoke-PumbRun $res.Cfg $ctx
+        } 6>&1 | ForEach-Object { [string]$_ }
+        Write-AgentSummary $ctx (Join-Path $d 'summary-agent.txt') 'ok'
+        [System.IO.File]::WriteAllText((Join-Path $d 'console.log'), (($text -join "`r`n") + "`r`n"), $script:Utf8NoBom)
+        [pscustomobject]@{ Ctx = $ctx; Sent = $sent; Dir = $d; Cfg = $res.Cfg; Console = ($text -join "`n") }
+    }
+    $all3 = & $acRun $acRaw 'all3'
+    $scn = @($all3.Ctx.Stats.Keys)
+    $curBodies = @($all3.Sent | Where-Object { $_ -match '"documentType":\["CUR"\]' })
+    & $check "ПУМБ, Accounts = 'all': 3 рахунки з /account (2 UAH, 1 USD) — сценарії для всіх трьох, CUR лише для валютного" (
+        $all3.Cfg.AccountsAll -and ($scn -contains 'pumb_a1_searcher_small') -and ($scn -contains 'pumb_a2_searcher_small') -and ($scn -contains 'pumb_a3_searcher_small') -and
+        ($scn -contains 'pumb_a3_searcher_types_cur') -and ($scn -notcontains 'pumb_a1_searcher_types_cur') -and ($scn -notcontains 'pumb_a2_searcher_types_cur') -and
+        ($curBodies.Count -eq 1) -and ($curBodies[0] -match '"documentAccounts":\["7100003"\]') -and
+        ($acId | ForEach-Object { $id = $_; @($all3.Sent | Where-Object { $_ -match ('"documentAccounts":\["' + $id + '"\]') }).Count -ge 1 }) -notcontains $false) "(сценаріїв: $($scn.Count))"
+    $acRaw2 = $acRaw.Clone(); $acRaw2.Accounts = @('ALL'); $acRaw2.MaxAccounts = 2
+    $all2 = & $acRun $acRaw2 'all2'
+    $scn2 = @($all2.Ctx.Stats.Keys)
+    $summary2 = [System.IO.File]::ReadAllText((Join-Path $all2.Dir 'summary-agent.txt'))
+    $noVals = { param([string]$t) $bad = @($acIban + $acId + @('AC-FAKE-NAME') | Where-Object { $t.Contains($_) }); $bad.Count -eq 0 }
+    & $check "ПУМБ, MaxAccounts = 2 (Accounts = @('ALL')): взято 2 із 3; у консолі й summary лише кількості, без IBAN, accountId і назв" (
+        ($scn2 -contains 'pumb_a2_searcher_small') -and ($scn2 -notcontains 'pumb_a3_searcher_small') -and ($scn2 -notcontains 'pumb_a3_searcher_types_cur') -and
+        $all2.Console.Contains('знайдено рахунків 3, взято 2') -and $summary2.Contains('знайдено рахунків 3, взято 2') -and (& $noVals $all2.Console) -and (& $noVals $summary2) -and (& $noVals $all3.Console))
+    $acWith = { param($H, [string]$K, $V) $c = $H.Clone(); $c[$K] = $V; $c }
+    $badCfg = @(
+        (Resolve-BankConfig 'Pumb' (& $acWith $acRaw 'Accounts' @('all', 'UA111111111111111111111111111')) $false),
+        (Resolve-BankConfig 'Pumb' (& $acWith $acRaw 'MaxAccounts' 0) $false),
+        (Resolve-BankConfig 'Privat' @{ ClientId = 'x1234'; Token = 'x1234567'; Accounts = 'all'; Period = @{ From = '2020-01-01'; To = '2020-01-03' } } $false))
+    & $check "ПУМБ, конфіг: 'all' разом з IBAN, MaxAccounts = 0 і 'all' для іншого банку — проблеми конфігу (запуску немає)" (($badCfg | Where-Object { $_.Problems.Count -gt 0 }).Count -eq 3)
+    # контроль витоку: IBAN/accountId, знайдені в /account, у консолі чи stderr — код 3 (без значення у LEAK-DETECTED.txt)
+    $codeAcOk = Invoke-AccountLeakCheck $all3.Dir $all3.Ctx.AccountSecrets $Dir
+    [System.IO.File]::AppendAllText((Join-Path $all3.Dir 'console.log'), "  debug: рахунок $($acIban[1])`r`n", $script:Utf8NoBom)
+    $codeAcLeak = Invoke-AccountLeakCheck $all3.Dir $all3.Ctx.AccountSecrets $Dir
+    $leakTxtAc = if (Test-Path (Join-Path $all3.Dir 'LEAK-DETECTED.txt')) { [System.IO.File]::ReadAllText((Join-Path $all3.Dir 'LEAK-DETECTED.txt')) } else { '' }
+    Remove-Item (Join-Path $all3.Dir 'LEAK-DETECTED.txt') -Force -ErrorAction SilentlyContinue
+    $stderrAc = Join-Path $Dir 'allacc-stderr.log'
+    [System.IO.File]::WriteAllText($stderrAc, "Error: boom id=$($acId[0])", $script:Utf8NoBom)
+    $all2b = & $acRun $acRaw 'all3b'
+    $codeAcErr = Invoke-AccountLeakCheck $all2b.Dir $all2b.Ctx.AccountSecrets $Dir @($stderrAc)
+    & $check 'ПУМБ, КОНТРОЛЬ витоку рахунків: чистий вивід — код 0; IBAN у консолі — код 3; accountId у stderr — код 3; LEAK-DETECTED.txt без значень' (
+        ($codeAcOk -eq 0) -and ($codeAcLeak -eq 3) -and ($codeAcErr -eq 3) -and $leakTxtAc.Contains('console.log') -and -not $leakTxtAc.Contains($acIban[1]))
 
     # --- запис ПУМБ у форматі v2, зроблений справжнім записувачем; значення вигадані ---
     $pSecrets = [ordered]@{ 'Pumb.ClientSecret' = 'ВИГАДАНИЙ-СЕКРЕТ-Zk3q9Lm2'; 'Pumb.Password' = 'ВИГАДАНИЙ-ПАРОЛЬ-Qw8r5Tn1' }
@@ -2014,6 +2140,10 @@ foreach ($b in $selected) {
                 Write-Host '  Теку НЕ передавайте нікому. Токен у банку краще перевипустити. Повідомте планувальника (без значення токена).'
             }
             else { Write-Host ("Самоперевірка: токенів у {0} файлах не знайдено." -f $files.Count) }
+            if ((Invoke-AccountLeakCheck $runDir $ctx.AccountSecrets $OutRoot @($StderrLog)) -eq 3) {
+                $leak = $true
+                Save-Manifest $rec 'leak-detected' 'IBAN/accountId від банку знайдено в консолі, summary або stderr; теку нікому не передавати'
+            }
         }
         catch {
             # самоперевірку виконати не вдалося — це не «чисто»: прогін вважається проваленим
