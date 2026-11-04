@@ -103,6 +103,7 @@ class Sensitive:
         self.positional = []          # [(індекс обміну, шлях у дереві, роль, значення)] -- для порівняння на своєму місці
         self.person = set()           # значення полів-осіб (`PERSON_FIELDS`) і їхні похідні (ініціали, «Прізвище І.Б.»): підрядок без нижньої межі довжини, без регістру, БЕЗ винятку `exempt`
         self.short = set()            # цілі значення ролей ID / ACC / NAME коротші за MIN_WHOLE (не більш як 2 різних символи -- винятком): пошук у значеннях полів, без нижньої межі довжини
+        self.short_ids = set()        # ЦИФРОВІ значення ролі ID довжиною <= `A.SHORT_ID_MAX` (не більш як 2 різних символи -- винятком): (а) шукає їх лише ЦІЛИМ значенням поля (будь-якого, включно з KEEP, шляху, запиту), підрядком -- ні
         self.generic = set()          # загальні фрази словника замін
         self.pair_exempt = {}         # токен -> {поля, у яких він МОЖЕ лишитися}: вузькі винятки за парою полів
         self.pair_counts = {}         # назва пари -> кількість випадків у сирому записі (іде у звіт)
@@ -263,7 +264,10 @@ def collect(bank, rec, cfg):
             texts.append((role, val.strip() if nd.kind == 'str' else val))
             sens.positional.append((idx, (part,) + tuple(where), role, val))
     for role, v in texts:
-        if role in ('ID', 'ACC', 'NAME', 'BANKNAME') and 0 < len(v.strip()) < MIN_WHOLE and len(set(v.strip())) > 2:
+        if role == 'ID' and A.is_short_numeric_id(v):
+            if len(set(v.strip())) > 2:
+                sens.short_ids.add(v.strip())          # 4-значне число підрядком будь-де збігається з датами й сумами: пошук підрядком -- шум, не захист (README)
+        elif role in ('ID', 'ACC', 'NAME', 'BANKNAME') and 0 < len(v.strip()) < MIN_WHOLE and len(set(v.strip())) > 2:
             sens.short.add(v.strip())
         if role in ('ID', 'ACC', 'CODE', 'SCRAMBLE') and len(v) >= MIN_WHOLE:
             sens.whole.add(v)
@@ -375,6 +379,48 @@ def scan_short(rec, tokens):
     return _scan_texts(rec, tokens, False)
 
 
+def scan_short_ids(rec, tokens):
+    """Короткі цифрові ID (`Sensitive.short_ids`): ЦІЛЕ значення будь-якого поля знеособленого запису (тіло відповіді й тіло запиту -- рядок чи число, включно з полями KEEP на кшталт
+    `number`, `documentNumber`), сегмента шляху чи значення параметра запиту. Підрядок не шукається. -> множина знайдених токенів (значень не друкуємо)."""
+    found = set()
+    if not tokens:
+        return found
+
+    def hit(v):
+        v = str(v).strip()
+        if v in tokens:
+            found.add(v)
+
+    def walk(o):
+        if isinstance(o, dict):
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+        elif o is not None and not isinstance(o, bool):
+            hit(o)
+
+    for ex in rec.exchanges:
+        req = ex['request']
+        for seg in urllib.parse.unquote(req['path']).split('/'):
+            hit(seg)
+        for _, _, v in A.query_pairs_raw(req['query']):
+            hit(urllib.parse.unquote(v))
+        rtext = R.request_body_bytes(ex)
+        if rtext is not None:
+            try:
+                walk(json.loads(rtext.decode('utf-8', errors='replace')))
+            except ValueError:
+                pass
+        if ex['response']:
+            try:
+                walk(json.loads(R.body_text(ex)))
+            except ValueError:
+                pass
+    return found
+
+
 def scan_person(rec, tokens):
     """Значення полів-осіб і їхні похідні (`person_tokens`, нижній регістр) у БУДЬ-ЯКОМУ тексті запису (шлях, запит, текст збою, рядки тіла запиту й
     відповіді), підрядком без нижньої межі довжини й без регістру. -> множина знайдених токенів."""
@@ -435,7 +481,7 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
     sub, lex = haystacks(target, bank)
     whole = scan_whole(sub, sens.whole)
     nums, names = scan_lexemes(lex, sens.nums, sens.names)
-    unchanged_long = unchanged_short = misaligned = 0
+    unchanged_long = unchanged_short = unchanged_short_id = misaligned = 0
     if not control:
         anon = R.Recording.from_dir(anon_dir)
         pos_anon = positional_values(bank, anon)
@@ -446,15 +492,18 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
             elif av == val and not sens.exempt(val):
                 if len(str(val)) >= MIN_WHOLE_POSITIONAL:
                     unchanged_long += 1
+                elif role == 'ID' and A.is_short_numeric_id(str(val)):
+                    unchanged_short_id += 1                 # короткий цифровий ID на своєму місці -- збіг (а не лише довідка)
                 else:
                     unchanged_short += 1
     pair = pair_leaks(bank, R.Recording.from_dir(target), sens.pair_exempt)
     target_rec = R.Recording.from_dir(target)
     short = scan_short(target_rec, sens.short)
+    short_ids = scan_short_ids(target_rec, sens.short_ids)
     person = scan_person(target_rec, sens.person)
-    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair + len(short) + len(person)
+    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair + len(short) + len(short_ids) + unchanged_short_id + len(person)
     return {'pair_counts': dict(sens.pair_counts), 'pair_leaks': pair, 'bank': bank, 'control': control, 'exchanges': len(raw.exchanges), 'tokens': sens.counts(),
-            'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names), 'hits_short': len(short), 'short_tokens': len(sens.short), 'hits_person': len(person), 'person_tokens': len(sens.person),
+            'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names), 'hits_short': len(short), 'short_tokens': len(sens.short), 'hits_short_ids': len(short_ids), 'short_id_tokens': len(sens.short_ids), 'unchanged_short_id': unchanged_short_id, 'hits_person': len(person), 'person_tokens': len(sens.person),
             'unchanged_long': unchanged_long, 'unchanged_short_info': unchanged_short, 'misaligned': misaligned,
             'hits': hits, 'problems': ['збіги: %d' % hits] if hits else []}
 

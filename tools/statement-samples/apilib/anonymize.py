@@ -28,6 +28,7 @@ FREE_TEXT_KEEP = ('message', 'errorDescription')       # KEEP-поля з віл
 # Слова, які генератор сам видає у вигаданих призначеннях (словники `gen.PHRASES` / `gen.SHORT`): за побудовою не ідентифікують, тож не чистяться з полів KEEP і не рахуються витоком у (а). ЄДИНИЙ такий
 # словник; явні слова публічного словника -- `allowed_words`, `guard_allowed_words`, `api_guard_allowed_words` із `config.json` (юридичні форми, назви банків, міста).
 GEN_WORDS = frozenset(w.casefold() for lst in list(gen.PHRASES.values()) + list(gen.SHORT.values()) for p in lst for w in WORD.findall(p))
+SHORT_ID_MAX = 5                                       # роль ID з чисто цифровим значенням довжиною <= цього: «короткий цифровий ID» -- (а) шукає його лише ЦІЛИМ значенням поля, а генератор не видає заміни, рівної сирому такому ID (README, «Короткі цифрові ID»)
 SWEEP_MIN = 6                                          # найкоротше значення ролі ID / ACC, яке підмінюється всередині рядків KEEP (коротші лише ловить перевірка (а))
 # Вигадані призначення для ASCII-оригіналу ролі PURPOSE (A6, рішення консультанта; ЗАГАЛЬНЕ правило для всіх банків, не виняток): клас байтів оригіналу зберігається
 # (ASCII -> ASCII), тож перевірка (б) «кодування тіла» лишається строгою. Слова -- рядкові (перевірка (а) шукає власні назви з великої літери).
@@ -366,8 +367,15 @@ def prescan_values(bank, rec, cfg=None):
     return ids, accs, codes, words
 
 
-def make_fakes(cfg, words, nums, map_path):
+def is_short_numeric_id(v):
+    """Сире значення ролі ID: лише ASCII-цифри, довжина <= `SHORT_ID_MAX`."""
+    v = v.strip()
+    return 0 < len(v) <= SHORT_ID_MAX and v.isascii() and v.isdigit()
+
+
+def make_fakes(cfg, words, nums, map_path, ids=()):
     fk = gen.Fakes(forbidden_words=words, forbidden_numbers=nums, allowed_words=cfg.get('allowed_words', []))
+    fk.forbidden_ids = {v.strip() for v in ids if is_short_numeric_id(v)}
     if map_path and os.path.exists(map_path):
         with open(map_path, encoding='utf-8') as f:
             fk.load(json.load(f))
@@ -383,7 +391,7 @@ def anonymize_bank(bank, raw_dir, out_dir, map_path, cfg=None):
         raise schema.UnknownField('%s: у маніфесті інший банк' % bank)
     refs, ibans, words, nums = prescan(bank, rec)
     ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
-    fk = make_fakes(cfg, words, nums, map_path)
+    fk = make_fakes(cfg, words, nums, map_path, ids)
     b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     b.build_sweep()
     new = [b.exchange(ex) for ex in rec.exchanges]
@@ -402,6 +410,6 @@ def load_bank(bank, raw_dir, map_path, cfg=None):
     rec = R.Recording.from_dir(raw_dir)
     refs, ibans, words, nums = prescan(bank, rec)
     ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
-    fk = make_fakes(cfg, words, nums, map_path)
+    fk = make_fakes(cfg, words, nums, map_path, ids)
     b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     return rec, b

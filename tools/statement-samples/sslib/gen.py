@@ -93,6 +93,7 @@ class Fakes:
         self.forbidden_words = {w.casefold() for w in forbidden_words}
         self.forbidden_numbers = set(forbidden_numbers)
         self.allowed = set(allowed_words)
+        self.forbidden_ids = set()           # сирі короткі цифрові ID запису: заміна ролі ID їм не дорівнює (`apilib.anonymize.is_short_numeric_id`)
         self.m = {'code': {}, 'core': {}, 'word': {}, 'text': {}, 'scramble': {}, 'issued': []}
         self._issued = set()
         self.used_words = set()
@@ -355,7 +356,7 @@ class Fakes:
                 new = self.ident(pref, refs) + self._ident_shape(v[len(pref):])
             else:
                 new = self._ident_shape(v)
-            if new != v and new not in self._ident_used:
+            if new != v and new not in self._ident_used and new not in self.forbidden_ids:
                 break
         else:
             raise RuntimeError('не вдалося підібрати вигаданий ідентифікатор')

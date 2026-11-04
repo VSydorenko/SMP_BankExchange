@@ -167,9 +167,9 @@ def _run_a(a):
         res = step2.check_a(bank, raw, anon)
         ctl = step2.check_a(bank, raw, anon, control=True)
         lines.append('a %s: обмінів %d; токенів %s; збігів: підрядки %d, числа %d, назви %d, короткі ID/ACC/NAME (з %d) %d, незмінені на місці %d '
-                     '(коротких без збігу: %d, без пари: %d)' % (
+                     '(коротких без збігу: %d, без пари: %d); короткі цифрові ID (з %d) цілим значенням: %d, незмінених на місці: %d' % (
                          bank, res['exchanges'], res['tokens'], res['hits_whole'], res['hits_nums'], res['hits_names'], res['short_tokens'], res['hits_short'],
-                         res['unchanged_long'], res['unchanged_short_info'], res['misaligned']))
+                         res['unchanged_long'], res['unchanged_short_info'], res['misaligned'], res['short_id_tokens'], res['hits_short_ids'], res['unchanged_short_id']))
         if bank in step2.PERSON_FIELDS:
             lines.append('a %s: поля-особи %s (токенів %d): збігів %d' % (bank, '/'.join(sorted(step2.PERSON_FIELDS[bank])), res['person_tokens'], res['hits_person']))
         lines.append('a %s: вузькі винятки за парою полів (у сирому записі): %s; значень поза дозволеними полями: %d' % (

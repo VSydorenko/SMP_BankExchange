@@ -43,14 +43,14 @@ def _resp(obj, status=200, hdr=JSON_HDR):
     return {'status': status, 'headers': hdr, 'body': json.dumps(obj, ensure_ascii=False).encode('utf-8')}
 
 
-def fake_recording(searcher_body=None, raw_text=None, child=None, errors=None, doc2_number='4816', ptx_amount='1500.00', ptx_docnum='4815', query='', extra_body=None):
+def fake_recording(searcher_body=None, raw_text=None, child=None, errors=None, doc2_number='4816', ptx_amount='1500.00', ptx_docnum='4815', query='', extra_body=None, doc_id=8800123456, doc_number='4815', alt=ALT, paging=None):
     account = {'id': 7000123456, 'accountId': ACC_ID, 'mfo': '322001', 'currency': 'UAH', 'number': '26001234567890',
                'name': 'Поточний Зіркова', 'state': 1, 'hostId': 3, 'branchId': 'XYZ', 'clientId': 'CL778899', 'clientName': PERSON,
                'clientOkpo': '3098712345', 'isDefault': True, 'iban': IBAN, 'balance': REST, 'rest': REST,
-               'altNumber': ALT, 'accountTypeName': TYPE_NAME, 'restWithHolds': 84213.55, 'createdOn': '01.01.2020 10:00:00', 'openDate': None,
+               'altNumber': alt, 'accountTypeName': TYPE_NAME, 'restWithHolds': 84213.55, 'createdOn': '01.01.2020 10:00:00', 'openDate': None,
                'accountCardType': None, 'isDeleted': None, 'clientaccounttotype': 'CURRENT'}
-    doc = {'id': LAST_ID + 1, 'hostId': 3, 'docId': 8800123456, 'date': '01.11.2026 10:15:00', 'state': 'PROCESSED', 'type': 'UAH',
-           'firstSignature': PERSON, 'secondSignature': PERSON_INI, 'number': '4815', 'accountId': ACC_ID, 'amount': '1500.00',
+    doc = {'id': LAST_ID + 1, 'hostId': 3, 'docId': doc_id, 'date': '01.11.2026 10:15:00', 'state': 'PROCESSED', 'type': 'UAH',
+           'firstSignature': PERSON, 'secondSignature': PERSON_INI, 'number': doc_number, 'accountId': ACC_ID, 'amount': '1500.00',
            'currencyCode': 'UAH', 'description': 'Оплата за послуги Зіркова Л.О.', 'operationDate': '01.11.2026 10:15:00',
            'userIdentity': PERSON_INI, 'direction': 'INBOUND', 'senderName': 'Вигадана компанія', 'correspondentName': PERSON,
            'senderTaxId': '3122334455', 'senderAccountNumber': '26009876543210', 'responsible': PERSON_INI, 'senderIBAN': IBAN,
@@ -66,7 +66,7 @@ def fake_recording(searcher_body=None, raw_text=None, child=None, errors=None, d
                              'narrative': 'Оплата за послуги', 'iban': IBAN}]}
     auth = {'access_token': 'aaaaaaaaaa.aaaaaaaaaa.aaaaaaaaaa', 'expires_in': 300, 'token_type': 'Bearer', 'scope': 'profile'}
     sb = searcher_body or {'fromDate': '01.11.2026 00:00:00', 'toDate': '01.11.2026 23:59:59', 'documentState': ['PROCESSED'],
-                           'documentType': ['UAH'], 'documentAccounts': [str(ACC_ID)], 'pagingRequest': {'pageSize': 1, 'orderedLastId': LAST_ID,
+                           'documentType': ['UAH'], 'documentAccounts': [str(ACC_ID)], 'pagingRequest': {'pageSize': paging or 1, 'orderedLastId': LAST_ID,
                                                            'orderedLastValue': SORTED}}
     sb = dict(sb, **(extra_body or {}))
     searcher = _post('/document/searcher', sb)
@@ -154,6 +154,48 @@ class PumbRequestBodyAndPersons(unittest.TestCase):
                 env.anonymize()
             res = env.check()
             self.assertGreater(res['hits'], 0, res)
+
+    def test_v_short_numeric_id_is_searched_as_a_whole_value_only_and_controls_fail(self):
+        # короткий цифровий ID (роль ID, лише цифри, <= 5): (а) шукає ЦІЛЕ значення поля в будь-якому полі (включно з KEEP), у шляху й тілі запиту; підрядком -- ні.
+        # Три контролі, що вміють впасти, і зелений парний прогін; ACC із коротким значенням лишається під пошуком підрядком.
+        short = '4739'
+        with tempfile.TemporaryDirectory() as d:                                     # зелений: docId = 4739 замінено, 4739 більше ніде немає; підрядок (у даті, сумі) не збіг
+            env = Env(d, doc_id=int(short), extra_body={'documentAccounts': [str(ACC_ID)]})
+            env.anonymize()
+            res = env.check()
+            self.assertEqual((res['hits'], res['hits_short_ids'], res['unchanged_short_id']), (0, 0, 0), res)
+            self.assertGreaterEqual(res['short_id_tokens'], 1)
+        with tempfile.TemporaryDirectory() as d:                                     # підрядок НЕ шукається: сире 4739 всередині довшого рядка KEEP -- не збіг
+            env = Env(d, doc_id=int(short), doc_number='N4739K', ptx_docnum='4739' + '5')
+            env.anonymize()
+            res = env.check()
+            self.assertEqual((res['hits_short_ids'], res['hits']), (0, 0), res)
+        with tempfile.TemporaryDirectory() as d:                                     # контроль 1: сирий короткий docId як ціле значення в ІНШОМУ полі (number, KEEP)
+            env = Env(d, doc_id=int(short), doc_number=short)
+            env.anonymize()
+            self.assertGreater(env.check()['hits_short_ids'], 0)
+        orig = A.Bank.ident
+        with tempfile.TemporaryDirectory() as d:                                     # контроль 2: сирий короткий docId на своєму місці (заміну вимкнено)
+            env = Env(d, doc_id=int(short))
+            with mock.patch.object(A.Bank, 'ident', lambda self, s: s if s == short else orig(self, s)):
+                env.anonymize()
+            res = env.check()
+            self.assertGreater(res['unchanged_short_id'], 0, res)
+            self.assertGreater(res['hits'], 0, res)
+        with tempfile.TemporaryDirectory() as d:                                     # контроль 3: сирий короткий docId як ціле значення в тілі ЗАПИТУ (pageSize, KEEP)
+            env = Env(d, doc_id=int(short), paging=int(short))
+            env.anonymize()
+            res = env.check()
+            self.assertGreater(res['hits_short_ids'], 0, res)
+        with tempfile.TemporaryDirectory() as d:                                     # ACC без змін: коротке значення шукається підрядком (4-значне altNumber усередині number)
+            env = Env(d, alt='5521', doc_number='N5521K')
+            env.anonymize()
+            self.assertGreater(env.check()['hits_short'], 0)
+
+    def test_vi_generator_never_issues_a_replacement_equal_to_a_raw_short_id(self):
+        fk = gen.Fakes()
+        fk.forbidden_ids = {str(i) for i in range(1, 9)}
+        self.assertEqual(fk.ident('7'), '9')
 
     def test_ii_person_fields_are_name_and_control_fails_when_replacement_disabled(self):
         self.assertTrue(all(schema.ROLES['pumb']['doc'][f] == 'NAME' for f in ('userIdentity', 'responsible', 'firstSignature', 'secondSignature')))
