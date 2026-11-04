@@ -695,7 +695,7 @@ def _mono(rec, p, out, disabled):
         earliest = None
         earliest_unix = None
         start_local, upper_local = kyiv.unix_to_local(frm), kyiv.unix_to_local(to)
-        if corp and any(isinstance(tx, dict) and tx.get('time') is not None and (int(tx['time']) > to or int(tx['time']) < frm)
+        if corp and any(isinstance(tx, dict) and isinstance(tx.get('time'), int) and (tx['time'] > to or tx['time'] < frm)
                         for tx in page):
             # ПОЗА виміряним (запобіжник, D36 п. 8 і рішення за рев'ю задачі 4): відповідь виходить за межі запиту -- `time` > `to` або
             # `time` < `from` (`time` = `to` НЕ аномалія: виключність межі й дробові секунди не виміряно, повтори відкидає `id`).
@@ -707,9 +707,13 @@ def _mono(rec, p, out, disabled):
         for tx in page:
             n += 1
             items.append(Item(n, tx, ex['seq']))
-            t = kyiv.unix_to_local(int(tx.get('time')))
+            try:
+                tu = int(tx.get('time'))
+            except (TypeError, ValueError):
+                continue                                       # час не читається: рядок скаже bad-date у _mono_items, на курсор не впливає
+            t = kyiv.unix_to_local(tu)
             earliest = t if earliest is None or t < earliest else earliest
-            earliest_unix = int(tx.get('time')) if earliest_unix is None or int(tx.get('time')) < earliest_unix else earliest_unix
+            earliest_unix = tu if earliest_unix is None or tu < earliest_unix else earliest_unix
         limit = requested_limit(ex) if corp else C.PAGE_SIZE_MONO
         if len(page) < limit:                       # D36 п. 11: коротша за запитаний ліміт -- остання (ФОП: гіпотеза документації)
             if corp:

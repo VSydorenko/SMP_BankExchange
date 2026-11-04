@@ -105,8 +105,8 @@ class Shape(unittest.TestCase):
             if e.failure_class:
                 self.assertFalse(e.complete, s.name)
                 self.assertEqual(e.trust, s.params.period_start, s.name)      # межа визначена: курсор не посунеться
-                self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags if d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds')), s.name)
-                self.assertTrue(any(d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds') for d in e.diags), s.name)
+                self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags if d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds', 'page-without-time')), s.name)
+                self.assertTrue(any(d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds', 'page-without-time') for d in e.diags), s.name)
                 self.assertIn(e.failure_class, (E.CLS_RETRY, E.CLS_HUMAN))
             else:
                 self.assertTrue(e.complete, s.name)

@@ -41,7 +41,8 @@ class ByHand(unittest.TestCase):
         got_requests = [r['Путь'] for r in e.requests if '/statement/' in r['Путь']]
         self.assertEqual(got_requests, want_requests, sid)
         self.assertEqual((e.failure_class, e.complete, e.trust), (cls, complete, trust), sid)
-        self.assertEqual([(d['Уровень'], d['ПорядковыйНомер'], d['Факты']) for d in e.diags], list(diags), sid)
+        key = lambda d: (d[1], d[0])                    # порядок рядків діагностики не специфікація: за номером і рівнем
+        self.assertEqual(sorted([(d['Уровень'], d['ПорядковыйНомер'], d['Факты']) for d in e.diags], key=key), sorted(diags, key=key), sid)
 
     def test_d36_p11_expectations_written_by_hand(self):
         end_of_period = datetime(2026, 10, 15, 23, 59, 59)
@@ -84,6 +85,12 @@ class ByHand(unittest.TestCase):
         ops = {k: SID('E', 30 - k) for k in range(1, 31)}
         self.check('СинтБанкИгнорируетTo', ops=ops, requests=[end, base + 1], cls='Повторить', complete=False, trust=start_of_period,
                    diags=[(warn, 0, {'Банк': bank, 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''})])
+
+        # повна сторінка без читаного time: курсора немає, хоча «є ще» -- «повторити», неповне; кожен рядок без часу -- Ошибка bad-date,
+        # операцій немає (відповідь записана вручну як аномалія, поза виміряним)
+        diags = [(warn, 0, {'Банк': bank, 'Вид': 'page-without-time', 'Статус': 200, 'ОписаниеБанка': ''})]
+        diags += [('Ошибка', k, {'Ид': SID('X', k - 1)}) for k in range(1, 31)]
+        self.check('СинтПолнаяБезВремени', ops={}, requests=[end], cls='Повторить', complete=False, trust=start_of_period, diags=diags)
 
         # контроль: операції на time = to і time = from -- НЕ аномалія, звичайні дані, кожна рівно раз (за спаданням time)
         self.check('СинтОперацияНаTo', ops={1: SID('Q', 1), 2: SID('Q', 2), 3: SID('Q', 3)}, requests=[end], cls='', complete=True,

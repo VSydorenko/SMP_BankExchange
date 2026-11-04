@@ -267,7 +267,13 @@ def _old_mono(rec, p, corp):
         start_local, upper_local = C.session_local(frm, p.old_session_tz), C.session_local(to, p.old_session_tz)
         for tx in page:
             n += 1
-            t_create = C.session_local(int(tx.get('time')), p.old_session_tz)
+            try:
+                t_create = C.session_local(int(tx.get('time')), p.old_session_tz)
+            except (TypeError, ValueError):
+                # попередник: `ДатаИзUnixTime(Неопределено)` -- виняток у ПрочитатьТранзакции (MU:~330), читання не закінчується
+                res.error = {'kind': 'time-unreadable', 'text': 'time запису не читається'}
+                complete = False
+                break
             if earliest is None or t_create < earliest:
                 earliest = t_create
             if corp:
