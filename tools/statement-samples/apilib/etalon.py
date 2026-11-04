@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Еталон очікуваного конверта `СМП_ТестЭталон<Банк><Ид>` для запису відповідей API. JSON, UTF-8, версія 1.
+"""Еталон очікуваного конверта `СМП_ТестЭталон<Банк><Ид>` для запису відповідей API. JSON, UTF-8, версія 1 (2 — коли запис, до якого еталон, у форматі v2).
 
 Рахується ТІЛЬКИ Python-оракулом (`expected.run`, `oracle_old.run`) з того самого запису, що лежить у макеті
 `СМП_ТестОтвет<Банк><Ид>`. Руками й BSL-кодом не рахується.
@@ -96,7 +96,7 @@ def build_from(rec, p, *, sid, title, focus, macro, synthetic, disabled=frozense
         depends.add('ТлумачениеГраницы')
     if rec.bank == 'privat' and any(o['Валюта'] not in ('980', '') for o in exp.ops):
         depends.add('ФильтрВалютыПриват')
-    d = {'format': FORMAT, 'formatVersion': VERSION, 'bank': rec.bank, 'id': sid, 'synthetic': synthetic, 'title': title,
+    d = {'format': FORMAT, 'formatVersion': max(VERSION, rec.manifest['formatVersion']), 'bank': rec.bank, 'id': sid, 'synthetic': synthetic, 'title': title,
          'reviewFocus': focus, 'recording': {'макет': macro, 'обменов': len(rec.exchanges)},
          'parameters': p.to_json(), 'dependsOn': sorted(depends),
          'expected': {'ЧтениеПолное': exp.complete, 'ГраницаДоверия': C.iso(exp.trust), 'КлассОтказа': exp.failure_class,

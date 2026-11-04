@@ -8,12 +8,12 @@
 Форми (JSON, UTF-8):
 * набір записів (BinaryData, без BOM)::
 
-    {"format": "smp-api-record-set", "formatVersion": 1, "bank": "privat|mono-fop|mono-corp", "kind": "synthetic|run1",
+    {"format": "smp-api-record-set", "formatVersion": 1|2, "bank": "privat|mono-fop|mono-corp", "kind": "synthetic|run1",
      "records": {"<Ид>": <пакет запису: smp-api-recording-pack, див. recording.py>, ...}}
 
 * набір еталонів (TextDocument, UTF-8 з BOM, як наявні макети еталонів)::
 
-    {"format": "smp-api-etalon-set", "formatVersion": 1, "bank": ..., "kind": ..., "etalons": {"<Ид>": <еталон, etalon.py>, ...}}
+    {"format": "smp-api-etalon-set", "formatVersion": 1|2, "bank": ..., "kind": ..., "etalons": {"<Ид>": <еталон, etalon.py>, ...}}
 
 Імена макетів: `СМП_ТестОтветы<Банк><Вид>` і `СМП_ТестЭталоны<Банк><Вид>`; `<Банк>` -- `Приват`, `МоноФОП`, `МоноЮр`;
 `<Вид>` -- `Синт` (синтетика, ознака в імені) або `Run1` (знеособлені обміни прогону). Для run1 береться лише те читання, що має
@@ -99,7 +99,8 @@ def build(anon_root, out_dir, anon_root3=None):
             if sorted(recs) != sorted(ets):
                 raise ValueError('набори записів і еталонів не збігаються: %s %s' % (bank, kind))
             rname, ename = names(bank, kind)
-            head = {'formatVersion': 1, 'bank': bank, 'kind': kind}
+            # версія набору — найвища з версій записів у ньому (v1, поки жоден запис не використовує v2)
+            head = {'formatVersion': max([p['formatVersion'] for p in recs.values()] + [R.VERSION]), 'bank': bank, 'kind': kind}
             rtext = _dumps(dict(head, format=RECORD_SET, records=recs))
             etext = _dumps(dict(head, format=ETALON_SET, etalons=ets))
             with open(os.path.join(out_dir, rname + '.bin'), 'wb') as f:

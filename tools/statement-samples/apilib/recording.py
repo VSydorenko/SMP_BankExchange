@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Запис відповідей API: читання, запис, пакування, розбір тіла. Формат — `tools/api-recorder/FORMAT.md`, версія 1.
+"""Запис відповідей API: читання, запис, пакування, розбір тіла. Формат — `tools/api-recorder/FORMAT.md`, версії 1 і 2.
 
 Запис — тека з `recording.json` (маніфест, упорядкований перелік обмінів) і файлами `NNNN.json` (один обмін на файл).
 Тіло відповіді — байтами в Base64 (кодування — частина даних, рекордер його не змінює).
 
 **Пакет (`pack`/`unpack`)** — той самий запис в одному JSON-файлі, для макета тестового розширення (один макет — один
-запис): `{"format": "smp-api-recording-pack", "formatVersion": 1, "manifest": <recording.json>,
+запис): `{"format": "smp-api-recording-pack", "formatVersion": <1|2>, "manifest": <recording.json>,
 "exchanges": {"0001.json": <обмін>, ...}}`. Об'єкти — дослівно ті самі, що лежать у теці, тож `unpack(pack(x))` дає
 записану теку без втрат (тест у `tests/test_api_recording.py`).
 """
@@ -19,7 +19,12 @@ from urllib.parse import parse_qsl
 FORMAT = 'smp-api-recording'
 EXCHANGE_FORMAT = 'smp-api-exchange'
 PACK_FORMAT = 'smp-api-recording-pack'
-VERSION = 1
+VERSION = 1                 # версія запису 5а; запис, що не використовує нічого з v2, лишається v1
+VERSION_2 = 2               # метод POST, request.port, тіло запиту (bodyBase64 / bodyMasked / bodyOmitted)
+VERSIONS = (VERSION, VERSION_2)
+MASK_MARKER = '<masked>'
+METHODS_V2 = ('GET', 'POST')
+BODY_KEYS = ('bodyBase64', 'bodyMasked', 'bodyOmitted')
 STATES = ('ok', 'incomplete', 'aborted', 'error', 'interrupted', 'leak-detected')
 FAILURE_KINDS = ('timeout', 'network', 'other')
 HEADER_WHITELIST_RX = re.compile(r'^(content-type|retry-after|date|x-rate-limit-.*|x-ratelimit-.*|ratelimit-.*)$')
@@ -37,16 +42,33 @@ def _dumps(obj, indent=None):
     return json.dumps(obj, ensure_ascii=False, indent=indent, sort_keys=False)
 
 
+def _uses_v2(request):
+    return (request.get('method', 'GET') != 'GET' or 'port' in request
+            or any(k in request for k in ('body', 'bodyMasked', 'bodyOmitted')))
+
+
 def make_exchange(seq, scenario, request, response=None, failure=None, started='2026-10-15T09:00:00.000Z',
                   duration_ms=10):
-    """Обмін у форматі FORMAT.md. `request` = {method, host, path, query}; `response` = {status, headers, body(bytes)}
-    або None; `failure` = {kind, text} або None. Рівно одне з response / failure."""
+    """Обмін у форматі FORMAT.md. `request` = {method, host, path, query} плюс (v2) `port`, `body` (bytes) або
+    `bodyMasked` ({text, fields}) або `bodyOmitted` (причина); `response` = {status, headers, body(bytes)} або None;
+    `failure` = {kind, text} або None. Рівно одне з response / failure. Версія 2 — лише якщо запит використовує щось із v2."""
     if (response is None) == (failure is None):
         raise FormatError('обмін має або response, або failure')
-    ex = {'format': EXCHANGE_FORMAT, 'formatVersion': VERSION, 'seq': seq, 'scenario': scenario,
-          'startedUtc': started, 'durationMs': duration_ms,
+    ex = {'format': EXCHANGE_FORMAT, 'formatVersion': VERSION_2 if _uses_v2(request) else VERSION, 'seq': seq,
+          'scenario': scenario, 'startedUtc': started, 'durationMs': duration_ms,
           'request': {'method': request.get('method', 'GET'), 'host': request['host'], 'path': request['path'],
                       'query': request.get('query', '')}}
+    rq = ex['request']
+    if 'port' in request:
+        rq['port'] = request['port']
+    if 'body' in request:
+        rq['bodyBase64'] = base64.b64encode(request['body']).decode('ascii')
+        rq['bodyLength'] = len(request['body'])
+    if 'bodyMasked' in request:
+        rq['bodyMasked'] = {'text': request['bodyMasked']['text'], 'fields': list(request['bodyMasked']['fields'])}
+    if 'bodyOmitted' in request:
+        rq['bodyOmitted'] = True
+        rq['bodyOmittedReason'] = request['bodyOmitted']
     if response is not None:
         body = response['body']
         ex['response'] = {'status': response['status'],
@@ -61,7 +83,7 @@ def make_exchange(seq, scenario, request, response=None, failure=None, started='
 
 def make_manifest(bank, run_label, exchanges, state='ok', note='', started='2026-10-15T09:00:00.000Z',
                   finished='2026-10-15T09:00:05.000Z', recorder='synthetic'):
-    return {'format': FORMAT, 'formatVersion': VERSION, 'recorderVersion': recorder, 'bank': bank, 'runLabel': run_label,
+    return {'format': FORMAT, 'formatVersion': max([e['formatVersion'] for e in exchanges] + [VERSION]), 'recorderVersion': recorder, 'bank': bank, 'runLabel': run_label,
             'startedUtc': started, 'finishedUtc': finished, 'state': state, 'note': note,
             'exchanges': [{'seq': e['seq'], 'file': '%04d.json' % e['seq'], 'scenario': e['scenario'],
                            'status': (e['response']['status'] if e['response'] else None),
@@ -77,7 +99,7 @@ class Recording:
     # ------------------------------------------------------------------ перевірка формату
     def validate(self):
         m = self.manifest
-        if m.get('format') != FORMAT or m.get('formatVersion') != VERSION:
+        if m.get('format') != FORMAT or m.get('formatVersion') not in VERSIONS:
             raise FormatError('маніфест: format/formatVersion')
         if m.get('bank') not in ('privat', 'mono-corp', 'mono-fop'):
             raise FormatError('маніфест: bank')
@@ -87,12 +109,17 @@ class Recording:
         if [e['seq'] for e in listed] != [e['seq'] for e in self.exchanges]:
             raise FormatError('маніфест: порядок обмінів не збігається з файлами')
         for i, e in enumerate(self.exchanges):
-            if e.get('format') != EXCHANGE_FORMAT or e.get('formatVersion') != VERSION:
+            if e.get('format') != EXCHANGE_FORMAT or e.get('formatVersion') not in VERSIONS:
                 raise FormatError('обмін %d: format' % e.get('seq', i))
             if 'headers' in e.get('request', {}):
                 raise FormatError('обмін %d: у запиті не може бути заголовків' % e['seq'])
-            if e['request'].get('method') != 'GET':
-                raise FormatError('обмін %d: метод не GET' % e['seq'])
+            if e['formatVersion'] > m['formatVersion']:
+                raise FormatError('обмін %d: версія обміну вища за версію маніфесту' % e['seq'])
+            if e['formatVersion'] == VERSION:
+                if e['request'].get('method') != 'GET':
+                    raise FormatError('обмін %d: метод не GET' % e['seq'])
+            else:
+                self._validate_request_v2(e)
             r, f = e.get('response'), e.get('failure')
             if (r is None) == (f is None):
                 raise FormatError('обмін %d: рівно одне з response / failure' % e['seq'])
@@ -106,6 +133,39 @@ class Recording:
             else:
                 if f.get('kind') not in FAILURE_KINDS:
                     raise FormatError('обмін %d: failure.kind' % e['seq'])
+
+    @staticmethod
+    def _validate_request_v2(e):
+        rq, n = e['request'], e['seq']
+        if rq.get('method') not in METHODS_V2:
+            raise FormatError('обмін %d: метод поза GET/POST' % n)
+        if 'port' in rq and (type(rq['port']) is not int or not 0 < rq['port'] < 65536):
+            raise FormatError('обмін %d: port' % n)
+        forms = [k for k in BODY_KEYS if k in rq]
+        if len(forms) > 1 or (rq['method'] == 'POST' and not forms):
+            raise FormatError('обмін %d: тіло запиту — рівно одна з форм bodyBase64 / bodyMasked / bodyOmitted' % n)
+        if 'bodyBase64' in rq:
+            if len(base64.b64decode(rq['bodyBase64'], validate=True)) != rq.get('bodyLength'):
+                raise FormatError('обмін %d: bodyLength запиту' % n)
+        if 'bodyOmitted' in rq and (rq['bodyOmitted'] is not True or not rq.get('bodyOmittedReason')):
+            raise FormatError('обмін %d: bodyOmitted потребує причини' % n)
+        if 'bodyMasked' in rq:
+            bm = rq['bodyMasked']
+            fields = bm.get('fields')
+            if not isinstance(fields, list) or not fields:
+                raise FormatError('обмін %d: bodyMasked без переліку полів' % n)
+            try:
+                doc = json.loads(bm['text'])
+            except (ValueError, TypeError, KeyError):
+                raise FormatError('обмін %d: bodyMasked.text не JSON' % n)
+            for f in fields:
+                node = doc
+                for part in str(f).split('.'):
+                    node = node.get(part) if isinstance(node, dict) else None
+                if node != MASK_MARKER:
+                    raise FormatError('обмін %d: поле %s без маркера' % (n, f))
+            if bm['text'].count(json.dumps(MASK_MARKER)) != len(fields):
+                raise FormatError('обмін %d: маркер поза переліком полів' % n)
 
     # ------------------------------------------------------------------ тека
     @classmethod
@@ -128,14 +188,14 @@ class Recording:
 
     # ------------------------------------------------------------------ пакет
     def pack(self):
-        pk = {'format': PACK_FORMAT, 'formatVersion': VERSION, 'manifest': self.manifest,
+        pk = {'format': PACK_FORMAT, 'formatVersion': self.manifest['formatVersion'], 'manifest': self.manifest,
               'exchanges': {'%04d.json' % e['seq']: e for e in self.exchanges}}
         return _dumps(pk, 1) + '\n'
 
     @classmethod
     def unpack(cls, text):
         pk = json.loads(text)
-        if pk.get('format') != PACK_FORMAT or pk.get('formatVersion') != VERSION:
+        if pk.get('format') != PACK_FORMAT or pk.get('formatVersion') not in VERSIONS:
             raise FormatError('пакет: format')
         exchanges = [pk['exchanges'][entry['file']] for entry in pk['manifest']['exchanges']]
         return cls(pk['manifest'], exchanges)
