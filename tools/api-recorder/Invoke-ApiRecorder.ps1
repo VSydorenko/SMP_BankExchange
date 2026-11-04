@@ -14,7 +14,9 @@
 [CmdletBinding()]
 param(
     # Справжня конфігурація — лише в temp основного дерева (гітігнорована), поза git.
-    [string]$Config = 'R:/github/SMP_BankExchange/temp/api-recorder/config.psd1',
+    # Шлях за замовчуванням можна підмінити змінною середовища SMP_APIRECORDER_DEFAULT_CONFIG (її ставить самотест на файл-пастку);
+    # немає або порожня — жорсткий шлях.
+    [string]$Config = $(if ($env:SMP_APIRECORDER_DEFAULT_CONFIG) { $env:SMP_APIRECORDER_DEFAULT_CONFIG } else { 'R:/github/SMP_BankExchange/temp/api-recorder/config.psd1' }),
     [ValidateSet('all', 'privat', 'monoCorp', 'monoFop', 'pumb')][string[]]$Bank = 'all',
     # Мітка прогону = назва теки запису. Другий прогін — та сама команда з новою міткою.
     [string]$RunLabel = (Get-Date -Format 'yyyyMMdd-HHmmss'),
@@ -1836,9 +1838,20 @@ function Invoke-SelfTestMode {
     $c4 = $LASTEXITCODE
     & $check 'ПУМБ, -CheckRun: чистий stderr і чиста тека — код 0' ($c4 -eq 0) "(код $c4)"
     # без -Config: неінтерактивно (-NonInteractive) — відмова з кодом 4, файл за замовчуванням не читається (справжній шлях жорсткий, тож тут лише відмова й її код)
-    $o5 = & $pwsh -NoProfile -NonInteractive -File $PSCommandPath -DryRun -Bank pumb 2>&1 | Out-String
-    $c5 = $LASTEXITCODE
-    & $check 'конфіг за замовчуванням: без -Config неінтерактивно — код 4, відмова, жодного банку не запущено' (($c5 -eq 4) -and $o5.Contains('не читається без підтвердження') -and -not $o5.Contains('################')) "(код $c5)"
+    # Шлях за замовчуванням дочірнього процесу — файл-пастка з ексклюзивним блокуванням (SMP_APIRECORDER_DEFAULT_CONFIG): будь-яка спроба її прочитати дала б IOException, тобто код не 4.
+    $trap2 = Join-Path $e2e 'trap-default-config.psd1'
+    [System.IO.File]::WriteAllText($trap2, '@{ ВИГАДАНА-ПАСТКА = (', $script:Utf8NoBom)
+    $trap2Before = [System.IO.File]::ReadAllText($trap2)
+    $prevDefault = [Environment]::GetEnvironmentVariable('SMP_APIRECORDER_DEFAULT_CONFIG')
+    $trap2Lock = [System.IO.File]::Open($trap2, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::None)
+    try {
+        [Environment]::SetEnvironmentVariable('SMP_APIRECORDER_DEFAULT_CONFIG', $trap2)
+        $o5 = & $pwsh -NoProfile -NonInteractive -File $PSCommandPath -DryRun -Bank pumb 2>&1 | Out-String
+        $c5 = $LASTEXITCODE
+    }
+    finally { [Environment]::SetEnvironmentVariable('SMP_APIRECORDER_DEFAULT_CONFIG', $prevDefault); $trap2Lock.Dispose() }
+    & $check 'конфіг за замовчуванням (шлях — пастка): без -Config неінтерактивно — код 4, відмова, пастку не відкрито, жодного банку не запущено' (
+        ($c5 -eq 4) -and $o5.Contains('не читається без підтвердження') -and $o5.Contains('trap-default-config.psd1') -and -not $o5.Contains('################') -and ([System.IO.File]::ReadAllText($trap2) -ceq $trap2Before)) "(код $c5)"
     }
     finally { foreach ($v in $proxyVars) { [Environment]::SetEnvironmentVariable($v, $savedEnv[$v]) } }
 
