@@ -91,9 +91,25 @@ class OldResult:
 KEY = ('ДатаДокумента', 'НомерДокумента', 'КонтрагентНомерСчета', 'Сумма')
 
 
+PUMB_NOT_APPLICABLE = 'PUMB-NOT-APPLICABLE'
+ASSUMPTIONS[PUMB_NOT_APPLICABLE] = ('ПУМБ: «стара обробка» не застосовується -- рішення власника: новий конектор не мусить впізнавати документи, завантажені попередником '
+                                    '(СМП_РаботаСБанкамиПУМБAPIСервер), сумісність поля ключа D17 зі старою обробкою не вимога; завантаження починається з дати. '
+                                    'Позначка лише для pumb: для банків 5а вона неможлива (тест `test_api_oracle`).')
+
+
+def pumb_not_applicable():
+    """Явна відмова, а не порожній «звичайний» результат: еталон ПУМБ несе `Исключение.kind = not-applicable` і `Допущения = [PUMB-NOT-APPLICABLE]`;
+    Т1 задачі 3 ключ D17 ПУМБ зі старою обробкою НЕ звіряє."""
+    res = OldResult('pumb')
+    res.error = {'kind': 'not-applicable', 'text': 'для ПУМБ не застосовується: рішення власника -- сумісність ключа D17 зі старою обробкою не потрібна'}
+    res.complete = None
+    res.used = {PUMB_NOT_APPLICABLE}
+    return res
+
+
 def run(rec, p):
     if rec.bank == 'pumb':
-        raise NotImplementedError('оракул «стара обробка» ПУМБ -- Step 2 задачі 2a')
+        return pumb_not_applicable()
     return {'privat': old_privat, 'mono-fop': old_mono_fop, 'mono-corp': old_mono_corp}[rec.bank](rec, p)
 
 

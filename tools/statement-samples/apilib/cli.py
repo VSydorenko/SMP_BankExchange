@@ -287,7 +287,7 @@ def main(argv):
     p.add_argument('--account-obsolete', default='')
     p.add_argument('--account-currency', default=None)
     p.add_argument('--privat-id', default='ID', choices=['REF+REFN', 'TECHNICAL_TRANSACTION_ID', 'ID', 'none'])
-    p.add_argument('--disable', nargs='*', choices=sorted(expected.DEVIATIONS))
+    p.add_argument('--disable', nargs='*', choices=sorted(expected.DEVIATIONS) + sorted(expected.PUMB_DEVIATIONS))
     p.set_defaults(fn=cmd_oracle)
     p = sub.add_parser('guard-synth')
     p.add_argument('--raw', required=True)

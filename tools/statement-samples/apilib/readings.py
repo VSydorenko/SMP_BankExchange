@@ -74,13 +74,74 @@ def _qdict(ex):
     return dict(R.query_pairs(ex))
 
 
+def _pumb_body(ex):
+    """Тіло запиту як JSON-об'єкт або None (немає / `bodyMasked` / `bodyOmitted` / не JSON)."""
+    try:
+        body = json.loads(R.request_body_text(ex) or '')
+    except (ValueError, UnicodeDecodeError):
+        return None
+    return body if isinstance(body, dict) else None
+
+
+def pumb_refusal(searches):
+    """Чому читання ПУМБ з цими запитами `searcher` оракул НЕ моделює (або ''). Пагінацію моделюють лише з виміру: сторінки, `pagingRequest`
+    і кілька запитів -- «до виміру», не мовчазне припущення. Формат дат запиту -- гіпотеза `dd.MM.yyyy HH:mm:ss`, інший -- відмова."""
+    if len(searches) != 1:
+        return 'кілька запитів searcher (пагінація -- до виміру)'
+    body = _pumb_body(searches[0])
+    if body is None:
+        return 'тіло запиту searcher не розібрано (немає, bodyMasked, bodyOmitted чи не JSON)'
+    if 'pagingRequest' in body:
+        return 'pagingRequest у запиті (пагінація -- до виміру)'
+    accs = body.get('documentAccounts')
+    if not isinstance(accs, list) or len(accs) != 1:
+        return 'documentAccounts не з одного рахунку'
+    try:
+        C.pumb_date(body.get('fromDate'))
+        C.pumb_date(body.get('toDate'))
+    except C.PumbDateFormat:
+        return 'формат дати запиту не dd.MM.yyyy HH:mm:ss (гіпотеза, до виміру)'
+    return ''
+
+
+def pumb_split(rec):
+    """ПУМБ: -> ([Reading], [(сценарій, причина)]) -- читання, які оракул моделює, і ЯВНИЙ перелік «не змодельовано до виміру».
+    Читання = автентифікація, список рахунків і ОДИН запит `searcher` без `pagingRequest` (як у попередника); параметри -- з запиту й списку рахунків."""
+    token = lambda e: e['request']['path'].endswith('/openid-connect/token')
+    account = lambda e: e['request']['path'].endswith('/account') and e['request']['method'] == 'GET'
+    g_auth = _first(rec, token)
+    g_acc = _first(rec, lambda e: account(e) and _ok(e))
+    out, skipped = [], []
+    for sc, exs in _groups(rec):
+        se = [e for e in exs if e['request']['path'].endswith('/document/searcher')]
+        if not se:
+            continue
+        why = pumb_refusal(se)
+        own_auth, own_acc = [e for e in exs if token(e)], [e for e in exs if account(e)]
+        auth = own_auth[0] if own_auth else g_auth
+        acc = own_acc[0] if own_acc else g_acc
+        if not why and (auth is None or acc is None):
+            why = 'у записі немає обміну автентифікації чи списку рахунків'
+        if why:
+            skipped.append((sc, why))
+            continue
+        body = _pumb_body(se[0])
+        accounts = (_json(acc) or []) if _ok(acc) else []
+        accid = str(body['documentAccounts'][0])
+        iban = next((a.get('iban') or '' for a in accounts if isinstance(a, dict) and str(a.get('accountId')) == accid), '')
+        p = Params(account=iban, period_start=C.pumb_date(body['fromDate']), period_end=C.pumb_date(body['toDate']),
+                   reading_moment=C.DEFAULT_READING_MOMENT)
+        out.append(Reading(reading_id('pumb', sc), 'pumb', sc, [auth, acc, se[0]], p))
+    return out, skipped
+
+
 def readings(rec):
     """-> [Reading]: читання, які можна дати оракулові. Сценарії, що не є читанням (баланси окремо, settings, interim/final),
     пропускаються."""
     bank = rec.bank
     out = []
     if bank == 'pumb':
-        raise NotImplementedError('читання ПУМБ для оракула -- Step 2 задачі 2a')
+        return pumb_split(rec)[0]
     if bank == 'privat':
         bal = _first(rec, lambda e: e['request']['path'] == C.PRIVAT_BALANCE_PATH and _ok(e))
         settings = _first(rec, lambda e: e['request']['path'] == C.PRIVAT_SETTINGS_PATH and _ok(e))

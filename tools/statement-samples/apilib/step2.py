@@ -26,7 +26,7 @@ from sslib import cfg as cfgmod, gen, guard
 from sslib.checks import DIG, WORD
 from sslib.util import ws
 
-from . import anonymize as A, common as C, etalon, jsonspan, readings as RD, recording as R, schema
+from . import anonymize as A, common as C, etalon, expected, jsonspan, readings as RD, recording as R, schema
 from .synth import BANK_KEYS
 
 SEP = b'\n\xff\xfe\x00SEP\x00\n'
@@ -749,8 +749,6 @@ def _outcome(reading, label):
 
 def check_c(bank, raw_dir, anon_dir, map_path, cfg=None):
     """Перевірка (в): оракул на сирому й знеособленому читанні."""
-    if bank == 'pumb':
-        raise CheckError('оракул ПУМБ ще не реалізовано (Step 2 задачі 2a): перевірку (в) не виконано')
     rec, b = A.load_bank(bank, raw_dir, map_path, cfg)
     b.build_sweep()
     anon = R.Recording.from_dir(anon_dir)
@@ -786,7 +784,9 @@ def check_c(bank, raw_dir, anon_dir, map_path, cfg=None):
         d.cmp({k: v for k, v in o1['parameters'].items() if k != 'НомерСчета'},
               {k: v for k, v in o2['parameters'].items() if k != 'НомерСчета'}, tag + '.parameters')
         want_req = []                    # лише спожиті оракулом запити (I1): беремо їх з еталона сирого читання
-        for rq in o1['expected']['Запросы']:
+        if bank == 'pumb':               # ПУМБ: запити з портом і ТІЛОМ -- через ту саму заміну, що знеособлення; спожиті -- префікс обмінів читання
+            want_req = [expected.request_entry({'request': b.request(e['request'])}, bank) for e in r1.exchanges[:len(o1['expected']['Запросы'])]]
+        for rq in ([] if bank == 'pumb' else o1['expected']['Запросы']):
             q = b.request({'method': rq['Метод'], 'host': rq['Хост'], 'path': rq['Путь'],
                            'query': '&'.join('%s=%s' % (k, v) for k, v in rq['Запрос'])})
             want_req.append({'Метод': q['method'], 'Хост': q['host'], 'Путь': q['path'],

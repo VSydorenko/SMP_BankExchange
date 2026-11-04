@@ -96,6 +96,8 @@ def build_from(rec, p, *, sid, title, focus, macro, synthetic, disabled=frozense
         depends.add('ТлумачениеГраницы')
     if rec.bank == 'privat' and any(o['Валюта'] not in ('980', '') for o in exp.ops):
         depends.add('ФильтрВалютыПриват')
+    if rec.bank == 'pumb':
+        depends |= {'ИдентификаторПУМБ', 'ВозвратПУМБ', 'ФорматДатыПУМБ'}   # id/docId, повернення, dd.MM.yyyy HH:mm:ss -- гіпотези до виміру (задача 1)
     d = {'format': FORMAT, 'formatVersion': max(VERSION, rec.manifest['formatVersion']), 'bank': rec.bank, 'id': sid, 'synthetic': synthetic, 'title': title,
          'reviewFocus': focus, 'recording': {'макет': macro, 'обменов': len(rec.exchanges)},
          'parameters': p.to_json(), 'dependsOn': sorted(depends),

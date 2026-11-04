@@ -149,6 +149,24 @@ def parse_1c_date(s):
         raise ValueError('Преобразование значения к типу Дата не может быть выполнено')
 
 
+_PUMB_DATE_RX = re.compile(r'\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}')
+
+
+class PumbDateFormat(ValueError):
+    """Дата ПУМБ не в гіпотезі `dd.MM.yyyy HH:mm:ss`: оракул ЯВНО відмовляє, формат не вгадується (значення в повідомленні немає)."""
+
+
+def pumb_date(text):
+    """`dd.MM.yyyy HH:mm:ss` (гіпотеза за swagger і запитами попередника, до виміру) -> naive datetime (київський час). Інший формат -- `PumbDateFormat`."""
+    s = to_str(text)
+    if not _PUMB_DATE_RX.fullmatch(s):
+        raise PumbDateFormat('дата ПУМБ не у форматі dd.MM.yyyy HH:mm:ss (гіпотеза, не виміряно)')
+    try:
+        return datetime.strptime(s, '%d.%m.%Y %H:%M:%S')
+    except ValueError:
+        raise PumbDateFormat('дата ПУМБ не у форматі dd.MM.yyyy HH:mm:ss (гіпотеза, не виміряно)')
+
+
 def number(s):
     """`Число(строка)`: кома чи крапка як роздільник (виміряно: «12,5» і «0.01»); сміття — виняток."""
     t = trim(to_str(s)).replace(' ', '').replace(',', '.')
