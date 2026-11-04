@@ -294,7 +294,8 @@ class TrustBoundary(unittest.TestCase):
                 mut = E.run(s.recording(), s.params).trust
             if base != mut:
                 changed.add((s.bank, s.sid))
-        self.assertEqual(changed, {('mono-corp', 'СинтГраницаДыра'), ('privat', 'СинтГраницаДыра'), ('privat', 'СинтГраницаНетДня')})
+        self.assertEqual(changed, {('mono-corp', 'СинтГраницаДыра'), ('mono-corp', 'СинтГраницаРаньшеНачала'), ('privat', 'СинтГраницаДыра'),
+                                   ('privat', 'СинтГраницаНетДня')})
 
     def test_corp_absent_day_interpretation_and_all_final(self):
         s = SCN[('mono-corp', 'СинтГраницаДыра')]

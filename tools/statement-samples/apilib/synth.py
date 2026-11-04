@@ -935,6 +935,16 @@ def _corp_scenarios():
     s.exchanges = b.ex
     sc.append(s)
 
+    # Межа довіри не раніше початку періоду (D36 п. 10): період починається о 10:00, а перший день без isFinal -- початок цього дня
+    # (00:00) раніше за початок періоду, тож межа = НачалоПериода.
+    s, b = new('СинтГраницаРаньшеНачала', 'monobank юросіб: період з 10:00, перший день неостаточний -- банківська межа (00:00) раніше за початок періоду, межа довіри = НачалоПериода', [2],
+               start=_day(2026, 10, 14, 10), end=_day(2026, 10, 14, 23, 59, 59))
+    one(b, [ctx_(g, t=utc(2026, 10, 14, 9), amount=-1000, desc='Операція', done=utc(2026, 10, 14, 9) + 10, cnt=cnt())],
+        s.params.period_start, s.params.period_end)
+    b.balances(resp_json(200, corp_balances_body(s.params, {'2026-10-14': False})))
+    s.exchanges = b.ex
+    sc.append(s)
+
     s, b = new('СинтБалансыСбой', 'monobank юросіб: виписка прочитана, збій самого обміну balances (HTTP 500)', [4])
     one(b, [ctx_(g, t=t0 + 60, amount=-500, desc='Операція', done=t0 + 70, cnt=cnt())], s.params.period_start, s.params.period_end)
     b.balances(resp_json(500, {'errorCode': 'INTERNAL_SERVER_ERROR', 'errorDescription': 'Internal server error'}))
