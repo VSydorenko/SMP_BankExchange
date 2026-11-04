@@ -200,5 +200,39 @@ class NarrowPairException(unittest.TestCase):
         self.assertGreater(self.res()['hits'], 0)
 
 
+
+class NameInKeepString(unittest.TestCase):
+    """Раунд фінального рев'ю: слово з NAME (прізвище, назва контрагента) у рядковому полі KEEP знеособлювач замінює тією ж заміною слова з мапи, а перевірка (а) більше не виключає
+    слово лише тому, що воно трапилось у KEEP того самого запису (`keep_words` прибрано)."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.env = Env('privat', 'СинтСтраницыСлед', self.tmp)
+        raw = R.Recording.from_dir(self.env.raw)
+        self.page = [e['seq'] for e in raw.exchanges if e['request']['path'] == C.PRIVAT_PATH][0]
+        t = R.body_json(raw.exchanges[self.page - 1])['transactions'][0]
+        import re as _re
+        from apilib import anonymize as A
+        words = [w for w in _re.findall(r'[A-Za-zА-Яа-яІіЇїЄєҐґ]{4,}', t['AUT_CNTR_NAM']) if w[0].isupper() and w.casefold() not in A.GEN_WORDS and w not in ('Банк',)]
+        self.word = words[0]
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_a_name_word_in_a_keep_string_is_replaced_and_the_check_is_green(self):
+        mutate_body(self.env.raw, self.page, lambda s: s.replace('"type":"transactions"', '"type":"%s"' % self.word, 1))
+        self.env.anonymize()
+        anon = R.body_json(R.Recording.from_dir(self.env.anon).exchanges[self.page - 1])
+        self.assertNotIn(self.word, anon['type'])
+        self.assertEqual(len(anon['type']), len(self.word))                          # заміна тієї ж довжини: форма збережена
+        self.assertEqual(step2.check_a('privat', self.env.raw, self.env.anon)['hits'], 0)
+
+    def test_the_name_word_left_in_a_keep_string_is_red(self):
+        """Контроль, що вміє падати: слово з NAME того самого запису в KEEP-рядку знеособленого запису -- збіг (раніше його ховав `keep_words`)."""
+        self.env.anonymize()
+        mutate_body(self.env.anon, self.page, lambda s: s.replace('"type":"transactions"', '"type":"%s"' % self.word, 1))
+        self.assertGreater(step2.check_a('privat', self.env.raw, self.env.anon)['hits'], 0)
+
+
 if __name__ == '__main__':
     unittest.main()

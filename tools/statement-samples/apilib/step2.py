@@ -160,7 +160,7 @@ def pair_leaks(bank, rec, pair_exempt):
 
 def collect(bank, rec, cfg):
     sens = Sensitive()
-    keep_nums, keep_words, lower_words = set(), set(), set()
+    keep_nums = set()
     objs = {}
     allowed = {w.casefold() for w in list(cfg.get('allowed_words', [])) + list(cfg.get('guard_allowed_words', [])) +
                list(cfg.get('api_guard_allowed_words', []))}
@@ -188,8 +188,6 @@ def collect(bank, rec, cfg):
             if role == 'KEEP':
                 if nd.kind == 'str':
                     keep_nums |= set(DIG.findall(val))
-                    keep_words |= {w.casefold() for w in WORD.findall(val)}
-                    lower_words |= {w.casefold() for w in WORD.findall(val) if w[0].islower()}
                 else:
                     keep_nums |= set(DIG.findall(val))
                 continue
@@ -197,9 +195,6 @@ def collect(bank, rec, cfg):
                 continue
             texts.append((role, val.strip() if nd.kind == 'str' else val))
             sens.positional.append((idx, ('body',) + tuple(where), role, val))
-    for role, v in texts:
-        if role in NAME_ROLES:
-            lower_words |= {w.casefold() for w in WORD.findall(v) if w[0].islower()}
     for role, v in texts:
         if role in ('ID', 'ACC', 'NAME', 'BANKNAME') and 0 < len(v.strip()) < MIN_WHOLE and len(set(v.strip())) > 2:
             sens.short.add(v.strip())
@@ -214,8 +209,7 @@ def collect(bank, rec, cfg):
                 sens.nums.add(t)
         if role in NAME_ROLES:
             for w in WORD.findall(v):
-                if len(w) >= 4 and w[0].isupper() and w.casefold() not in allowed and w.casefold() not in lower_words \
-                        and w.casefold() not in keep_words:
+                if len(w) >= 4 and w[0].isupper() and w.casefold() not in allowed and w.casefold() not in A.GEN_WORDS:
                     sens.names.add(w)
     sens.nums -= keep_nums
     sens.generic = {x for lst in gen.PHRASES.values() for x in lst} | {x for lst in gen.SHORT.values() for x in lst}

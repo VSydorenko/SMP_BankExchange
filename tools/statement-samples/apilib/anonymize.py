@@ -18,11 +18,15 @@ import re
 
 from sslib import cfg as cfgmod, gen
 from sslib.checks import DIG, WORD
+from sslib.gen import WORD_RX
 
 from . import jsonspan, recording as R, schema
 
 IBAN_RX = re.compile(r'UA\d{27}')
 FREE_TEXT_KEEP = ('message', 'errorDescription')       # KEEP-поля з вільним текстом (зачищалися від IBAN); тепер зачищається КОЖНЕ рядкове поле KEEP (`Bank.clean_text`)
+# Слова, які генератор сам видає у вигаданих призначеннях (словники `gen.PHRASES` / `gen.SHORT`): за побудовою не ідентифікують, тож не чистяться з полів KEEP і не рахуються витоком у (а). ЄДИНИЙ такий
+# словник; явні слова публічного словника -- `allowed_words`, `guard_allowed_words`, `api_guard_allowed_words` із `config.json` (юридичні форми, назви банків, міста).
+GEN_WORDS = frozenset(w.casefold() for lst in list(gen.PHRASES.values()) + list(gen.SHORT.values()) for p in lst for w in WORD.findall(p))
 SWEEP_MIN = 6                                          # найкоротше значення ролі ID / ACC, яке підмінюється всередині рядків KEEP (коротші лише ловить перевірка (а))
 REPLACED = ('CODE', 'ACC', 'NAME', 'BANKNAME', 'PURPOSE', 'SCRAMBLE', 'ID')
 PRIVAT_KEEP_QUERY = ('startDate', 'endDate', 'limit')
@@ -60,9 +64,10 @@ def query_pairs_raw(query):
 class Bank:
     """Знеособлення одного банку: одна мапа на всі його записи."""
 
-    def __init__(self, bank, fakes, refs=(), ibans=(), ids=(), accs=()):
+    def __init__(self, bank, fakes, refs=(), ibans=(), ids=(), accs=(), codes=(), words=()):
         self.bank, self.fakes, self.refs, self.ibans = bank, fakes, tuple(sorted(refs, key=len, reverse=True)), tuple(ibans)
-        self.ids, self.accs = tuple(ids), tuple(accs)    # сирі значення ролей ID і ACC запису (для зачистки полів KEEP)
+        self.ids, self.accs, self.codes = tuple(ids), tuple(accs), tuple(codes)    # сирі значення ролей ID, ACC і CODE запису (для зачистки полів KEEP)
+        self.words = frozenset(words)                    # слова (casefold) із значень ролей NAME / BANKNAME запису: прізвища й назви, що не мусять лишитись у рядках KEEP
         self.sweep = []                      # [(сирий токен, вигаданий)] для рядкових полів KEEP
 
     # ----------------------------------------------------------- значення
@@ -105,6 +110,8 @@ class Bank:
     def clean_text(self, s):
         for raw, fake in self.sweep:
             s = s.replace(raw, fake)
+        if self.words:
+            s = WORD_RX.sub(lambda m: self.fakes.word(m.group(0)) if m.group(0).casefold() in self.words else m.group(0), s)
         return s
 
     def build_sweep(self):
@@ -121,6 +128,9 @@ class Bank:
         for v in self.ids:
             if len(v) >= SWEEP_MIN and len(set(v)) > 2:
                 pairs.append((v, self.ident(v)))
+        for v in self.codes:
+            if len(v) >= SWEEP_MIN and len(set(v)) > 2:
+                pairs.append((v, self.value('CODE', v)))
         seen, out = set(), []
         for raw, fake in sorted(pairs, key=lambda p: -len(p[0])):
             if raw not in seen:
@@ -250,9 +260,12 @@ def prescan(bank, rec):
     return refs, ibans, words, nums
 
 
-def prescan_values(bank, rec):
-    """Сирі значення ролей ID і ACC (у тілах, шляхах, запитах) для зачистки полів KEEP. -> (ids, accs)."""
-    ids, accs = set(), set()
+def prescan_values(bank, rec, cfg=None):
+    """Сирі значення ролей ID, ACC, CODE й слова ролей NAME / BANKNAME (у тілах, шляхах, запитах) для зачистки полів KEEP. Слова з явного словника (`allowed_words`, `guard_allowed_words`,
+    `api_guard_allowed_words`) і зі словника генератора (`GEN_WORDS`) і слова коротші за 4 літери не беруться. -> (ids, accs, codes, words)."""
+    cfg = cfg or cfgmod.load()
+    allowed = {w.casefold() for w in list(cfg.get('allowed_words', [])) + list(cfg.get('guard_allowed_words', [])) + list(cfg.get('api_guard_allowed_words', []))}
+    ids, accs, codes, words = set(), set(), set(), set()
     for ex in rec.exchanges:
         req = ex['request']
         segs = req['path'].split('/')
@@ -279,7 +292,11 @@ def prescan_values(bank, rec):
                 accs.add(v)
                 if IBAN_RX.fullmatch(v):
                     accs.add(v[-14:])
-    return ids, accs
+            elif role == 'CODE':
+                codes.add(v)
+            elif role in ('NAME', 'BANKNAME'):
+                words |= {w.casefold() for w in WORD.findall(v) if len(w) >= 4 and w.casefold() not in allowed and w.casefold() not in GEN_WORDS}
+    return ids, accs, codes, words
 
 
 def make_fakes(cfg, words, nums, map_path):
@@ -298,9 +315,9 @@ def anonymize_bank(bank, raw_dir, out_dir, map_path, cfg=None):
     if rec.bank != bank:
         raise schema.UnknownField('%s: у маніфесті інший банк' % bank)
     refs, ibans, words, nums = prescan(bank, rec)
-    ids, accs = prescan_values(bank, rec)
+    ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
     fk = make_fakes(cfg, words, nums, map_path)
-    b = Bank(bank, fk, refs, ibans, ids, accs)
+    b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     b.build_sweep()
     new = [b.exchange(ex) for ex in rec.exchanges]
     anon = R.Recording(copy.deepcopy(rec.manifest), new)
@@ -317,7 +334,7 @@ def load_bank(bank, raw_dir, map_path, cfg=None):
     cfg = cfg or cfgmod.load()
     rec = R.Recording.from_dir(raw_dir)
     refs, ibans, words, nums = prescan(bank, rec)
-    ids, accs = prescan_values(bank, rec)
+    ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
     fk = make_fakes(cfg, words, nums, map_path)
-    b = Bank(bank, fk, refs, ibans, ids, accs)
+    b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     return rec, b

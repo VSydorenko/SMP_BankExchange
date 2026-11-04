@@ -12,9 +12,12 @@ from .checks import DIG, WORD, lexemes
 def raw_lexicon(cfg, raw_root):
     """Лексикон сторожа: числа від 5 цифр і власні назви з чутливих полів усіх зразків.
     Не беруться: числа, що збігаються зі збереженими полями (дата, сума, номер документа) будь-якого
-    зразка; слова призначень (звичайні слова); слова, чий варіант з малої літери трапляється в сирих
-    текстах; слова з `allowed_words` і `guard_allowed_words` (назви банків-міток зразків)."""
-    sens_all, keep_nums, lower_words = [], set(), set()
+    зразка (ЯВНИЙ виняток: без нього у макетах 30 збігів самих цих збережених значень); слова призначень
+    (звичайні слова); слова з `allowed_words` і `guard_allowed_words` (назви банків-міток зразків).
+    Виняток «слово, чий варіант з малої літери трапляється в сирих текстах» (`lower_words`) прибрано
+    (раунд фінального рев'ю): він ховав би прізвище, що збігається зі звичайним словом; на наявних даних це +28 слів
+    лексикону й 0 збігів."""
+    sens_all, keep_nums = [], set()
     allowed = set(cfg.get('allowed_words', [])) | set(cfg.get('guard_allowed_words', []))
     for s in cfg['samples']:
         raw = cfgmod.resolve(s, raw_root)
@@ -22,15 +25,13 @@ def raw_lexicon(cfg, raw_root):
         sens_all += sens
         for r, t, k in keep:
             keep_nums |= {x for x in lexemes(t) if x[0].isdigit()}
-        for r, t, k in sens + keep:
-            lower_words |= {w for w in WORD.findall(t) if w[0].islower()}
     nums, names = set(), set()
     for role, text, key in sens_all:
         for t in lexemes(text):
             if t[0].isdigit():
                 if t not in keep_nums:
                     nums.add(t)
-            elif role in ('NAME', 'BANKNAME') and len(t) >= 4 and t not in allowed and t.lower() not in lower_words                     and t.casefold() not in lower_words:
+            elif role in ('NAME', 'BANKNAME') and len(t) >= 4 and t not in allowed:
                 names.add(t)
     return nums, names
 

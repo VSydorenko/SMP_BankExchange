@@ -578,6 +578,9 @@ def _privat(rec, p, out, disabled):
     out.items = n
     if not out.failure_class:
         _privat_balance(rec, p, out)               # раніше за операції: з нього береться валюта рахунку (відступ 1)
+        if out.failure_class:
+            # обмін балансів не вдався (відмова за п. 8): валюту рахунку не визначено, фільтр валюти не застосовується -- той самий рядок, що й при порожній валюті в рядках балансу
+            out.diag('Предупреждение', 0, 'currency-unknown', None, Банк=BANK_NAMES['privat'])
     _privat_items(out, items, p, disabled)
 
 

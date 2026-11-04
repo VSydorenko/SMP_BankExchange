@@ -129,6 +129,10 @@ class ByHand(unittest.TestCase):
         self.check('СинтПолнаяНаНижней', ops={}, requests=[hi, frm], cls='ДействиеЧеловека', complete=False, trust=start_of_period, pauses=[],
                    diags=[(warn, 0, {'Банк': bank, 'Вид': 'cursor-stuck', 'Секунда': local(frm - 1), 'Секунда2': local(frm), 'Количество': 30})])
 
+        # «цей рік»: КонецПериода 15.01.2027, момент читання 04.11.2026 00:00 UTC: запит один, (S - 1, момент); межа довіри = момент читання (02:00 за Києвом)
+        m0 = S.utc(2026, 11, 4)
+        self.check('СинтКонецПослеМомента', ops={1: SID('Y', 1)}, requests=[m0], cls='', complete=True, trust=datetime(2026, 11, 4, 2, 0, 0), pauses=[])
+
         # пауза понад стелю: retry-after 3600 с > 120 с -- «повторити» без повтору й без сну, діагностика називає запитану паузу
         self.check('СинтЛимит429Потолок', ops={}, requests=[hi], cls='Повторить', complete=False, trust=start_of_period, pauses=[],
                    diags=[(warn, 0, {'Банк': bank, 'Вид': 'pause-over-ceiling', 'Статус': 429, 'ОписаниеБанка': 'Too many requests', 'Пауза': 3600})])
@@ -232,6 +236,12 @@ class ByHandFop(unittest.TestCase):
         # запиту навпаки (to <= from) немає. Усі операції до початку періоду -- відкинуто мовчки
         self.check('СинтПолнаяНаНижней', ops={}, requests=[(lo, hi), (lo, frm)], cls='ДействиеЧеловека', complete=False, trust=start_of_period, pauses=[60],
                    diags=[(warn, 0, {'Банк': bank, 'Вид': 'cursor-stuck', 'Секунда': local(frm - 1), 'Секунда2': local(frm), 'Количество': 30})])
+
+        # «цей рік»: відрізки від першої верхньої межі (момент читання - 1 с), а не від КонецПериода: (M - 31 доба - 2, M), далі (S - 1, M - 31 доба - 1); пауза 60 с між запитами
+        m0 = S.utc(2026, 11, 4)
+        s0 = S.to_unix(datetime(2026, 9, 25))
+        self.check('СинтКонецПослеМомента', ops={1: F('Y', 1), 2: F('Y', 2)}, requests=[(m0 - 31 * 86400 - 2, m0), (s0 - 1, m0 - 31 * 86400 - 1)], cls='', complete=True,
+                   trust=datetime(2026, 11, 4, 2, 0, 0), pauses=[60])
 
         # пауза понад стелю (retry-after 3600 с > 120 с): без повтору й без сну
         self.check('СинтЛимит429Потолок', ops={}, requests=[(lo, hi)], cls='Повторить', complete=False, trust=start_of_period, pauses=[],
@@ -368,6 +378,11 @@ class ByHandPrivat(unittest.TestCase):
         self.check('СинтПериодНаоборот', ops={}, requests=[], cls='ДействиеЧеловека', complete=False, trust=datetime(2026, 10, 15, 23, 59, 59),
                    pauses=[], diags=[(warn, 0, {})])
 
+        # «цей рік»: КонецПериода 15.01.2027 пізніший за момент 04.11.2026 (02:00 за Києвом) -- запит і баланс до дня моменту, межа довіри = момент
+        self.check('СинтКонецПослеМомента', ops={1: ('77.00', 'Поступило')},
+                   requests=[('settings', ''), ('transactions', 'startDate=25-09-2026&endDate=04-11-2026&' + lim), ('balance', 'startDate=25-09-2026&endDate=04-11-2026')],
+                   cls='', complete=True, trust=datetime(2026, 11, 4, 2, 0, 0), pauses=[1, 1])
+
         # межа довіри не раніше НачалоПериода: перший день неостаточний (00:00), але період починається о 10:00
         self.check('СинтГраницаРаньшеНачала', ops={1: ('42.00', 'Поступило')},
                    requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('balance', one_day('15-10-2026'))],
@@ -421,7 +436,7 @@ class ByHandPrivat(unittest.TestCase):
         self.check('СинтБалансЕщеСтраница', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано')},
                    requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('balance', one_day('15-10-2026'))],
                    cls='Повторить', complete=False, trust=datetime(2026, 10, 15), pauses=[1, 1],
-                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'balance-next-page', 'Статус': 200, 'ОписаниеБанка': ''})])
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'balance-next-page', 'Статус': 200, 'ОписаниеБанка': ''}), (warn, 0, {'Банк': bank})])    # + валюту не визначено (відмова /balance)
 
         # exist_next_page = рядок «false»: не булеве -- «повторити», прочитана сторінка лишається, балансу немає
         self.check('СинтExistНеБулево', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано')},
