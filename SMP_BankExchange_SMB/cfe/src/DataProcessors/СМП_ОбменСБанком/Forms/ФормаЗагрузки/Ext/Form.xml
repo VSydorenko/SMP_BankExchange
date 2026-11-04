@@ -41,7 +41,6 @@
 				</InputField>
 				<InputField name="УчетнаяЗапись" id="10">
 					<DataPath>УчетнаяЗапись</DataPath>
-					<Visible>false</Visible>
 					<ContextMenu name="УчетнаяЗаписьКонтекстноеМеню" id="11"/>
 					<ExtendedTooltip name="УчетнаяЗаписьРасширеннаяПодсказка" id="12"/>
 					<Events>
@@ -59,7 +58,6 @@
 				</InputField>
 				<LabelField name="ТекстВнешнейОбработки" id="16">
 					<DataPath>ТекстВнешнейОбработки</DataPath>
-					<Visible>false</Visible>
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
@@ -74,7 +72,6 @@
 					<ExtendedTooltip name="ТекстВнешнейОбработкиРасширеннаяПодсказка" id="18"/>
 				</LabelField>
 				<LabelDecoration name="ДекорацияПредупрежденияФормата" id="19">
-					<Visible>false</Visible>
 					<TextColor>web:FireBrick</TextColor>
 					<Title formatted="false">
 						<v8:item>
@@ -105,13 +102,11 @@
 				</Button>
 				<Button name="ОтменитьЧтение" id="27">
 					<CommandName>Form.Command.ОтменитьЧтение</CommandName>
-					<Visible>false</Visible>
 					<ExtendedTooltip name="ОтменитьЧтениеРасширеннаяПодсказка" id="28"/>
 				</Button>
 			</ChildItems>
 		</UsualGroup>
 		<UsualGroup name="ГруппаПлан" id="6">
-			<Visible>false</Visible>
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -557,7 +552,6 @@
 			<ExtendedTooltip name="ГруппаПодвалРасширеннаяПодсказка" id="9"/>
 			<ChildItems>
 				<UsualGroup name="ГруппаИтоги" id="109">
-					<Visible>false</Visible>
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
@@ -671,7 +665,6 @@
 				</UsualGroup>
 				<InputField name="СводкаЧтения" id="29">
 					<DataPath>СводкаЧтения</DataPath>
-					<Visible>false</Visible>
 					<ReadOnly>true</ReadOnly>
 					<TitleLocation>None</TitleLocation>
 					<MultiLine>true</MultiLine>
