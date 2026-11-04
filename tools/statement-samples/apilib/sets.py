@@ -31,6 +31,16 @@ ETALON_SET = 'smp-api-etalon-set'
 KINDS = {'synthetic': 'Синт', 'run1': 'Run1', 'run3': 'Run3'}
 BANKS = ('privat', 'mono-fop', 'mono-corp')       # банки 5а: 12 макетів; ПУМБ -- окремо (`PUMB`, `--anon-root-pumb`), щоб 12 і хеші 5а не змінились
 PUMB = 'pumb'
+# Банки, чий набір `run1` МОЖЕ не мати жодного справжнього запису, -- ЛИШЕ через цю названу константу з причиною (загальне правило «у кожного банку не менше однієї справжньої записи» не послаблюється:
+# для інших банків нуль -- помилка). Для ПУМБ -- `common.PUMB_AWAITING_RUN2`.
+AWAITING_REAL_RECORDS = {PUMB: C.PUMB_AWAITING_RUN2}
+
+
+def real_records_problem(bank, count):
+    """Правило набору `run1`: справжніх записів не менше одного, крім банків із `AWAITING_REAL_RECORDS`. -> текст проблеми або ''."""
+    if count >= 1 or bank in AWAITING_REAL_RECORDS:
+        return ''
+    return 'у наборі run1 банку %s немає жодного справжнього запису (нуль допустимий лише для банків із AWAITING_REAL_RECORDS)' % bank
 
 
 def names(bank, kind):
@@ -58,7 +68,7 @@ def run1_sets(bank, anon_root, kind='run1'):
     prefix = 'СМП_ТестЭталон' + key
     recs, ets = {}, {}
     folder = os.path.join(anon_root, 'etalons')
-    for fn in sorted(os.listdir(folder)):
+    for fn in sorted(os.listdir(folder)) if os.path.isdir(folder) else []:
         if not (fn.startswith(prefix) and fn.endswith('.json')):
             continue
         ident = fn[len(prefix):-len('.json')]
@@ -99,6 +109,12 @@ def build(anon_root, out_dir, anon_root3=None, anon_root_pumb=None):
     for bank, kind in plan:
         root = anon_root3 if kind == 'run3' else (anon_root_pumb if bank == PUMB else anon_root)
         recs, ets = synthetic_sets(bank) if kind == 'synthetic' else run1_sets(bank, root, kind)
+        if bank == PUMB and kind == 'run1':
+            problem = real_records_problem(bank, len(recs))
+            if problem:
+                raise ValueError(problem)
+            if not recs:
+                EXCLUDED.append((bank, 'усі читання run1b', AWAITING_REAL_RECORDS[bank], kind))
         if sorted(recs) != sorted(ets):
             raise ValueError('набори записів і еталонів не збігаються: %s %s' % (bank, kind))
         rname, ename = names(bank, kind)

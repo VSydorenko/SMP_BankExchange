@@ -12,7 +12,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from apilib import anonymize as A, common as C, expected as E, readings as RD, recording as R, step2
+from apilib import anonymize as A, common as C, expected as E, kyiv, readings as RD, recording as R, step2
 from apilib.common import Params
 from test_api_pumb_anonymize import IBAN, _post, _resp
 
@@ -31,7 +31,13 @@ def doc(n, state='PROCESSED', when='01.11.2026 10:00:00', amount='100.50', out=T
 
 
 def reading(docs, acct_status=200, search_status=200, auth_status=200, search_body=None, scenario='pumb_a1_searcher_nopaging', auth_body=None, **kw):
-    body = search_body or {'fromDate': DAY0, 'toDate': DAY1, 'documentAccounts': [str(ACCT['accountId'])]}
+    start, end = C.pumb_date(DAY0), C.pumb_date(DAY1)
+    if search_body is not None:                              # свій запит тесту: період із його тіла, як було
+        start, end = C.pumb_date(search_body['fromDate']), C.pumb_date(search_body['toDate'])
+    else:                                  # перший запит -- форма конектора: межі A2 (початок - 1 с, Мин(кінець + 1 с, момент читання)) і три поля (оракул звіряє й перший запит)
+        lo, hi = C.pumb_request_bounds(start, end, kyiv.to_local(C.DEFAULT_READING_MOMENT))
+        search_body = {'fromDate': lo.strftime('%d.%m.%Y %H:%M:%S'), 'toDate': hi.strftime('%d.%m.%Y %H:%M:%S'), 'documentAccounts': [str(ACCT['accountId'])]}
+    body = search_body
     auth = R.make_exchange(1, 'pumb_auth', {'method': 'POST', 'host': 'auth.fuib.com', 'path': '/auth/realms/VegaNet/protocol/openid-connect/token',
                                             'query': '', 'bodyOmitted': 'автентифікація'}, _resp(auth_body or {'token_type': 'Bearer'}, auth_status))
     acc = R.make_exchange(2, 'pumb_account', {'method': 'GET', 'host': 'service.fuib.com', 'port': 4103, 'path': '/war_veganet_api/account', 'query': ''},
@@ -39,7 +45,7 @@ def reading(docs, acct_status=200, search_status=200, auth_status=200, search_bo
     srch = R.make_exchange(3, scenario, _post('/document/searcher', body), _resp(docs, search_status))
     ex = [auth, acc, srch]
     rec = R.Recording(R.make_manifest('pumb', 'run1', ex), ex)
-    p = Params(account=IBAN, period_start=C.pumb_date(body['fromDate']), period_end=C.pumb_date(body['toDate']), reading_moment=C.DEFAULT_READING_MOMENT, **kw)
+    p = Params(account=IBAN, period_start=start, period_end=end, reading_moment=C.DEFAULT_READING_MOMENT, **kw)
     return rec, p
 
 
@@ -77,6 +83,16 @@ class PumbExpected(unittest.TestCase):
         self.assertEqual(e3.trust, p.period_end)
         self.assertEqual({o['ИдентификаторОперации'] for o in E.run(rec, p, {'pumb6'}).ops}, {''})
         self.assertEqual(sorted(e.applied), ['pumb1', 'pumb3', 'pumb5', 'pumb6'])
+
+    def test_first_request_recorder_form_is_rejected(self):
+        # перший запит справжнього запису (межі рівно по періоду, фільтри стану й типу) -- форма рекордера, не конектора: оракул відхиляє (закриває run2); перевірка (в) знеособлення не строга
+        body = {'fromDate': DAY0, 'toDate': DAY1, 'documentState': ['PROCESSED'], 'documentType': ['UAH'], 'documentAccounts': [str(ACCT['accountId'])]}
+        rec, p = reading([doc(1)], search_body=body)
+        with self.assertRaises(E.RecordingMismatch) as cm:
+            E.run(rec, p)
+        self.assertEqual(str(cm.exception), C.PUMB_AWAITING_RUN2)
+        import dataclasses
+        self.assertEqual(len(E.run(rec, dataclasses.replace(p, strict_first_request=False)).ops), 1)
 
     def test_by_hand_a4_no_iban_error_error_description_cut_and_empty_id(self):
         # Р-д: документ без IBAN обох сторін -- Ошибка no-iban (рахунок з accountId запиту НЕ виводиться), не операція; сусідні документи -- як було
@@ -124,7 +140,7 @@ class PumbExpected(unittest.TestCase):
         self.assertEqual((e.complete, e.trust, e.ops, e.requests), (True, datetime(2026, 12, 1), [], []))
         # п. 11: аномалія меж -- операція поза межами ЗАПИТУ (fromDate/toDate з тіла searcher): повторити, читання неповне, межа = початок, сторінку не беремо, без значень у діагностиці;
         # рівність межі аномалією не є (включність не виміряна)
-        for when in ('02.11.2026 00:00:00', '31.10.2026 23:59:59'):
+        for when in ('02.11.2026 00:00:01', '31.10.2026 23:59:58'):          # на секунду за межею ЗАПИТУ (31.10 23:59:59 ... 02.11 00:00:00: запас A2)
             rec, p = reading([doc(1), doc(2, when=when)])
             e = E.run(rec, p)
             self.assertEqual((e.failure_class, e.complete, e.trust, e.ops), ('Повторить', False, p.period_start, []), when)
@@ -132,6 +148,9 @@ class PumbExpected(unittest.TestCase):
                              [('Предупреждение', 'out-of-bounds', {'Банк': 'ПУМБ', 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''})])
         rec, p = reading([doc(1, when=DAY0), doc(2, when=DAY1)])
         self.assertEqual([o['ПорядковыйНомер'] for o in E.run(rec, p).ops], [1, 2])
+        rec, p = reading([doc(1, when='31.10.2026 23:59:59'), doc(2, when='02.11.2026 00:00:00')])                  # рівно на межі запиту (запас): не аномалія, за періодом відкидається мовчки
+        e = E.run(rec, p)
+        self.assertEqual((e.failure_class, e.ops, e.out_of_period), ('', [], [1, 2]))
         # формат operationDate -- гіпотеза: інший формат -- явна відмова, не здогад
         rec, p = reading([doc(1, when='2026-11-01T10:00:00')])
         with self.assertRaises(C.PumbDateFormat):

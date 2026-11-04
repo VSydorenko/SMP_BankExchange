@@ -17,6 +17,7 @@
 
 Ґенератори, мапа й сторож -- `sslib` (`gen.Fakes`, `guard`); тут їх використано, не скопійовано."""
 import base64
+import dataclasses
 import json
 import os
 import re
@@ -763,7 +764,7 @@ class Diff:
 def _outcome(reading, label):
     """-> ('ok', словник еталона) | ('exc', ім'я виняткy)."""
     try:
-        d, exp, old = etalon.build_from(reading.recording(), reading.params, sid=reading.id, title=label, focus=[], macro=reading.name,
+        d, exp, old = etalon.build_from(reading.recording(), dataclasses.replace(reading.params, strict_first_request=False), sid=reading.id, title=label, focus=[], macro=reading.name,
                                         synthetic=False)
         return 'ok', d
     except Exception as e:                                  # noqa: BLE001 -- порівнюється вид винятку, не текст
@@ -836,7 +837,7 @@ def write_etalons(bank, anon_dir, out_root, label='run1'):
             d, _, _ = etalon.build_from(r.recording(), r.params, sid=r.id, title='знеособлений запис %s: %s' % (label, r.scenario), focus=[],
                                         macro=r.name, synthetic=False)
         except Exception as e:                              # noqa: BLE001
-            skipped.append((r.id, type(e).__name__))
+            skipped.append((r.id, type(e).__name__ + (': ' + str(e) if isinstance(e, expected.RecordingMismatch) else '')))      # текст RecordingMismatch -- фіксований, без значень
             continue
         rec_dir = os.path.join(out_root, 'readings', bank, r.id)
         r.recording().to_dir(rec_dir)

@@ -1345,11 +1345,11 @@ def _pumb(rec, p, out, disabled):
             search = searches[used]
             used += 1
             use(out, search)
-            if used > 1:                                                   # половини -- межі запиту за правилом; ПЕРШИЙ запит у справжньому записі -- межі рекордера, тож не звіряється
+            if used > 1 or p.strict_first_request:                         # КОЖЕН запит (і перший) -- межі за правилом A2 і форма тіла конектора; перший запит справжнього запису (форма рекордера) відхиляється
                 body = json.loads(R.request_body_text(search))
                 want = C.pumb_request_bounds(lo, hi, moment_local)
-                if (C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))) != want:
-                    raise RecordingMismatch('межі запиту searcher не збігаються з половиною періоду')
+                if (C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))) != want or set(body) != {'fromDate', 'toDate', 'documentAccounts'}:
+                    raise RecordingMismatch(C.PUMB_AWAITING_RUN2 if used == 1 else 'межі запиту searcher не збігаються з половиною періоду')
             if search['failure'] or search['response']['status'] != 200:
                 _failure(out, search, bank, p.credentials)                          # 429 тут -- без повтору: модель пауз зі Step 3
                 return
