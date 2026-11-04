@@ -316,10 +316,10 @@ def utc(y, mo, d, h=0, mi=0, s=0):
     return int((datetime(y, mo, d, h, mi, s) - kyiv.EPOCH).total_seconds())
 
 
-def corp_paged(b, p, ops, limit, first_headers=()):
+def corp_paged(b, p, ops, limit, first_headers=(), stop_after=None):
     """Обміни виписки юросіб, які дав би банк (модель `bankmodel.CorpBank`, лише виміряне) на запити конектора за D36 п. 11
-    (`44d22a1`): `to` наступного запиту = найраніша `time` сторінки + 1 (межова секунда охоплюється вдруге, повтори відкидає
-    конектор за `id`); повна сторінка, що лежить в одній секунді (продовження збіглося б із поточним), -- застряглий курсор:
+    (`44d22a1` і рішення за рев'ю): `to` наступного запиту = Мин(найраніша `time` сторінки + 1, поточна `to`) (межова секунда
+    охоплюється вдруге, повтори відкидає конектор за `id`); повна сторінка, що лежить в одній секунді (продовження збіглося б із поточним), -- застряглий курсор:
     читання йде далі з `to` = ця секунда (виключна). Кінець -- сторінка, коротша за `limit`, або `to` не вище за початок."""
     bank = bankmodel.CorpBank(ops)
     frm, upper, first = to_unix(p.period_start), to_unix(p.period_end), True
@@ -327,15 +327,15 @@ def corp_paged(b, p, ops, limit, first_headers=()):
         page = bank.statement(frm, upper, limit)
         b.statement(frm, upper, resp_json(200, page, first_headers if first else ()))
         first = False
-        if len(page) < limit:
+        if len(page) < limit or (stop_after is not None and len(b.ex) >= stop_after):
             return
         earliest = min(o['time'] for o in page)
-        if earliest + 1 >= upper:
-            upper = earliest
-            if upper <= frm:
-                return
-        else:
-            upper = earliest + 1
+        nxt = min(earliest + 1, upper)                   # межа продовження = Мин(E + 1, U)
+        if nxt >= upper:                                 # запит продовження збігся б із поточним: застряг; крок -- Мин(E, U - 1)
+            nxt = min(earliest, upper - 1)
+        if nxt <= frm:
+            return
+        upper = nxt
 
 
 def desc_ordered(items):
@@ -872,9 +872,46 @@ def _corp_scenarios():
     # Повна сторінка в одній секунді на початку відрізка (D36 п. 11, 44d22a1): продовження збіглося б із поточним -- «дія людини»,
     # неповне читання; читання йде далі з межею в цю секунду (тут старших операцій немає). Припущення, не виміряне: операція
     # на секунді `from` повертається (нижня межа `from` у моделі не змодельована).
+    # Повна сторінка, усі операції на `time` = `to` запиту (межа продовження = поточна відразу; крок після застрягання -- Мин(E, U - 1),
+    # без «- 1» читання повторювало б той самий запит). Сторінка записана вручну: модель виміряного (`to` виключний) операцій на
+    # `time` = `to` не повернула б; семантика `to` для цього випадку не виміряна. Старші операції читаються далі.
+    s, b = new('СинтПолнаяНаTo', 'monobank юросіб: повна сторінка, усі операції на time = to запиту -- застряглий курсор, крок Мин(E, U - 1), старіші операції в конверті (D36 п. 11)', [3])
+    top = to_unix(s.params.period_end)
+    on_to = [ctx_(g, t=top, amount=-(100 + i), desc='на to %d' % i, tid=seqid('T', i)) for i in range(lim)]
+    below_to = [ctx_(g, t=top - 100 - 10 * i, amount=-(400 + i), desc='нижче %d' % i, tid=seqid('U', i)) for i in range(3)]
+    b.statement(to_unix(s.params.period_start), top, resp_json(200, on_to))
+    b.statement(to_unix(s.params.period_start), top - 1, resp_json(200, bankmodel.CorpBank(on_to + below_to).statement(0, top - 1, lim)))
+    s.exchanges = b.ex
+    sc.append(s)
+
     s, b = new('СинтПолнаяНаНачале', 'monobank юросіб: повна сторінка, усі операції на секунді початку відрізка -- застряглий курсор, «дія людини» (D36 п. 11)', [3])
     corp_paged(b, s.params, [ctx_(g, t=to_unix(s.params.period_start), amount=-(100 + i), desc='на початку %d' % i, tid=seqid('S', i))
                               for i in range(lim)], lim)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # ПОЗА виміряним (запобіжник; модель банку тут не застосовується, відповідь другої сторінки записана вручну як аномалія): банк
+    # проігнорував `to` і повернув сторінку, де є `time` > `to` запиту. Відповідь за межами запиту в конверт не береться, раніше
+    # прочитана перша сторінка лишається; читання неповне, «повторити» (D36 п. 8 і рішення за рев'ю задачі 4).
+    s, b = new('СинтБанкИгнорируетTo', 'monobank юросіб: банк ігнорує to -- на другій сторінці time > to запиту (поза виміряним, запобіжник); перша сторінка лишається', [3])
+    anomaly_t = utc(2026, 10, 14, 6)
+    first_page = [ctx_(g, t=anomaly_t + 10 * i, amount=-(100 + i), desc='ан%d' % i, tid=seqid('E', i)) for i in range(lim)]
+    corp_paged(b, s.params, first_page, lim, stop_after=1)
+    bad_to = anomaly_t + 1                                       # to другого запиту = найраніша time першої сторінки + 1
+    outside = [ctx_(g, t=bad_to + 1 + i, amount=-(500 + i), desc='поза to %d' % i, tid=seqid('I', i)) for i in range(lim)]
+    b.statement(to_unix(s.params.period_start), bad_to, resp_json(200, sorted(outside, key=lambda o: -o['time'])))
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Контроль до запобіжника: операції рівно на `time` = `to` і `time` = `from` -- НЕ аномалія (виключність межі й дробові секунди не
+    # виміряно; повтори відкидає id). Звичайні дані без відмови, кожна операція в конверті рівно один раз.
+    s, b = new('СинтОперацияНаTo', 'monobank юросіб: операції на time = to і time = from запиту -- не аномалія, звичайні дані; кожна рівно раз', [3])
+    eq_from, eq_to = to_unix(s.params.period_start), to_unix(s.params.period_end)
+    edge = [ctx_(g, t=eq_to, amount=-1000, desc='на to', done=eq_to, tid=seqid('Q', 1)),
+            ctx_(g, t=utc(2026, 10, 14, 8), amount=2000, desc='всередині', done=utc(2026, 10, 14, 8) + 5, tid=seqid('Q', 2)),
+            ctx_(g, t=eq_from, amount=-3000, desc='на from', done=eq_from, tid=seqid('Q', 3))]
+    b.statement(eq_from, eq_to, resp_json(200, sorted(edge, key=lambda o: -o['time'])))
+    b.balances(resp_json(200, corp_balances_body(s.params)))
     s.exchanges = b.ex
     sc.append(s)
 

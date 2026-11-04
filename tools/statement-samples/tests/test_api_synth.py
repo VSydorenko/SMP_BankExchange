@@ -105,8 +105,8 @@ class Shape(unittest.TestCase):
             if e.failure_class:
                 self.assertFalse(e.complete, s.name)
                 self.assertEqual(e.trust, s.params.period_start, s.name)      # межа визначена: курсор не посунеться
-                self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags if d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck')), s.name)
-                self.assertTrue(any(d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck') for d in e.diags), s.name)
+                self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags if d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds')), s.name)
+                self.assertTrue(any(d['Суть'] in ('read-failed', 'account-not-found', 'work-balance', 'page-cannot-continue', 'cursor-stuck', 'out-of-bounds') for d in e.diags), s.name)
                 self.assertIn(e.failure_class, (E.CLS_RETRY, E.CLS_HUMAN))
             else:
                 self.assertTrue(e.complete, s.name)
@@ -114,7 +114,7 @@ class Shape(unittest.TestCase):
     def test_diagnostic_facts_are_a_closed_list(self):
         """Текст для людини будується лише з названих фактів (банк, статус, опис банку, ідентифікатор): заголовків запиту й
         облікових даних у діагностиці немає за побудовою."""
-        allowed = {'Банк', 'Вид', 'Статус', 'ОписаниеБанка', 'Состояние', 'Ид', 'Момент', 'Значение', 'Код', 'КодСервиса', 'Секунда', 'Количество'}
+        allowed = {'Банк', 'Вид', 'Статус', 'ОписаниеБанка', 'Состояние', 'Ид', 'Момент', 'Значение', 'Код', 'КодСервиса', 'Секунда', 'Секунда2', 'Количество'}
         for s in ALL:
             for d in E.run(s.recording(), s.params).diags:
                 self.assertLessEqual(set(d['Факты']), allowed, s.name)

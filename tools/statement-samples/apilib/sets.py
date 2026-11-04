@@ -20,8 +20,9 @@
 еталон, тож кількість записів дорівнює кількості еталонів у кожному наборі."""
 import json
 import os
+from datetime import datetime
 
-from . import etalon, readings, recording as R, synth
+from . import common as C, etalon, readings, recording as R, synth
 
 # Читання run1, виключені з наборів, бо конектор не відтворює їхніх запитів (`readings.replay_exclusion`): (банк, ід, причина).
 EXCLUDED = []
@@ -68,6 +69,17 @@ def run1_sets(bank, anon_root):
         reason = readings.replay_exclusion(bank, rec, et['parameters'])
         if reason:
             EXCLUDED.append((bank, ident, reason))
+            if reason.startswith('limit '):
+                # справжні операції, сторінки від моделі банку на робочому limit (`ЗапStatementLimit500_Модель30`): продуктовий шлях без шва
+                derived = readings.model_paged_corp(rec)
+                p = C.Params(account=et['parameters']['НомерСчета'],
+                             period_start=datetime.strptime(et['parameters']['НачалоПериода'], '%Y-%m-%dT%H:%M:%S'),
+                             period_end=datetime.strptime(et['parameters']['КонецПериода'], '%Y-%m-%dT%H:%M:%S'), old_account_currency='980')
+                did = ident + '_Модель30'
+                d, _, _ = etalon.build_from(derived, p, sid=did, title='справжні операції запису %s, сторінки від моделі банку (limit %d)' % (ident, C.CORP_WORKING_LIMIT),
+                                            focus=et.get('reviewFocus', []), macro=et.get('recording', {}).get('макет', did), synthetic=False)
+                ets[did] = d
+                recs[did] = json.loads(derived.pack())
             continue
         ets[ident] = et
         recs[ident] = json.loads(rec.pack())

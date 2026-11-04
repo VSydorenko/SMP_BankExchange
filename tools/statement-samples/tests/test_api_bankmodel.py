@@ -3,16 +3,21 @@
 `corp_a1_statement_small_limit` на запитах рекордера (to = час межової операції) -- сторінки 10/10/10/3, ті самі операції в тому
 самому порядку; зіпсована модель (`to` включний) це відтворення валить. Один тест. Запис -- знеособлений вихід run1 у
 гітігнорованій `temp/` (його немає в клонах без прогону), тож без нього тест пропускається."""
+import base64
+import json
 import os
 import sys
 import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from apilib import bankmodel, recording as R
+from apilib import bankmodel, readings, recording as R
 
 READING = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'temp', 'api-anon', 'run1', 'readings',
                        'mono-corp', 'ЗапStatementSmallLimit')
+
+
+READING500 = os.path.join(os.path.dirname(READING), 'ЗапStatementLimit500')
 
 
 def replay(model, statements):
@@ -22,7 +27,7 @@ def replay(model, statements):
 
 
 class BankModel(unittest.TestCase):
-    @unittest.skipUnless(os.path.isdir(READING), 'немає знеособленого запису run1 (temp/api-anon/run1)')
+    @unittest.skipUnless(os.path.isdir(READING) and os.path.isdir(READING500), 'немає знеособленого запису run1 (temp/api-anon/run1)')
     def test_model_reproduces_the_recorded_pagination_and_a_broken_model_does_not(self):
         rec = R.Recording.from_dir(READING)
         statements = [e for e in rec.exchanges if R.statement_window(e)]
@@ -32,6 +37,22 @@ class BankModel(unittest.TestCase):
         self.assertEqual(len({op['id'] for op in pool}), len(pool))               # у запису повторів немає
         self.assertEqual(replay(bankmodel.CorpBank(pool), statements), recorded)    # поле за полем, у тому самому порядку
         self.assertNotEqual(replay(bankmodel.CorpBank(pool, to_inclusive=True), statements), recorded)   # контроль уміє впасти
+        # похідний запис «справжні операції, сторінки від моделі» (ЗапStatementLimit500_Модель30): модель лише групує операції --
+        # тіла операцій побайтово ті самі, множина id та сама; balances справжнього запису береться як є
+        real = R.Recording.from_dir(READING500)
+        derived = readings.model_paged_corp(real)
+        real_stmt = next(e for e in real.exchanges if R.statement_window(e))
+        real_body = base64.b64decode(real_stmt['response']['bodyBase64'])
+        real_ops = R.body_json(real_stmt)
+        derived_stmts = [e for e in derived.exchanges if R.statement_window(e)]
+        derived_ops = [op for e in derived_stmts for op in R.body_json(e)]
+        self.assertGreater(len(derived_stmts), 1)                                       # сторінки на робочому ліміті, а не одна на 500
+        self.assertEqual({op['id'] for op in derived_ops}, {op['id'] for op in real_ops})
+        for op in derived_ops:
+            self.assertIn(json.dumps(op, ensure_ascii=False, separators=(',', ':')).encode('utf-8'), real_body)
+        real_bal = next(e for e in real.exchanges if e['request']['path'].endswith('/balances'))
+        self.assertEqual([e['response']['bodyBase64'] for e in derived.exchanges if e['request']['path'].endswith('/balances')],
+                         [real_bal['response']['bodyBase64']])
 
 
 if __name__ == '__main__':

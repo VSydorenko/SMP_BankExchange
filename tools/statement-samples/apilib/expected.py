@@ -396,14 +396,15 @@ def rule_page_without_id(out, ex):
     out.rules.add('rule_page_without_id')
 
 
-def rule_cursor_stuck(out, second_unix, count):
-    """Застряглий курсор (D36 п. 11, п. 8; `44d22a1`): повна сторінка лежить в одній секунді, запит продовження збігся б із поточним.
-    Повтор дав би те саме -> клас «дія людини» (не «повторити»); читання неповне; діагностика називає секунду (київський час) і
-    кількість отриманих операцій; читання триває далі з межею в цю секунду, тож неповною лишається лише вона."""
+def rule_cursor_stuck(out, bound_unix, count):
+    """Застряглий курсор (D36 п. 11, п. 8; `44d22a1` і уточнення архітектора): запит продовження збігся б із поточним (E >= U - 1, `U` --
+    поточна верхня межа). Повтор дав би те саме -> клас «дія людини» (не «повторити»); читання неповне; діагностика називає секунди
+    між новою межею (U - 1) і поточною (U) -- київський час -- і кількість отриманих операцій; читання триває далі з межею U - 1."""
     out.failure_class = out.failure_class or CLS_HUMAN
     out.complete = False
     out.diag('Предупреждение', 0, 'cursor-stuck', None, Банк=BANK_NAMES[out.bank], Вид='cursor-stuck',
-             Секунда=kyiv.unix_to_local(second_unix).strftime('%d.%m.%Y %H:%M:%S'), Количество=count)
+             Секунда=kyiv.unix_to_local(bound_unix - 1).strftime('%d.%m.%Y %H:%M:%S'),
+             Секунда2=kyiv.unix_to_local(bound_unix).strftime('%d.%m.%Y %H:%M:%S'), Количество=count)
     out.rules.add('rule_cursor_stuck')
 
 
@@ -694,6 +695,15 @@ def _mono(rec, p, out, disabled):
         earliest = None
         earliest_unix = None
         start_local, upper_local = kyiv.unix_to_local(frm), kyiv.unix_to_local(to)
+        if corp and any(isinstance(tx, dict) and tx.get('time') is not None and (int(tx['time']) > to or int(tx['time']) < frm)
+                        for tx in page):
+            # ПОЗА виміряним (запобіжник, D36 п. 8 і рішення за рев'ю задачі 4): відповідь виходить за межі запиту -- `time` > `to` або
+            # `time` < `from` (`time` = `to` НЕ аномалія: виключність межі й дробові секунди не виміряно, повтори відкидає `id`).
+            # Читання неповне, «повторити»; ЦЯ сторінка в конверт не береться, раніше прочитані лишаються.
+            _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''},
+                  'out-of-bounds')
+            out.rules.add('rule_response_out_of_bounds')
+            break
         for tx in page:
             n += 1
             items.append(Item(n, tx, ex['seq']))
@@ -709,17 +719,21 @@ def _mono(rec, p, out, disabled):
             # D36 п. 11 (44d22a1): продовження за часом знову охоплює секунду найранішої операції (`to` = time + 1; банк `to` не
             # включає); повтори відкидає дедуплікація за id. Запит продовження, що збігся б із поточним (вся повна сторінка в одній
             # секунді), -- застряглий курсор: «дія людини», читання йде далі з `to` = ця секунда (виключна).
-            nxt = earliest_unix + 1 if earliest_unix is not None else None
-            if nxt is None:
+            if earliest_unix is None:
                 _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-without-time', 'Статус': 200, 'ОписаниеБанка': ''},
                       'page-without-time')
                 out.rules.add('rule_end_of_read')
                 break
+            # межа продовження = Мин(найраніша time + 1, поточна `to`): межа ніколи не зростає, і застрягання (наступна межа = поточна)
+            # визначається за будь-якої семантики `to`
+            nxt = min(earliest_unix + 1, to)
             if nxt >= to:
-                rule_cursor_stuck(out, earliest_unix, len(page))
-                nxt = earliest_unix
-                if nxt <= frm:
-                    break
+                # застрягання: межа продовження = поточна (E >= U - 1). Крок після нього -- Мин(E, U - 1), строго менша за U за будь-якої
+                # семантики `to`; неповними лишаються секунди між новою й поточною межею (одна, якщо межа виключна, до двох, якщо включна)
+                rule_cursor_stuck(out, to, len(page))
+                nxt = min(earliest_unix, to - 1)
+            if nxt <= frm:
+                break                                # читати нічого (межа дійшла до початку), без відмови
             if i < len(stmts) and R.statement_window(stmts[i])[2] != nxt:
                 raise RecordingMismatch('запит продовження запису (to = %d) не збігається з правилом D36 п. 11 (to = %d)'
                                         % (R.statement_window(stmts[i])[2], nxt))

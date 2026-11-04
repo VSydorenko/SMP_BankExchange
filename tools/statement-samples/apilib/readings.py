@@ -6,11 +6,12 @@
 Параметри читання (рахунок, період) виводяться з самого запису -- однаково для сирого й знеособленого: рахунок з відповіді
 `/balance` (Приват), зі шляху виписки (юросіб), з `client-info` за ідентифікатором рахунку зі шляху (ФОП); період -- із
 запиту. Жодна функція не друкує значення."""
+import json
 import re
 from dataclasses import dataclass
 from datetime import datetime
 
-from . import common as C, kyiv, recording as R
+from . import bankmodel, common as C, kyiv, recording as R
 from .common import Params
 from .synth import BANK_KEYS
 
@@ -172,4 +173,44 @@ def replay_exclusion(bank, rec, params):
             times = [x.get('time') for x in page if isinstance(x, dict) and isinstance(x.get('time'), int)] if isinstance(page, list) else []
             if isinstance(page, list) and len(page) >= limit and times and frm < min(times) < to:
                 return 'запис кінчається повною сторінкою (limit %d), яку можна продовжити: наступного обміну немає, ознаки кінця немає' % limit
+    for e in rec.exchanges:
+        if R.statement_window(e):
+            limit = next((int(v) for k, v in R.query_pairs(e) if k == 'limit' and v.isdigit()), 10)
+            if limit > C.CORP_WORKING_LIMIT:
+                return 'limit %d понад робочий (%d); шов розміру сторінки лише менший за робочий ліміт' % (limit, C.CORP_WORKING_LIMIT)
     return ''
+
+
+def model_paged_corp(rec, limit=None):
+    """Похідний запис «справжні операції, сторінки від моделі»: операції справжнього запису юросіб (одна сторінка великого `limit`),
+    згруповані моделлю банку (`bankmodel.CorpBank`, лише виміряне) у сторінки на робочому `limit` на запити конектора за D36 п. 11
+    (межа продовження Мин(E + 1, U)). Тіла операцій не змінюються (серіалізація тими самими байтами), модель їх лише групує; обмін
+    `balances` береться зі справжнього запису як є. -> `Recording`."""
+    limit = C.CORP_WORKING_LIMIT if limit is None else limit
+    stmts = [e for e in rec.exchanges if R.statement_window(e)]
+    bals = [e for e in rec.exchanges if e['request']['path'].endswith('/balances')]
+    if len(stmts) != 1 or len(bals) != 1:
+        raise ValueError('очікується один запит виписки й один balances, а в записі %d і %d' % (len(stmts), len(bals)))
+    real = stmts[0]
+    acct, frm, to = R.statement_window(real)
+    bank = bankmodel.CorpBank(R.body_json(real))
+    exchanges, upper = [], to
+    while True:
+        page = bank.statement(frm, upper, limit)
+        body = json.dumps(page, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+        exchanges.append(R.make_exchange(len(exchanges) + 1, 'model30_' + real['scenario'],
+                                         {'method': 'GET', 'host': real['request']['host'],
+                                          'path': '/ext/v1/statement/%s/%d/%d' % (acct, frm, upper), 'query': 'limit=%d' % limit},
+                                         {'status': 200, 'headers': [tuple(h) for h in real['response']['headers']], 'body': body}))
+        if len(page) < limit:
+            break
+        earliest = min(o['time'] for o in page)
+        nxt = min(earliest + 1, upper)
+        if nxt >= upper:
+            nxt = min(earliest, upper - 1)
+        if nxt <= frm:
+            break
+        upper = nxt
+    balances = dict(bals[0], seq=len(exchanges) + 1)
+    exchanges.append(balances)
+    return R.Recording(R.make_manifest(rec.bank, 'model30', exchanges, note='real operations paged by the bank model'), exchanges)
