@@ -101,6 +101,7 @@ class Expected:
     nonfinal: list = field(default_factory=list)     # моменти неостаточних операцій
     bank_boundary: object = None                     # межа остаточності від банку (balances), D36 п. 10
     used: list = field(default_factory=list)         # обміни запису, які оракул СПОЖИВ, у порядку споживання
+    account_currency: object = None                  # валюта рахунку ПриватБанку з /balance (буквений код); None -- невідома
     out_of_period: list = field(default_factory=list)  # номери записів поза періодом (відкинуто мовчки), D36 п. 11
 
     def diag(self, level, n, essence, dev=None, **facts):
@@ -561,9 +562,9 @@ def _privat(rec, p, out, disabled):
             break
         follow_used.add(cursor)
     out.items = n
-    _privat_items(out, items, p, disabled)
     if not out.failure_class:
-        _privat_balance(rec, p, out)
+        _privat_balance(rec, p, out)               # раніше за операції: з нього береться валюта рахунку (відступ 1)
+    _privat_items(out, items, p, disabled)
 
 
 def rule_cursor_repeated(out):
@@ -632,6 +633,24 @@ def _privat_balance(rec, p, out):
         _fail_not_json(out, 'privat', 'not-object')
         return
     out.bank_boundary = rule_bank_boundary_privat(js['balances'], p)
+    out.account_currency = privat_account_currency(js['balances'])
+
+
+def privat_account_currency(balances):
+    """Валюта рахунку ПриватБанку за рядками `/balance` (`currency`, буквений код; run1: UAH 44 з 44). Параметрів читання з валютою немає й не буде, тому валюта
+    береться з обміну, який конектор і так робить. Рядки з різними значеннями чи без значення -- валюта невідома (None), відступ 1 не застосовується."""
+    vals = {C.trim(C.to_str(b.get('currency'))).upper() for b in balances if isinstance(b, dict)}
+    return vals.pop() if len(vals) == 1 and next(iter(vals), '') else None
+
+
+def foreign_currency(out, disabled, n, raw, ident):
+    """Відступ 1 (валюта): операція в валюті, відмінній від валюти рахунку, -- рядок Предупреждение (рівень, як для чужого рахунку в точці читання), у Операции
+    не йде; попередник такі рядки відкидав мовчки (регламентний фільтр валюти). -> True, якщо операцію відкинуто. Валюта рахунку невідома -- не застосовується."""
+    ccy = C.trim(C.to_str(raw.get('CCY'))).upper()
+    if 'dev1' in disabled or not out.account_currency or not ccy or ccy == out.account_currency:
+        return False
+    out.diag('Предупреждение', n, 'foreign-currency', 'dev1', Ид=ident, Код=ccy)
+    return True
 
 
 def _privat_items(out, items, p, disabled):
@@ -711,6 +730,8 @@ def _privat_items(out, items, p, disabled):
         code = dev6_currency(ccy_text, disabled, p) if ccy_text else ''
         if ccy_text and code is None:
             out.diag('Ошибка', n, 'unknown-currency', None, Ид=ident_for_diag, Код=ccy_text)
+            continue
+        if foreign_currency(out, disabled, n, d, ident_for_diag):       # відомий код, відмінний від валюти рахунку
             continue
         if ccy_text and ccy_text != 'UAH' and 'dev6' not in disabled:
             if code != p.old_currency_catalog.get(ccy_text, ''):

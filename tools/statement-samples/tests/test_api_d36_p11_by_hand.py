@@ -335,6 +335,13 @@ class ByHandPrivat(unittest.TestCase):
                              ('balance', one_day('15-10-2026'))],
                    cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 5, 1])
 
+        # чужа валюта (відступ 1): рахунок UAH (рядки балансу несуть UAH), 2-га операція в USD -- Предупреждение (код валюти й ідентифікатор), у Операции не йде
+        ids = self.ids('СинтЧужаяВалюта')
+        self.check('СинтЧужаяВалюта', ops={1: ('100.00', 'Поступило'), 3: ('300.00', 'Списано')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('balance', one_day('15-10-2026'))],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1],
+                   diags=[(warn, 2, {'Ид': ids[1], 'Код': 'USD'})])
+
         # пауза понад стелю (3600 с > 120 с): без повтору й без сну, «повторити», баланс не запитується
         self.check('СинтЛимит429Потолок', ops={},
                    requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim)],

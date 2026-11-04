@@ -229,6 +229,7 @@ def privat_balance_body(p, flags=None, absent=()):
     """Відповідь `/api/statements/balance` ПриватБанку (run1, пункт 6): `balances[]` -- по рядку на добу періоду, від НОВИХ до
     старих; день рядка -- `dpd` (`DD.MM.YYYY 00:00:00`); `is_final_bal` -- bool. `flags` -- {день 'YYYY-MM-DD': is_final_bal};
     за замовчуванням усі дні остаточні; `absent` -- дні, яких у відповіді немає. Суми -- вигадані."""
+    ccy = {v: k for k, v in C.ISO4217.items()}.get(p.old_account_currency, '')     # валюта рахунку: рядок балансу несе її буквений код; не задана -- порожньо (невідома)
     days = C.privat_days(p) or (p.period_start, p.period_end)         # ті самі дні, що в запиті транзакцій (D36 п. 11)
     rows, day = [], datetime(days[0].year, days[0].month, days[0].day)
     last = datetime(days[1].year, days[1].month, days[1].day)
@@ -236,7 +237,7 @@ def privat_balance_body(p, flags=None, absent=()):
         key = day.strftime('%Y-%m-%d')
         if key not in absent:
             rows.append({'acc': p.account, 'atp': 'A', 'balanceIn': '1000.00', 'balanceInEq': '1000.00', 'balanceOut': '1000.00',
-                         'balanceOutEq': '1000.00', 'bgfIBrnm': ' ', 'brnm': 'D1', 'currency': 'UAH',
+                         'balanceOutEq': '1000.00', 'bgfIBrnm': ' ', 'brnm': 'D1', 'currency': ccy,
                          'date_close_acc': '01.01.2100 00:00:00', 'date_open_acc_reg': '01.01.2020 00:00:00',
                          'date_open_acc_sys': '01.01.2020 00:00:00', 'dpd': day.strftime('%d.%m.%Y 00:00:00'), 'flmn': 'N1',
                          'is_final_bal': (flags or {}).get(key, True), 'nameACC': 'ТОВ "Вигадана Назва"', 'state': 'a',
@@ -522,6 +523,14 @@ def _privat_scenarios():
                account=own_usd, old_account_currency='840', old_currency_catalog={})
     b.privat_pages([[ptx(g, own_usd, when=day.replace(hour=10), tran='C', ccy='USD', amount='1200.00', **cnt()),
                      ptx(g, own_usd, when=day.replace(hour=11), tran='D', ccy='USD', amount='33.33', **cnt())]])
+    done(s, b)
+
+    # Чужа валюта (відступ 1 плану, за текстом відступу; у run1 рядків чужої валюти 0): рахунок у UAH, операція в USD -- Предупреждение, не операція
+    s, b = new('СинтЧужаяВалюта', 'ПриватБанк: на запиті за рахунком UAH прийшла операція в USD (рядки балансу несуть UAH) -- Предупреждение, операція не завантажується '
+                                  '[документальний, не спостерігалось]', [5])
+    b.privat_pages([[ptx(g, acct, when=day.replace(hour=10), tran='C', amount='100.00', **cnt()),
+                     ptx(g, acct, when=day.replace(hour=11), tran='C', ccy='USD', amount='200.00', **cnt()),
+                     ptx(g, acct, when=day.replace(hour=12), tran='D', amount='300.00', **cnt())]])
     done(s, b)
 
     # --- Збої посеред читання

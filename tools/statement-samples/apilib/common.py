@@ -236,7 +236,7 @@ def request_windows(p, fop):
 
 
 PRIVAT_WORKING_LIMIT = 100       # limit запиту транзакцій ПриватБанку: «рекомендовано не більше 100» (privat.txt, параметр limit); кінець читання -- exist_next_page, тож межі виміряного максимуму сторінки немає
-PRIVAT_PAUSE_SECONDS = 1         # «рекомендовано не частіше 1 запиту в секунду» (privat.txt)
+PRIVAT_PAUSE_SECONDS = 1         # документація Привату, temp/research/2026-10-13-readers/docs/privat.txt, рядок 62: «Рекомендовано відправляти запити не частіше 1 запиту в секунду.»
 
 
 def privat_days(p):
