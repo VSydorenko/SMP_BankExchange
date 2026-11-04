@@ -107,6 +107,8 @@ HAR відкинуто: він несе заголовки запиту (отж�
 
 * `corp_aN_statement_small_limit_overlap` — як `_statement_small_limit`, але наступний запит іде з `to` = найраніша `time`
   сторінки + 1 (D36 п. 11); лише юросіб (у ФОП немає `limit`).
+* `corp_aN_statement_saturated_limit500` — насичений період юросіб (`SaturatedPeriod`, `limit=500`), продовження з `to` = найраніша `time`
+  сторінки + 1, збіг запитів — `stuck_cursor`.
 * `fop_a1_saturated` — насичений період ФОП (`SaturatedPeriod`) до сторінки, коротшої за 500, продовження так само, з паузою 61 с.
   Без `SaturatedPeriod` у записі лише порожній сценарій у `summary-agent.txt` (обмінів немає).
 * Пари меж, `{corp_aN|fop_a1}_boundary_{from|to}_{eq|shift}`: `from_eq` — `from` = t; `from_shift` — `from` = t − 1 (обидва зі спільним

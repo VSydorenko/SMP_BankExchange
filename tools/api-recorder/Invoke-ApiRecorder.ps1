@@ -650,10 +650,10 @@ function Invoke-MonoCorpRun {
             $memo500 = @($Ctx.Captured)
         }
         # Насичений період (необов'язковий; відсутній блок чи перемикач = вимкнено, не помилка): limit=500, сторінки зсувом
-        # верхньої межі, доки сторінка повна, — максимум сторінки банку. Розміри сторінок — у summary-agent.txt.
+        # верхньої межі до найраніша time + 1 (D36 п. 11, -Overlap; збіг запитів — збій stuck_cursor), доки сторінка повна, — максимум сторінки банку. Розміри сторінок — у summary-agent.txt.
         if ((Test-ScenarioOn $Cfg 'Saturated' $false) -and $Cfg.SaturatedParsed) {
             $sf = ConvertTo-UnixKyiv $Cfg.SaturatedParsed.From; $st = ConvertTo-UnixKyiv $Cfg.SaturatedParsed.To.AddDays(1).AddSeconds(-1)
-            Invoke-Scenario $Ctx "corp_${tag}_statement_saturated_limit500" { Read-MonoCorpStatement $Ctx $iban $sf $st 500 $maxPages }
+            Invoke-Scenario $Ctx "corp_${tag}_statement_saturated_limit500" { Read-MonoCorpStatement $Ctx $iban $sf $st 500 $maxPages -Overlap }
         }
         else { Write-Host "[вимкнено] corp_${tag}_statement_saturated_limit500 — немає SaturatedPeriod або Scenarios.Saturated не ввімкнено" }
         if (Test-ScenarioOn $Cfg 'StatementSmallLimit') {
