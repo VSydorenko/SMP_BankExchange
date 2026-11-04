@@ -289,6 +289,16 @@ class ByHandPrivat(unittest.TestCase):
                 rows += R.body_json(x).get('transactions') or []
         return [r['ID'] for r in rows]
 
+    def test_redirect_status_is_a_human_action_not_a_retry(self):
+        """3xx (тлумачення п. 8, як у спільному класі конекторів): повтор не допоможе -- «дія людини»; 5xx -- «повторити»."""
+        for status, cls in ((302, 'ДействиеЧеловека'), (503, 'Повторить')):
+            s = scenario('СинтПусто', 'privat')
+            b = S.Builder('privat', 't', s.params)
+            b.settings(S.resp_json(200, S.privat_settings_body()))
+            b.privat(S.resp_json(status, {'message': 'x'}))
+            rec = S.R.Recording(S.R.make_manifest('privat', 't', b.ex), b.ex)
+            self.assertEqual(E.run(rec, s.params).failure_class, cls, status)
+
     def test_privat_expectations_written_by_hand(self):
         warn = 'Предупреждение'
         bank = 'ПриватБанк'

@@ -273,8 +273,8 @@ PRIVAT_AUTH_SERVICE_PREFIX = 'CLIENT_AUTH'      # privat.txt: CLIENT_AUTH, _DENY
 
 def rule_failure_class(bank, ex):
     """Клас відмови (D36 п. 8) і факти для тексту людині. Принцип: чи допоможе повтор?
-    «Повторити» — мережа, таймаут, 408, 429 (після дозволеного повтору), 5xx, будь-яка інша нестандартна відповідь;
-    «дія людини» — 401, 403 та інші 4xx (токен, права, формат запиту, рахунку немає)."""
+    «Повторити» — мережа, таймаут, 408, 429 (після дозволеного повтору), 5xx, 2xx крім 200;
+    «дія людини» — 401, 403 та інші 4xx (токен, права, формат запиту, рахунку немає), а також 1xx і 3xx (тлумачення п. 8)."""
     facts = {'Банк': BANK_NAMES[bank]}
     if ex['failure']:
         facts.update(Вид=ex['failure']['kind'], Статус='', ОписаниеБанка='')
@@ -283,9 +283,9 @@ def rule_failure_class(bank, ex):
     facts.update(Вид='http', Статус=st, ОписаниеБанка=C.error_description(ex))
     if st in (408, 429) or st >= 500:
         return CLS_RETRY, facts
-    if 400 <= st < 500:
-        return CLS_HUMAN, facts
-    return CLS_RETRY, facts
+    if 200 <= st < 300:
+        return CLS_RETRY, facts                 # 2xx, крім очікуваного 200, -- несподівана відповідь, тимчасова проблема
+    return CLS_HUMAN, facts                     # 4xx, а також 1xx і 3xx (тлумачення п. 8, як у спільному класі конекторів): повтор не допоможе
 
 
 def rule_privat_api_error(js):
