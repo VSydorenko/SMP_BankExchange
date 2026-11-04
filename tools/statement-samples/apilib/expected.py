@@ -22,7 +22,7 @@
 |      | кількість і зміст операцій від цього не змінюються |
 
 **Контрактні правила** (не відступи, а розвиток D28/D36 п. 8 для API): `rule_failure_class`, `rule_complete`,
-`rule_trust_boundary`, `rule_unknown_state`, `rule_unknown_direction`, `rule_page_without_id`, `rule_dedupe_by_id`.
+`rule_trust_boundary`, `rule_unknown_state`, `rule_unknown_direction`, `rule_page_without_id`, `rule_dedupe_by_id`; ПУМБ: `rule_identifier_length` (D28), `rule_no_iban` (Р-д).
 Їхні рішення — окремий рядок звіту виконавця: планувальник підтверджує або відкидає.
 """
 import json
@@ -287,16 +287,38 @@ def _retry_seconds(ex):
 PRIVAT_AUTH_SERVICE_PREFIX = 'CLIENT_AUTH'      # privat.txt: CLIENT_AUTH, _DENY, _BADSESSION, _P24_CHECK_ERR, _P24_NOT_VALID, _ERROR
 
 
-def rule_failure_class(bank, ex):
+PUMB_CUT_MARK = '<вирізано>'
+
+
+def pumb_error_description(ex, secrets=()):
+    """Опис помилки ПУМБ для діагностики (Р-е): `error_description` (Keycloak/OAuth2), далі `errorDescription`, `message`; немає -- порожньо. Текст береться ЛИШЕ через
+    вирізання значень облікових даних (`secrets`: логін тощо, без регістру; довші першими) -- замість кожного входження `<вирізано>`. Самих значень не повертає й не пише."""
+    try:
+        js = R.body_json(ex)
+    except R.NotJson:
+        return ''
+    if not isinstance(js, dict):
+        return ''
+    for k in ('error_description', 'errorDescription', 'message'):
+        if js.get(k) is not None:
+            text = C.to_str(js[k])
+            for sec in sorted({C.to_str(x) for x in secrets if C.to_str(x)}, key=len, reverse=True):
+                text = re.sub(re.escape(sec), PUMB_CUT_MARK, text, flags=re.IGNORECASE)
+            return text
+    return ''
+
+
+def rule_failure_class(bank, ex, secrets=()):
     """Клас відмови (D36 п. 8) і факти для тексту людині. Принцип: чи допоможе повтор?
     «Повторити» — мережа, таймаут, 408, 429 (після дозволеного повтору), 5xx, 2xx крім 200;
-    «дія людини» — 401, 403 та інші 4xx (токен, права, формат запиту, рахунку немає), а також 1xx і 3xx (тлумачення п. 8)."""
+    «дія людини» — 401, 403 та інші 4xx (токен, права, формат запиту, рахунку немає), а також 1xx і 3xx (тлумачення п. 8).
+    `secrets` -- лише ПУМБ: значення облікових даних, що вирізаються з опису банку (`pumb_error_description`)."""
     facts = {'Банк': BANK_NAMES[bank]}
     if ex['failure']:
         facts.update(Вид=ex['failure']['kind'], Статус='', ОписаниеБанка='')
         return CLS_RETRY, facts
     st = ex['response']['status']
-    facts.update(Вид='http', Статус=st, ОписаниеБанка=C.error_description(ex))
+    facts.update(Вид='http', Статус=st, ОписаниеБанка=pumb_error_description(ex, secrets) if bank == 'pumb' else C.error_description(ex))
     if st in (408, 429) or st >= 500:
         return CLS_RETRY, facts
     if 200 <= st < 300:
@@ -407,8 +429,8 @@ def _fail(out, cls, facts, essence='read-failed'):
     out.rules.add('rule_failure_class')
 
 
-def _failure(out, ex, bank):
-    cls, facts = rule_failure_class(bank, ex)
+def _failure(out, ex, bank, secrets=()):
+    cls, facts = rule_failure_class(bank, ex, secrets)
     _fail(out, cls, facts)
 
 
@@ -1178,7 +1200,7 @@ def pumb5_purpose(out, disabled, text):
 def pumb6_identifier(out, disabled, doc):
     """Ідентифікатор: `id`, а за його відсутності `docId` (НомерДок попередника, ПУМБ:342); гіпотеза §6 `hostId`+`docId` -- до виміру. -> (НомерДокумента, ИдентификаторОперации);
     вимкнено -- попередник СМП_ИДТранзакцииБанка не писав: ідентифікатор операції порожній."""
-    num = C.to_str(doc.get('id') if doc.get('id') is not None else doc.get('docId'))
+    num = C.to_str(doc.get('id')) or C.to_str(doc.get('docId'))        # порожній `id` (null, відсутній, '') ідентифікатором не є -- далі docId
     if 'pumb6' in disabled:
         return num, ''
     if num:
@@ -1212,6 +1234,14 @@ def rule_identifier_length(out, n, ident):
     return True
 
 
+def rule_no_iban(out, n, ident):
+    """Контрактне правило (Р-д, не відступ): документ без IBAN ОБОХ сторін -- чий це рух, не встановити (рахунок із `accountId` запиту не виводиться): операція не подається,
+    рядок `Ошибка` `no-iban`; діагностика несе лише ідентифікатор. -> True (завжди відхилено)."""
+    out.diag('Ошибка', n, 'no-iban', None, Ид=ident)
+    out.rules.add('rule_no_iban')
+    return True
+
+
 def pumb_out_of_bounds(search, docs):
     """Аномалія меж (D36 п. 11): `operationDate` документа раніше за `fromDate` або пізніше за `toDate` ЗАПИТУ (межі -- з тіла запиту searcher, той самий строгий формат).
     Рівність межі -- НЕ аномалія (включність меж не виміряна). Запас між межами запиту й періодом -- не аномалія, а мовчазне відкидання (див. `_pumb`)."""
@@ -1238,14 +1268,14 @@ def _pumb(rec, p, out, disabled):
     auth = exs[0]
     use(out, auth)
     if auth['failure'] or auth['response']['status'] != 200:
-        _failure(out, auth, bank)                                # автентифікація: 4xx -- дія людини, 5xx/збій -- повторити; запис може кінчатися тут (searcher не потрібен)
+        _failure(out, auth, bank, p.credentials)                                # автентифікація: 4xx -- дія людини, 5xx/збій -- повторити; запис може кінчатися тут (searcher не потрібен)
         return
     if len(exs) < 2:
         raise RecordingMismatch('у записі ПУМБ немає списку рахунків')
     account = exs[1]
     use(out, account)
     if account['failure'] or account['response']['status'] != 200:
-        _failure(out, account, bank)
+        _failure(out, account, bank, p.credentials)
         return
     try:
         accounts = R.body_json(account)
@@ -1263,7 +1293,7 @@ def _pumb(rec, p, out, disabled):
     search = searches[0]
     use(out, search)
     if search['failure'] or search['response']['status'] != 200:
-        _failure(out, search, bank)                              # 429 тут -- без повтору: модель пауз зі Step 3
+        _failure(out, search, bank, p.credentials)                              # 429 тут -- без повтору: модель пауз зі Step 3
         return
     try:
         docs = R.body_json(search)
@@ -1293,6 +1323,9 @@ def _pumb(rec, p, out, disabled):
         if 'pumb6' not in disabled and rule_identifier_length(out, n, ident):
             continue
         snd, rcv = C.to_str(r.get('senderIBAN')), C.to_str(r.get('correspondentIBAN'))
+        if not snd and not rcv:
+            rule_no_iban(out, n, number)
+            continue
         if snd == p.account:
             outgoing, own = True, snd
         elif rcv == p.account:

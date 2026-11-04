@@ -95,6 +95,9 @@ class Params:
     page_ceiling: object = None
     # момент читання `Транспорт.ТекущийМомент()` (UTC, naive); None -- банк без правила верхньої межі (Приват), у еталон не пишеться
     reading_moment: object = None
+    # ПУМБ (Р-е): значення облікових даних, що їх знає платформа (логін тощо) і які ВИРІЗАЮТЬСЯ з тексту помилки банку (`error_description`).
+    # Лише для оракула й тестів; в еталон (`to_json`) НЕ пишуться. Порожній кортеж -- нічого не вирізати.
+    credentials: tuple = ()
 
     def to_json(self):
         d = {'НомерСчета': self.account, 'НачалоПериода': iso(self.period_start), 'КонецПериода': iso(self.period_end)}

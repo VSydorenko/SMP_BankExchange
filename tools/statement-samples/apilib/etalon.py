@@ -29,7 +29,7 @@
 
 * **`Диагностика.Суть`** — стабільний код, а не текст: тест не прив'язується до формулювання, яке ще не визначено.
   Коди: `nonfinal`, `cancelled` (Предупреждение); `reversal-state-change`, `unknown-state`, `unknown-direction`,
-  `bad-amount`, `bad-date`, `unknown-currency`, `conflicting-duplicate` (Ошибка); `account-not-found`, `read-failed`, `work-balance` —
+  `bad-identifier`, `no-iban` (лише ПУМБ), `bad-amount`, `bad-date`, `unknown-currency`, `conflicting-duplicate` (Ошибка); `account-not-found`, `read-failed`, `work-balance` —
   збій читання з непорожнім класом (Предупреждение: неповне читання, курсор утримується).
   `Факты` — те, що текст для людини мусить назвати (банк, статус, опис банку) і чого в ньому не мусить бути (токена).
 * **`dependsOn`** — що з зафіксованого ще не виміряно й може змінити еталон: `ИдентификаторПриват` (вибір D36 п. 6), `РеверсСлучай` (випадок

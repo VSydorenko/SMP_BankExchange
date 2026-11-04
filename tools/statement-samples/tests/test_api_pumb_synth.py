@@ -145,7 +145,8 @@ class HandExpected(unittest.TestCase):
         e = run('СинтПУМБПоляОтсутствуют')
         self.assertEqual(numbers(e.ops), [1, 2, 3, 4])
         self.assertEqual([(d['ПорядковыйНомер'], d['Уровень'], d['Суть']) for d in e.diags],
-                         [(4, 'Предупреждение', 'currency-unknown'), (5, 'Ошибка', 'bad-amount'), (6, 'Ошибка', 'unknown-state'), (7, 'Ошибка', 'unknown-direction')])
+                         [(4, 'Предупреждение', 'currency-unknown'), (5, 'Ошибка', 'bad-amount'), (6, 'Ошибка', 'unknown-state'), (7, 'Ошибка', 'unknown-direction'),
+                          (8, 'Ошибка', 'no-iban')])        # Р-д: без IBAN обох сторін -- Ошибка, рахунок із accountId запиту не виводиться
         self.assertEqual([o['ИдентификаторОперации'] for o in e.ops], ['1101', '2202', '1103', '1104'])      # без id -- docId (відступ 6)
         self.assertEqual(e.ops[0]['НазначениеПлатежа'], '')                                           # без description -- порожнє, не «Неопределено»
         self.assertEqual(e.ops[2]['КонтрагентНаименование'] + e.ops[2]['КонтрагентКод'] + e.ops[2]['КонтрагентМФО'], '')
@@ -155,7 +156,11 @@ class HandExpected(unittest.TestCase):
         self.assertEqual({'Количество'} | set(), set(run('СинтПУМБДлинныйИд').diags[0]['Факты']))     # довжина, не значення ідентифікатора
         e = run('СинтПУМБДлинныйИд')
         self.assertEqual((numbers(e.ops), len(e.ops[0]['ИдентификаторОперации']), [(d['Суть'], d['Факты']['Количество']) for d in e.diags]),
-                         ([1], 50, [('bad-identifier', 51), ('bad-identifier', 0), ('bad-identifier', 0)]))
+                         ([1, 5], 50, [('bad-identifier', 51), ('bad-identifier', 0), ('bad-identifier', 0)]))
+        self.assertEqual(e.ops[1]['ИдентификаторОперации'], '2205')                                   # pumb6: id='' -- не ідентифікатор, береться docId
+        e = run('СинтПУМБInvalidGrant')                                                              # Р-е: опис банку читається, вигаданий логін вирізано
+        self.assertEqual(e.diags[0]['Факты']['ОписаниеБанка'], 'Invalid user credentials for ' + E.PUMB_CUT_MARK)
+        self.assertNotIn(SP.FAKE_LOGIN, json.dumps(e.diags, ensure_ascii=False).lower())
         e = run('СинтПУМБНазначение')
         self.assertEqual(len(e.ops[0]['НазначениеПлатежа']), 1200)                                    # не обрізане до 1024 (відступ 5)
 

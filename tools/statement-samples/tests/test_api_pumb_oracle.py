@@ -30,10 +30,10 @@ def doc(n, state='PROCESSED', when='01.11.2026 10:00:00', amount='100.50', out=T
     return d
 
 
-def reading(docs, acct_status=200, search_status=200, auth_status=200, search_body=None, scenario='pumb_a1_searcher_nopaging', **kw):
+def reading(docs, acct_status=200, search_status=200, auth_status=200, search_body=None, scenario='pumb_a1_searcher_nopaging', auth_body=None, **kw):
     body = search_body or {'fromDate': DAY0, 'toDate': DAY1, 'documentAccounts': [str(ACCT['accountId'])]}
     auth = R.make_exchange(1, 'pumb_auth', {'method': 'POST', 'host': 'auth.fuib.com', 'path': '/auth/realms/VegaNet/protocol/openid-connect/token',
-                                            'query': '', 'bodyOmitted': 'автентифікація'}, _resp({'token_type': 'Bearer'}, auth_status))
+                                            'query': '', 'bodyOmitted': 'автентифікація'}, _resp(auth_body or {'token_type': 'Bearer'}, auth_status))
     acc = R.make_exchange(2, 'pumb_account', {'method': 'GET', 'host': 'service.fuib.com', 'port': 4103, 'path': '/war_veganet_api/account', 'query': ''},
                           _resp([ACCT], acct_status))
     srch = R.make_exchange(3, scenario, _post('/document/searcher', body), _resp(docs, search_status))
@@ -77,6 +77,33 @@ class PumbExpected(unittest.TestCase):
         self.assertEqual(e3.trust, p.period_end)
         self.assertEqual({o['ИдентификаторОперации'] for o in E.run(rec, p, {'pumb6'}).ops}, {''})
         self.assertEqual(sorted(e.applied), ['pumb1', 'pumb3', 'pumb5', 'pumb6'])
+
+    def test_by_hand_a4_no_iban_error_error_description_cut_and_empty_id(self):
+        # Р-д: документ без IBAN обох сторін -- Ошибка no-iban (рахунок з accountId запиту НЕ виводиться), не операція; сусідні документи -- як було
+        rec, p = reading([doc(1), doc(2, senderIBAN=None, correspondentIBAN=''), doc(3, out=False, amount='7.00')])
+        e = E.run(rec, p)
+        self.assertEqual(([o['ПорядковыйНомер'] for o in e.ops], [(d['Уровень'], d['ПорядковыйНомер'], d['Суть']) for d in e.diags]),
+                         ([1, 3], [('Ошибка', 2, 'no-iban')]))
+        self.assertEqual(e.foreign, {})
+        self.assertNotIn(str(ACCT['accountId']), json.dumps([e.ops, e.diags], ensure_ascii=False))
+        self.assertEqual(set(e.diags[0]['Факты']), {'Ид'})                                      # лише ідентифікатор документа
+        # Р-е: error_description (OAuth2) читається для діагностики, значення облікових даних вирізаються (без регістру). Контроль, що вміє впасти: БЕЗ вирізання логін у тексті є
+        login = 'fiktivnyi_login_77'
+        body = {'error': 'invalid_grant', 'error_description': 'Invalid user %s or password' % login.upper()}
+        rec, p = reading([doc(1)], auth_status=400, auth_body=body)
+        leaky = E.run(rec, p).diags[0]['Факты']['ОписаниеБанка']
+        self.assertIn(login, leaky.lower())                                                     # без облікових даних у Params вирізати нічого: фікстура справді «витікала б»
+        rec, p = reading([doc(1)], auth_status=400, auth_body=body, credentials=(login,))
+        e = E.run(rec, p)
+        self.assertEqual(e.diags[0]['Факты']['ОписаниеБанка'], 'Invalid user %s or password' % E.PUMB_CUT_MARK)
+        self.assertNotIn(login, json.dumps(e.diags, ensure_ascii=False).lower())
+        self.assertEqual(e.failure_class, 'ДействиеЧеловека')
+        # error_description старший за message; інакше message; облікові дані не потрапляють в etalon-параметри
+        self.assertEqual(E.pumb_error_description(rec.exchanges[0]), 'Invalid user %s or password' % login.upper())
+        self.assertNotIn('credentials', json.dumps(p.to_json()).lower())
+        # pumb6: порожній id (null, '') не береться -- далі docId; непорожній id старший за docId
+        rec, p = reading([doc(1, id=''), doc(2, id=None), doc(3)])
+        self.assertEqual([o['ИдентификаторОперации'] for o in E.run(rec, p).ops], ['8001', '8002', '9003'])
 
     def test_by_hand_d36_failures_period_format_and_pagination(self):
         # п. 8: автентифікація / 4xx -- дія людини; 5xx -- повторити; п. 10: відмова -- межа = НачалоПериода, читання неповне

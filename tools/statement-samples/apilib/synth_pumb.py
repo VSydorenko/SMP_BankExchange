@@ -23,6 +23,7 @@ ACCOUNT_ID = 3300                      # accountId вигаданого раху
 PORT = 4103
 AUTH_HOST, AUTH_PATH = 'auth.fuib.com', '/auth/realms/VegaNet/protocol/openid-connect/token'
 API = '/war_veganet_api'
+FAKE_LOGIN = 'vymyshlenyi_login_pumb'                                            # вигаданий логін: у відповіді invalid_grant він мусить бути вирізаний (Р-е)
 MASK = 'aaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaa'      # маркер тієї ж форми, що пише рекордер (кожне рядкове значення відповіді токена)
 
 # Перелік випадків плану (Step 3) -> запис синтетики (або «чекає виміру run1»). Тест звіряє: кожен випадок має або наявний запис, або причину.
@@ -188,13 +189,14 @@ def _scenarios(refused):
                     pdoc(g, own, 3, when=at(10), amount='30.00')]))
 
     # ---- відсутні поля (swagger не позначає обов'язкових)
-    s, r = new('СинтПУМБПоляОтсутствуют', 'ПУМБ: відсутні поля -- без description; без id (docId); без реквізитів контрагента; без currencyCode; без amount; без state; без direction і чужі IBAN', [3, 5])
+    s, r = new('СинтПУМБПоляОтсутствуют', 'ПУМБ: відсутні поля -- без description; без id (docId); без реквізитів контрагента; без currencyCode; без amount; без state; без direction і чужі IBAN; без IBAN обох сторін (Ошибка no-iban)', [3, 5])
     miss = party(g)
     foreign = party(g)
     done(s, r.full([pdoc(g, own, 1, when=at(9), drop=('description',)), pdoc(g, own, 2, when=at(10), drop=('id',)),
                     pdoc(g, own, 3, when=at(11), drop=('correspondentName', 'correspondentTaxId', 'correspondentBankMfo')),
                     pdoc(g, own, 4, when=at(12), drop=('currencyCode',)), pdoc(g, own, 5, when=at(13), drop=('amount',)), pdoc(g, own, 6, when=at(14), drop=('state',)),
-                    pdoc(g, own, 7, when=at(15), cp=miss, senderIBAN=foreign['iban'], correspondentIBAN=miss['iban'], drop=('direction',))]))
+                    pdoc(g, own, 7, when=at(15), cp=miss, senderIBAN=foreign['iban'], correspondentIBAN=miss['iban'], drop=('direction',)),
+                    pdoc(g, own, 8, when=at(16), drop=('senderIBAN', 'correspondentIBAN'))]))                     # Р-д: без IBAN обох сторін -- Ошибка no-iban
 
     # ---- сума (D28), ідентифікатор (D28), призначення
     s, r = new('СинтПУМБСумма', "ПУМБ: від'ємна, нульова й нерозбірна сума -- Ошибка bad-amount, не операція", [5])
@@ -202,7 +204,7 @@ def _scenarios(refused):
                     pdoc(g, own, 4, when=at(12), amount='abc')]))
     s, r = new('СинтПУМБДлинныйИд', 'ПУМБ: ідентифікатор 50 символів -- приймається, 51 і порожній -- Ошибка bad-identifier (id як рядок -- поза swagger, де id цілий; перевіряє межу D28)', [5])
     done(s, r.full([pdoc(g, own, 1, when=at(9), id='A' * 50), pdoc(g, own, 2, when=at(10), id='B' * 51), pdoc(g, own, 3, when=at(11), id='', docId=None),
-                    pdoc(g, own, 4, when=at(12), drop=('id', 'docId'))]))
+                    pdoc(g, own, 4, when=at(12), drop=('id', 'docId')), pdoc(g, own, 5, when=at(13), id='')]))      # id='' -- не ідентифікатор: далі docId
     s, r = new('СинтПУМБНазначение', 'ПУМБ: призначення платежу довше за 1024 символи не обрізається (відступ 5)', [5])
     done(s, r.full([pdoc(g, own, 1, when=at(9), desc=('Оплата за послуги за договором. ' * 40)[:1200])]))
 
@@ -249,8 +251,9 @@ def _scenarios(refused):
     done(s, r)
 
     # ---- відмови (D36 п. 8): форма помилок swagger не описує -- Keycloak і загальна форма (гіпотеза)
-    s, r = new('СинтПУМБInvalidGrant', 'ПУМБ: автентифікація відхилена (invalid_grant, HTTP 400) -- «дія людини», текст без облікових даних', [1])
-    r.auth(_json(400, {'error': 'invalid_grant', 'error_description': 'Invalid user credentials'}))
+    s, r = new('СинтПУМБInvalidGrant', 'ПУМБ: автентифікація відхилена (invalid_grant, HTTP 400) -- «дія людини»; error_description читається (Р-е), вигаданий логін у ньому вирізається', [1],
+               credentials=(FAKE_LOGIN,))
+    r.auth(_json(400, {'error': 'invalid_grant', 'error_description': 'Invalid user credentials for ' + FAKE_LOGIN}))
     done(s, r)
     s, r = new('СинтПУМБ401Запрос', 'ПУМБ: 401 на запиті searcher -- «дія людини» (токен), межа довіри = НачалоПериода', [1])
     r.auth(); r.accounts(); r.search(_json(401, {'message': 'Unauthorized', 'status': 401}))
