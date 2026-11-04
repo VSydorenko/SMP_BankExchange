@@ -124,7 +124,7 @@ class Coverage(unittest.TestCase):
     def test_every_review_focus_row_is_covered_per_bank(self):
         for bank in C.BANKS:
             got = set()
-            for s in ALL:
+            for s in ALL + S.pumb_scenarios():             # ПУМБ -- окремий перелік (`synth.pumb_scenarios()`), 5а -- `all_scenarios()`
                 if s.bank == bank:
                     got |= set(s.focus)
             self.assertEqual(got, {1, 2, 3, 4, 5}, bank)

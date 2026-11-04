@@ -1140,6 +1140,7 @@ def pumb3_state(out, disabled, n, state, moment, ident):
         out.nonfinal.append(moment)
     else:
         rule_unknown_state(out, n, state, ident)
+        out.applied.add('pumb3')                                 # невідомий стан -- теж слід відступу (вимкнений: мовчазне відкидання попередника)
         return 'handled'
     out.applied.add('pumb3')
     return 'handled'
@@ -1198,6 +1199,19 @@ def pumb8_pagination(searches):
         raise PaginationUnmeasured(why)
 
 
+PUMB_IDENTIFIER_MAX = 50           # D28: довжина ідентифікатора операції
+
+
+def rule_identifier_length(out, n, ident):
+    """Контрактне правило D28 (не відступ): ідентифікатор операції -- від 1 до 50 символів; порожній чи довший -- операція не подається, рядок `Ошибка` `bad-identifier`
+    (довжина без значення: ідентифікатор довгого значення в діагностику не йде). Вимкнений відступ pumb6 дає порожній ідентифікатор за побудовою, правило тоді не діє. -> True, якщо відхилено."""
+    if 1 <= len(ident) <= PUMB_IDENTIFIER_MAX:
+        return False
+    out.diag('Ошибка', n, 'bad-identifier', None, Количество=len(ident))
+    out.rules.add('rule_identifier_length')
+    return True
+
+
 def pumb_out_of_bounds(search, docs):
     """Аномалія меж (D36 п. 11): `operationDate` документа раніше за `fromDate` або пізніше за `toDate` ЗАПИТУ (межі -- з тіла запиту searcher, той самий строгий формат).
     Рівність межі -- НЕ аномалія (включність меж не виміряна). Запас між межами запиту й періодом -- не аномалія, а мовчазне відкидання (див. `_pumb`)."""
@@ -1217,14 +1231,18 @@ def _pumb(rec, p, out, disabled):
         out.items = 0                                            # D36 п. 11: НачалоПериода пізніший за момент читання -- запитів немає, порожнє повне читання
         return
     searches = [e for e in exs if e['request']['path'].endswith('/document/searcher')]
-    if not searches:
-        raise RecordingMismatch('у записі ПУМБ немає запиту searcher')
-    pumb8_pagination(searches)
-    auth, account, search = exs[0], exs[1], searches[0]
+    if not exs:
+        raise RecordingMismatch('у записі ПУМБ немає обмінів')
+    if searches:
+        pumb8_pagination(searches)
+    auth = exs[0]
     use(out, auth)
     if auth['failure'] or auth['response']['status'] != 200:
-        _failure(out, auth, bank)                                # автентифікація: 4xx -- дія людини, 5xx/збій -- повторити
+        _failure(out, auth, bank)                                # автентифікація: 4xx -- дія людини, 5xx/збій -- повторити; запис може кінчатися тут (searcher не потрібен)
         return
+    if len(exs) < 2:
+        raise RecordingMismatch('у записі ПУМБ немає списку рахунків')
+    account = exs[1]
     use(out, account)
     if account['failure'] or account['response']['status'] != 200:
         _failure(out, account, bank)
@@ -1240,6 +1258,9 @@ def _pumb(rec, p, out, disabled):
     if mine is None:
         _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES[bank]}, 'account-not-found')
         return
+    if not searches:
+        raise RecordingMismatch('у записі ПУМБ немає запиту searcher')
+    search = searches[0]
     use(out, search)
     if search['failure'] or search['response']['status'] != 200:
         _failure(out, search, bank)                              # 429 тут -- без повтору: модель пауз зі Step 3
@@ -1269,6 +1290,8 @@ def _pumb(rec, p, out, disabled):
         if pumb3_state(out, disabled, n, C.to_str(r.get('state')), moment, number) != 'emit':
             continue
         pumb4_returns(out, disabled, n, r, number)
+        if 'pumb6' not in disabled and rule_identifier_length(out, n, ident):
+            continue
         snd, rcv = C.to_str(r.get('senderIBAN')), C.to_str(r.get('correspondentIBAN'))
         if snd == p.account:
             outgoing, own = True, snd

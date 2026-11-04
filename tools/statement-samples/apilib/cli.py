@@ -37,14 +37,14 @@ def _write(path, text, binary=False):
 
 
 def cmd_list(a):
-    for s in synth.all_scenarios():
+    for s in synth.every_scenario():
         print('%-10s %-36s фокус %-8s %s' % (s.bank, s.name, ','.join(map(str, s.focus)), s.title))
     return 0
 
 
 def cmd_synth(a):
     n = 0
-    for s in synth.all_scenarios():
+    for s in synth.every_scenario():
         if a.only and a.only not in (s.sid, s.name):
             continue
         rec = s.recording()

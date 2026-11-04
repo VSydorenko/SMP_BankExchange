@@ -404,6 +404,17 @@ def all_scenarios():
     return out
 
 
+def pumb_scenarios():
+    """Синтетика ПУМБ (задача 2a, Step 3; `synth_pumb.py`). Окремо від `all_scenarios()` -- ТІЛЬКИ банки 5а (їхній перелік, хеші записів і тести лишаються без змін)."""
+    from . import synth_pumb
+    return synth_pumb.scenarios()
+
+
+def every_scenario():
+    """Усі синтетичні сценарії всіх банків: 5а і ПУМБ."""
+    return all_scenarios() + pumb_scenarios()
+
+
 def by_name(name):
     for s in all_scenarios():
         if s.sid == name or s.name == name:

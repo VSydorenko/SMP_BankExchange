@@ -43,7 +43,7 @@ def _dumps(obj):
 
 def synthetic_sets(bank):
     recs, ets = {}, {}
-    for s in synth.all_scenarios():
+    for s in synth.every_scenario():
         if s.bank == bank:
             recs[s.sid] = json.loads(s.recording().pack())
             ets[s.sid] = etalon.build(s)[0]
