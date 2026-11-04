@@ -234,5 +234,44 @@ class NameInKeepString(unittest.TestCase):
         self.assertGreater(step2.check_a('privat', self.env.raw, self.env.anon)['hits'], 0)
 
 
+class KeepNumbersOnlyFromListedFields(unittest.TestCase):
+    """Консультант фінального рев'ю: число з поля KEEP виключається з перевірки (а) ЛИШЕ для явного переліку полів (`step2.KEEP_NUM_FIELDS`: суми, дати, номери документів).
+    Число з поля іншого роду (тут `type`, як і `message`) винятку не має."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.env = Env('privat', 'СинтСтраницыСлед', self.tmp)
+        self.raw = R.Recording.from_dir(self.env.raw)
+        self.page = [e['seq'] for e in self.raw.exchanges if e['request']['path'] == C.PRIVAT_PATH][0]
+        from apilib import leakguard
+        self.cfg = leakguard.api_config()
+        self.num = sorted(step2.collect('privat', self.raw, self.cfg).nums)[0]       # число від 5 цифр з чутливого поля
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def nums_after(self, fn):
+        mutate_body(self.env.raw, self.page, fn)
+        return step2.collect('privat', R.Recording.from_dir(self.env.raw), self.cfg).nums
+
+    def test_a_number_in_a_keep_field_outside_the_list_is_not_exempt(self):
+        """Контроль, що вміє падати: те саме число в `type` (KEEP поза переліком) лишається в чутливих і (а) його шукає."""
+        self.assertNotIn('type', step2.KEEP_NUM_FIELDS['privat'])
+        self.assertIn(self.num, self.nums_after(lambda s: s.replace('"type":"transactions"', '"type":"%s"' % self.num, 1)))
+
+    def test_a_number_in_a_listed_field_is_exempt(self):
+        import re as _re
+        self.assertIn('SUM', step2.KEEP_NUM_FIELDS['privat'])
+        nums = self.nums_after(lambda s: _re.sub(r'"SUM":"[^"]*"', '"SUM":"%s"' % self.num, s, count=1))
+        self.assertNotIn(self.num, nums)
+
+    def test_the_guard_list_exempts_amounts_dates_documents_only(self):
+        from sslib import guard
+        for k in ('SUMMA', 'dаtа_d', 'DOCUMENTNO', 'номер документа'):                    # (друге -- з кириличним двійником)
+            self.assertIn(guard.norm_key(k), guard.KEEP_NUM_KEYS)
+        for k in ('mfo_cr', 'BANKID', 'OPERATIONID', 'message', 'мфо'):
+            self.assertNotIn(guard.norm_key(k), guard.KEEP_NUM_KEYS)
+
+
 if __name__ == '__main__':
     unittest.main()

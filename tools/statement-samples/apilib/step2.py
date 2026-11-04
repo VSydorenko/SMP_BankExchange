@@ -158,6 +158,17 @@ def pair_leaks(bank, rec, pair_exempt):
     return n
 
 
+# Поля KEEP, чиї числа (від 5 цифр) виключаються з перевірки (а): ЛИШЕ суми, дати/моменти й номери документів -- публічні за природою значення, що можуть
+# випадково збігтись із числом чутливого поля (сума в призначенні платежу, залишок єдиної операції). Не входять: МФО (AUT_*_MFO), коди й ідентифікатори,
+# текстові поля (message, brnm, ...). Перелік явний: нове поле KEEP винятку не має, доки його сюди не внесено.
+KEEP_NUM_FIELDS = {
+    'privat': frozenset({'SUM', 'SUM_E', 'NUM_DOC', 'DAT_KL', 'DAT_OD', 'DATE_TIME_DAT_OD_TIM_P', 'TIM_P', 'dpd', 'date_close_acc',
+                         'date_open_acc_reg', 'date_open_acc_sys', 'date_final_statement', 'server_date_time', 'today', 'lastday', 'work_balance'}),
+    'mono-corp': frozenset({'amount', 'time', 'completedTime', 'date'}),
+    'mono-fop': frozenset({'amount', 'operationAmount', 'cashbackAmount', 'time'}),
+}
+
+
 def collect(bank, rec, cfg):
     sens = Sensitive()
     keep_nums = set()
@@ -186,10 +197,10 @@ def collect(bank, rec, cfg):
             if nd.kind == 'str' and where and isinstance(where[-1], str):
                 objs.setdefault((idx, tuple(where[:-1])), {})[where[-1]] = val
             if role == 'KEEP':
-                if nd.kind == 'str':
-                    keep_nums |= set(DIG.findall(val))
-                else:
-                    keep_nums |= set(DIG.findall(val))
+                # число з поля KEEP виключається з (а) лише для явного переліку полів банку (`KEEP_NUM_FIELDS`); поле іншого роду винятку не має
+                field = next((w for w in reversed(where) if isinstance(w, str)), '')
+                if field in KEEP_NUM_FIELDS.get(bank, ()):
+                    keep_nums |= set(DIG.findall(str(val)))
                 continue
             if val == '' or (nd.kind == 'str' and val.strip() == ''):
                 continue
