@@ -322,3 +322,103 @@
 під проксі-кліткою: код 4, жодного банку не запущено. Справжній конфіг основного дерева не чіпався.
 **Мутація (копія):** `Test-InteractiveSession` завжди `$true` → самотест код **1**, 1 червона перевірка (дочірній процес без `-Config` дав код 1, а не 4: `Read-Host` у `-NonInteractive` відмовляє, до читання файлу не доходить).
 Мутація свідомо обмежена цим місцем: вилучення всього шлюзу прочитало б справжній файл, тож не проганялась.
+
+## Задача 2a, частина 1. `pumb` у переліках apilib, знеособлення тіла запиту v2, ролі (Step 1)
+
+Умова: гілка `feature/smb-import-platform-connectors-2`, база — `4bf56a7` (план `fb934ad`); записів ПУМБ немає (рекордер не запускався), усі входи — **вигадані**
+(`tests/test_api_pumb_anonymize.py`). Ролі нижче — **з swagger, гіпотеза до запису**; затверджує консультант до першого коміту макетів. Оракул (Step 2) і синтетика (Step 3)
+у цій частині не робились.
+
+### Прогнози мутацій (записано ДО прогону)
+
+Мутація — в копії/`Edit`-ом продукту, після прогону повертається, `git diff` продуктового файлу порівнюється з до-мутаційним станом.
+
+| № | Контроль | Мутація | Прогноз |
+|---|---|---|---|
+| M1 | (і) тіло запиту | `anonymize.Bank._request_body` — `return` першим рядком (тіло запиту не знеособлюється) | `test_i…` **червоний** на «зеленому парному прогоні» (`hits` > 0: сирий `accountId` у тілі запиту); `test_ii` теж червоний (парний прогін — те саме); `test_iii` зелений (відмова — у прескані, до заміни) |
+| M2 | (іі) поля-особи | `step2.scan_person` повертає порожню множину (перевірка осіб сліпа) | лише `test_ii…` **червоний** (у мутованому прогоні `hits_person` = 0, а не > 0); `test_i`, `test_iii` зелені |
+| M3 | (ііі) нерозбірне тіло | `anonymize.request_body` ковтає `JsonSpanError` і повертає `(None, [])` (тіло копіюється як є) | лише `test_iii…` **червоний** (`UnknownField` не піднято, тека `anon` створена); `test_i`, `test_ii` зелені |
+
+### Результати мутацій (як прогнозовано; файл повернено копією з до-мутаційного стану, `cmp` — збіг)
+
+| № | Результат | Збіг із прогнозом |
+|---|---|---|
+| M1 | 3 тести, **2 червоні**: `test_i` і `test_ii` (на парному зеленому прогоні `hits` 7 замість 0); `test_iii` зелений | так |
+| M2 | 3 тести, **1 червоний**: `test_ii` (`hits_person` = 0 при непорожніх 13 токенах осіб; інші перевірки (а) у тому ж прогоні дали 9 збігів — особи ловляться й цілими значеннями, тож власну роль `scan_person` доводить лише ця перевірка `hits_person`); `test_i`, `test_iii` зелені | так |
+| M3 | 3 тести, **1 червоний**: `test_iii` («UnknownField not raised»); `test_i`, `test_ii` зелені | так |
+
+Парні зелені прогони (без мутації): `hits` = 0 у (і) і (іі), відмова в (ііі) без фрагмента вхідного тексту (перевірено: у повідомленні немає ні фрагмента, ні числа з тіла).
+
+### Що зроблено
+
+1. **`pumb` у переліках apilib.** `recording.BANKS` (формат: `Recording.validate` приймає банк `pumb` — закриває знахідку 1 задачі 1), `cli.BANKS` (вибір `--bank`; типовий перелік
+   `DEFAULT_BANKS` лишився трьома банками 5а, `pumb` додається лише коли існує його `<raw-root>/pumb/<мітка>` — інакше `verify` без `--bank` на записах 5а зламався б
+   на відсутній теці), `schema.ROLES`/`CHILD`/`root_section`/`request_section`, `step2.KEEP_NUM_FIELDS`/`PERSON_FIELDS`, `expected.BANK_NAMES`, `synth.BANK_KEYS` (`ПУМБ`) і `HOSTS`
+   (`service.fuib.com`), коментарі формату в `etalon.py`/`sets.py`. **Свідомо НЕ додано:** `common.BANKS` (на ньому стоїть наявний тест покриття Review Focus «кожен банк має синтетику» — з'явиться
+   разом зі Step 3), `sets.BANKS` (порожні набори ПУМБ не пишемо; з'являться зі Step 3/записом), `common.PAGE_CEILING` (стеля сторінок — вимір). Оракул: `oracle_old.run` і
+   `readings.readings` для `pumb` — явний `NotImplementedError` (без цього `readings` мовчки віддав би порожній перелік і (в) була б «зеленою»); `step2.check_c('pumb')` — `CheckError`
+   (код 4, «оракул ПУМБ ще не реалізовано»): **`verify` на записі ПУМБ до Step 2 завершується кодом 4 на (в), а не 0** — це чесна зупинка, не дефект.
+2. **Знеособлення тіла запиту v2** (`anonymize.Bank._request_body`, `anonymize.request_body`): `port` і `bodyOmitted` — як є; `bodyBase64` — розкодувати (UTF-8, суворо), знеособити ТИМИ САМИМИ ролями
+   й ТІЄЮ САМОЮ мапою (`ident` за текстом числа: `accountId` запиту = `accountId` відповіді, `documentAccounts`-рядок = число swagger), закодувати, перерахувати `bodyLength`;
+   `bodyMasked` — знеособити `text`, маркер `<masked>` не чіпати, `fields` — як є. Не UTF-8 / не JSON — `UnknownField` з позицією, без фрагмента; мовчазного копіювання немає. Числовий ID
+   (`[1-9]\d*`) раніше викликав зупинку для всіх банків; тепер заміна за текстом (інші ролі на числі — як раніше зупинка).
+3. **Перевірка (а) обходить шлях, запит, тіло запиту й тіло відповіді:** `collect` (токени й позиції), `positional_values`, `haystacks` (байти й рядки тіла запиту), `scan_short`, `pair_leaks`; прескан
+   (`prescan`, `prescan_values`) бере ролі й з тіла запиту — зокрема `accountId`, якого немає в жодній відповіді (вигаданий рахунок у «чужому рахунку»). Перевірка (б) звіряє `port`, `bodyOmitted`,
+   `bodyLength`, скелет і форму значень тіла запиту (`_check_request_body`).
+4. **Поля-особи.** `userIdentity`, `responsible`, `firstSignature`, `secondSignature` — NAME. (а) додатково шукає їх значення й похідні (`step2.person_tokens`: значення від 2 символів, слова від 4 літер, «І.Б.»,
+   «І. Б.», «І.Б», «Прізвище І.Б.», «І.Б. Прізвище», з повного ПІБ і з готових ініціалів) підрядком, без регістру, у шляху, запиті, тілі запиту й тілі відповіді, без винятку `Sensitive.exempt`
+   (`scan_person`, лічильники `person_tokens`/`hits_person` у `check-a`).
+
+### Ролі ПУМБ (Step 1; **з swagger, гіпотеза до запису** — до затвердження консультантом)
+
+Джерело — лише `swagger.json` (`VeganetClientRestAccount`, `VeganetDocumentItem`, `DocumentFilter`+`PagingRequest`, `EJBPeriodTransactionsRequest/Response`, `VnTransaction`, `VnTransactionListHeader`);
+форма відповіді токен-ендпоінта — з рекордера (відповідь замаскована, ключі Keycloak). Форм помилок swagger **не описує** (помилковий код у трьох операцій — лише `500` без схеми).
+
+| Розділ (операція) | NAME | CODE | ACC | ID | SCRAMBLE | PURPOSE | BANKNAME | KEEP |
+|---|---|---|---|---|---|---|---|---|
+| `account` (`GET /account`) | `name`, `clientName` | `clientOkpo` | `number`, `iban` | `id`, `accountId`, `clientId` | `balance`, `rest`, `holds`, `balanceUah`, `restUah`, `holdsUah`, `forecast`, `inWork` | — | — | `mfo`, `currency`, `state`, `hostId`, `branchId`, `isDefault`, `canDebit`, `isCardAccount`, `canCreatePdfPropertyAccount`, `isOwnerHost`, `lastActivity` |
+| `doc` (`searcher`, `VeganetDocumentItem`) | `userIdentity`, `responsible`, `firstSignature`, `secondSignature`, `senderName`, `correspondentName` | `senderTaxId`, `correspondentTaxId` | `senderAccountNumber`, `correspondentAccountNumber`, `senderIBAN`, `correspondentIBAN` | `id`, `docId`, `accountId` | — | `description`, `errorReason`, `expenseItems` | `senderBankName`, `correspondentBankName` | `hostId`, `viewTemplateId`, `signTemplateId`, `date`, `state`, `type`, `number`, `amount`, `currencyCode`, `createdOn`, `isImported`, `origin`, `destinationHostId`, `system`, `direction`, `operationDate`, `senderBankMfo`, `correspondentBankMfo`, `isRead` |
+| `rowinfo` (`pagingRowInfo`) | — | — | — | `rowIdentity` | — | — | — | `rowNumber`, `sortedValue` |
+| `ptx_header` (`period-transactions`) | `accountName` | — | `iban` | — | `inSaldo`, `outSaldo`, `debitTurn`, `creditTurn` | — | — | `dateFrom`, `dateTo`, `currency` |
+| `ptx_tx` (`VnTransaction`) | `accountName`, `corrName` | `corrOkpo` | `corrAccountNumber`, `iban`, `corrIban` | `transactionId` | — | `narrative` | `corrBankName` | `dcFlag`, `currency`, `amount`, `documentDate`, `processDate`, `documentNumber`, `corrBankMfo`, `comissionType` |
+| `auth` (відповідь токена, замаскована) | — | — | — | — | `access_token`, `refresh_token`, `id_token`, `session_state` | — | — | `expires_in`, `refresh_expires_in`, `not-before-policy`, `token_type`, `scope` |
+| `autherror`, `error` | — | — | — | — | — | — | — | `error`, `error_description`, `error_uri` (+ у `error`: `message`, `status`, `code`) |
+| тіло `searcher` (`DocumentFilter`) | `correspondentName` | `tax` | `accountNumber`, `correspondentIban` | `documentAccounts[]`, `pagingRequest.pagingSessionId`, `pagingRequest.orderedLastId` | — | `description` | `bankName` | `fromDate`, `toDate`, `documentState[]`, `documentType[]`, `documentDirection[]`, `origin[]`, `documentRead`, `documentAmount`, `amountCondition`, `bankMfo`, `pagingRequest.pageSize`, `.orderedLastValue`, `.direction`, `.sortField` |
+| тіло `period-transactions` | — | — | — | `accountId` | — | — | — | `dateFrom`, `dateTo`, `onlyHeader`, `withoutAccountACL` |
+
+Рішення, що потребують підтвердження (усі — гіпотези, виміру немає):
+- **`accountId`/`id`/`docId`/`transactionId`/`orderedLastId` — ID, `number`/`iban` — ACC**; `hostId`, `branchId`, `viewTemplateId`, `signTemplateId`, `destinationHostId`, `mfo` — KEEP як службові константи банку (малі значення в ID дали б хибні збіги підрядком).
+- **`sortedValue`/`orderedLastValue` — KEEP** (значення поля сортування; рекордер `sortField` не ставить): якщо сортування піде за іменем, воно потрапить у KEEP — його зачистить `clean_text` за словами ≥ 4 літер, ініціали й
+  «Прізвище І.Б.» там `scan_person` лише ЗНАЙДЕ (знеособлювач ініціалів у KEEP-рядках не замінює — див. знахідки).
+- **`errorReason`, `expenseItems` — PURPOSE** (вільний текст банку, смисл `expenseItems` swagger суперечить сам собі); **`balance`… — SCRAMBLE** (як залишки Привата).
+- **Форми помилок:** лише Keycloak (`error`, `error_description`, `error_uri`) і мінімум `message`/`status`/`code`; будь-яке інше поле — зупинка до першого запису.
+
+### Імена складу облікових даних ПУМБ (фіксуються до першого макета)
+
+Рядок реєстру `ПУМБ_API` (план `fb934ad`, Interfaces): `ИдентификаторКлиента`, `СекретКлиента`, `Логин`, `Пароль`. У конфігурації рекордера (`-Config`, блок `Pumb`): `ClientId`, `ClientSecret`, `Login`, `Password` (+ булеве
+`LoginApproved` — не облікові дані, а погодження власника). Видане банком значення `access_token` складу не належить (платформа його не знає).
+
+### Явні винятки (а)
+
+- `KEEP_NUM_FIELDS['pumb']` (числа від 5 цифр з цих KEEP-полів не вважаються чутливими): `amount`, `number`, `documentNumber`, `date`, `createdOn`, `operationDate`, `documentDate`, `processDate`, `lastActivity`, `dateFrom`, `dateTo`,
+  `fromDate`, `toDate`. Причина — суми, дати/моменти й номери документів публічні за природою (той самий критерій, що `SUM`, `DAT_*`, `NUM_DOC` Привата); МФО, коди, ідентифікатори й текст — не входять.
+- Словників слів нових немає (`allowed_words` / `api_guard_allowed_words` / `GEN_WORDS` — ті самі). Нових `PAIRS` (виняток за парою полів) **немає**; єдина пара лишається Приватова.
+- Один обмежувальний пункт нового механізму: токен пошуку осіб з **одного** символу відкидається (одна літера не ідентифікує); усе довше шукається.
+
+### Регресія 5а
+
+Вхід — усі синтетичні сценарії трьох банків 5а (`synth.all_scenarios()`, 114) як «сирі» записи; ГПВЧ мапи підмінено детермінованим (`random.SystemRandom` → `random.Random(12345)`), `PYTHONHASHSEED=0`;
+для кожного: знеособлення → SHA-256 усіх файлів знеособленого запису й мапи, підсумки (а) / (б) / (в). Скрипт — у scratchpad (`regress5a.py`), до змін і після — **побайтово однаковий вивід** (`cmp`).
+Друга частина: `apisamples.py verify --raw-root … --anon-root … --map-dir …` (без `--bank`, три банки 5а, по одному записі) запущено на `git archive HEAD` (стара версія) і на дереві зі змінами над ТИМИ САМИМИ каталогами —
+вивід і код виходу (0) однакові (`diff`).
+Тести інструмента: **258 OK, 1 skip** (було 255 + 3 нових); `selfcheck` — код 0, 8 з 8.
+
+### Знахідки
+
+1. **Сценарій рекордера `pumb_errors_body_not_json` шле тіло з 16 байтів, що не є JSON, — за рішенням консультанта (нерозбірне тіло = відмова) знеособлення справжнього запису ПУМБ ЗУПИНИТЬСЯ на цьому обміні.**
+   Перевірено на запису рекордера з фальшивого сервера (scratchpad, вигадані дані): без цього обміну 32 обміни знеособлено, (а) 0 збігів, (б) 0 проблем, контроль (а) на сирому — 20 збігів. Потрібне рішення консультанта:
+   чи пише рекордер це тіло як `bodyOmitted` (причина «навмисно не JSON»), чи знеособлювач знає цей сценарій. Я нічого з цього не робив.
+2. **Ініціали осіб у KEEP-рядках** (`sortedValue`, `message` помилок) знеособлювач не замінює (`clean_text` бере слова від 4 літер); (а) їх **знайде** (`scan_person`) і `verify` буде 1. Вигадане для ініціалів — випадкова літера
+   (`Fakes.word` для односимвольних), тож збіг із сирими ініціалами можливий і сам по собі (≈ 1/900 на пару) — теж побачить (а). Підстава не розв'язувати тут: невідомо, чи такі значення трапляться (рекордер `sortField` не ставить).
+3. **Порожнє тіло й HTML відповіді** (5xx/401 без JSON) знеособлювач відхиляє (`тіло не є JSON`, як і для 5а) — зупинка, не копіювання; рішення — після першого запису.
+4. Гіпотези, які лишаються: форма помилок Veganet, формат `lastActivity`/`date`, змістовна роль `sortedValue`, `documentAccounts` рядком (рекордер) проти числа (swagger) — заміна однакова, звірка (б) форму зберігає.

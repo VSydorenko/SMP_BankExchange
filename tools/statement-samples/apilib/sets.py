@@ -8,7 +8,7 @@
 Форми (JSON, UTF-8):
 * набір записів (BinaryData, без BOM)::
 
-    {"format": "smp-api-record-set", "formatVersion": 1|2, "bank": "privat|mono-fop|mono-corp", "kind": "synthetic|run1",
+    {"format": "smp-api-record-set", "formatVersion": 1|2, "bank": "privat|mono-fop|mono-corp|pumb", "kind": "synthetic|run1",
      "records": {"<Ид>": <пакет запису: smp-api-recording-pack, див. recording.py>, ...}}
 
 * набір еталонів (TextDocument, UTF-8 з BOM, як наявні макети еталонів)::
@@ -29,7 +29,7 @@ EXCLUDED = []                      # (банк, ід, причина, вид н�
 RECORD_SET = 'smp-api-record-set'
 ETALON_SET = 'smp-api-etalon-set'
 KINDS = {'synthetic': 'Синт', 'run1': 'Run1', 'run3': 'Run3'}
-BANKS = ('privat', 'mono-fop', 'mono-corp')
+BANKS = ('privat', 'mono-fop', 'mono-corp')       # набори pumb (синтетика, run1) з'являються разом зі Step 3 / записом: порожні набори не пишемо
 
 
 def names(bank, kind):

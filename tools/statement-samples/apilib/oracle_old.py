@@ -92,6 +92,8 @@ KEY = ('ДатаДокумента', 'НомерДокумента', 'Контр
 
 
 def run(rec, p):
+    if rec.bank == 'pumb':
+        raise NotImplementedError('оракул «стара обробка» ПУМБ -- Step 2 задачі 2a')
     return {'privat': old_privat, 'mono-fop': old_mono_fop, 'mono-corp': old_mono_corp}[rec.bank](rec, p)
 
 

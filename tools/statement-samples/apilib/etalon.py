@@ -8,7 +8,7 @@
 
 ```
 { "format": "smp-api-etalon", "formatVersion": 1,
-  "bank": "privat" | "mono-fop" | "mono-corp", "id": "Синт…", "synthetic": true,
+  "bank": "privat" | "mono-fop" | "mono-corp" | "pumb", "id": "Синт…", "synthetic": true,
   "title": "...", "reviewFocus": [1, 2],
   "recording": {"макет": "СМП_ТестОтвет…", "обменов": N},
   "parameters": {"НомерСчета": "...", "НачалоПериода": "...", "КонецПериода": "..."},

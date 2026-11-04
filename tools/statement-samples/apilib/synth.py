@@ -25,8 +25,8 @@ from .common import Params
 
 import sslib.gen as sgen
 
-BANK_KEYS = {'privat': 'Приват', 'mono-fop': 'МоноФОП', 'mono-corp': 'МоноЮр'}
-HOSTS = {'privat': 'acp.privatbank.ua', 'mono-fop': 'api.monobank.ua', 'mono-corp': 'corp-api.monobank.ua'}
+BANK_KEYS = {'privat': 'Приват', 'mono-fop': 'МоноФОП', 'mono-corp': 'МоноЮр', 'pumb': 'ПУМБ'}
+HOSTS = {'privat': 'acp.privatbank.ua', 'mono-fop': 'api.monobank.ua', 'mono-corp': 'corp-api.monobank.ua', 'pumb': 'service.fuib.com'}
 PRIVAT_LIMIT = C.PRIVAT_WORKING_LIMIT
 UA_PHRASES = [p for k in ('services', 'goods', 'other', 'tax') for p in sgen.PHRASES[k]]
 

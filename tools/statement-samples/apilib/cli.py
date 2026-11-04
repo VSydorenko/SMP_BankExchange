@@ -26,7 +26,8 @@ from . import sets as sets_mod, anonymize as A, common as C, etalon, expected, l
 RC_VIOLATION = 1
 RC_CONTROL = 2
 RC_STOP = 4
-BANKS = ('privat', 'mono-corp', 'mono-fop')
+BANKS = ('privat', 'mono-corp', 'mono-fop', 'pumb')
+DEFAULT_BANKS = ('privat', 'mono-corp', 'mono-fop')      # pumb -- у типовий перелік лише коли є його сирий запис (див. `_banks`)
 
 
 def _write(path, text, binary=False):
@@ -134,7 +135,13 @@ def cmd_unpack(a):
 
 
 def _banks(a):
-    return list(a.bank or BANKS)
+    """`--bank` задано -- як є. Інакше три банки 5а, а ПУМБ -- лише коли його сирий запис існує (відсутній запис 5а лишається помилкою)."""
+    if a.bank:
+        return list(a.bank)
+    out = list(DEFAULT_BANKS)
+    if os.path.isdir(step2.raw_dir_of(a.raw_root, 'pumb', a.label)):
+        out.append('pumb')
+    return out
 
 
 def _paths(a, bank):
@@ -163,6 +170,8 @@ def _run_a(a):
                      '(коротких без збігу: %d, без пари: %d)' % (
                          bank, res['exchanges'], res['tokens'], res['hits_whole'], res['hits_nums'], res['hits_names'], res['short_tokens'], res['hits_short'],
                          res['unchanged_long'], res['unchanged_short_info'], res['misaligned']))
+        if bank in step2.PERSON_FIELDS:
+            lines.append('a %s: поля-особи %s (токенів %d): збігів %d' % (bank, '/'.join(sorted(step2.PERSON_FIELDS[bank])), res['person_tokens'], res['hits_person']))
         lines.append('a %s: вузькі винятки за парою полів (у сирому записі): %s; значень поза дозволеними полями: %d' % (
             bank, res['pair_counts'] or '{}', res['pair_leaks']))
         lines.append('a %s КОНТРОЛЬ на сирому записі: збігів %d (мусить бути > 0)' % (bank, ctl['hits']))

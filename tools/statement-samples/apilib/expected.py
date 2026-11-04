@@ -52,7 +52,7 @@ PRIVAT_LIMIT = 100                  # dev9: «рекомендовано не б
 PRIVAT_PAUSE_SECONDS = 1            # dev9: «не частіше 1 запиту в секунду»
 PAUSE_CEILING = C.PAUSE_CEILING_SECONDS
 MONO_PAUSE_SECONDS = 60             # MF:485-490: ліміт monobank ФОП — 1 запит на 60 с
-BANK_NAMES = {'privat': 'ПриватБанк', 'mono-fop': 'monobank ФОП', 'mono-corp': 'monobank юросіб'}
+BANK_NAMES = {'privat': 'ПриватБанк', 'mono-fop': 'monobank ФОП', 'mono-corp': 'monobank юросіб', 'pumb': 'ПУМБ'}
 OP_COLUMNS = ['ПорядковыйНомер', 'НомерСчета', 'Валюта', 'ДатаОперации', 'НомерДокумента', 'ДатаДокумента', 'Сумма',
               'Направление', 'ИдентификаторОперации', 'КонтрагентНаименование', 'КонтрагентНомерСчета', 'КонтрагентКод',
               'КонтрагентМФО', 'НазначениеПлатежа']

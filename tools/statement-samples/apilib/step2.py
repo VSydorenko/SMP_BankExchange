@@ -100,6 +100,7 @@ class Sensitive:
         self.nums = set()             # числа від 5 цифр
         self.names = set()            # власні назви (слова з великої літери)
         self.positional = []          # [(індекс обміну, шлях у дереві, роль, значення)] -- для порівняння на своєму місці
+        self.person = set()           # значення полів-осіб (`PERSON_FIELDS`) і їхні похідні (ініціали, «Прізвище І.Б.»): підрядок без нижньої межі довжини, без регістру, БЕЗ винятку `exempt`
         self.short = set()            # цілі значення ролей ID / ACC / NAME коротші за MIN_WHOLE (не більш як 2 різних символи -- винятком): пошук у значеннях полів, без нижньої межі довжини
         self.generic = set()          # загальні фрази словника замін
         self.pair_exempt = {}         # токен -> {поля, у яких він МОЖЕ лишитися}: вузькі винятки за парою полів
@@ -142,13 +143,13 @@ def pair_leaks(bank, rec, pair_exempt):
         req = ex['request']
         flat = urllib.parse.unquote(req['path'] + '?' + req['query'])
         n += sum(1 for t in pair_exempt if t in flat)
-        if not ex['response']:
-            continue
-        try:
-            root = jsonspan.parse(R.body_text(ex))
-        except jsonspan.JsonSpanError:
-            continue
-        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
+        leaves = list(A.request_body(bank, ex)[1])
+        if ex['response']:
+            try:
+                leaves += schema.leaves(bank, req['path'], ex['response']['status'], jsonspan.parse(R.body_text(ex)))
+            except jsonspan.JsonSpanError:
+                pass
+        for role, nd, where in leaves:
             if nd.kind == 'lit':
                 continue
             field = next((w for w in reversed(where) if isinstance(w, str)), '')
@@ -166,7 +167,36 @@ KEEP_NUM_FIELDS = {
                          'date_open_acc_reg', 'date_open_acc_sys', 'date_final_statement', 'server_date_time', 'today', 'lastday', 'work_balance'}),
     'mono-corp': frozenset({'amount', 'time', 'completedTime', 'date'}),
     'mono-fop': frozenset({'amount', 'operationAmount', 'cashbackAmount', 'time'}),
+    # ПУМБ: суми, дати/моменти й номери документів -- публічні за природою, як NUM_DOC / SUM / DAT_* ПриватБанку. МФО, коди, ідентифікатори й текстові поля -- не входять.
+    'pumb': frozenset({'amount', 'number', 'documentNumber', 'date', 'createdOn', 'operationDate', 'documentDate', 'processDate', 'lastActivity',
+                       'dateFrom', 'dateTo', 'fromDate', 'toDate'}),
 }
+
+# Поля-особи (роль NAME, НЕ KEEP): їхні значення шукаються у знеособленому записі підрядком без нижньої межі довжини (див. `person_tokens`).
+PERSON_FIELDS = {'pumb': frozenset({'userIdentity', 'responsible', 'firstSignature', 'secondSignature'})}
+_INITIALS_RX = re.compile(r'(?<![^\W\d_])([^\W\d_])\.\s?([^\W\d_])\.?(?![^\W\d_])')
+
+
+def person_tokens(value):
+    """Токени пошуку для значення поля-особи, у нижньому регістрі: саме значення (без нижньої межі довжини, від 2 символів), його слова від 4 літер,
+    ініціали («І.Б.», «І. Б.», «І.Б») і форми «Прізвище І.Б.» / «І.Б. Прізвище», виведені з ПІБ і з готових ініціалів. Виняток один -- токени з
+    одного символу (одна літера ідентифікатора не є ідентифікатором)."""
+    v = ' '.join(str(value).split())
+    out = {v}
+    words = WORD.findall(v)
+    out |= {w for w in words if len(w) >= 4}
+    pairs = {(m.group(1), m.group(2)) for m in _INITIALS_RX.finditer(v)}
+    if len(words) >= 2 and len(words[0]) >= 2:
+        ini = [w[0] for w in words[1:]]
+        sur = words[0]
+        out.add('%s %s.' % (sur, ini[0]))
+        if len(ini) >= 2:
+            pairs.add((ini[0], ini[1]))
+            for a, b in ((ini[0], ini[1]),):
+                out |= {'%s %s.%s.' % (sur, a, b), '%s %s. %s.' % (sur, a, b), '%s %s.%s' % (sur, a, b), '%s.%s. %s' % (a, b, sur), '%s. %s. %s' % (a, b, sur)}
+    for a, b in pairs:
+        out |= {'%s.%s.' % (a, b), '%s. %s.' % (a, b), '%s.%s' % (a, b)}
+    return {x.casefold() for x in out if len(x) >= 2}
 
 
 def collect(bank, rec, cfg):
@@ -187,25 +217,28 @@ def collect(bank, rec, cfg):
                 role = 'ACC' if k == 'acc' else 'ID'
                 texts.append((role, v))
                 sens.positional.append((idx, ('query', k), role, v))
-        if not ex['response']:
-            continue
-        root = jsonspan.parse(R.body_text(ex))
-        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
+        leaves = [('reqbody', x) for x in A.request_body(bank, ex)[1]]            # тіло запиту: ті самі ролі, та сама мапа
+        if ex['response']:
+            root = jsonspan.parse(R.body_text(ex))
+            leaves += [('body', x) for x in schema.leaves(bank, req['path'], ex['response']['status'], root)]
+        for part, (role, nd, where) in leaves:
             if nd.kind == 'lit':
                 continue
-            val = nd.value if nd.kind == 'str' else nd.value
+            val = nd.value
             if nd.kind == 'str' and where and isinstance(where[-1], str):
-                objs.setdefault((idx, tuple(where[:-1])), {})[where[-1]] = val
+                objs.setdefault((idx, part, tuple(where[:-1])), {})[where[-1]] = val
+            field = next((w for w in reversed(where) if isinstance(w, str)), '')
             if role == 'KEEP':
                 # число з поля KEEP виключається з (а) лише для явного переліку полів банку (`KEEP_NUM_FIELDS`); поле іншого роду винятку не має
-                field = next((w for w in reversed(where) if isinstance(w, str)), '')
                 if field in KEEP_NUM_FIELDS.get(bank, ()):
                     keep_nums |= set(DIG.findall(str(val)))
                 continue
             if val == '' or (nd.kind == 'str' and val.strip() == ''):
                 continue
+            if nd.kind == 'str' and role == 'NAME' and field in PERSON_FIELDS.get(bank, ()):
+                sens.person |= person_tokens(val)
             texts.append((role, val.strip() if nd.kind == 'str' else val))
-            sens.positional.append((idx, ('body',) + tuple(where), role, val))
+            sens.positional.append((idx, (part,) + tuple(where), role, val))
     for role, v in texts:
         if role in ('ID', 'ACC', 'NAME', 'BANKNAME') and 0 < len(v.strip()) < MIN_WHOLE and len(set(v.strip())) > 2:
             sens.short.add(v.strip())
@@ -229,6 +262,25 @@ def collect(bank, rec, cfg):
     return sens
 
 
+def _strings_blob(text):
+    """ Усі ключі й рядкові/числові значення JSON-тексту (розкодовані екранування) через новий рядок, UTF-8. Не JSON -> JsonSpanError."""
+    root = jsonspan.parse(text)
+    strings = []
+
+    def walk(nd):
+        if nd.kind == 'obj':
+            for k, v in nd.items:
+                strings.append(k)
+                walk(v)
+        elif nd.kind == 'arr':
+            for v in nd.items:
+                walk(v)
+        elif nd.kind in ('str', 'num'):
+            strings.append(nd.value)
+    walk(root)
+    return '\n'.join(strings).encode('utf-8')
+
+
 def haystacks(directory, bank):
     """Байти запису з диска й похідні подання: (великий блоб для пошуку підрядком, блоб для лексем).
     Блоб лексем не містить Base64 (випадкові п'ятицифрові серії в Base64 дали б хибні збіги)."""
@@ -243,28 +295,24 @@ def haystacks(directory, bank):
         decoded = urllib.parse.unquote(req['path'] + '?' + req['query'])
         sub.append(decoded.encode('utf-8'))
         lex.append(decoded.encode('utf-8'))
+        rb = R.request_body_bytes(ex)
+        if rb is not None:                                  # тіло запиту: байти (розкодовані з Base64) і рядки JSON, як у відповіді
+            sub.append(rb)
+            lex.append(rb)
+            try:
+                blob = _strings_blob(rb.decode('utf-8'))
+                sub.append(blob)
+                lex.append(blob)
+            except (UnicodeDecodeError, jsonspan.JsonSpanError):
+                pass
         if ex['response']:
             body = R.body_bytes(ex)
             sub.append(body)
             lex.append(body)
             try:
-                root = jsonspan.parse(R.body_text(ex))
+                blob = _strings_blob(R.body_text(ex))
             except jsonspan.JsonSpanError:
                 continue
-            strings = []
-
-            def walk(nd):
-                if nd.kind == 'obj':
-                    for k, v in nd.items:
-                        strings.append(k)
-                        walk(v)
-                elif nd.kind == 'arr':
-                    for v in nd.items:
-                        walk(v)
-                elif nd.kind in ('str', 'num'):
-                    strings.append(nd.value)
-            walk(root)
-            blob = '\n'.join(strings).encode('utf-8')
             sub.append(blob)
             lex.append(blob)
         else:
@@ -299,12 +347,24 @@ def scan_lexemes(blob, nums, names):
 
 
 def scan_short(rec, tokens):
-    """Короткі (< MIN_WHOLE) значення ролей ID / ACC / NAME у БУДЬ-ЯКОМУ полі знеособленого запису: шлях і запит (розкодовані), текст збою, кожне рядкове значення тіла (після JSON-розкодування екранувань), підрядком і без нижньої межі довжини. -> множина знайдених токенів (значень не друкуємо)."""
+    """Короткі (< MIN_WHOLE) значення ролей ID / ACC / NAME у БУДЬ-ЯКОМУ полі знеособленого запису: шлях і запит (розкодовані), текст збою, кожне рядкове значення ТІЛА ЗАПИТУ й тіла відповіді (після JSON-розкодування екранувань), підрядком і без нижньої межі довжини.. -> множина знайдених токенів (значень не друкуємо)."""
+    return _scan_texts(rec, tokens, False)
+
+
+def scan_person(rec, tokens):
+    """Значення полів-осіб і їхні похідні (`person_tokens`, нижній регістр) у БУДЬ-ЯКОМУ тексті запису (шлях, запит, текст збою, рядки тіла запиту й
+    відповіді), підрядком без нижньої межі довжини й без регістру. -> множина знайдених токенів."""
+    return _scan_texts(rec, tokens, True)
+
+
+def _scan_texts(rec, tokens, fold):
     found = set()
     if not tokens:
         return found
 
     def hit(text):
+        if fold:
+            text = text.casefold()
         for t in tokens:
             if t in text:
                 found.add(t)
@@ -324,6 +384,13 @@ def scan_short(rec, tokens):
     for ex in rec.exchanges:
         req = ex['request']
         hit(urllib.parse.unquote(req['path'] + '?' + req['query']))
+        rtext = R.request_body_bytes(ex)                    # тіло запиту: рядки JSON (а не лише Base64 у файлі)
+        if rtext is not None:
+            rtext = rtext.decode('utf-8', errors='replace')
+            try:
+                walk(json.loads(rtext))
+            except ValueError:
+                hit(rtext)
         if not ex['response']:
             hit(ex['failure']['text'])
             continue
@@ -358,10 +425,12 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
                 else:
                     unchanged_short += 1
     pair = pair_leaks(bank, R.Recording.from_dir(target), sens.pair_exempt)
-    short = scan_short(R.Recording.from_dir(target), sens.short)
-    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair + len(short)
+    target_rec = R.Recording.from_dir(target)
+    short = scan_short(target_rec, sens.short)
+    person = scan_person(target_rec, sens.person)
+    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair + len(short) + len(person)
     return {'pair_counts': dict(sens.pair_counts), 'pair_leaks': pair, 'bank': bank, 'control': control, 'exchanges': len(raw.exchanges), 'tokens': sens.counts(),
-            'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names), 'hits_short': len(short), 'short_tokens': len(sens.short),
+            'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names), 'hits_short': len(short), 'short_tokens': len(sens.short), 'hits_person': len(person), 'person_tokens': len(sens.person),
             'unchanged_long': unchanged_long, 'unchanged_short_info': unchanged_short, 'misaligned': misaligned,
             'hits': hits, 'problems': ['збіги: %d' % hits] if hits else []}
 
@@ -376,6 +445,9 @@ def positional_values(bank, rec):
         for k, _, v in A.query_pairs_raw(req['query']):
             if bank == 'privat' and k in ('acc', 'followId'):
                 out[(idx, ('query', k))] = v
+        for role, nd, where in A.request_body(bank, ex)[1]:
+            if nd.kind != 'lit':
+                out[(idx, ('reqbody',) + tuple(where))] = nd.value
         if ex['response']:
             root = jsonspan.parse(R.body_text(ex))
             for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
@@ -426,6 +498,7 @@ def check_b(bank, raw_dir, anon_dir, map_path, cfg=None):
                 or set(x['request']) != set(y['request']):
             bad(tag + ': метод/хост/ключі запиту')
         _check_request(bank, tag, x['request'], y['request'], bad)
+        _check_request_body(bank, tag, x['request'], y['request'], b, counts, bad)
         if (x['response'] is None) != (y['response'] is None):
             bad(tag + ': response/failure')
             continue
@@ -464,6 +537,28 @@ def _check_request(bank, tag, rx, ry, bad):
             bad('%s: параметр запиту %s' % (tag, k))
 
 
+def _check_request_body(bank, tag, rx, ry, b, counts, bad):
+    """ Тіло запиту v2: `port` і `bodyOmitted` ті самі; `bodyBase64` / `bodyMasked` -- структура та сама, KEEP не змінено, замінені мають ту саму форму,
+    `bodyLength` відповідає байтам."""
+    if rx.get('port') != ry.get('port'):
+        bad(tag + ': port')
+    if (rx.get('bodyOmitted'), rx.get('bodyOmittedReason')) != (ry.get('bodyOmitted'), ry.get('bodyOmittedReason')):
+        bad(tag + ': bodyOmitted')
+    if 'bodyMasked' in rx and rx['bodyMasked'].get('fields') != ry.get('bodyMasked', {}).get('fields'):
+        bad(tag + ': перелік полів bodyMasked')
+    if 'bodyBase64' in ry and ry['bodyLength'] != len(base64.b64decode(ry['bodyBase64'])):
+        bad(tag + ': bodyLength запиту')
+    if 'bodyBase64' not in rx and 'bodyMasked' not in rx:
+        return
+    try:
+        tx, ty = R.request_body_text({'request': rx}), R.request_body_text({'request': ry})
+        nx, ny = jsonspan.parse(tx), jsonspan.parse(ty)
+    except (UnicodeDecodeError, TypeError, KeyError, jsonspan.JsonSpanError):
+        bad(tag + ': тіло запиту не JSON / не UTF-8 / форма змінилась')
+        return
+    _check_json(bank, tag + ' (запит)', tx, ty, nx, ny, lambda n: schema.request_leaves(bank, rx['path'], n), b, counts, bad)
+
+
 def _check_body(bank, tag, x, y, b, counts, bad):
     try:
         tx, ty = R.body_text(x), R.body_text(y)
@@ -474,12 +569,16 @@ def _check_body(bank, tag, x, y, b, counts, bad):
     except jsonspan.JsonSpanError:
         bad(tag + ': тіло не JSON')
         return
+    path, status = x['request']['path'], x['response']['status']
+    _check_json(bank, tag, tx, ty, nx, ny, lambda n: schema.leaves(bank, path, status, n), b, counts, bad)
+
+
+def _check_json(bank, tag, tx, ty, nx, ny, leaves_of, b, counts, bad):
     if jsonspan.skeleton(tx, nx) != jsonspan.skeleton(ty, ny):
         bad(tag + ': скелет тіла (ключі, типи, довжини масивів, пробіли)')
         return
-    path, status = x['request']['path'], x['response']['status']
-    lx = schema.leaves(bank, path, status, nx)
-    ly = schema.leaves(bank, path, status, ny)
+    lx = leaves_of(nx)
+    ly = leaves_of(ny)
     if len(lx) != len(ly):
         bad(tag + ': кількість скалярів')
         return
@@ -650,6 +749,8 @@ def _outcome(reading, label):
 
 def check_c(bank, raw_dir, anon_dir, map_path, cfg=None):
     """Перевірка (в): оракул на сирому й знеособленому читанні."""
+    if bank == 'pumb':
+        raise CheckError('оракул ПУМБ ще не реалізовано (Step 2 задачі 2a): перевірку (в) не виконано')
     rec, b = A.load_bank(bank, raw_dir, map_path, cfg)
     b.build_sweep()
     anon = R.Recording.from_dir(anon_dir)

@@ -61,6 +61,26 @@ def query_pairs_raw(query):
     return [(p.partition('=')[0], p.partition('=')[1], p.partition('=')[2]) for p in query.split('&')] if query else []
 
 
+def request_body(bank, ex):
+    """Тіло запиту обміну (формат v2) для обходу: (текст, [(роль, вузол, шлях)]). Тіла немає або `bodyOmitted` -> (None, []).
+    Маркер `<masked>` форми `bodyMasked` значенням не є і в перелік не йде. Тіло не UTF-8 / не JSON -> `UnknownField`
+    (позиція й код, НЕ фрагмент вхідного тексту): мовчазного копіювання тіла немає."""
+    rq = ex['request']
+    if 'bodyBase64' not in rq and 'bodyMasked' not in rq:
+        return None, []
+    try:
+        text = R.request_body_text(ex)
+    except UnicodeDecodeError as e:
+        raise schema.UnknownField('%s: тіло запиту не UTF-8 (позиція %d)' % (bank, e.start))
+    try:
+        root = jsonspan.parse(text)
+    except jsonspan.JsonSpanError as e:
+        raise schema.UnknownField('%s: тіло запиту не є JSON (%s)' % (bank, e))
+    masked = 'bodyMasked' in rq
+    return text, [(role, nd, where) for role, nd, where in schema.request_leaves(bank, rq['path'], root)
+                  if not (masked and nd.kind == 'str' and nd.value == R.MASK_MARKER)]
+
+
 class Bank:
     """Знеособлення одного банку: одна мапа на всі його записи."""
 
@@ -159,7 +179,27 @@ class Bank:
         out = dict(req)
         out['path'] = '/'.join(seg)
         out['query'] = '&'.join(pairs)
+        self._request_body(req, out)
         return out
+
+    def _request_body(self, req, out):
+        """Тіло запиту v2: `port` і `bodyOmitted` лишаються як є; `bodyBase64` -- розкодувати, знеособити ТІЄЮ САМОЮ мапою й ролями, що й
+        відповідь, закодувати, перерахувати `bodyLength`; `bodyMasked` -- знеособити `text`, маркери лишити."""
+        text, leaves = request_body(self.bank, {'request': req})
+        if text is None:
+            return
+        edits = []
+        for role, nd, where in leaves:
+            new = self.replace_node(role, nd, next((w for w in reversed(where) if isinstance(w, str)), ''), '\\u' in text)
+            if new is not None:
+                edits.append((nd.start, nd.end, new))
+        new_text = jsonspan.replace_spans(text, edits)
+        if 'bodyBase64' in req:
+            body = new_text.encode('utf-8')
+            out['bodyBase64'] = base64.b64encode(body).decode('ascii')
+            out['bodyLength'] = len(body)
+        else:
+            out['bodyMasked'] = {'text': new_text, 'fields': list(req['bodyMasked']['fields'])}
 
     def _query_value(self, role, v):
         if '%' in v or '+' in v:
@@ -209,6 +249,13 @@ class Bank:
             if role == 'SCRAMBLE':
                 new = self.fakes.number(nd.value)
                 return None if new == nd.value else new
+            if role == 'ID':
+                # числовий ідентифікатор (ПУМБ: id, docId, accountId, orderedLastId): та сама заміна за ТЕКСТОМ числа, що й для рядкового
+                # значення (documentAccounts рекордера -- рядки), тож зв'язок запит <-> відповідь зберігається
+                if not re.fullmatch(r'[1-9]\d*', nd.value):
+                    raise schema.UnknownField('%s: числовий ідентифікатор не є натуральним цілим' % self.bank)
+                new = self.ident(nd.value)
+                return None if new == nd.value else new
             raise schema.UnknownField('%s: число в полі з роллю %s' % (self.bank, role))
         raise schema.UnknownField('%s: контейнер там, де очікується скаляр' % self.bank)
 
@@ -234,14 +281,15 @@ def prescan(bank, rec):
         for part in req['path'].split('/') + [v for _, _, v in query_pairs_raw(req['query'])]:
             if IBAN_RX.fullmatch(part):
                 ibans.add(part)
-        if not ex['response']:
-            continue
-        try:
-            root = jsonspan.parse(R.body_text(ex))
-        except jsonspan.JsonSpanError:
-            raise schema.UnknownField('%s: тіло не є JSON' % bank)
-        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
-            if nd.kind != 'str' or role == 'KEEP' or nd.value == '':
+        leaves = list(request_body(bank, ex)[1])             # тіло запиту (v2): ті самі ролі, ті самі заборонені значення
+        if ex['response']:
+            try:
+                root = jsonspan.parse(R.body_text(ex))
+            except jsonspan.JsonSpanError:
+                raise schema.UnknownField('%s: тіло не є JSON' % bank)
+            leaves += schema.leaves(bank, req['path'], ex['response']['status'], root)
+        for role, nd, where in leaves:
+            if (nd.kind != 'str' and not (nd.kind == 'num' and role == 'ID')) or role == 'KEEP' or nd.value == '':
                 continue
             v = nd.value.strip()
             if role == 'ID' and where and where[-1] == 'REF':
@@ -276,14 +324,15 @@ def prescan_values(bank, rec, cfg=None):
                 accs.add(v)
             elif bank == 'privat' and k == 'followId':
                 ids.add(v)
-        if not ex['response']:
-            continue
-        try:
-            root = jsonspan.parse(R.body_text(ex))
-        except jsonspan.JsonSpanError:
-            continue
-        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
-            if nd.kind != 'str' or nd.value.strip() == '':
+        leaves = list(request_body(bank, ex)[1])
+        if ex['response']:
+            try:
+                root = jsonspan.parse(R.body_text(ex))
+                leaves += schema.leaves(bank, req['path'], ex['response']['status'], root)
+            except jsonspan.JsonSpanError:
+                pass
+        for role, nd, where in leaves:
+            if (nd.kind != 'str' and not (nd.kind == 'num' and role == 'ID')) or nd.value.strip() == '':
                 continue
             v = nd.value.strip()
             if role == 'ID':

@@ -13,6 +13,13 @@
 
 Шлях запиту (`request.path`, `request.query`) знеособлюється тими самими правилами: IBAN рахунку, ідентифікатор рахунку
 monobank ФОП, `acc` ПриватБанку.
+
+ПУМБ (план 05б-2, задача 2a): ролі за swagger Veganet (`VeganetDocumentItem`, `VeganetClientRestAccount`, `DocumentFilter`,
+`EJBPeriodTransactionsRequest/Response`) і за формою відповіді автентифікації, яку пише рекордер, -- **ГІПОТЕЗА до запису**: усе, чого
+swagger не описує (форми помилок), звужено до того, що відоме, а решта -- зупинка (`UnknownField`). Числові `id` / `docId` / `accountId` /
+`transactionId` / `orderedLastId` -- ID: одне значення (текст числа) = одна заміна в усіх відповідях і ТІЛАХ ЗАПИТІВ (`accountId` запиту =
+`accountId` відповіді; `documentAccounts` рекордера -- рядки, у swagger -- числа, заміна та сама). `userIdentity`, `responsible`,
+`firstSignature`, `secondSignature` -- NAME (не KEEP), перевіряються підрядком без нижньої межі довжини (`step2.person_tokens`).
 """
 
 PRIVAT_TX = {
@@ -60,12 +67,58 @@ MONO_CORP_BALANCE = {'date': 'KEEP', 'balance': 'SCRAMBLE', 'isFinal': 'KEEP'}
 MONO_CORP_ACCOUNT = {'iban': 'ACC', 'currency': 'KEEP', 'balance': 'SCRAMBLE'}
 ERROR_BODY = {'errorCode': 'KEEP', 'errorDescription': 'KEEP'}
 
+# ---------------------------------------------------------------------- ПУМБ (Veganet): ролі за swagger, ГІПОТЕЗА до запису
+# GET /account -> [VeganetClientRestAccount]
+PUMB_ACCOUNT = {
+    'id': 'ID', 'accountId': 'ID', 'mfo': 'KEEP', 'currency': 'KEEP', 'number': 'ACC', 'name': 'NAME', 'state': 'KEEP', 'hostId': 'KEEP',
+    'branchId': 'KEEP', 'clientId': 'ID', 'clientName': 'NAME', 'clientOkpo': 'CODE', 'isDefault': 'KEEP', 'canDebit': 'KEEP',
+    'isCardAccount': 'KEEP', 'canCreatePdfPropertyAccount': 'KEEP', 'iban': 'ACC', 'isOwnerHost': 'KEEP', 'balance': 'SCRAMBLE',
+    'rest': 'SCRAMBLE', 'holds': 'SCRAMBLE', 'balanceUah': 'SCRAMBLE', 'restUah': 'SCRAMBLE', 'holdsUah': 'SCRAMBLE',
+    'lastActivity': 'KEEP', 'forecast': 'SCRAMBLE', 'inWork': 'SCRAMBLE'}
+# POST /document/searcher -> [VeganetDocumentItem]
+PUMB_DOC = {
+    'id': 'ID', 'hostId': 'KEEP', 'docId': 'ID', 'viewTemplateId': 'KEEP', 'signTemplateId': 'KEEP', 'date': 'KEEP', 'state': 'KEEP',
+    'type': 'KEEP', 'firstSignature': 'NAME', 'secondSignature': 'NAME', 'errorReason': 'PURPOSE', 'number': 'KEEP', 'accountId': 'ID',
+    'amount': 'KEEP', 'currencyCode': 'KEEP', 'description': 'PURPOSE', 'createdOn': 'KEEP', 'isImported': 'KEEP',
+    'userIdentity': 'NAME', 'origin': 'KEEP', 'destinationHostId': 'KEEP', 'system': 'KEEP', 'direction': 'KEEP',
+    'operationDate': 'KEEP', 'senderName': 'NAME', 'correspondentName': 'NAME', 'senderTaxId': 'CODE', 'correspondentTaxId': 'CODE',
+    'senderBankMfo': 'KEEP', 'correspondentBankMfo': 'KEEP', 'senderBankName': 'BANKNAME', 'correspondentBankName': 'BANKNAME',
+    'senderAccountNumber': 'ACC', 'correspondentAccountNumber': 'ACC', 'responsible': 'NAME', 'expenseItems': 'PURPOSE',
+    'isRead': 'KEEP', 'senderIBAN': 'ACC', 'correspondentIBAN': 'ACC', 'pagingRowInfo': 'OBJECT'}
+PUMB_ROWINFO = {'rowNumber': 'KEEP', 'rowIdentity': 'ID', 'sortedValue': 'KEEP'}
+# POST /document/period-transactions -> EJBPeriodTransactionsResponse
+PUMB_PTX = {'header': 'OBJECT', 'transactions': 'ARRAY'}
+PUMB_PTX_HEADER = {'dateFrom': 'KEEP', 'dateTo': 'KEEP', 'currency': 'KEEP', 'accountName': 'NAME', 'inSaldo': 'SCRAMBLE',
+                   'outSaldo': 'SCRAMBLE', 'debitTurn': 'SCRAMBLE', 'creditTurn': 'SCRAMBLE', 'iban': 'ACC'}
+PUMB_PTX_TX = {
+    'dcFlag': 'KEEP', 'accountName': 'NAME', 'currency': 'KEEP', 'amount': 'KEEP', 'transactionId': 'ID', 'documentDate': 'KEEP',
+    'processDate': 'KEEP', 'documentNumber': 'KEEP', 'corrBankMfo': 'KEEP', 'corrBankName': 'BANKNAME', 'corrAccountNumber': 'ACC',
+    'corrName': 'NAME', 'corrOkpo': 'CODE', 'narrative': 'PURPOSE', 'comissionType': 'KEEP', 'iban': 'ACC', 'corrIban': 'ACC'}
+# Відповідь токен-ендпоінта в записі рекордера ЗАМАСКОВАНА (значення -- літера->a/A, цифра->9); жива форма -- Keycloak. Токени й сесія -- SCRAMBLE.
+PUMB_AUTH = {'access_token': 'SCRAMBLE', 'refresh_token': 'SCRAMBLE', 'id_token': 'SCRAMBLE', 'session_state': 'SCRAMBLE',
+             'expires_in': 'KEEP', 'refresh_expires_in': 'KEEP', 'not-before-policy': 'KEEP', 'token_type': 'KEEP', 'scope': 'KEEP'}
+PUMB_AUTH_ERROR = {'error': 'KEEP', 'error_description': 'KEEP', 'error_uri': 'KEEP'}
+# Форми помилок Veganet swagger не описує: лише відоме (Keycloak) й мінімум службових полів; решта -- зупинка до запису.
+PUMB_ERROR = {'error': 'KEEP', 'error_description': 'KEEP', 'error_uri': 'KEEP', 'message': 'KEEP', 'status': 'KEEP', 'code': 'KEEP'}
+# Тіла запитів (DocumentFilter, PagingRequest, EJBPeriodTransactionsRequest). Рекордер шле лише частину полів; решту swagger -- на випадок появи.
+PUMB_REQ_SEARCHER = {
+    'documentDirection': 'ARRAY', 'documentState': 'ARRAY', 'documentType': 'ARRAY', 'fromDate': 'KEEP', 'toDate': 'KEEP', 'documentRead': 'KEEP',
+    'correspondentName': 'NAME', 'documentAmount': 'KEEP', 'amountCondition': 'KEEP', 'documentAccounts': 'ARRAY', 'pagingRequest': 'OBJECT',
+    'origin': 'ARRAY', 'tax': 'CODE', 'bankName': 'BANKNAME', 'bankMfo': 'KEEP', 'accountNumber': 'ACC', 'correspondentIban': 'ACC',
+    'description': 'PURPOSE'}
+PUMB_REQ_PAGING = {'pageSize': 'KEEP', 'pagingSessionId': 'ID', 'orderedLastValue': 'KEEP', 'orderedLastId': 'ID', 'direction': 'KEEP',
+                   'sortField': 'KEEP'}
+PUMB_REQ_PTX = {'accountId': 'ID', 'dateFrom': 'KEEP', 'dateTo': 'KEEP', 'onlyHeader': 'KEEP', 'withoutAccountACL': 'KEEP'}
+
 ROLES = {
     'privat': {'page': PRIVAT_PAGE, 'tx': PRIVAT_TX, 'settings': PRIVAT_SETTINGS, 'balance': PRIVAT_BALANCE},
     'mono-fop': {'tx': MONO_FOP_TX, 'client': MONO_FOP_CLIENT, 'account': MONO_FOP_ACCOUNT, 'jar': MONO_FOP_JAR,
                  'error': ERROR_BODY},
     'mono-corp': {'tx': MONO_CORP_TX, 'ultimate': MONO_CORP_ULTIMATE, 'balance': MONO_CORP_BALANCE,
                   'caccount': MONO_CORP_ACCOUNT, 'error': ERROR_BODY},
+    'pumb': {'account': PUMB_ACCOUNT, 'doc': PUMB_DOC, 'rowinfo': PUMB_ROWINFO, 'ptx': PUMB_PTX, 'ptx_header': PUMB_PTX_HEADER,
+             'ptx_tx': PUMB_PTX_TX, 'auth': PUMB_AUTH, 'autherror': PUMB_AUTH_ERROR, 'error': PUMB_ERROR,
+             'req_searcher': PUMB_REQ_SEARCHER, 'req_paging': PUMB_REQ_PAGING, 'req_ptx': PUMB_REQ_PTX},
 }
 
 
@@ -90,6 +143,15 @@ CHILD = {
     ('mono-fop', 'client', 'jars'): ('arr', 'jar'),
     ('mono-fop', 'account', 'maskedPan'): ('scalars', 'SCRAMBLE'),
     ('mono-corp', 'tx', 'ultimateDebit'): ('obj', 'ultimate'),
+    ('pumb', 'doc', 'pagingRowInfo'): ('obj', 'rowinfo'),
+    ('pumb', 'ptx', 'header'): ('obj', 'ptx_header'),
+    ('pumb', 'ptx', 'transactions'): ('arr', 'ptx_tx'),
+    ('pumb', 'req_searcher', 'documentDirection'): ('scalars', 'KEEP'),
+    ('pumb', 'req_searcher', 'documentState'): ('scalars', 'KEEP'),
+    ('pumb', 'req_searcher', 'documentType'): ('scalars', 'KEEP'),
+    ('pumb', 'req_searcher', 'origin'): ('scalars', 'KEEP'),
+    ('pumb', 'req_searcher', 'documentAccounts'): ('scalars', 'ID'),
+    ('pumb', 'req_searcher', 'pagingRequest'): ('obj', 'req_paging'),
 }
 
 
@@ -105,6 +167,8 @@ def root_section(bank, path, status, kind):
         if path.startswith('/personal/statement/') and status == 200:
             return 'tx' if kind == 'arr' else _bad(bank, 'statement')
         return 'error' if kind == 'obj' else _bad(bank, 'error')
+    if bank == 'pumb':
+        return _pumb_response_section(path, status, kind)
     if status == 200 and kind == 'arr':
         if path == '/ext/v1/accounts':
             return 'caccount'
@@ -116,13 +180,45 @@ def root_section(bank, path, status, kind):
     return 'error' if kind == 'obj' else _bad(bank, 'error')
 
 
+def _pumb_response_section(path, status, kind):
+    """Розділ кореня тіла відповіді ПУМБ за кінцем шляху (перед ним -- префікс `/war_veganet_api`), статусом і видом кореня."""
+    if path.endswith('/openid-connect/token'):
+        return ('auth' if status == 200 else 'autherror') if kind == 'obj' else _bad('pumb', 'token')
+    if status == 200:
+        for tail, section, want in (('/account', 'account', 'arr'), ('/document/searcher', 'doc', 'arr'),
+                                    ('/document/period-transactions', 'ptx', 'obj')):
+            if path.endswith(tail):
+                return section if kind == want else _bad('pumb', section)
+        return _bad('pumb', 'path')
+    return 'error' if kind == 'obj' else _bad('pumb', 'error')
+
+
+def request_section(bank, path, kind):
+    """Розділ кореня ТІЛА ЗАПИТУ (формат v2). Тіло запиту є лише в ПУМБ; решта банків його не має -- зупинка."""
+    if bank != 'pumb':
+        raise UnknownField('%s: тіло запиту не очікується' % bank)
+    for tail, section in (('/document/searcher', 'req_searcher'), ('/document/period-transactions', 'req_ptx')):
+        if path.endswith(tail):
+            return section if kind == 'obj' else _bad(bank, 'тіло запиту')
+    raise UnknownField('pumb: тіло запиту до невідомого шляху')
+
+
 def _bad(bank, what):
     raise UnknownField('%s: неочікуваний вигляд кореня тіла (%s)' % (bank, what))
 
 
 def leaves(bank, path, status, root):
-    """Усі скалярні вузли тіла з ролями: [(роль, вузол, шлях_у_дереві)]. Невідоме поле -> UnknownField (ім'я, не значення).
+    """Усі скалярні вузли тіла відповіді з ролями: [(роль, вузол, шлях_у_дереві)]. Невідоме поле -> UnknownField (ім'я, не значення).
     `root` -- вузол `jsonspan`."""
+    return _walk(bank, root_section(bank, path, status, root.kind), root)
+
+
+def request_leaves(bank, path, root):
+    """Те саме для ТІЛА ЗАПИТУ (формат v2): ті самі ролі й та сама заміна, що й у відповіді."""
+    return _walk(bank, request_section(bank, path, root.kind), root)
+
+
+def _walk(bank, section, root):
     out = []
 
     def scalar_ok(role, nd, where):
@@ -160,7 +256,6 @@ def leaves(bank, path, status, root):
             else:
                 scalar_ok(role, v, here)
 
-    section = root_section(bank, path, status, root.kind)
     if root.kind == 'obj':
         obj(section, root, ())
     else:

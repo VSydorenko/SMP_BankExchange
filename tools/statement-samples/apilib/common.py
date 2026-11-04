@@ -11,7 +11,7 @@ from decimal import Decimal, InvalidOperation
 
 from . import kyiv, recording as rec_mod
 
-BANKS = ('privat', 'mono-fop', 'mono-corp')
+BANKS = ('privat', 'mono-fop', 'mono-corp')      # банки з МОДЕЛЛЮ оракулу й синтетикою; pumb сюди -- разом зі Step 2 / 3 задачі 2a (`recording.BANKS` -- усі формати)
 PRIVAT_PATH = '/api/statements/transactions'
 PRIVAT_SETTINGS_PATH = '/api/statements/settings'
 PRIVAT_BALANCE_PATH = '/api/statements/balance'

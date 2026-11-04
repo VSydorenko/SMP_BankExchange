@@ -79,6 +79,8 @@ def readings(rec):
     пропускаються."""
     bank = rec.bank
     out = []
+    if bank == 'pumb':
+        raise NotImplementedError('читання ПУМБ для оракула -- Step 2 задачі 2a')
     if bank == 'privat':
         bal = _first(rec, lambda e: e['request']['path'] == C.PRIVAT_BALANCE_PATH and _ok(e))
         settings = _first(rec, lambda e: e['request']['path'] == C.PRIVAT_SETTINGS_PATH and _ok(e))

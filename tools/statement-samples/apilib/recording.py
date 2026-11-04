@@ -25,6 +25,7 @@ VERSIONS = (VERSION, VERSION_2)
 MASK_MARKER = '<masked>'
 METHODS_V2 = ('GET', 'POST')
 BODY_KEYS = ('bodyBase64', 'bodyMasked', 'bodyOmitted')
+BANKS = ('privat', 'mono-corp', 'mono-fop', 'pumb')
 STATES = ('ok', 'incomplete', 'aborted', 'error', 'interrupted', 'leak-detected')
 FAILURE_KINDS = ('timeout', 'network', 'other')
 HEADER_WHITELIST_RX = re.compile(r'^(content-type|retry-after|date|x-rate-limit-.*|x-ratelimit-.*|ratelimit-.*)$')
@@ -101,7 +102,7 @@ class Recording:
         m = self.manifest
         if m.get('format') != FORMAT or m.get('formatVersion') not in VERSIONS:
             raise FormatError('маніфест: format/formatVersion')
-        if m.get('bank') not in ('privat', 'mono-corp', 'mono-fop'):
+        if m.get('bank') not in BANKS:
             raise FormatError('маніфест: bank')
         if m.get('state') not in STATES:
             raise FormatError('маніфест: state')
@@ -225,6 +226,22 @@ def charset_of(ex):
     ct = header(ex, 'content-type') or ''
     m = re.search(r'charset\s*=\s*([\w\-]+)', ct, re.I)
     return (m.group(1).lower() if m else 'utf-8')
+
+
+def request_body_bytes(ex):
+    """Байти тіла запиту (v2): `bodyBase64` розкодовано; `bodyMasked` — текст UTF-8; `bodyOmitted` і запит без тіла — None."""
+    rq = ex['request']
+    if 'bodyBase64' in rq:
+        return base64.b64decode(rq['bodyBase64'])
+    if 'bodyMasked' in rq:
+        return rq['bodyMasked']['text'].encode('utf-8')
+    return None
+
+
+def request_body_text(ex):
+    """Текст тіла запиту (UTF-8, суворо) або None. Не UTF-8 -> UnicodeDecodeError (виклик перетворює на відмову без вмісту)."""
+    b = request_body_bytes(ex)
+    return None if b is None else b.decode('utf-8')
 
 
 def body_text(ex):
