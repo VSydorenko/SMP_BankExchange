@@ -1455,6 +1455,29 @@ function Invoke-SecretCheck {
     0
 }
 
+# Сесія інтерактивна, лише якщо є кому відповісти: користувацький режим ОС, stdin не перенаправлений і pwsh запущено без -NonInteractive.
+# (Перенаправлений stdin або -NonInteractive — типові ознаки запуску з агента, планувальника, конвеєра; Read-Host там або висне, або відмовить.)
+function Test-InteractiveSession {
+    if (-not [Environment]::UserInteractive) { return $false }
+    if ([Console]::IsInputRedirected) { return $false }
+    foreach ($a in [Environment]::GetCommandLineArgs()) { if ($a -match '^[-/](noni|noninteractive)$') { return $false } }
+    $true
+}
+
+# Конфіг за замовчуванням (справжній, з токенами) читається лише після підтвердження людини. Явний -Config підтвердження не потребує.
+# Повертає 0 (можна читати) або 4 (відмова; файл НЕ відкривається: тут його не торкаються взагалі, лише друкується шлях).
+function Invoke-ConfigGate {
+    param([string]$Path, [bool]$Explicit, [bool]$Interactive, [scriptblock]$Ask = { param($p) (Read-Host "Прочитати справжній конфіг $p? [y/N]") -cmatch '^[yY]$' })
+    if ($Explicit) { return 0 }
+    if (-not $Interactive) {
+        Write-Host "ВІДМОВА: -Config не вказано, а сесія неінтерактивна: конфіг за замовчуванням ($Path) не читається без підтвердження людини. Вкажіть -Config <файл> або запустіть у консолі."
+        return 4
+    }
+    if (& $Ask $Path) { return 0 }
+    Write-Host 'ВІДМОВА: підтвердження не отримано, конфіг за замовчуванням не прочитано.'
+    4
+}
+
 # Які банки йдуть у прогін: 'all' — три банки зі старого переліку; ПУМБ (вхід у банк) — лише за явним -Bank pumb.
 function Get-SelectedBanks {
     param([string[]]$Bank)
@@ -1597,6 +1620,23 @@ function Invoke-SelfTestMode {
     & $check 'перевірка наявної теки: токен у теці owner-only — код 3' ((Invoke-SecretCheck $ckRun $ckOwn $secrets (Join-Path $Dir 'ck')) -eq 3)
     & $check 'перевірка наявної теки: порожній набір секретів — помилка, не «чисто»' (& $thrown2 { Invoke-SecretCheck $ckRun $ckOwn ([ordered]@{}) (Join-Path $Dir 'ck') })
     & $check 'перевірка наявної теки: немає теки — помилка' (& $thrown2 { Invoke-SecretCheck (Join-Path $Dir 'ck\nope') $null $secrets $Dir })
+
+    # --- шлюз конфігу за замовчуванням: рішення, підтвердження, пастка, яку не можна читати ---
+    $trapDir = Join-Path $Dir 'trap'
+    New-Item -ItemType Directory -Path $trapDir -Force | Out-Null
+    $trap = Join-Path $trapDir 'config.psd1'
+    [System.IO.File]::WriteAllText($trap, '@{ ВИГАДАНА-ПАСТКА = (', $script:Utf8NoBom)
+    $trapBefore = [System.IO.File]::ReadAllText($trap)
+    $trapLock = [System.IO.File]::Open($trap, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::None)   # будь-яке читання пастки дало б IOException
+    try {
+        $gNon = Invoke-ConfigGate $trap $false $false { param($p) throw 'питання не мало ставитись' }
+        $gNo = Invoke-ConfigGate $trap $false $true { param($p) $false }
+        $gYes = Invoke-ConfigGate $trap $false $true { param($p) $true }
+        $gExp = Invoke-ConfigGate $trap $true $false { param($p) throw 'питання не мало ставитись' }
+    }
+    finally { $trapLock.Dispose() }
+    & $check 'шлюз конфігу: неінтерактивно без -Config — 4 без питання; відмова людини — 4; «y» — 0; явний -Config — 0 без питання' (($gNon -eq 4) -and ($gNo -eq 4) -and ($gYes -eq 0) -and ($gExp -eq 0)) "($gNon/$gNo/$gYes/$gExp)"
+    & $check 'шлюз конфігу: пастку не відкрито й не змінено' ([System.IO.File]::ReadAllText($trap) -ceq $trapBefore)
 
     # --- OwnerRoot усередині OutRoot відхиляється ---
     & $check 'OwnerRoot усередині OutRoot розпізнається (вкладена тека, збіг, інший регістр)' ((Test-PathInside 'C:\x\rec\owner' 'C:\x\rec') -and (Test-PathInside 'C:\x\rec' 'C:\x\rec') -and (Test-PathInside 'c:\X\REC\a\b' 'C:\x\rec'))
@@ -1795,6 +1835,10 @@ function Invoke-SelfTestMode {
     $o4 = & $pwsh -NoProfile -File $PSCommandPath -CheckRun -Bank pumb -RunLabel e2e3 -Config $fakeCfg -OutRoot $outRoot -OwnerRoot $ownRoot -StderrLog $stderrE2e 2>&1 | Out-String
     $c4 = $LASTEXITCODE
     & $check 'ПУМБ, -CheckRun: чистий stderr і чиста тека — код 0' ($c4 -eq 0) "(код $c4)"
+    # без -Config: неінтерактивно (-NonInteractive) — відмова з кодом 4, файл за замовчуванням не читається (справжній шлях жорсткий, тож тут лише відмова й її код)
+    $o5 = & $pwsh -NoProfile -NonInteractive -File $PSCommandPath -DryRun -Bank pumb 2>&1 | Out-String
+    $c5 = $LASTEXITCODE
+    & $check 'конфіг за замовчуванням: без -Config неінтерактивно — код 4, відмова, жодного банку не запущено' (($c5 -eq 4) -and $o5.Contains('не читається без підтвердження') -and -not $o5.Contains('################')) "(код $c5)"
     }
     finally { foreach ($v in $proxyVars) { [Environment]::SetEnvironmentVariable($v, $savedEnv[$v]) } }
 
@@ -1823,6 +1867,8 @@ if (Test-PathInside $OwnerRoot $OutRoot) {
 }
 $selected = Get-SelectedBanks $Bank
 
+$gate = Invoke-ConfigGate $Config $PSBoundParameters.ContainsKey('Config') (Test-InteractiveSession)
+if ($gate -ne 0) { exit $gate }
 if (-not (Test-Path -LiteralPath $Config)) {
     if ($DryRun) { $fallback = Join-Path $PSScriptRoot 'config.template.psd1'; Write-Host "[dry-run] конфігурації немає ($Config); беру шаблон $fallback"; $Config = $fallback }
     else { Write-Host "Конфігурації немає: $Config"; Write-Host 'Скопіюйте config.template.psd1 у це місце й впишіть значення (див. README.md).'; exit 2 }
