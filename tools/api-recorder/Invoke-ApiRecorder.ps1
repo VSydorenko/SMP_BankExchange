@@ -39,6 +39,7 @@ $script:FakeIban = 'UA000000000000000000000000000'
 $script:FakeMonoAccountId = 'invalidAccountId0000'
 $script:UserAgent = "SMP-ApiRecorder/$script:RecorderVersion"
 $script:Http = $null
+$script:FopPageMax = 500   # максимум операцій на сторінку виписки ФОП (документація)
 
 # =============================================================================================
 # Контекст, зведення, пауза
@@ -50,6 +51,7 @@ function New-Ctx {
         BaseHeaders = @{}; ContentType = ''; NextGap = 0.0; LastEnd = $null; PlannedSeconds = 0.0
         Stats = [ordered]@{}; Cur = $null; Owner = [System.Collections.Generic.List[string]]::new()
         Abort = ''; Failed = $false; Requests = 0
+        Captured = [System.Collections.Generic.List[object]]::new()
     }
 }
 
@@ -67,6 +69,7 @@ function Start-ScenarioStats {
     }
     $Ctx.Stats[$Name] = $s
     $Ctx.Cur = $s
+    $Ctx.Captured = [System.Collections.Generic.List[object]]::new()   # сторінки виписки поточного сценарію в пам'яті (для вибору операції пар меж)
     Write-Host ''
     Write-Host "=== $Name ==="
 }
@@ -492,10 +495,97 @@ function Invoke-PrivatRun {
 }
 
 # =============================================================================================
+# Межі запиту monobank: збій рекордера, вибір операції, пари запитів (D36 п. 11)
+# =============================================================================================
+# Збій на боці рекордера (запит НЕ надсилався): обмін без response, failure.kind = stuck_cursor | no_candidate.
+# Поле request — запит, який було б надіслано (stuck_cursor) або вибірка, з якої операцію не знайдено (no_candidate). FORMAT.md.
+function Add-RecorderFailure {
+    param($Ctx, [string]$Path, [string]$Query, [string]$Kind, [string]$Text)
+    Assert-ReadOnlyRequest 'GET' $Ctx.HostName $Path
+    Add-Count $Ctx 'HTTP' ('збій:' + $Kind)
+    Add-Note $Ctx "$Kind — $Text"
+    if ($Ctx.Dry) { return }
+    [void](Save-Exchange $Ctx.Rec $Ctx.Cur.Name $Ctx.HostName $Path $Query $null @() ([byte[]]@()) ([pscustomobject]@{ Kind = $Kind; Text = $Text }) ([datetime]::UtcNow) 0)
+}
+
+# Обирає операцію, єдину у своїй секунді time (серед усіх сторінок вибірки), лише зі сторінки, НЕ повної за її limit.
+# З кількох придатних — ту, що найдалі від найближчої іншої операції (щоб сусідня секунда не плутала пару). $Pages: @{Items; Limit}.
+function Select-BoundaryCandidate {
+    param($Pages)
+    $count = @{}
+    foreach ($pg in @($Pages)) {
+        foreach ($op in @($pg.Items)) {
+            if ($null -eq $op['time']) { continue }
+            $k = [long]$op['time']
+            $count[$k] = 1 + [int]($count[$k] ?? 0)
+        }
+    }
+    $cand = [System.Collections.Generic.HashSet[long]]::new()
+    foreach ($pg in @($Pages)) {
+        if (@($pg.Items).Count -ge [int]$pg.Limit) { continue }
+        foreach ($op in @($pg.Items)) {
+            if ($null -eq $op['time']) { continue }
+            $k = [long]$op['time']
+            if ($count[$k] -eq 1) { [void]$cand.Add($k) }
+        }
+    }
+    if ($cand.Count -eq 0) { return $null }
+    $sorted = @($count.Keys | ForEach-Object { [long]$_ } | Sort-Object)
+    $best = $null; $bestGap = [long]-1
+    for ($i = 0; $i -lt $sorted.Count; $i++) {
+        $t = [long]$sorted[$i]
+        if (-not $cand.Contains($t)) { continue }
+        $gap = [long]31536000
+        if ($i -gt 0) { $gap = [math]::Min($gap, $t - [long]$sorted[$i - 1]) }
+        if ($i -lt $sorted.Count - 1) { $gap = [math]::Min($gap, [long]$sorted[$i + 1] - $t) }
+        if ($gap -gt $bestGap) { $best = $t; $bestGap = $gap }
+    }
+    [pscustomobject]@{ Time = [long]$best; Gap = $bestGap; Candidates = $cand.Count }
+}
+
+# Пари запитів на включність меж: from = t і t - 1 (to — t + 3600, не пізніше кінця періоду); to = t і t + 1
+# (from — t - 3600, не раніше початку періоду). Кожен запит — окремий сценарій. Висновку рекордер не робить.
+function Invoke-BoundaryPairs {
+    param($Ctx, [string]$Prefix, $Pages, [long]$PeriodFrom, [long]$PeriodTo, [scriptblock]$PathFor, [string]$Query, [bool]$IsFop)
+    $cand = Select-BoundaryCandidate $Pages
+    if ($null -eq $cand -and $Ctx.Dry) {
+        Write-Host '[dry-run] у заглушках немає операцій — для плану запитів підставлено синтетичного кандидата'
+        $cand = [pscustomobject]@{ Time = $PeriodFrom + 86400; Gap = 0; Candidates = 0 }
+    }
+    if ($null -eq $cand) {
+        Invoke-Scenario $Ctx "${Prefix}_boundary_candidate" {
+            Add-RecorderFailure $Ctx (& $PathFor $PeriodFrom $PeriodTo) $Query 'no_candidate' 'немає операції, єдиної у своїй секунді, на неповній сторінці вибірки; пар не робили'
+        }
+        return
+    }
+    $t = [long]$cand.Time
+    $toA = [math]::Min($t + 3600, $PeriodTo)
+    $fromB = [math]::Max($t - 3600, $PeriodFrom)
+    $steps = @(
+        @{ Tag = 'from_eq'; F = $t; T = $toA }
+        @{ Tag = 'from_shift'; F = ($t - 1); T = $toA }
+        @{ Tag = 'to_eq'; F = $fromB; T = $t }
+        @{ Tag = 'to_shift'; F = $fromB; T = ($t + 1) }
+    )
+    $first = $true
+    foreach ($st in $steps) {
+        $qf = [long]$st.F; $qt = [long]$st.T; $isFirst = $first; $first = $false
+        Invoke-Scenario $Ctx "${Prefix}_boundary_$($st.Tag)" {
+            if ($isFirst) { Add-Note $Ctx "кандидат обрано: придатних операцій $($cand.Candidates); секунд до найближчої іншої операції: $($cand.Gap)" }
+            $r = Invoke-Api $Ctx (& $PathFor $qf $qt) $Query -DryStub '[]'
+            $j = ConvertFrom-BodyBytes $r.Body $r.Headers
+            if ($j -is [array]) { Add-MonoTxDigest $Ctx @($j) $IsFop }
+        }
+    }
+}
+
+# =============================================================================================
 # monobank юросіб (corp-api)
 # =============================================================================================
+# -Overlap (D36 п. 11): продовження з to = найраніша time + 1, тож межова секунда потрапляє в наступний запит знову.
+# Якщо наступний запит збігся б із попереднім (повна сторінка в одній секунді), пишеться збій stuck_cursor і читання зупиняється.
 function Read-MonoCorpStatement {
-    param($Ctx, [string]$Iban, [long]$FromUnix, [long]$ToUnix, [int]$Limit, [int]$MaxPages, [string]$Extra = '')
+    param($Ctx, [string]$Iban, [long]$FromUnix, [long]$ToUnix, [int]$Limit, [int]$MaxPages, [string]$Extra = '', [switch]$Overlap)
     $upper = $ToUnix
     while ($true) {
         $r = Invoke-Api $Ctx "/ext/v1/statement/$Iban/$FromUnix/$upper" (Join-Query @("limit=$Limit", $Extra)) -DryStub '[]'
@@ -504,12 +594,20 @@ function Read-MonoCorpStatement {
         if ($j -isnot [array]) { Add-Note $Ctx 'тіло не JSON-масив — читання зупинено'; return }
         $page = @($j)
         Add-MonoTxDigest $Ctx $page $false
+        $Ctx.Captured.Add([pscustomobject]@{ Items = $page; Limit = $Limit })
         if ($page.Count -lt $Limit) { return }
         $earliest = ($page | ForEach-Object { [long]$_['time'] } | Measure-Object -Minimum).Minimum
         if ($earliest -le $FromUnix) { Add-Note $Ctx 'повна сторінка дійшла до початку періоду'; return }
-        if ($earliest -ge $upper) { Add-Note $Ctx 'верхня межа не зменшилась (багато операцій в одну секунду) — читання зупинено'; return }
+        if ($Overlap) {
+            $next = $earliest + 1
+            if ($next -ge $upper) {
+                Add-RecorderFailure $Ctx "/ext/v1/statement/$Iban/$FromUnix/$next" (Join-Query @("limit=$Limit", $Extra)) 'stuck_cursor' 'продовження збіглось би з попереднім запитом: повна сторінка в одній секунді; читання зупинено'
+                return
+            }
+        }
+        elseif ($earliest -ge $upper) { Add-Note $Ctx 'верхня межа не зменшилась (багато операцій в одну секунду) — читання зупинено'; return }
         if ($Ctx.Cur.Pages -ge $MaxPages) { Add-Note $Ctx "досягнуто ліміту сторінок рекордера ($MaxPages)"; return }
-        $upper = $earliest
+        $upper = $(if ($Overlap) { $next } else { $earliest })
     }
 }
 
@@ -546,8 +644,10 @@ function Invoke-MonoCorpRun {
                 }
             }
         }
+        $memo500 = $null   # сторінки limit500 за основний період, якщо сценарій цього прогону їх прочитав (для пар меж)
         if (Test-ScenarioOn $Cfg 'StatementLimit500') {
             Invoke-Scenario $Ctx "corp_${tag}_statement_limit500" { Read-MonoCorpStatement $Ctx $iban $fromU $toU 500 $maxPages }
+            $memo500 = @($Ctx.Captured)
         }
         # Насичений період (необов'язковий; відсутній блок чи перемикач = вимкнено, не помилка): limit=500, сторінки зсувом
         # верхньої межі, доки сторінка повна, — максимум сторінки банку. Розміри сторінок — у summary-agent.txt.
@@ -558,6 +658,10 @@ function Invoke-MonoCorpRun {
         else { Write-Host "[вимкнено] corp_${tag}_statement_saturated_limit500 — немає SaturatedPeriod або Scenarios.Saturated не ввімкнено" }
         if (Test-ScenarioOn $Cfg 'StatementSmallLimit') {
             Invoke-Scenario $Ctx "corp_${tag}_statement_small_limit" { Read-MonoCorpStatement $Ctx $iban $fromU $toU $small $maxSmall }
+        }
+        if (Test-ScenarioOn $Cfg 'StatementSmallLimitOverlap' $false) {
+            # той самий період і limit, але продовження з to = найраніша time + 1 (D36 п. 11)
+            Invoke-Scenario $Ctx "corp_${tag}_statement_small_limit_overlap" { Read-MonoCorpStatement $Ctx $iban $fromU $toU $small $maxSmall -Overlap }
         }
         if (Test-ScenarioOn $Cfg 'StatementOrder') {
             # без direction (за замовчуванням) і з deprecated direction UP/DOWN — одна коротка сторінка кожен
@@ -586,6 +690,19 @@ function Invoke-MonoCorpRun {
         if ((Test-ScenarioOn $Cfg 'Reversal') -and $Cfg.ReversalParsed) {
             $rf = ConvertTo-UnixKyiv $Cfg.ReversalParsed.From; $rt = ConvertTo-UnixKyiv $Cfg.ReversalParsed.To.AddDays(1).AddSeconds(-1)
             Invoke-Scenario $Ctx "corp_${tag}_statement_reversal_period" { Read-MonoCorpStatement $Ctx $iban $rf $rt 500 $maxPages }
+        }
+        if (Test-ScenarioOn $Cfg 'BoundaryPairs' $false) {
+            $pages = $memo500
+            if ($null -eq $pages) {
+                Invoke-Scenario $Ctx "corp_${tag}_boundary_source" {
+                    $r = Invoke-Api $Ctx "/ext/v1/statement/$iban/$fromU/$toU" 'limit=500' -DryStub '[]'
+                    $j = ConvertFrom-BodyBytes $r.Body $r.Headers
+                    if ($j -is [array]) { Add-MonoTxDigest $Ctx @($j) $false; $Ctx.Captured.Add([pscustomobject]@{ Items = @($j); Limit = 500 }) }
+                }
+                $pages = @($Ctx.Captured)
+            }
+            $pathFor = { param($f, $t) "/ext/v1/statement/$iban/$f/$t" }.GetNewClosure()
+            Invoke-BoundaryPairs $Ctx "corp_${tag}" $pages $fromU $toU $pathFor 'limit=500' $false
         }
         if ((Test-ScenarioOn $Cfg 'Errors') -and $i -eq 1) {
             $fakeHdr = @{ 'x-token' = $script:FakeToken; accept = 'application/json'; 'User-Agent' = $script:UserAgent }
@@ -625,8 +742,9 @@ function Get-FopSegments {
 
 # Читає відрізок: наступна сторінка — зсув верхньої межі до найранішої операції. Умова продовження:
 # UntilEmpty — доки сторінка непорожня (вимір розміру сторінки); інакше — доки сторінка має щонайменше ContinueAtLeast операцій.
+# -Overlap: продовження з to = найраніша time + 1 (D36 п. 11); збіг із попереднім запитом — збій stuck_cursor.
 function Read-FopSegment {
-    param($Ctx, [string]$AccId, [long]$FromUnix, [long]$ToUnix, [bool]$UntilEmpty, [int]$ContinueAtLeast, [int]$MaxPages)
+    param($Ctx, [string]$AccId, [long]$FromUnix, [long]$ToUnix, [bool]$UntilEmpty, [int]$ContinueAtLeast, [int]$MaxPages, [switch]$Overlap)
     $upper = $ToUnix; $pages = 0
     while ($true) {
         $r = Invoke-Api $Ctx "/personal/statement/$AccId/$FromUnix/$upper" '' -DryStub '[]'
@@ -636,13 +754,21 @@ function Read-FopSegment {
         if ($j -isnot [array]) { Add-Note $Ctx 'тіло не JSON-масив — відрізок зупинено'; return }
         $page = @($j)
         Add-MonoTxDigest $Ctx $page $true
+        $Ctx.Captured.Add([pscustomobject]@{ Items = $page; Limit = $script:FopPageMax })
         if ($page.Count -eq 0) { return }
         if (-not $UntilEmpty -and $page.Count -lt $ContinueAtLeast) { return }
         $earliest = ($page | ForEach-Object { [long]$_['time'] } | Measure-Object -Minimum).Minimum
         if ($earliest -le $FromUnix) { return }
-        if ($earliest -ge $upper) { Add-Note $Ctx 'верхня межа не зменшилась — відрізок зупинено'; return }
+        if ($Overlap) {
+            $next = $earliest + 1
+            if ($next -ge $upper) {
+                Add-RecorderFailure $Ctx "/personal/statement/$AccId/$FromUnix/$next" '' 'stuck_cursor' 'продовження збіглось би з попереднім запитом: повна сторінка в одній секунді; відрізок зупинено'
+                return
+            }
+        }
+        elseif ($earliest -ge $upper) { Add-Note $Ctx 'верхня межа не зменшилась — відрізок зупинено'; return }
         if ($pages -ge $MaxPages) { Add-Note $Ctx "досягнуто ліміту сторінок на відрізок ($MaxPages)"; return }
-        $upper = $earliest
+        $upper = $(if ($Overlap) { $next } else { $earliest })
     }
 }
 
@@ -680,7 +806,7 @@ function Invoke-MonoFopRun {
         }
         $accId = $script:fopAcc
     }
-    if (-not $accId -and ((Test-ScenarioOn $Cfg 'StatementSegments') -or (Test-ScenarioOn $Cfg 'Saturated') -or ((Test-ScenarioOn $Cfg 'Reversal') -and $Cfg.ReversalParsed))) {
+    if (-not $accId -and ((Test-ScenarioOn $Cfg 'StatementSegments') -or (Test-ScenarioOn $Cfg 'Saturated') -or (Test-ScenarioOn $Cfg 'BoundaryPairs' $false) -or (Test-ScenarioOn $Cfg 'SaturatedOverlap' $false) -or ((Test-ScenarioOn $Cfg 'Reversal') -and $Cfg.ReversalParsed))) {
         if (-not $accId) {
             Invoke-Scenario $Ctx 'fop_client_info' {
                 $r = Invoke-Api $Ctx '/personal/client-info' '' -DryStub $stubInfo
@@ -691,12 +817,15 @@ function Invoke-MonoFopRun {
     }
     if (-not $accId) { Write-Host '[увага] ідентифікатор рахунку ФОП не отримано — сценарії виписок пропущено'; if (-not $Ctx.Dry) { $Ctx.Failed = $true }; return }
 
+    $fopMemo = $null   # сторінки відрізків основного періоду, прочитані в цьому прогоні (для пар меж)
     if (Test-ScenarioOn $Cfg 'StatementSegments') {
         $segs = Get-FopSegments $P.From $P.To
         $n = 0
+        $fopMemo = [System.Collections.Generic.List[object]]::new()
         foreach ($sg in $segs) {
             $n++
             Invoke-Scenario $Ctx ("fop_statement_segment_{0:D2}" -f $n) { Read-FopSegment $Ctx $accId $sg.From $sg.To $false $cont $maxPages }
+            $fopMemo.AddRange(@($Ctx.Captured))
         }
     }
     if ((Test-ScenarioOn $Cfg 'Saturated') -and $Cfg.SaturatedParsed) {
@@ -713,6 +842,30 @@ function Invoke-MonoFopRun {
             $n++
             Invoke-Scenario $Ctx ("fop_reversal_segment_{0:D2}" -f $n) { Read-FopSegment $Ctx $accId $sg.From $sg.To $false $cont $maxPages }
         }
+    }
+    if (Test-ScenarioOn $Cfg 'SaturatedOverlap' $false) {
+        # насичений період до неповної сторінки (< 500): продовження з to = найраніша time + 1, пауза 61 с між запитами
+        if ($Cfg.SaturatedParsed) {
+            $maxSat = [int]($Cfg.MaxSaturatedPages ?? 40)
+            Invoke-Scenario $Ctx 'fop_a1_saturated' {
+                foreach ($sg in (Get-FopSegments $Cfg.SaturatedParsed.From $Cfg.SaturatedParsed.To)) {
+                    $left = $maxSat - $Ctx.Cur.Pages
+                    if ($left -le 0) { Add-Note $Ctx "досягнуто ліміту сторінок рекордера ($maxSat)"; break }
+                    Read-FopSegment $Ctx $accId $sg.From $sg.To $false $script:FopPageMax $left -Overlap
+                }
+            }
+        }
+        else { Invoke-Scenario $Ctx 'fop_a1_saturated' { Add-Note $Ctx 'пропущено: SaturatedPeriod порожній (заглушки) — сценарій не виконувався' } }
+    }
+    if (Test-ScenarioOn $Cfg 'BoundaryPairs' $false) {
+        $pages = $fopMemo
+        if ($null -eq $pages) {
+            $s0 = (Get-FopSegments $P.From $P.To)[0]
+            Invoke-Scenario $Ctx 'fop_a1_boundary_source' { Read-FopSegment $Ctx $accId $s0.From $s0.To $false $script:FopPageMax 1 }
+            $pages = @($Ctx.Captured)
+        }
+        $pathFor = { param($f, $t) "/personal/statement/$accId/$f/$t" }.GetNewClosure()
+        Invoke-BoundaryPairs $Ctx 'fop_a1' $pages (ConvertTo-UnixKyiv $P.From) (ConvertTo-UnixKyiv $P.To.AddDays(1).AddSeconds(-1)) $pathFor '' $true
     }
     if (Test-ScenarioOn $Cfg 'Errors') {
         $fakeHdr = @{ 'X-Token' = $script:FakeToken; 'User-Agent' = $script:UserAgent }
