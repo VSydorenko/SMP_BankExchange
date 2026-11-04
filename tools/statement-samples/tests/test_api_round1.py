@@ -450,7 +450,7 @@ class CurrencyList(unittest.TestCase):
     def test_unknown_code_is_an_error_row(self):
         rec, p = privat([([tx(ccy='CAD', tid='1'), tx(ccy='USD', tid='2')], None)], old_account_currency=None)
         e = E.run(rec, p)
-        self.assertEqual(([o['Валюта'] for o in e.ops], [d['Суть'] for d in e.diags]), (['840'], ['unknown-currency']))
+        self.assertEqual(([o['Валюта'] for o in e.ops], [d['Суть'] for d in e.diags]), (['840'], ['currency-unknown', 'unknown-currency']))   # валюта рахунку в балансі не задана: окремий рядок
         rec, p = mono('mono-fop', [fop('a', S.utc(2026, 10, 15, 8), -100, currencyCode=124)])
         self.assertEqual([d['Суть'] for d in E.run(rec, p).diags], ['unknown-currency'])
 

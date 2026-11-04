@@ -342,6 +342,11 @@ class ByHandPrivat(unittest.TestCase):
                    cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1],
                    diags=[(warn, 2, {'Ид': ids[1], 'Код': 'USD'})])
 
+        # валюта рахунку з /balance не визначена: фільтр валюти не застосовується (обидві операції в конверті), окремий Предупреждение без номера операції
+        self.check('СинтВалютаНеОпределена', ops={1: ('100.00', 'Поступило'), 2: ('200.00', 'Поступило')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('balance', one_day('15-10-2026'))],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1], diags=[(warn, 0, {'Банк': bank})])
+
         # пауза понад стелю (3600 с > 120 с): без повтору й без сну, «повторити», баланс не запитується
         self.check('СинтЛимит429Потолок', ops={},
                    requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim)],

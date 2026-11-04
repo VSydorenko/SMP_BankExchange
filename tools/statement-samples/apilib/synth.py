@@ -225,11 +225,11 @@ def corp_balances_body(p, flags=None, absent=()):
     return out
 
 
-def privat_balance_body(p, flags=None, absent=()):
+def privat_balance_body(p, flags=None, absent=(), currency=None):
     """Відповідь `/api/statements/balance` ПриватБанку (run1, пункт 6): `balances[]` -- по рядку на добу періоду, від НОВИХ до
     старих; день рядка -- `dpd` (`DD.MM.YYYY 00:00:00`); `is_final_bal` -- bool. `flags` -- {день 'YYYY-MM-DD': is_final_bal};
     за замовчуванням усі дні остаточні; `absent` -- дні, яких у відповіді немає. Суми -- вигадані."""
-    ccy = {v: k for k, v in C.ISO4217.items()}.get(p.old_account_currency, '')     # валюта рахунку: рядок балансу несе її буквений код; не задана -- порожньо (невідома)
+    ccy = {v: k for k, v in C.ISO4217.items()}.get(p.old_account_currency, '') if currency is None else currency     # валюта рахунку: рядок балансу несе її буквений код; не задана -- порожньо (невідома)
     days = C.privat_days(p) or (p.period_start, p.period_end)         # ті самі дні, що в запиті транзакцій (D36 п. 11)
     rows, day = [], datetime(days[0].year, days[0].month, days[0].day)
     last = datetime(days[1].year, days[1].month, days[1].day)
@@ -532,6 +532,13 @@ def _privat_scenarios():
                      ptx(g, acct, when=day.replace(hour=11), tran='C', ccy='USD', amount='200.00', **cnt()),
                      ptx(g, acct, when=day.replace(hour=12), tran='D', amount='300.00', **cnt())]])
     done(s, b)
+
+    # Валюта рахунку з /balance не визначена (рядки без currency): фільтр валюти не застосовується, окремий Предупреждение, обидві операції завантажуються
+    s, b = new('СинтВалютаНеОпределена', 'ПриватБанк: рядки /balance без валюти рахунку -- фільтр валюти не застосовується, Предупреждение «валюту не визначено» '
+                                         '[документальний, не спостерігалось]', [5])
+    b.privat_pages([[ptx(g, acct, when=day.replace(hour=10), tran='C', amount='100.00', **cnt()),
+                     ptx(g, acct, when=day.replace(hour=11), tran='C', ccy='USD', amount='200.00', **cnt())]])
+    done(s, b, currency='')
 
     # --- Збої посеред читання
     two = lambda: [ptx(g, acct, when=day.replace(hour=10), tran='C', amount='10.00', **cnt()),

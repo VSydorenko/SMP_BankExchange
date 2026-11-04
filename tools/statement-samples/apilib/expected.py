@@ -634,6 +634,9 @@ def _privat_balance(rec, p, out):
         return
     out.bank_boundary = rule_bank_boundary_privat(js['balances'], p)
     out.account_currency = privat_account_currency(js['balances'])
+    if out.account_currency is None:
+        # обмін вдався, а валюти рахунку з нього не визначено: фільтр валюти не застосовується, і про це окремий рядок (мовчки нічого не відкидаємо)
+        out.diag('Предупреждение', 0, 'currency-unknown', None, Банк=BANK_NAMES['privat'])
 
 
 def privat_account_currency(balances):
