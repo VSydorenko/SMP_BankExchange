@@ -22,6 +22,8 @@ swagger не описує (форми помилок), звужено до то�
 `firstSignature`, `secondSignature` -- NAME (не KEEP), перевіряються підрядком без нижньої межі довжини (`step2.person_tokens`).
 """
 
+import re
+
 PRIVAT_TX = {
     'AUT_MY_CRF': 'CODE', 'AUT_MY_MFO': 'KEEP', 'AUT_MY_ACC': 'ACC', 'AUT_MY_NAM': 'NAME', 'AUT_MY_MFO_NAME': 'BANKNAME',
     'AUT_MY_MFO_CITY': 'KEEP', 'AUT_CNTR_CRF': 'CODE', 'AUT_CNTR_MFO': 'KEEP', 'AUT_CNTR_ACC': 'ACC',
@@ -218,6 +220,26 @@ def request_leaves(bank, path, root):
     return _walk(bank, request_section(bank, path, root.kind), root)
 
 
+# Поля, роль яких залежить від ФОРМИ значення (явний виняток ролі, ЄДИНЕ місце; названо в README інструменту й у журналі).
+# Курсор пагінації ПУМБ (`sortedValue` відповіді, `orderedLastValue` запиту) -- значення поля сортування: дата/час чи число (публічні за природою, KEEP) або рядок
+# (ID: узгоджена заміна з мапи, однакова у відповіді й наступному запиті). ЧОМУ: роль ID для дати кидала б її в `build_sweep`, і збіжна KEEP-дата
+# (`operationDate`) тихо змінювалась би, зсуваючи ключ D17 і межу довіри однаково в сирому й знеособленому записі -- жодна перевірка цього не бачить.
+SHAPED_FIELDS = {'pumb': frozenset({'sortedValue', 'orderedLastValue'})}
+_DATE_RX = re.compile(r'\d{2}\.\d{2}\.\d{4}(?: \d{2}:\d{2}:\d{2})?|\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}:\d{2})?')
+_NUM_RX = re.compile(r'-?\d+(?:\.\d+)?')
+
+
+def _by_shape(bank, key, role, nd):
+    """Роль скаляра: для `SHAPED_FIELDS` -- KEEP, якщо значення ПОВНІСТЮ дата/час чи число, інакше таблична (ID)."""
+    if key not in SHAPED_FIELDS.get(bank, ()) or nd.kind in ('lit',):
+        return role
+    if nd.kind == 'num':
+        return 'KEEP'
+    if nd.kind == 'str' and (_DATE_RX.fullmatch(nd.value) or _NUM_RX.fullmatch(nd.value)):
+        return 'KEEP'
+    return role
+
+
 def _walk(bank, section, root):
     out = []
 
@@ -254,7 +276,7 @@ def _walk(bank, section, root):
                     for i, it in enumerate(v.items):
                         scalar_ok(target, it, here + (i,))
             else:
-                scalar_ok(role, v, here)
+                scalar_ok(_by_shape(bank, key, role, v), v, here)
 
     if root.kind == 'obj':
         obj(section, root, ())
