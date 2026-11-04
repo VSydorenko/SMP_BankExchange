@@ -151,7 +151,10 @@ function Invoke-HttpSend {
     $req = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::new($Method), $Uri)
     foreach ($k in $Headers.Keys) { [void]$req.Headers.TryAddWithoutValidation($k, [string]$Headers[$k]) }
     if ($ContentType -or $null -ne $Body) {
-        $bytes = if ($null -ne $Body) { [byte[]]$Body } else { [byte[]]@() }
+        # Не `$bytes = if (...) {...} else { [byte[]]@() }`: порожній масив із гілки if конвеєр розгортає в $null,
+        # і ByteArrayContent падає «Value cannot be null (content)» — так упав GET /account у run1 ПУМБ.
+        [byte[]]$bytes = [byte[]]::new(0)
+        if ($null -ne $Body) { $bytes = [byte[]]$Body }
         $req.Content = [System.Net.Http.ByteArrayContent]::new($bytes)
         if ($ContentType) { [void]$req.Content.Headers.TryAddWithoutValidation('Content-Type', $ContentType) }
     }
@@ -1961,6 +1964,15 @@ function Invoke-SelfTestMode {
     # передумова захисту: дочірній процес із цим середовищем на недосяжному імені хоста дає відмову з'єднання з проксі (ConnectionRefused), а не помилку імені
     $guardProbe = (& $pwsh -NoProfile -Command '$h=[System.Net.Http.HttpClient]::new(); $h.Timeout=[TimeSpan]::FromSeconds(15); try { $h.GetAsync("https://selftest-guard.invalid/").GetAwaiter().GetResult()|Out-Null; "reached" } catch { $e=$_.Exception; while($e.InnerException){$e=$e.InnerException}; if ($e -is [System.Net.Sockets.SocketException]) { [string]$e.SocketErrorCode } else { $e.GetType().Name } }' 2>&1 | Out-String).Trim()
     & $check 'захист від мережі: дочірній процес іде через проксі 127.0.0.1:9 (відмова з''єднання з проксі, не помилка імені хоста)' ($guardProbe -ceq 'ConnectionRefused') "($guardProbe)"
+    # справжній Invoke-HttpSend (без мока): GET без тіла з Content-Type і POST з тілом доходять до відправки й дають мережевий збій,
+    # а не виняток побудови запиту (run1 ПУМБ: GET /account упав на ByteArrayContent(null)). Ціль — закритий локальний порт, мережі немає.
+    $sendErr = $null; $sendGet = $null; $sendPost = $null
+    try {
+        $sendGet = Invoke-HttpSend -Method 'GET' -Uri 'http://127.0.0.1:9/selftest' -Headers @{} -ContentType 'application/json'
+        $sendPost = Invoke-HttpSend -Method 'POST' -Uri 'http://127.0.0.1:9/selftest' -Headers @{} -ContentType 'application/json' -Body ([System.Text.Encoding]::UTF8.GetBytes('{}'))
+    } catch { $sendErr = $_.Exception.Message }
+    & $check 'транспорт: GET без тіла (з Content-Type) і POST з тілом будуються й відправляються — мережевий збій, не виняток побудови запиту' (
+        ($null -eq $sendErr) -and ($null -ne $sendGet) -and ($null -ne $sendGet.Failure) -and ($null -ne $sendPost) -and ($null -ne $sendPost.Failure)) "($sendErr)"
     $o1 = & $pwsh -NoProfile -File $PSCommandPath -Bank pumb -Config $fakeCfg -OutRoot $outRoot -OwnerRoot $ownRoot -RunLabel e2e1 2>&1 | Out-String
     $c1 = $LASTEXITCODE
     & $check 'ПУМБ, без ключа «вхід погоджено» сценарій з автентифікацією — код 2, записів немає, у виводі немає значень облікових даних' (
