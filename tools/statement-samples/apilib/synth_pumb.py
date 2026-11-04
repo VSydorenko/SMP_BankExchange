@@ -35,6 +35,8 @@ CASES = [
     ('без пагінації: відповідь нижче порога -- один запит', 'СинтПУМБНижеПорога'), ('без пагінації: відповідь на порозі -- ділення навпіл', 'СинтПУМБПорогДелит'),
     ('без пагінації: ділення рекурсивно, кілька рівнів', 'СинтПУМБДелитГлубоко'), ('без пагінації: доба на порозі -- дія людини', 'СинтПУМБСуткиНаПороге'),
     ('без пагінації: єдина доба на порозі -- дія людини', 'СинтПУМБСуткиСразуНаПороге'),
+    ('без пагінації: відповідь між спостереженим максимумом і 100 (імітація обрізаної стелею) -- ділиться', 'СинтПУМБОтсечёнСтеля'),
+    ('direction проти боку за запитаним рахунком; переказ між своїми', 'СинтПУМБПереводМеждуСвоими'),
     ('STM у відповіді -- не операції, один рядок Предупреждение', 'СинтПУМБSTM'), ('CUR без IBAN: номер рахунку = запитаному', 'СинтПУМБНомерСчета'),
     ('документ без свого рахунку -- діагностика', 'СинтПУМБНетСвоегоСчета'),
     ('аномалія меж', 'СинтПУМБАномалияПосле'),
@@ -328,6 +330,13 @@ def _scenarios(refused):
     r.auth(); r.accounts(); r.search_for(s.params.period_start, s.params.period_end, bulk(T, 1000, 1))
     done(s, r)
 
+    s, r = new('СинтПУМБОтсечёнСтеля', 'ПУМБ: відповідь на 80 документів -- між спостереженим максимумом (67, поріг) і 100: імітація відповіді, обрізаної невідомою стелею банку; ДІЛИТЬСЯ (поріг понад спостережене був би мовчазною втратою)', [4], **two_days)
+    r.auth(); r.accounts()
+    r.search_for(s.params.period_start, s.params.period_end, bulk(80, 1000, 1))
+    r.search_for(_day(1), _day(1, 23, 59, 59), [A, B, Cc])
+    r.search_for(_day(2), _day(2, 23, 59, 59), [B, Cc, D])
+    done(s, r)
+
     # ---- STM (гіпотеза Р11) і фільтр за рахунком
     def stm(n):
         return pdoc(g, own, n, when=at(0, 0, 0), type='STM', direction='INBOUND', amount='500.00', drop=('senderIBAN', 'correspondentIBAN'))
@@ -339,6 +348,11 @@ def _scenarios(refused):
                     pdoc(g, own, 2, when=at(10), type='CUR_ADV', out=False, amount='20.00', correspondentAccountNumber=alt, drop=('senderIBAN', 'correspondentIBAN')),
                     pdoc(g, own, 3, when=at(11), type='CUR_ADV', amount='30.00', senderAccountNumber='26000000000000', drop=('senderIBAN', 'correspondentIBAN'))],
                    accounts=[own.account_item(alt=alt)]))
+    other_own = Own(g).iban                                            # IBAN іншого рахунку цієї ж компанії (переказ між своїми)
+    s, r = new('СинтПУМБПереводМеждуСвоими', 'ПУМБ: переказ між своїми рахунками -- бік за запитаним рахунком, direction мусить збігтися: правильний (OUTBOUND / INBOUND) -- операції; хибний -- Ошибка direction-mismatch', [4])
+    mate = dict(party(g), iban=other_own)
+    done(s, r.full([pdoc(g, own, 1, when=at(9), out=True, cp=mate, amount='10.00'), pdoc(g, own, 2, when=at(10), out=False, cp=mate, amount='20.00'),
+                    pdoc(g, own, 3, when=at(11), out=True, cp=mate, amount='30.00', direction='INBOUND'), pdoc(g, own, 4, when=at(12), out=False, cp=mate, amount='40.00', direction='OUTBOUND')]))
     s, r = new('СинтПУМБНетСвоегоСчета', 'ПУМБ: документ, у якому немає нашого IBAN і нашого номера рахунку (сторони -- чужі IBAN і чужі номери) -- Предупреждение foreign-account, не операція', [4])
     done(s, r.full([pdoc(g, own, 1, when=at(9), amount='10.00'),
                     pdoc(g, own, 2, when=at(10), amount='20.00', senderIBAN=party(g)['iban'], correspondentIBAN=party(g)['iban'], senderAccountNumber='26000000000001', correspondentAccountNumber='26000000000002'),

@@ -152,8 +152,7 @@ class HandExpected(unittest.TestCase):
         e = run('СинтПУМБПоляОтсутствуют')
         self.assertEqual(numbers(e.ops), [1, 2, 3, 4])
         self.assertEqual([(d['ПорядковыйНомер'], d['Уровень'], d['Суть']) for d in e.diags],
-                         [(4, 'Предупреждение', 'currency-unknown'), (5, 'Ошибка', 'bad-amount'), (6, 'Ошибка', 'unknown-state'), (7, 'Предупреждение', 'foreign-account'),
-                          (8, 'Ошибка', 'no-iban')])        # Р-д: без IBAN обох сторін -- Ошибка, рахунок із accountId запиту не виводиться
+                         [(4, 'Предупреждение', 'currency-unknown'), (5, 'Ошибка', 'bad-amount'), (6, 'Ошибка', 'unknown-state'), (8, 'Ошибка', 'no-iban'), (0, 'Предупреждение', 'foreign-account')])        # Р-д: без IBAN обох сторін -- Ошибка, рахунок із accountId запиту не виводиться
         self.assertEqual([o['ИдентификаторОперации'] for o in e.ops], ['2201', '2202', '2203', '2204'])      # ідентифікатор -- docId (відступ 6; id -- null чи відсутній, на нього не дивимось)
         self.assertEqual(e.ops[0]['НазначениеПлатежа'], '')                                           # без description -- порожнє, не «Неопределено»
         self.assertEqual(e.ops[2]['КонтрагентНаименование'] + e.ops[2]['КонтрагентКод'] + e.ops[2]['КонтрагентМФО'], '')
@@ -196,10 +195,10 @@ class HandExpected(unittest.TestCase):
         return [(r['Тело']['fromDate'], r['Тело']['toDate']) for r in e.requests if r['Путь'].endswith('/document/searcher')]
 
     def test_by_hand_no_pagination_threshold_halving(self):
-        self.assertEqual(C.PUMB_RESPONSE_THRESHOLD, 100)                           # константа названа в common.py як гіпотеза до run2; ручне очікуване нижче -- з цим числом
-        # відповідь НИЖЧЕ порога (99): один запит за весь період
+        self.assertEqual(C.PUMB_RESPONSE_THRESHOLD, 67)                            # = найбільший спостережений розмір відповіді (run1b); поріг 100 -- мовчазна втрата обрізаної стелею відповіді; ручне очікуване нижче -- з цим числом
+        # відповідь НИЖЧЕ порога (66): один запит за весь період
         e = run('СинтПУМБНижеПорога')
-        self.assertEqual((len(e.ops), e.complete, e.failure_class, self.bodies(e)), (99, True, '', [('31.10.2026 23:59:59', '03.11.2026 00:00:00')]))
+        self.assertEqual((len(e.ops), e.complete, e.failure_class, self.bodies(e)), (66, True, '', [('31.10.2026 23:59:59', '03.11.2026 00:00:00')]))
         # відповідь НА порозі (100): період ділиться навпіл -- 01.11 і 02.11; запити: усе, перша, друга; запас у секунду з обох боків, межі періодів половин -- без проміжку й перекриття
         e = run('СинтПУМБПорогДелит')
         self.assertEqual(self.bodies(e), [('31.10.2026 23:59:59', '03.11.2026 00:00:00'), ('31.10.2026 23:59:59', '02.11.2026 00:00:00'), ('01.11.2026 23:59:59', '03.11.2026 00:00:00')])
@@ -209,6 +208,9 @@ class HandExpected(unittest.TestCase):
                          [('2201', '2026-11-01T10:00:00', '11.00', 'Списано'), ('2202', '2026-11-01T23:59:59', '22.00', 'Списано'),
                           ('2203', '2026-11-02T00:00:00', '33.00', 'Поступило'), ('2204', '2026-11-02T12:00:00', '44.00', 'Списано')])
         self.assertEqual((e.complete, e.failure_class, e.trust, e.diags), (True, '', BY['СинтПУМБПорогДелит'].params.period_end, []))
+        # відповідь на 80 документів (між спостереженим максимумом 67 і 100 -- імітація обрізаної стелею): ДІЛИТЬСЯ так само, як на порозі
+        e = run('СинтПУМБОтсечёнСтеля')
+        self.assertEqual((self.bodies(e), numbers(e.ops), e.out_of_period), (self.bodies(run('СинтПУМБПорогДелит')), [1, 2, 5, 6], [3, 4]))
         # рекурсія: 3 доби -> 1 + 2 (n // 2 діб у першій); друга (02-03.11) знову на порозі -> 02.11 і 03.11; порядок запитів -- обхід, ранішня половина першою
         e = run('СинтПУМБДелитГлубоко')
         self.assertEqual(self.bodies(e), [('31.10.2026 23:59:59', '04.11.2026 00:00:00'), ('31.10.2026 23:59:59', '02.11.2026 00:00:00'), ('01.11.2026 23:59:59', '04.11.2026 00:00:00'),
@@ -217,7 +219,7 @@ class HandExpected(unittest.TestCase):
         # доба на порозі (02.11 після ділення): ДействиеЧеловека, неповне, межа довіри за п. 10 -- НачалоПериода, діагностика називає добу (дату) і кількість, прочитане першої доби лишається
         e = run('СинтПУМБСуткиНаПороге')
         self.assertEqual((e.failure_class, e.complete, e.trust, numbers(e.ops)), (E.CLS_HUMAN, False, BY['СинтПУМБСуткиНаПороге'].params.period_start, [1]))
-        self.assertEqual([(d['Уровень'], d['Суть'], d['Факты']['Сутки'], d['Факты']['Документов']) for d in e.diags], [('Предупреждение', 'day-at-threshold', '02.11.2026', 100)])
+        self.assertEqual([(d['Уровень'], d['Суть'], d['Факты']['Сутки'], d['Факты']['Документов']) for d in e.diags], [('Предупреждение', 'day-at-threshold', '02.11.2026', 67)])
         e = run('СинтПУМБСуткиСразуНаПороге')                                      # період в одну добу: ділити нічого -- одразу дія людини, без операцій
         self.assertEqual((e.failure_class, e.complete, e.ops, [d['Факты']['Сутки'] for d in e.diags]), (E.CLS_HUMAN, False, [], ['01.11.2026']))
 
@@ -232,13 +234,20 @@ class HandExpected(unittest.TestCase):
         self.assertEqual([(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags], [('Ошибка', 'no-iban', 3)])
         # документ без свого рахунку: діагностика (рівень -- як у чужої валюти), не операція; факт -- лише ідентифікатор
         e = run('СинтПУМБНетСвоегоСчета')
-        self.assertEqual((numbers(e.ops), [(d['Уровень'], d['Суть'], d['ПорядковыйНомер'], d['Факты']) for d in e.diags], 'pumb1' in e.applied),
-                         ([1], [('Предупреждение', 'foreign-account', 2, {'Ид': '2202'}), ('Предупреждение', 'foreign-account', 3, {'Ид': '2203'})], True))
+        # один рядок на читання з КІЛЬКІСТЮ (не рядок на документ); без значень
+        self.assertEqual((numbers(e.ops), [(d['Уровень'], d['Суть'], d['ПорядковыйНомер'], d['Факты']) for d in e.diags], 'pumb1' in e.applied, e.foreign_docs),
+                         ([1], [('Предупреждение', 'foreign-account', 0, {'Количество': 2})], True, [2, 3]))
+
+    def test_by_hand_direction_against_the_side_of_the_requested_account(self):
+        # переказ між своїми рахунками: бік за запитаним рахунком (відправник -- Списано, одержувач -- Поступило); direction мусить збігтися, хибний -- Ошибка рядка, не операція
+        e = run('СинтПУМБПереводМеждуСвоими')
+        self.assertEqual(([(o['ПорядковыйНомер'], o['Направление']) for o in e.ops], [(d['Уровень'], d['ПорядковыйНомер'], d['Суть'], d['Факты']) for d in e.diags]),
+                         ([(1, 'Списано'), (2, 'Поступило')], [('Ошибка', 3, 'direction-mismatch', {'Ид': '2203'}), ('Ошибка', 4, 'direction-mismatch', {'Ид': '2204'})]))
 
     def test_foreign_account_and_currency(self):
         e = run('СинтПУМБЧужойСчет')
         self.assertEqual((numbers(e.ops), e.foreign, [(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags]),
-                         ([1], {}, [('Предупреждение', 'foreign-account', 2)]))                          # фільтр конектора за рахунком (pumb1/D30): діагностика, не операція
+                         ([1], {}, [('Предупреждение', 'foreign-account', 0)]))                          # фільтр конектора за рахунком (pumb1/D30): діагностика, не операція
         e = run('СинтПУМБЧужаяВалюта')
         self.assertEqual((numbers(e.ops), [(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags]), ([1], [('Предупреждение', 'foreign-currency', 2)]))
         e = run('СинтПУМБВалютныйСчет')
@@ -267,7 +276,7 @@ class Contract(unittest.TestCase):
             nums = numbers(e.ops) + [d['ПорядковыйНомер'] for d in e.diags if d['ПорядковыйНомер'] > 0 and d['Суть'] != 'currency-unknown']
             self.assertEqual(len(nums), len(set(nums)), s.sid)
             if not e.failure_class:
-                self.assertEqual(len(nums) + len(e.out_of_period) + len(e.skipped_stm) + e.silent, e.items, s.sid)
+                self.assertEqual(len(nums) + len(e.out_of_period) + len(e.skipped_stm) + len(e.foreign_docs) + e.silent, e.items, s.sid)
             self.assertEqual(e.silent, 0, s.sid)
 
     def test_sets_for_pumb_are_buildable_with_equal_ids(self):

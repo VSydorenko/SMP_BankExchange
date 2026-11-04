@@ -103,6 +103,7 @@ class Expected:
     used: list = field(default_factory=list)         # обміни запису, які оракул СПОЖИВ, у порядку споживання
     account_currency: object = None                  # валюта рахунку ПриватБанку з /balance (буквений код); None -- невідома
     out_of_period: list = field(default_factory=list)  # номери записів поза періодом (відкинуто мовчки), D36 п. 11
+    foreign_docs: list = field(default_factory=list)   # ПУМБ: номери документів, чий рахунок сторін не збігся ні з IBAN, ні з номером запитаного (не операції; один рядок Предупреждение на читання з кількістю, відступ pumb1)
     skipped_stm: list = field(default_factory=list)    # ПУМБ: номери документів STM (не операції; один рядок Предупреждение на читання, відступ pumb9)
 
     def diag(self, level, n, essence, dev=None, **facts):
@@ -1100,7 +1101,7 @@ def _mono_items(out, items, p, disabled, corp):
 # Відступи від попередника (план 05б-2, «Відступи від попередника», ПУМБ 1-8) -- окремий реєстр: наявний тест вимагає, щоб кожен відступ 5а (`DEVIATIONS`) спрацьовував на синтетиці.
 # Вимкнений відступ -- поведінка попередника (ПУМБ:342-385). Формат `operationDate` -- гіпотеза `dd.MM.yyyy HH:mm:ss`, інший -- явна відмова (`C.PumbDateFormat`).
 PUMB_DEVIATIONS = {
-    'pumb1': 'чужий рахунок (D30; фільтр конектора за рахунком: IBAN запитаного серед сторін або його number/altNumber серед номерів сторін) і чужа валюта -- діагностика, не операція й не мовчазний пропуск (валюта рахунку -- зі списку /account)',
+    'pumb1': 'чужий рахунок (D30; фільтр конектора за рахунком: IBAN запитаного серед сторін або його number/altNumber серед номерів сторін) і чужа валюта -- діагностика, не операція й не мовчазний пропуск (валюта рахунку -- зі списку /account); `direction`, що не збігся з боком за запитаним рахунком, -- Ошибка рядка',
     'pumb2': 'валютний рахунок: попередник читає лише UAH і 980; без виміру -- гривня й Предупреждение про невизначену валюту',
     'pumb3': 'непроведені й скасовані -- Предупреждение, у Операции лише PROCESSED; запит без фільтра станів; межа довіри не пізніша за першу неостаточну',
     'pumb4': 'повернення -- до виміру (а: окремий документ свого напряму, б: рядок Ошибка); без виміру нічого не вгадується',
@@ -1256,6 +1257,22 @@ def rule_day_at_threshold(out, day, count):
     out.rules.add('rule_day_at_threshold')
 
 
+def pumb_direction_conflict(out, n, doc, outgoing, ident):
+    """Напрям за ознакою банку проти боку, визначеного за запитаним рахунком (рішення консультанта, A9): `direction` не збігся з боком -- Ошибка `direction-mismatch` (хибний знак руху грошей), не операція;
+    значення поза OUTBOUND/INBOUND -- `unknown-direction`; відсутній `direction` -- не розбіжність (бік уже визначено рахунком). Переказ між своїми рахунками: бік -- за запитаним, direction мусить збігтися. -> True, якщо відхилено."""
+    d = doc.get('direction')
+    if d is None or d == '':
+        return False
+    if d not in ('OUTBOUND', 'INBOUND'):
+        rule_unknown_direction(out, n, C.to_str(d), ident)
+        return True
+    if (d == 'OUTBOUND') != outgoing:
+        out.diag('Ошибка', n, 'direction-mismatch', None, Ид=ident)
+        out.rules.add('rule_direction_mismatch')
+        return True
+    return False
+
+
 def pumb1_account_side(own, mine, doc):
     """Фільтр конектора за рахунком (відступ pumb1/D30): чи документ нашого рахунку і з якого боку. Наш -- запитаний IBAN серед `senderIBAN`/`correspondentIBAN`, АБО номер запитаного рахунку
     (`number`/`altNumber` зі списку /account) серед `senderAccountNumber`/`correspondentAccountNumber` (виміряно run1b: 1 CUR без IBAN відправника з номером = запитаному). IBAN старший за номер.
@@ -1320,51 +1337,55 @@ def _pumb(rec, p, out, disabled):
     filtered = p.reading_moment is not None or len(searches) > 1       # відсів за періодом (піддобу): запас меж запиту й суміжні запити дають документи поза ним
     n = 0                                                              # ПорядковыйНомер -- наскрізний за всіма прийнятими відповідями
     stack, used = [(p.period_start, top)], 0                           # обхід навпіл: спершу ранішня половина (порядок запитів у записі)
-    while stack:
-        lo, hi = stack.pop()
-        if used >= len(searches):
-            raise RecordingMismatch('у записі ПУМБ немає запиту searcher для піддобу (запис кінчається раніше за модель ділення)')
-        search = searches[used]
-        used += 1
-        use(out, search)
-        if used > 1:                                                   # половини -- межі запиту за правилом; ПЕРШИЙ запит у справжньому записі -- межі рекордера, тож не звіряється
-            body = json.loads(R.request_body_text(search))
-            want = C.pumb_request_bounds(lo, hi, moment_local)
-            if (C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))) != want:
-                raise RecordingMismatch('межі запиту searcher не збігаються з половиною періоду')
-        if search['failure'] or search['response']['status'] != 200:
-            _failure(out, search, bank, p.credentials)                          # 429 тут -- без повтору: модель пауз зі Step 3
-            return
-        try:
-            docs = R.body_json(search)
-        except R.NotJson:
-            docs = None
-        if not isinstance(docs, list):
-            _fail_not_json(out, bank)
-            return
-        if pumb_out_of_bounds(search, docs):
-            _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''}, 'out-of-bounds')
-            out.rules.add('rule_response_out_of_bounds')              # D36 п. 11: аномалія меж -- «повторити», ЦЯ сторінка в конверт не береться
-            out.items += len(docs)
-            return
-        if len(docs) >= C.PUMB_RESPONSE_THRESHOLD:                    # D36 п. 11, Р4: відповідь на порозі -- ділення навпіл (відповідь не береться, половини перечитують її)
-            halves = C.pumb_halves(lo, hi)
-            if halves is None:
-                rule_day_at_threshold(out, lo, len(docs))
+    try:
+        while stack:
+            lo, hi = stack.pop()
+            if used >= len(searches):
+                raise RecordingMismatch('у записі ПУМБ немає запиту searcher для піддобу (запис кінчається раніше за модель ділення)')
+            search = searches[used]
+            used += 1
+            use(out, search)
+            if used > 1:                                                   # половини -- межі запиту за правилом; ПЕРШИЙ запит у справжньому записі -- межі рекордера, тож не звіряється
+                body = json.loads(R.request_body_text(search))
+                want = C.pumb_request_bounds(lo, hi, moment_local)
+                if (C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))) != want:
+                    raise RecordingMismatch('межі запиту searcher не збігаються з половиною періоду')
+            if search['failure'] or search['response']['status'] != 200:
+                _failure(out, search, bank, p.credentials)                          # 429 тут -- без повтору: модель пауз зі Step 3
                 return
-            out.rules.add('rule_split_at_threshold')
-            stack.extend(reversed(halves))
-            continue
-        out.items += len(docs)
-        for r in docs:
-            n += 1
-            if not isinstance(r, dict):
-                raise ValueError("елемент відповіді ПУМБ не є об'єктом")
-            _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, (lo, hi) if filtered else None)
-    if used < len(searches):
-        raise RecordingMismatch('у записі ПУМБ більше запитів searcher, ніж робить модель читання')
-    if out.skipped_stm:
-        out.diag('Предупреждение', 0, 'stm-skipped', 'pumb9', Количество=len(out.skipped_stm))      # гіпотеза Р11; текст -- `PUMB_STM_TEXT`
+            try:
+                docs = R.body_json(search)
+            except R.NotJson:
+                docs = None
+            if not isinstance(docs, list):
+                _fail_not_json(out, bank)
+                return
+            if pumb_out_of_bounds(search, docs):
+                _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''}, 'out-of-bounds')
+                out.rules.add('rule_response_out_of_bounds')              # D36 п. 11: аномалія меж -- «повторити», ЦЯ сторінка в конверт не береться
+                out.items += len(docs)
+                return
+            if len(docs) >= C.PUMB_RESPONSE_THRESHOLD:                    # D36 п. 11, Р4: відповідь на порозі -- ділення навпіл (відповідь не береться, половини перечитують її)
+                halves = C.pumb_halves(lo, hi)
+                if halves is None:
+                    rule_day_at_threshold(out, lo, len(docs))
+                    return
+                out.rules.add('rule_split_at_threshold')
+                stack.extend(reversed(halves))
+                continue
+            out.items += len(docs)
+            for r in docs:
+                n += 1
+                if not isinstance(r, dict):
+                    raise ValueError("елемент відповіді ПУМБ не є об'єктом")
+                _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, (lo, hi) if filtered else None)
+        if used < len(searches):
+            raise RecordingMismatch('у записі ПУМБ більше запитів searcher, ніж робить модель читання')
+    finally:                                                           # рядки на читання (по одному на правило, з кількістю) -- і коли читання зупинилось відмовою: прочитане лишається
+        if out.foreign_docs:
+            out.diag('Предупреждение', 0, 'foreign-account', 'pumb1', Количество=len(out.foreign_docs))   # рахунок сторін не збігся ні з IBAN, ні з номером запитаного рахунку; текст -- точка читання
+        if out.skipped_stm:
+            out.diag('Предупреждение', 0, 'stm-skipped', 'pumb9', Количество=len(out.skipped_stm))      # гіпотеза Р11; текст -- `PUMB_STM_TEXT`
 
 
 def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
@@ -1391,10 +1412,13 @@ def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
         if 'pumb1' in disabled:
             side = 'out' if r.get('direction') == 'OUTBOUND' else 'in'     # попередник рахунок не звіряв: усе, що банк віддав, -- наше
         else:
-            out.diag('Предупреждение', n, 'foreign-account', 'pumb1', Ид=number)
+            out.foreign_docs.append(n)
+            out.applied.add('pumb1')
             return
     outgoing = side == 'out'
     own = p.account
+    if pumb_direction_conflict(out, n, r, outgoing, number):
+        return
     doc_ccy = C.numeric_currency(C.to_str(r.get('currencyCode')))
     if doc_ccy is None or (doc_ccy == '' and 'pumb2' not in disabled):
         out.diag('Предупреждение', n, 'currency-unknown', 'pumb2', Ид=number, Код=C.to_str(r.get('currencyCode')))
