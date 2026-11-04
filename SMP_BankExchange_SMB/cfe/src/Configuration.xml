@@ -182,6 +182,7 @@
 			<Enum>ВидыОперацийРасходСоСчета</Enum>
 			<Enum>ВидыОперацийЭквайринга</Enum>
 			<DataProcessor>СМП_КлиентБанк</DataProcessor>
+			<DataProcessor>СМП_ОбменСБанком</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_АкордБанк</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_БанкВосток</DataProcessor>
 			<DataProcessor>СМП_ОбработкаВыпискиБанка_КредоБанк</DataProcessor>
