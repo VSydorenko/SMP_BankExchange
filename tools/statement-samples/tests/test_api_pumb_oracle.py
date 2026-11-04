@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Оракул ПУМБ, режим «очікуване» (задача 2a, Step 2): очікування -- РУКАМИ, зі спеки й рішень плану (відступи 1-8, D36 п. 8, 10, 11), а не з коду оракула.
 Усі значення ВИГАДАНІ. «Стара обробка» для ПУМБ не застосовується (рішення власника) -- її контроль у `test_api_oracle.py`. Пагінація й формат дати --
-гіпотези до виміру: читання зі сторінками й інший формат `operationDate` -- явна відмова."""
+гіпотези до виміру: запит із `pagingRequest` (конектор його не шле, Р4) і інший формат `operationDate` -- явна відмова; кілька запитів `searcher` без `pagingRequest` -- ділення навпіл (тести в `test_api_pumb_synth.py`, ручне очікуване)."""
 import json
 import os
 import shutil
@@ -58,11 +58,11 @@ class PumbExpected(unittest.TestCase):
         rec, p = reading(MIXED)
         e = E.run(rec, p)
         ops, diags = summary(e)
-        self.assertEqual(ops, [(1, '100.50', 'Списано', '9001', OTHER), (2, '200.00', 'Поступило', '9002', OTHER)])
+        self.assertEqual(ops, [(1, '100.50', 'Списано', '8001', OTHER), (2, '200.00', 'Поступило', '8002', OTHER)])
         self.assertEqual(diags, [('Ошибка', 5, 'bad-amount'), ('Предупреждение', 3, 'nonfinal'), ('Предупреждение', 4, 'cancelled'),
                                  ('Предупреждение', 6, 'foreign-currency')])
         self.assertEqual([(o['ИдентификаторОперации'], o['Валюта'], o['ДатаОперации'], o['ДатаДокумента']) for o in e.ops],
-                         [('9001', '980', '2026-11-01T10:00:00', '2026-11-01'), ('9002', '980', '2026-11-01T11:00:00', '2026-11-01')])
+                         [('8001', '980', '2026-11-01T10:00:00', '2026-11-01'), ('8002', '980', '2026-11-01T11:00:00', '2026-11-01')])
         self.assertEqual((e.complete, e.failure_class), (True, ''))
         self.assertEqual(e.trust, datetime(2026, 11, 1, 12, 0, 0))              # не пізніша за першу неостаточну (D36 п. 10); скасована межу не тримає
         self.assertEqual([(r['Метод'], r['Хост'], r.get('Порт'), r['Путь']) for r in e.requests],
@@ -101,9 +101,11 @@ class PumbExpected(unittest.TestCase):
         # error_description старший за message; інакше message; облікові дані не потрапляють в etalon-параметри
         self.assertEqual(E.pumb_error_description(rec.exchanges[0]), 'Invalid user %s or password' % login.upper())
         self.assertNotIn('credentials', json.dumps(p.to_json()).lower())
-        # pumb6: порожній id (null, '') не береться -- далі docId; непорожній id старший за docId
-        rec, p = reading([doc(1, id=''), doc(2, id=None), doc(3)])
-        self.assertEqual([o['ИдентификаторОперации'] for o in E.run(rec, p).ops], ['8001', '8002', '9003'])
+        # pumb6 (виміряно run1b): ідентифікатор -- docId; id (майже завжди null, у 2 входженнях непорожній і != docId) основним НЕ є; порожній docId -- Ошибка bad-identifier
+        rec, p = reading([doc(1, id=''), doc(2, id=None), doc(3), doc(4, docId=None, id=7777), doc(5, docId='')])
+        e = E.run(rec, p)
+        self.assertEqual([o['ИдентификаторОперации'] for o in e.ops], ['8001', '8002', '8003'])
+        self.assertEqual([(d['Уровень'], d['ПорядковыйНомер'], d['Суть'], d['Факты']) for d in e.diags], [('Ошибка', 4, 'bad-identifier', {'Количество': 0}), ('Ошибка', 5, 'bad-identifier', {'Количество': 0})])
 
     def test_by_hand_d36_failures_period_format_and_pagination(self):
         # п. 8: автентифікація / 4xx -- дія людини; 5xx -- повторити; п. 10: відмова -- межа = НачалоПериода, читання неповне
@@ -134,7 +136,7 @@ class PumbExpected(unittest.TestCase):
         rec, p = reading([doc(1, when='2026-11-01T10:00:00')])
         with self.assertRaises(C.PumbDateFormat):
             E.run(rec, p)
-        # пагінація -- до виміру: читання з pagingRequest не моделюється (оракул відмовляє, перелік «не змодельовано» названий)
+        # Р4: конектор пагінації не використовує -- запит з pagingRequest оракул відхиляє явно (перелік «не змодельовано» названий)
         rec, p = reading([doc(1)], search_body={'fromDate': DAY0, 'toDate': DAY1, 'documentAccounts': ['5500123456'], 'pagingRequest': {'pageSize': 1}})
         with self.assertRaises(E.PaginationUnmeasured):
             E.run(rec, p)

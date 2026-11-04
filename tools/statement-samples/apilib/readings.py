@@ -84,29 +84,35 @@ def _pumb_body(ex):
 
 
 def pumb_refusal(searches):
-    """Чому читання ПУМБ з цими запитами `searcher` оракул НЕ моделює (або ''). Пагінацію моделюють лише з виміру: сторінки, `pagingRequest`
-    і кілька запитів -- «до виміру», не мовчазне припущення. Формат дат запиту -- гіпотеза `dd.MM.yyyy HH:mm:ss`, інший -- відмова."""
-    if len(searches) != 1:
-        return 'кілька запитів searcher (пагінація -- до виміру)'
-    body = _pumb_body(searches[0])
-    if body is None:
-        return 'тіло запиту searcher не розібрано (немає, bodyMasked, bodyOmitted чи не JSON)'
-    if 'pagingRequest' in body:
-        return 'pagingRequest у запиті (пагінація -- до виміру)'
-    accs = body.get('documentAccounts')
-    if not isinstance(accs, list) or len(accs) != 1:
-        return 'documentAccounts не з одного рахунку'
-    try:
-        C.pumb_date(body.get('fromDate'))
-        C.pumb_date(body.get('toDate'))
-    except C.PumbDateFormat:
-        return 'формат дати запиту не dd.MM.yyyy HH:mm:ss (гіпотеза, до виміру)'
+    """Чому читання ПУМБ з цими запитами `searcher` оракул НЕ моделює (або ''). Читання без пагінації моделюється з кількома запитами `searcher` (ділення періоду навпіл,
+    D36 п. 11, Р4); явно відхиляються: запит із `pagingRequest` (конектор його не шле), тіло, що не розібрано, не один рахунок у `documentAccounts` чи різні рахунки в запитах
+    одного читання. Формат дат запиту -- гіпотеза `dd.MM.yyyy HH:mm:ss`, інший -- відмова."""
+    if not searches:
+        return 'немає запиту searcher'
+    accounts = set()
+    for se in searches:
+        body = _pumb_body(se)
+        if body is None:
+            return 'тіло запиту searcher не розібрано (немає, bodyMasked, bodyOmitted чи не JSON)'
+        if 'pagingRequest' in body:
+            return 'pagingRequest у запиті (Р4: конектор пагінації не використовує)'
+        accs = body.get('documentAccounts')
+        if not isinstance(accs, list) or len(accs) != 1:
+            return 'documentAccounts не з одного рахунку'
+        accounts.add(str(accs[0]))
+        try:
+            C.pumb_date(body.get('fromDate'))
+            C.pumb_date(body.get('toDate'))
+        except C.PumbDateFormat:
+            return 'формат дати запиту не dd.MM.yyyy HH:mm:ss (гіпотеза, до виміру)'
+    if len(accounts) != 1:
+        return 'запити одного читання -- різні рахунки'
     return ''
 
 
 def pumb_split(rec):
     """ПУМБ: -> ([Reading], [(сценарій, причина)]) -- читання, які оракул моделює, і ЯВНИЙ перелік «не змодельовано до виміру».
-    Читання = автентифікація, список рахунків і ОДИН запит `searcher` без `pagingRequest` (як у попередника); параметри -- з запиту й списку рахунків."""
+    Читання = автентифікація, список рахунків і запити `searcher` без `pagingRequest` (перший -- увесь період, далі половини, якщо відповідь на порозі; Р4); параметри -- з ПЕРШОГО запиту й списку рахунків."""
     token = lambda e: e['request']['path'].endswith('/openid-connect/token')
     account = lambda e: e['request']['path'].endswith('/account') and e['request']['method'] == 'GET'
     g_auth = _first(rec, token)
@@ -131,7 +137,7 @@ def pumb_split(rec):
         iban = next((a.get('iban') or '' for a in accounts if isinstance(a, dict) and str(a.get('accountId')) == accid), '')
         p = Params(account=iban, period_start=C.pumb_date(body['fromDate']), period_end=C.pumb_date(body['toDate']),
                    reading_moment=C.DEFAULT_READING_MOMENT)
-        out.append(Reading(reading_id('pumb', sc), 'pumb', sc, [auth, acc, se[0]], p))
+        out.append(Reading(reading_id('pumb', sc), 'pumb', sc, [auth, acc, *se], p))
     return out, skipped
 
 
