@@ -85,7 +85,7 @@ PUMB_DOC = {
     'senderBankMfo': 'KEEP', 'correspondentBankMfo': 'KEEP', 'senderBankName': 'BANKNAME', 'correspondentBankName': 'BANKNAME',
     'senderAccountNumber': 'ACC', 'correspondentAccountNumber': 'ACC', 'responsible': 'NAME', 'expenseItems': 'PURPOSE',
     'isRead': 'KEEP', 'senderIBAN': 'ACC', 'correspondentIBAN': 'ACC', 'pagingRowInfo': 'OBJECT'}
-PUMB_ROWINFO = {'rowNumber': 'KEEP', 'rowIdentity': 'ID', 'sortedValue': 'KEEP'}
+PUMB_ROWINFO = {'rowNumber': 'KEEP', 'rowIdentity': 'ID', 'sortedValue': 'ID'}
 # POST /document/period-transactions -> EJBPeriodTransactionsResponse
 PUMB_PTX = {'header': 'OBJECT', 'transactions': 'ARRAY'}
 PUMB_PTX_HEADER = {'dateFrom': 'KEEP', 'dateTo': 'KEEP', 'currency': 'KEEP', 'accountName': 'NAME', 'inSaldo': 'SCRAMBLE',
@@ -106,7 +106,7 @@ PUMB_REQ_SEARCHER = {
     'correspondentName': 'NAME', 'documentAmount': 'KEEP', 'amountCondition': 'KEEP', 'documentAccounts': 'ARRAY', 'pagingRequest': 'OBJECT',
     'origin': 'ARRAY', 'tax': 'CODE', 'bankName': 'BANKNAME', 'bankMfo': 'KEEP', 'accountNumber': 'ACC', 'correspondentIban': 'ACC',
     'description': 'PURPOSE'}
-PUMB_REQ_PAGING = {'pageSize': 'KEEP', 'pagingSessionId': 'ID', 'orderedLastValue': 'KEEP', 'orderedLastId': 'ID', 'direction': 'KEEP',
+PUMB_REQ_PAGING = {'pageSize': 'KEEP', 'pagingSessionId': 'ID', 'orderedLastValue': 'ID', 'orderedLastId': 'ID', 'direction': 'KEEP',
                    'sortField': 'KEEP'}
 PUMB_REQ_PTX = {'accountId': 'ID', 'dateFrom': 'KEEP', 'dateTo': 'KEEP', 'onlyHeader': 'KEEP', 'withoutAccountACL': 'KEEP'}
 

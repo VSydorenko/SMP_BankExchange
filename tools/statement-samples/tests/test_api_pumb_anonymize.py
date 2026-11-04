@@ -18,6 +18,7 @@ from sslib import gen
 
 ACC_ID = 5500123456                  # accountId у відповіді /account і в тілах запитів (вигаданий)
 LAST_ID = 9100123456
+SORTED = 'SV-4821907'               # sortedValue відповіді = orderedLastValue наступного запиту (роль ID: та сама заміна)
 PERSON = 'Зіркова Лілія Орестівна'
 PERSON_INI = 'Зіркова Л.О.'
 JSON_HDR = [('content-type', 'application/json;charset=utf-8')]
@@ -46,7 +47,7 @@ def fake_recording(searcher_body=None, raw_text=None):
            'currencyCode': 'UAH', 'description': 'Оплата за послуги Зіркова Л.О.', 'operationDate': '01.11.2026 10:15:00',
            'userIdentity': PERSON_INI, 'direction': 'INBOUND', 'senderName': 'Вигадана компанія', 'correspondentName': PERSON,
            'senderTaxId': '3122334455', 'senderAccountNumber': '26009876543210', 'responsible': PERSON_INI, 'senderIBAN': IBAN,
-           'pagingRowInfo': {'rowNumber': 1, 'rowIdentity': LAST_ID + 1, 'sortedValue': '01.11.2026 10:15:00'}}
+           'pagingRowInfo': {'rowNumber': 1, 'rowIdentity': LAST_ID + 1, 'sortedValue': SORTED}}
     ptx = {'header': {'dateFrom': '01.11.2026 00:00:00', 'dateTo': '01.11.2026 23:59:59', 'currency': 'UAH', 'accountName': 'Поточний Зіркова',
                       'inSaldo': '1000.10', 'outSaldo': '2500.10', 'debitTurn': '0.00', 'creditTurn': '1500.00', 'iban': IBAN},
            'transactions': [{'dcFlag': 1, 'accountName': 'Поточний Зіркова', 'currency': 'UAH', 'amount': '1500.00', 'transactionId': 6600123456,
@@ -54,7 +55,8 @@ def fake_recording(searcher_body=None, raw_text=None):
                              'narrative': 'Оплата за послуги', 'iban': IBAN}]}
     auth = {'access_token': 'aaaaaaaaaa.aaaaaaaaaa.aaaaaaaaaa', 'expires_in': 300, 'token_type': 'Bearer', 'scope': 'profile'}
     sb = searcher_body or {'fromDate': '01.11.2026 00:00:00', 'toDate': '01.11.2026 23:59:59', 'documentState': ['PROCESSED'],
-                           'documentType': ['UAH'], 'documentAccounts': [str(ACC_ID)], 'pagingRequest': {'pageSize': 1, 'orderedLastId': LAST_ID}}
+                           'documentType': ['UAH'], 'documentAccounts': [str(ACC_ID)], 'pagingRequest': {'pageSize': 1, 'orderedLastId': LAST_ID,
+                                                           'orderedLastValue': SORTED}}
     searcher = _post('/document/searcher', sb)
     if raw_text is not None:
         searcher['body'] = raw_text
@@ -106,6 +108,9 @@ class PumbRequestBodyAndPersons(unittest.TestCase):
             self.assertEqual(e3['bodyLength'], len(b3))
             self.assertEqual(json.loads(base64.b64decode(e4['bodyBase64']))['accountId'], acc)
             self.assertEqual(e3['port'], 4103)
+            sv = json.loads(base64.b64decode(anon_exchange(env, 3)['response']['bodyBase64']))[0]['pagingRowInfo']['sortedValue']
+            self.assertEqual(sv, json.loads(b3)['pagingRequest']['orderedLastValue'])      # узгоджена заміна відповідь <-> запит
+            self.assertNotEqual(sv, SORTED)
             self.assertIn('"accountId":"<masked>"', e5['bodyMasked']['text'])
             self.assertEqual(e5['bodyMasked']['fields'], ['accountId'])
             self.assertTrue(e1['bodyOmitted'])
