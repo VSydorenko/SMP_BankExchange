@@ -117,6 +117,8 @@ def cmd_sets(a):
     """12 файлів наборів для макетів тестового розширення (R15): записи й еталони пакетами, синтетика і run1."""
     for name, kind, n, size in sets_mod.build(a.anon_root, a.out):
         print('%-40s %-10s записів %3d  байтів %8d' % (name, kind, n, size))
+    for bank, ident, reason in sets_mod.EXCLUDED:
+        print('виключено з run1: %s %s -- %s' % (bank, ident, reason))
     return 0
 
 

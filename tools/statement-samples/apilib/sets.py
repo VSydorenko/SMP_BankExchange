@@ -21,8 +21,10 @@
 import json
 import os
 
-from . import etalon, recording as R, synth
+from . import etalon, readings, recording as R, synth
 
+# Читання run1, виключені з наборів, бо конектор не відтворює їхніх запитів (`readings.replay_exclusion`): (банк, ід, причина).
+EXCLUDED = []
 RECORD_SET = 'smp-api-record-set'
 ETALON_SET = 'smp-api-etalon-set'
 KINDS = {'synthetic': 'Синт', 'run1': 'Run1'}
@@ -48,6 +50,7 @@ def synthetic_sets(bank):
 
 
 def run1_sets(bank, anon_root):
+    EXCLUDED[:] = [x for x in EXCLUDED if x[0] != bank]
     """Читання знеособленого запису, що мають еталон (`etalons/СМП_ТестЭталон<Банк><Ид>.json`)."""
     key = synth.BANK_KEYS[bank]
     prefix = 'СМП_ТестЭталон' + key
@@ -61,8 +64,13 @@ def run1_sets(bank, anon_root):
             et = json.load(f)
         if et['bank'] != bank:
             continue
+        rec = R.Recording.from_dir(os.path.join(anon_root, 'readings', bank, ident))
+        reason = readings.replay_exclusion(bank, rec, et['parameters'])
+        if reason:
+            EXCLUDED.append((bank, ident, reason))
+            continue
         ets[ident] = et
-        recs[ident] = json.loads(R.Recording.from_dir(os.path.join(anon_root, 'readings', bank, ident)).pack())
+        recs[ident] = json.loads(rec.pack())
     return recs, ets
 
 

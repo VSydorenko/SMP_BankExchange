@@ -126,3 +126,28 @@ def readings(rec):
             out.append(Reading(reading_id(bank, sc), bank, sc, [e for e in exchanges if e['request']['path'] == C.FOP_CLIENT_INFO
                                                                   or R.statement_window(e)], p))
     return out
+
+
+def replay_exclusion(bank, rec, params):
+    """Чи може конектор відтворити читання запису запит у запит (транспорт відтворення строгий: інший рядок запиту -- червоний).
+    -> причина виключення з набору run1 або '' (читання лишається). Читання складається лише з обмінів, які конектор справді
+    запитує: рекордер знімав сценарії з параметрами, яких конектор не шле, і складав читання з обмінів різних сценаріїв.
+    Правило поки лише для monobank юросіб (задача 4 плану 05а); розмір сторінки (limit) причиною не є: його задає шов
+    розміру сторінки в тесті, а запис з limit, відмінним від робочого, читається зі швом на його limit.
+    `params` -- `parameters` еталона (`НачалоПериода`, `КонецПериода`: рядки ГГГГ-ММ-ДДTгг:хх:сс)."""
+    if bank != 'mono-corp':
+        return ''
+    day = lambda text: text[:10]
+    for e in rec.exchanges:
+        path = e['request']['path']
+        pairs = dict(R.query_pairs(e))
+        if R.statement_window(e):
+            extra = sorted(set(pairs) - {'limit'})
+            if extra:
+                return 'запит виписки несе параметр %s, якого конектор не шле (банк його ігнорує)' % ', '.join(extra)
+        elif path.endswith('/balances'):
+            want = {'dateFrom': day(params['НачалоПериода']), 'dateTo': day(params['КонецПериода'])}
+            if pairs != want:
+                return 'вікно balances запису (%s) не збігається з періодом читання (%s): обмін узято з іншого сценарію' % (
+                    '%s..%s' % (pairs.get('dateFrom'), pairs.get('dateTo')), '%s..%s' % (want['dateFrom'], want['dateTo']))
+    return ''

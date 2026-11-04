@@ -9,7 +9,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from apilib import etalon, recording as R, sets, synth
+from apilib import etalon, readings, recording as R, sets, synth
 
 
 def fake_anon_root(root):
@@ -79,6 +79,32 @@ class Sets(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 sets.run1_sets('privat', anon)
 
+
+class ReplayExclusion(unittest.TestCase):
+    """Читання run1 виключається з набору, якщо конектор не відтворить його запитів; контроль -- запис з direction і з чужим вікном balances."""
+
+    def corp(self):
+        s = next(x for x in synth.all_scenarios() if x.bank == 'mono-corp' and x.sid == 'СинтСтраницы')
+        return s, s.recording()
+
+    def test_synthetic_connector_shaped_record_is_kept(self):
+        s, rec = self.corp()
+        self.assertEqual(readings.replay_exclusion('mono-corp', rec, etalon.build(s)[0]['parameters']), '')
+
+    def test_direction_excludes(self):
+        s, rec = self.corp()
+        st = next(e for e in rec.exchanges if R.statement_window(e))
+        st['request']['query'] += '&direction=UP'
+        self.assertIn('direction', readings.replay_exclusion('mono-corp', rec, etalon.build(s)[0]['parameters']))
+
+    def test_foreign_balances_window_excludes(self):
+        s, rec = self.corp()
+        params = dict(etalon.build(s)[0]['parameters'], КонецПериода='2030-01-01T23:59:59')
+        self.assertIn('balances', readings.replay_exclusion('mono-corp', rec, params))
+
+    def test_other_banks_are_not_filtered(self):
+        s, rec = self.corp()
+        self.assertEqual(readings.replay_exclusion('privat', rec, etalon.build(s)[0]['parameters']), '')
 
 if __name__ == '__main__':
     unittest.main()
