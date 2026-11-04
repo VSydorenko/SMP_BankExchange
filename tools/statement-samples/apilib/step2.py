@@ -122,6 +122,21 @@ class Sensitive:
 PAIRS = (('turnover_equals_SUM', ('balanceIn', 'balanceInEq', 'balanceOut', 'balanceOutEq', 'turnoverCred', 'turnoverCredEq',
                                   'turnoverDebt', 'turnoverDebtEq'), ('SUM', 'SUM_E')),)
 
+# ПУМБ (A6, рішення консультанта; за прецедентом `turnover_equals_SUM`): значення SCRAMBLE-поля залишку/обороту (`PUMB_PAIR_SOURCES`: `/account` і шапка period-transactions)
+# МОЖЕ лишитися лише в `amount` ДОКУМЕНТА searcher (KEEP); будь-де ще (інше поле, `amount` period-transactions, шлях, запит, тіло запиту) -- `pair_leaks`, червоне.
+# Причина: сума єдиного документа дорівнює залишку чи обороту (збіг значень, не зв'язок полів); суму оракул мусить бачити як є.
+PUMB_PAIR_SOURCES = frozenset({'balance', 'rest', 'holds', 'balanceUah', 'restUah', 'holdsUah', 'forecast', 'inWork', 'forecastWithHolds', 'restWithHolds',
+                               'restWithHoldsUah', 'transactionHolds', 'transactionHoldsUah', 'inSaldo', 'outSaldo', 'debitTurn', 'creditTurn'})
+PUMB_PAIR_NAME = 'pumb_balance_equals_amount'
+
+
+def collect_pumb_pair(sens, sources, money):
+    """Токен-джерело (значення поля з `PUMB_PAIR_SOURCES`, що вже є в `sens.whole` і не тривіальне) стоїть підрядком у `amount` документа -> дозволено лише в `amount`."""
+    for v in sources:
+        if v in sens.whole and not sens.exempt(v) and any(v in m for m in money):
+            sens.pair_exempt.setdefault(v, set()).add('amount')
+            sens.pair_counts[PUMB_PAIR_NAME] = sens.pair_counts.get(PUMB_PAIR_NAME, 0) + 1
+
 
 def collect_pairs(sens, objs):
     """Вузькі винятки за парою полів в ОДНОМУ об'єкті/рядку (`objs`: {(обмін, шлях): {поле: значення}})."""
@@ -153,6 +168,8 @@ def pair_leaks(bank, rec, pair_exempt):
             if nd.kind == 'lit':
                 continue
             field = next((w for w in reversed(where) if isinstance(w, str)), '')
+            if bank == 'pumb' and field == 'amount' and not req['path'].endswith('/document/searcher'):
+                field = 'ptx.amount'                         # дозволено лише `amount` документа searcher, не period-transactions
             for t, allowed in pair_exempt.items():
                 if field not in allowed and t in nd.value:
                     n += 1
@@ -207,6 +224,7 @@ def collect(bank, rec, cfg):
     allowed = {w.casefold() for w in list(cfg.get('allowed_words', [])) + list(cfg.get('guard_allowed_words', [])) +
                list(cfg.get('api_guard_allowed_words', []))}
     texts = []                                  # (роль, значення)
+    pumb_sources, pumb_money = set(), set()     # ПУМБ: значення полів залишків/оборотів і `amount` документів searcher (пара-виняток `PUMB_PAIR_NAME`)
     for idx, ex in enumerate(rec.exchanges):
         req = ex['request']
         segs = req['path'].split('/')
@@ -229,6 +247,11 @@ def collect(bank, rec, cfg):
             if nd.kind == 'str' and where and isinstance(where[-1], str):
                 objs.setdefault((idx, part, tuple(where[:-1])), {})[where[-1]] = val
             field = next((w for w in reversed(where) if isinstance(w, str)), '')
+            if bank == 'pumb' and part == 'body' and nd.kind in ('str', 'num'):
+                if field in PUMB_PAIR_SOURCES:
+                    pumb_sources.add(str(val).strip())
+                elif field == 'amount' and req['path'].endswith('/document/searcher'):
+                    pumb_money.add(str(val).strip())
             if role == 'KEEP':
                 # число з поля KEEP виключається з (а) лише для явного переліку полів банку (`KEEP_NUM_FIELDS`); поле іншого роду винятку не має
                 if field in KEEP_NUM_FIELDS.get(bank, ()):
@@ -259,6 +282,7 @@ def collect(bank, rec, cfg):
     sens.nums -= keep_nums
     sens.generic = {x for lst in gen.PHRASES.values() for x in lst} | {x for lst in gen.SHORT.values() for x in lst}
     collect_pairs(sens, objs)
+    collect_pumb_pair(sens, pumb_sources, pumb_money)
     sens.whole = {t for t in sens.whole if not sens.exempt(t) and t not in sens.pair_exempt}
     return sens
 

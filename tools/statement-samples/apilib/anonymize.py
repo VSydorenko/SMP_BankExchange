@@ -12,6 +12,7 @@
 Жодна функція не друкує значення."""
 import base64
 import copy
+import hashlib
 import json
 import os
 import re
@@ -28,6 +29,10 @@ FREE_TEXT_KEEP = ('message', 'errorDescription')       # KEEP-поля з віл
 # словник; явні слова публічного словника -- `allowed_words`, `guard_allowed_words`, `api_guard_allowed_words` із `config.json` (юридичні форми, назви банків, міста).
 GEN_WORDS = frozenset(w.casefold() for lst in list(gen.PHRASES.values()) + list(gen.SHORT.values()) for p in lst for w in WORD.findall(p))
 SWEEP_MIN = 6                                          # найкоротше значення ролі ID / ACC, яке підмінюється всередині рядків KEEP (коротші лише ловить перевірка (а))
+# Вигадані призначення для ASCII-оригіналу ролі PURPOSE (A6, рішення консультанта; ЗАГАЛЬНЕ правило для всіх банків, не виняток): клас байтів оригіналу зберігається
+# (ASCII -> ASCII), тож перевірка (б) «кодування тіла» лишається строгою. Слова -- рядкові (перевірка (а) шукає власні назви з великої літери).
+ASCII_PURPOSE = ('service notice', 'general message', 'standard notice', 'processing note', 'request note', 'system message', 'operation notice', 'status note',
+                 'information note', 'general information about the operation', 'standard text of the service message for this request')
 REPLACED = ('CODE', 'ACC', 'NAME', 'BANKNAME', 'PURPOSE', 'SCRAMBLE', 'ID')
 PRIVAT_KEEP_QUERY = ('startDate', 'endDate', 'limit')
 CORP_KEEP_QUERY = ('limit', 'direction', 'dateFrom', 'dateTo')
@@ -125,7 +130,20 @@ class Bank:
             return self.acc(s)
         if role == 'SCRAMBLE':
             return self.scramble(s)
-        return self.fakes.apply(role, s)
+        new = self.fakes.apply(role, s)
+        if role == 'PURPOSE' and s.isascii() and not new.isascii():
+            new = self.ascii_purpose(s)
+        return new
+
+    def ascii_purpose(self, s):
+        """ASCII-оригінал PURPOSE -> ASCII-заміна (та сама для того самого тексту: ключ у мапі `text`, префікс `ascii:`)."""
+        key = 'ascii:' + ' '.join(s.split())
+        text = self.fakes.m['text']
+        if key not in text:
+            pool = [p for p in ASCII_PURPOSE if len(p) <= max(len(s.strip()), 15)] or [min(ASCII_PURPOSE, key=len)]
+            # вибір -- за хешем тексту (окремий детермінований потік): основну послідовність ГПВЧ мапи не зсуває, тож решта значень записів не змінюється
+            text[key] = pool[int.from_bytes(hashlib.sha256(key.encode('utf-8')).digest()[:8], 'big') % len(pool)]
+        return text[key]
 
     def clean_text(self, s):
         for raw, fake in self.sweep:
