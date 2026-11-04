@@ -522,7 +522,7 @@ def _privat(rec, p, out, disabled):
     exs = C.exchanges_for(rec, C.PRIVAT_PATH)
     if not exs:
         raise RecordingMismatch('у записі немає запитів транзакцій ПриватБанку')
-    pos, follow_used = [0], set()
+    pos, follow_used, pages = [0], set(), 0
     while True:
         if pos[0] >= len(exs):
             raise RecordingMismatch('запис ПриватБанку кінчається, а exist_next_page лишився true')
@@ -551,28 +551,63 @@ def _privat(rec, p, out, disabled):
         for tx in js.get('transactions') or []:
             n += 1
             items.append(Item(n, tx, ex['seq']))
-        if not privat_has_next(js):
+        flag = privat_exist_flag(js)
+        if flag is None:
+            rule_exist_flag_invalid(out, 'page')
+            break
+        pages += 1
+        if not flag:
             break
         cursor = js.get('next_page_id')
         if cursor in (None, ''):
             rule_page_without_id(out, ex)
             break
         if cursor in follow_used:
-            rule_cursor_repeated(out)
+            rule_cursor_repeated(out, cursor)
             break
         follow_used.add(cursor)
+        if pages >= C.page_ceiling('privat', p):
+            moments = []
+            for it in items:
+                try:
+                    moments.append(C.parse_1c_date(C.to_str(it.raw.get('DATE_TIME_DAT_OD_TIM_P'))))
+                except ValueError:
+                    pass
+            rule_page_ceiling(out, 'privat', pages, n, moments[-1] if moments else p.period_start)
+            break
     out.items = n
     if not out.failure_class:
         _privat_balance(rec, p, out)               # раніше за операції: з нього береться валюта рахунку (відступ 1)
     _privat_items(out, items, p, disabled)
 
 
-def rule_cursor_repeated(out):
-    """`exist_next_page = true`, а `next_page_id` уже використаний як `followId` у цьому читанні: курсор банку не просувається, читати далі нічим
-    (інакше читання не скінчилося б). Те саме, що «є ще без курсора»: неповне читання, `Повторить`. Правило поза переліком спеки -- рішення
-    виконавця, питання контролеру (журнал 05а, задача 6)."""
-    _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'cursor-repeated', 'Статус': 200, 'ОписаниеБанка': ''})
+def rule_cursor_repeated(out, cursor):
+    """`exist_next_page = true`, а `next_page_id` уже використаний як `followId` у цьому читанні: курсор банку не просувається, читати далі нічим (інакше читання не
+    скінчилося б). Повтор банку не допоміг би (дані ті самі), тож клас «дія людини» (D36 п. 8; рішення планувальника 2026-11-04, п. 2, про «повторити» відкликано
+    на користь D36 п. 8), читання неповне, `Предупреждение` з курсором, що повторився."""
+    _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['privat'], 'Вид': 'cursor-repeated', 'Статус': 200, 'ОписаниеБанка': '', 'Значение': cursor})
     out.rules.add('rule_cursor_repeated')
+
+
+def privat_exist_flag(js):
+    """`exist_next_page` відповіді: True / False, а не булеве значення (рядок «false», число, відсутнє) -- None. Продукт читає прапорець так само (а не `bool(...)` Python)."""
+    v = js.get('exist_next_page')
+    return v if isinstance(v, bool) else None
+
+
+def rule_exist_flag_invalid(out, what):
+    """`exist_next_page` не булевого типу: кінець читання невідомий -- неповне, `Повторить`."""
+    _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'bad-exist-flag-' + what, 'Статус': 200, 'ОписаниеБанка': ''})
+    out.rules.add('rule_exist_flag_invalid')
+
+
+def rule_page_ceiling(out, bank, pages, ops, boundary):
+    """Стеля сторінок (`C.PAGE_CEILING`, обґрунтування там): прочитано стільки сторінок, а читання не закінчилось -- «дія людини» (законний обсяг повтор не зменшить),
+    діагностика називає кількість сторінок і операцій та межу, на якій читання зупинилось (Привата -- момент останньої прочитаної операції, monobank -- верхня межа
+    наступного запиту; київський час), і пропонує звузити період."""
+    _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES[bank], 'Вид': 'page-ceiling', 'Статус': 200, 'ОписаниеБанка': '', 'Страниц': pages, 'Операций': ops,
+                           'Граница': boundary.strftime('%d.%m.%Y %H:%M:%S')})
+    out.rules.add('rule_page_ceiling')
 
 
 def _privat_settings(rec, p, out):
@@ -632,6 +667,14 @@ def _privat_balance(rec, p, out):
     if not isinstance(js, dict) or not isinstance(js.get('balances'), list):
         _fail_not_json(out, 'privat', 'not-object')
         return
+    flag = privat_exist_flag(js)
+    if flag is None:
+        rule_exist_flag_invalid(out, 'balance')
+        return
+    if flag:
+        # баланси на кількох сторінках: межу довіри й валюту з однієї сторінки не визначити -- відмова, а не мовчання
+        _fail(out, CLS_RETRY, {'Банк': BANK_NAMES['privat'], 'Вид': 'balance-next-page', 'Статус': 200, 'ОписаниеБанка': ''})
+        return
     out.bank_boundary = rule_bank_boundary_privat(js['balances'], p)
     out.account_currency = privat_account_currency(js['balances'])
     if out.account_currency is None:
@@ -683,7 +726,7 @@ def _privat_items(out, items, p, disabled):
     skip = rule_dedupe_by_id(out, items, ident_of, is_final, is_reversal)
     by_ident = {}
     for it in items:
-        if is_final(it) and ident_of(it):
+        if it.n not in skip and is_final(it) and ident_of(it):         # пропущені тотожні дублі в пошук оригіналу не йдуть (дубль `t` -- не випадок (б))
             by_ident.setdefault(ident_of(it), []).append(it)
     for it in items:
         if it.n in skip:
@@ -799,6 +842,14 @@ def _mono(rec, p, out, disabled):
     # ФОП: відрізки ≤ 31 доби (кожен читається сторінками за D36 п. 11 -- як юросіб); юросіб: один відрізок, межі беруться із запиту
     seg = 0                                                  # поточний відрізок ФОП
     items, n, complete, i = [], 0, True, 0
+    pages = 0                                                # прочитано сторінок виписки (для стелі)
+
+    def stop_at_ceiling(boundary_unix):
+        """Стеля сторінок: перед запитом, що продовжив би читання (межа `boundary_unix`)."""
+        if pages >= C.page_ceiling(bank, p):
+            rule_page_ceiling(out, bank, pages, n, kyiv.unix_to_local(boundary_unix))
+            return True
+        return False
     continuing = False                                       # запит продовження в тому самому відрізку ще попереду
     while i < len(stmts):
         ex = stmts[i]
@@ -853,11 +904,14 @@ def _mono(rec, p, out, disabled):
             except (TypeError, ValueError):
                 continue                                       # час не читається: рядок скаже bad-date у _mono_items, на курсор не впливає
             earliest_unix = tu if earliest_unix is None or tu < earliest_unix else earliest_unix
+        pages += 1
         limit = requested_limit(ex) if corp else C.fop_page_limit(p)
         if len(page) < limit:                       # D36 п. 11: коротша за запитаний ліміт -- остання (ФОП: гіпотеза документації)
             if corp:
                 break
             seg += 1                                # кінець відрізка ФОП: далі наступний відрізок
+            if seg < len(windows) and stop_at_ceiling(windows[seg][1]):
+                break
             continue
         # D36 п. 11 (44d22a1): продовження за часом знову охоплює секунду найранішої операції (`to` = time + 1; банк `to` не
         # включає); повтори відкидає дедуплікація за id. Запит продовження, що збігся б із поточним (вся повна сторінка в одній
@@ -879,10 +933,14 @@ def _mono(rec, p, out, disabled):
             if corp:
                 break                                # читати нічого (межа дійшла до початку), без відмови
             seg += 1                                 # відрізок ФОП вичерпано, далі наступний
+            if seg < len(windows) and stop_at_ceiling(windows[seg][1]):
+                break
             continue
         if i < len(stmts) and R.statement_window(stmts[i])[2] != nxt:
             raise RecordingMismatch('запит продовження запису (to = %d) не збігається з правилом D36 п. 11 (to = %d)'
                                     % (R.statement_window(stmts[i])[2], nxt))
+        if stop_at_ceiling(nxt):
+            break
         continuing = True                            # запис кінчається до ознаки кінця -- скаже перевірка після циклу
     else:
         if continuing:

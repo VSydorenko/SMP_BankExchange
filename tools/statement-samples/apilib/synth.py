@@ -16,6 +16,7 @@
 """
 import json
 import random
+import urllib.parse
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
@@ -152,7 +153,7 @@ class Builder:
         p = self.p
         q = 'acc=%s&startDate=%s&endDate=%s&limit=%d' % ((p.account[-14:],) + self.privat_dates() + (PRIVAT_LIMIT,))
         if follow:
-            q += '&followId=' + follow
+            q += '&followId=' + urllib.parse.quote(follow, safe='')           # КодироватьСтроку у продукті: курсор у URL закодований
         self.add({'path': C.PRIVAT_PATH, 'query': q}, resp, failure)
 
     def privat_pages(self, pages, charset='utf-8'):
@@ -687,6 +688,48 @@ def _privat_scenarios():
     stale['next_page_id'] = first[-1]['ID']
     b.privat(resp_json(200, stale), follow=first[-1]['ID'])
     done(s, b, balance=False)
+
+    # Стеля сторінок (шов `page_ceiling` = 5; робоча 4000): банк без кінця віддає порожні сторінки з exist_next_page = true і щоразу новим next_page_id --
+    # після 5 сторінок читання зупиняється: «дія людини», діагностика називає сторінки, операції й межу
+    s, b = new('СинтПотолокСтраниц', 'ПриватБанк: нескінченні нові курсори (порожні сторінки з exist_next_page = true) -- стеля сторінок (шов 5), «дія людини» '
+                                     '[документальний, не спостерігалось]', [3], page_ceiling=5)
+    prev = None
+    for i in range(1, 6):
+        body = privat_page([], exist=True)
+        body['next_page_id'] = seqid('CUR', i)
+        b.privat(resp_json(200, body), follow=prev)
+        prev = seqid('CUR', i)
+    done(s, b, balance=False)
+
+    # Дубль сторнованої операції (PR_PR = t, свій ID) на двох сторінках: тотожний дубль пропускається і в пошук оригіналу не йде -- це НЕ випадок (б), операція одна
+    s, b = new('СинтДубльСторно', 'ПриватБанк: та сама операція PR_PR = t (свій ID) на двох сторінках -- дубль відкидається, випадок (б) не спрацьовує', [2, 3])
+    tdup = ptx(g, acct, when=day.replace(hour=10), tran='C', state='t', amount='40.00', **cnt())
+    b.privat_pages([[tdup], [tdup, ptx(g, acct, when=day.replace(hour=11), tran='D', amount='12.00', **cnt())]])
+    done(s, b)
+
+    # /balance із exist_next_page = true: межу довіри й валюту з однієї сторінки не визначити -- відмова «повторити», а не мовчання
+    s, b = new('СинтБалансЕщеСтраница', 'ПриватБанк: /balance з exist_next_page = true -- відмова «повторити» з діагностикою', [4])
+    b.privat_pages([two()])
+    bal = privat_balance_body(s.params)
+    bal['exist_next_page'] = True
+    b.privat_balance(resp_json(200, bal))
+    done(s, b, balance=False)
+
+    # exist_next_page не булевого типу (рядок «false»): кінець читання невідомий -- «повторити», прочитана сторінка лишається
+    s, b = new('СинтExistНеБулево', 'ПриватБанк: exist_next_page = рядок «false» -- не булеве значення, «повторити» [документальний, не спостерігалось]', [3])
+    body = privat_page(two(), exist=False)
+    body['exist_next_page'] = 'false'
+    b.privat(resp_json(200, body))
+    done(s, b, balance=False)
+
+    # followId у URL кодується (КодироватьСтроку): курсор із символами «/», «+», «=»
+    s, b = new('СинтКурсорСимволы', 'ПриватБанк: next_page_id із символами / + = -- followId у запиті закодований', [3])
+    first = two()
+    p1 = privat_page(first, exist=True)
+    p1['next_page_id'] = 'ab/cd+ef=gh'
+    b.privat(resp_json(200, p1))
+    b.privat(resp_json(200, privat_page([ptx(g, acct, when=day.replace(hour=12), tran='C', amount='30.00', **cnt())])), follow='ab/cd+ef=gh')
+    done(s, b)
     return sc
 
 
@@ -777,6 +820,23 @@ def _fop_scenarios():
     # --- Пагінація D36 п. 11 на меншій сторінці (шов розміру сторінки, `page_limit`): ті самі випадки, що в юросіб; модель банку -- `FopBank`
     lim = SEAM_LIMIT
     paged = lambda sid, title: new(sid, title, [3], page_limit=lim)
+
+    # Стеля сторінок (шов `page_ceiling` = 3 при пороші сторінки 30; робоча 200): повні сторінки по одній операції на секунду -- «дія людини»
+    s, b = new('СинтПотолокСтраниц', 'monobank ФОП: повні сторінки з кроком у секунду -- стеля сторінок (шов 3), «дія людини» [документальний, не спостерігалось]', [3],
+               page_limit=lim, page_ceiling=3)
+    info(b)
+    ceil_t = utc(2026, 10, 14, 6)
+    fop_paged(b, s.params, [ftx(g, t=ceil_t + k, amount=-(100 + k), desc='с%d' % k, tid=fid('Z', k)) for k in range(100)], lim, stop_after=4)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Межа продовження дійшла до нижньої межі запиту: читання відрізка закінчується БЕЗ запиту навпаки (to <= from)
+    s, b = new('СинтПолнаяНаНижней', 'monobank ФОП: повна сторінка в секунді НачалоПериода - 1 с -- межа продовження дійшла до нижньої, запиту навпаки немає', [3], page_limit=lim)
+    info(b)
+    low_t = to_unix(s.params.period_start) - 1
+    fop_paged(b, s.params, [ftx(g, t=low_t, amount=-(100 + i), desc='н%d' % i, tid=fid('L', i)) for i in range(lim)], lim)
+    s.exchanges = b.ex
+    sc.append(s)
 
     s, b = paged('СинтСекундаРаспалась', "monobank ФОП: секунда розпалась між сторінками (дві операції на першій, п'ять на другій з повтором) -- кожна рівно раз")
     info(b)
@@ -1171,6 +1231,22 @@ def _corp_scenarios():
     s, b = new('СинтКратнаяСтраница', 'monobank юросіб: кількість операцій рівно дорівнює ліміту -- друга сторінка лише повторює межову операцію', [3])
     base_t = utc(2026, 10, 14, 6)
     corp_paged(b, s.params, [ctx_(g, t=base_t + 10 * i, amount=-(100 + i), desc='к%d' % i, tid=seqid('K', i)) for i in range(lim)], lim)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Стеля сторінок (шов `page_ceiling` = 3; робоча 13000): повні сторінки по одній операції на секунду -- після трьох сторінок читання зупиняється, «дія людини»
+    s, b = new('СинтПотолокСтраниц', 'monobank юросіб: повні сторінки з кроком у секунду -- стеля сторінок (шов 3), «дія людини» [документальний, не спостерігалось]', [3],
+               page_ceiling=3)
+    ceil_t = utc(2026, 10, 14, 6)
+    corp_paged(b, s.params, [ctx_(g, t=ceil_t + k, amount=-(100 + k), desc='с%d' % k, tid=seqid('Z', k)) for k in range(100)], lim, stop_after=3)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Межа продовження дійшла до нижньої межі запиту (повна сторінка в секунді `НачалоПериода - 1 с`): читання закінчується БЕЗ запиту навпаки (to <= from);
+    # застрягання на межі U = НачалоПериода -- «дія людини»; усі операції до початку періоду -- відкинуто мовчки
+    s, b = new('СинтПолнаяНаНижней', 'monobank юросіб: повна сторінка в секунді НачалоПериода - 1 с -- межа продовження дійшла до нижньої, запиту навпаки немає', [3])
+    low_t = S_start = to_unix(s.params.period_start) - 1
+    corp_paged(b, s.params, [ctx_(g, t=low_t, amount=-(100 + i), desc='н%d' % i, tid=seqid('L', i)) for i in range(lim)], lim)
     s.exchanges = b.ex
     sc.append(s)
 

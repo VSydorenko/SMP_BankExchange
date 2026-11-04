@@ -115,6 +115,20 @@ class ByHand(unittest.TestCase):
         # (3) і на S (4) лишаються
         self.check('СинтГраницыПериода', ops={2: SID('D', 2), 3: SID('D', 3), 4: SID('D', 4)}, requests=[hi], cls='', complete=True, trust=end_of_period)
 
+        # стеля сторінок (шов 3): сторінки по 30 з перекриттям межової секунди (E + 1), три сторінки -- читання зупиняється, «дія людини»; рядів прочитано 90 (дублі межових
+        # секунд 31 і 61 -- у кількості, але не в операціях), межа -- верхня межа наступного запиту (E3 + 1)
+        c0 = S.utc(2026, 10, 14, 6)
+        ops = {n: SID('Z', 100 - n) for n in range(1, 31)}
+        ops.update({n: SID('Z', 101 - n) for n in range(32, 61)})
+        ops.update({n: SID('Z', 102 - n) for n in range(62, 91)})
+        self.check('СинтПотолокСтраниц', ops=ops, requests=[hi, c0 + 71, c0 + 42], cls='ДействиеЧеловека', complete=False, trust=start_of_period, pauses=[],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'page-ceiling', 'Статус': 200, 'ОписаниеБанка': '', 'Страниц': 3, 'Операций': 90, 'Граница': local(c0 + 13)})])
+
+        # межа продовження дійшла до нижньої межі запиту: 30 операцій у секунді S - 1; друга сторінка (to = S) -- те саме, застрягання на U = S; крок Мин(E, U - 1) = S - 1 <= from --
+        # запиту навпаки (to <= from) немає. Усі операції до початку періоду -- відкинуто мовчки
+        self.check('СинтПолнаяНаНижней', ops={}, requests=[hi, frm], cls='ДействиеЧеловека', complete=False, trust=start_of_period, pauses=[],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'cursor-stuck', 'Секунда': local(frm - 1), 'Секунда2': local(frm), 'Количество': 30})])
+
         # пауза понад стелю: retry-after 3600 с > 120 с -- «повторити» без повтору й без сну, діагностика називає запитану паузу
         self.check('СинтЛимит429Потолок', ops={}, requests=[hi], cls='Повторить', complete=False, trust=start_of_period, pauses=[],
                    diags=[(warn, 0, {'Банк': bank, 'Вид': 'pause-over-ceiling', 'Статус': 429, 'ОписаниеБанка': 'Too many requests', 'Пауза': 3600})])
@@ -205,6 +219,20 @@ class ByHandFop(unittest.TestCase):
         self.check('СинтГраницыПериода', ops={2: F('D', 2), 3: F('D', 3), 4: F('D', 4)}, requests=[(lo, hi)], cls='', complete=True,
                    trust=end_of_period, pauses=[])
 
+        # стеля сторінок (шов 3 при пороші 30): сторінки по 30 з перекриттям межової секунди (E + 1), три сторінки -- читання зупиняється, «дія людини»; рядів прочитано 90 (дублі межових
+        # секунд 31 і 61 -- у кількості, але не в операціях), межа -- верхня межа наступного запиту (E3 + 1)
+        c0 = S.utc(2026, 10, 14, 6)
+        ops = {n: F('Z', 100 - n) for n in range(1, 31)}
+        ops.update({n: F('Z', 101 - n) for n in range(32, 61)})
+        ops.update({n: F('Z', 102 - n) for n in range(62, 91)})
+        self.check('СинтПотолокСтраниц', ops=ops, requests=[(lo, hi), (lo, c0 + 71), (lo, c0 + 42)], cls='ДействиеЧеловека', complete=False, trust=start_of_period, pauses=[60, 60],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'page-ceiling', 'Статус': 200, 'ОписаниеБанка': '', 'Страниц': 3, 'Операций': 90, 'Граница': local(c0 + 13)})])
+
+        # межа продовження дійшла до нижньої межі запиту: 30 операцій у секунді S - 1; друга сторінка (to = S) -- те саме, застрягання на U = S; крок Мин(E, U - 1) = S - 1 <= from --
+        # запиту навпаки (to <= from) немає. Усі операції до початку періоду -- відкинуто мовчки
+        self.check('СинтПолнаяНаНижней', ops={}, requests=[(lo, hi), (lo, frm)], cls='ДействиеЧеловека', complete=False, trust=start_of_period, pauses=[60],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'cursor-stuck', 'Секунда': local(frm - 1), 'Секунда2': local(frm), 'Количество': 30})])
+
         # пауза понад стелю (retry-after 3600 с > 120 с): без повтору й без сну
         self.check('СинтЛимит429Потолок', ops={}, requests=[(lo, hi)], cls='Повторить', complete=False, trust=start_of_period, pauses=[],
                    diags=[(warn, 0, {'Банк': bank, 'Вид': 'pause-over-ceiling', 'Статус': 429, 'ОписаниеБанка': 'Too many requests', 'Пауза': 3600})])
@@ -279,6 +307,12 @@ class ByHandPrivat(unittest.TestCase):
         key = lambda d: (d[1], d[0])
         self.assertEqual(sorted([(d['Уровень'], d['ПорядковыйНомер'], d['Факты']) for d in e.diags], key=key), sorted(diags, key=key), sid)
         return s, e
+
+    def ceiling_requests(self):
+        """П'ять запитів транзакцій стелі: перший без followId, далі followId = next_page_id попередньої (CUR-aaaa ... літерні номери)."""
+        base = 'startDate=15-10-2026&endDate=15-10-2026&limit=100'
+        cur = lambda i: 'CUR-' + ''.join('abcdefghij'[int(c)] for c in '%04d' % i)
+        return [('transactions', base)] + [('transactions', base + '&followId=' + cur(i)) for i in range(1, 5)]
 
     def ids(self, sid):
         """`ID` операцій записаних сторінок транзакцій за позицією (дані, а не правило)."""
@@ -368,8 +402,40 @@ class ByHandPrivat(unittest.TestCase):
         self.check('СинтКурсорНеСдвинулся', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано'), 3: ('30.00', 'Поступило')},
                    requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim),
                              ('transactions', one_day('15-10-2026') + '&' + lim + '&followId=' + ids[1])],
+                   cls='ДействиеЧеловека', complete=False, trust=datetime(2026, 10, 15), pauses=[1, 1],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'cursor-repeated', 'Статус': 200, 'ОписаниеБанка': '', 'Значение': ids[1]})])
+
+        # стеля сторінок (шов 5): п'ять порожніх сторінок із новим курсором і exist_next_page = true -- «дія людини», діагностика: 5 сторінок, 0 операцій, межа -- початок періоду
+        self.check('СинтПотолокСтраниц', ops={},
+                   requests=[('settings', '')] + [('transactions', one_day('15-10-2026') + '&' + lim + ('' if k == 0 else '&followId=' + 'CUR-' + 'abcde'[k - 1] * 0)) for k in range(0)] + self.ceiling_requests(),
+                   cls='ДействиеЧеловека', complete=False, trust=datetime(2026, 10, 15), pauses=[1, 1, 1, 1, 1],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'page-ceiling', 'Статус': 200, 'ОписаниеБанка': '', 'Страниц': 5, 'Операций': 0, 'Граница': '15.10.2026 00:00:00'})])
+
+        # дубль сторнованої операції: t зі своїм ID двічі (тотожно) -- друга відкидається, випадок (б) не спрацьовує; операції 1 і 3 (номер 2 -- дубль)
+        self.check('СинтДубльСторно', ops={1: ('40.00', 'Поступило'), 3: ('12.00', 'Списано')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim),
+                             ('transactions', one_day('15-10-2026') + '&' + lim + '&followId=' + self.ids('СинтДубльСторно')[1]), ('balance', one_day('15-10-2026'))],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1, 1])
+
+        # /balance з exist_next_page = true: відмова «повторити», транзакції лишаються
+        self.check('СинтБалансЕщеСтраница', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim), ('balance', one_day('15-10-2026'))],
                    cls='Повторить', complete=False, trust=datetime(2026, 10, 15), pauses=[1, 1],
-                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'cursor-repeated', 'Статус': 200, 'ОписаниеБанка': ''})])
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'balance-next-page', 'Статус': 200, 'ОписаниеБанка': ''})])
+
+        # exist_next_page = рядок «false»: не булеве -- «повторити», прочитана сторінка лишається, балансу немає
+        self.check('СинтExistНеБулево', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim)],
+                   cls='Повторить', complete=False, trust=datetime(2026, 10, 15), pauses=[1],
+                   diags=[(warn, 0, {'Банк': bank, 'Вид': 'bad-exist-flag-page', 'Статус': 200, 'ОписаниеБанка': ''})])
+
+        # курсор із символами / + = у followId: оракул бачить розкодоване значення, а сирий рядок запиту запису мусить бути закодований (%2F %2B %3D)
+        s, e = self.check('СинтКурсорСимволы', ops={1: ('10.00', 'Поступило'), 2: ('20.00', 'Списано'), 3: ('30.00', 'Поступило')},
+                   requests=[('settings', ''), ('transactions', one_day('15-10-2026') + '&' + lim),
+                             ('transactions', one_day('15-10-2026') + '&' + lim + '&followId=ab/cd+ef=gh'), ('balance', one_day('15-10-2026'))],
+                   cls='', complete=True, trust=datetime(2026, 10, 15, 23, 59, 59), pauses=[1, 1, 1])
+        raw_queries = [x['request']['query'] for x in s.exchanges if x['request']['path'].endswith('/transactions')]
+        self.assertTrue(raw_queries[1].endswith('&followId=ab%2Fcd%2Bef%3Dgh'), raw_queries[1])
 
         # exist_next_page = true без next_page_id: продовжити нічим -- неповне, «повторити», без нескінченного циклу
         self.check('СинтБезСледующей', ops={1: ('9.00', 'Поступило')},

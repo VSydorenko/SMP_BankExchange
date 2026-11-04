@@ -363,7 +363,7 @@ class EndOfRead(unittest.TestCase):
             if s.bank != 'privat':
                 continue
             base = E.run(s.recording(), s.params)
-            with mock.patch.object(E, 'privat_has_next', lambda js: js.get('next_page_id') not in (None, '')):
+            with mock.patch.object(E, 'privat_exist_flag', lambda js: js.get('next_page_id') not in (None, '')):
                 try:
                     mut = E.run(s.recording(), s.params)
                     differs = (mut.ops, mut.complete, mut.failure_class) != (base.ops, base.complete, base.failure_class)
@@ -374,7 +374,7 @@ class EndOfRead(unittest.TestCase):
             if last_page_carries_cursor(s):
                 want.add(s.sid)
         # крім записів, де остання сторінка несе курсор, червоною стає лише «є ще без курсора» (СинтБезСледующей)
-        self.assertEqual(red - want, {'СинтБезСледующей'})
+        self.assertEqual(red - want, {'СинтБезСледующей', 'СинтExistНеБулево'})   # (прапорець не булевого типу теж міняє результат)
         self.assertIn('СинтСтраницыСлед', red)
         self.assertNotIn('СинтПусто', red)
         self.assertTrue(want <= red)
