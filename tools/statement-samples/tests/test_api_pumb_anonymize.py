@@ -43,7 +43,7 @@ def _resp(obj, status=200, hdr=JSON_HDR):
     return {'status': status, 'headers': hdr, 'body': json.dumps(obj, ensure_ascii=False).encode('utf-8')}
 
 
-def fake_recording(searcher_body=None, raw_text=None, child=None, errors=None, doc2_number='4816', ptx_amount='1500.00'):
+def fake_recording(searcher_body=None, raw_text=None, child=None, errors=None, doc2_number='4816', ptx_amount='1500.00', ptx_docnum='4815', query='', extra_body=None):
     account = {'id': 7000123456, 'accountId': ACC_ID, 'mfo': '322001', 'currency': 'UAH', 'number': '26001234567890',
                'name': 'Поточний Зіркова', 'state': 1, 'hostId': 3, 'branchId': 'XYZ', 'clientId': 'CL778899', 'clientName': PERSON,
                'clientOkpo': '3098712345', 'isDefault': True, 'iban': IBAN, 'balance': REST, 'rest': REST,
@@ -62,19 +62,20 @@ def fake_recording(searcher_body=None, raw_text=None, child=None, errors=None, d
     ptx = {'header': {'dateFrom': '01.11.2026 00:00:00', 'dateTo': '01.11.2026 23:59:59', 'currency': 'UAH', 'accountName': 'Поточний Зіркова',
                       'inSaldo': '1000.10', 'outSaldo': '2500.10', 'debitTurn': '0.00', 'creditTurn': '1500.00', 'iban': IBAN},
            'transactions': [{'dcFlag': 1, 'accountName': 'Поточний Зіркова', 'currency': 'UAH', 'amount': ptx_amount, 'transactionId': 6600123456,
-                             'documentDate': '01.11.2026', 'documentNumber': '4815', 'corrName': PERSON, 'corrIban': IBAN,
+                             'documentDate': '01.11.2026', 'documentNumber': ptx_docnum, 'corrName': PERSON, 'corrIban': IBAN,
                              'narrative': 'Оплата за послуги', 'iban': IBAN}]}
     auth = {'access_token': 'aaaaaaaaaa.aaaaaaaaaa.aaaaaaaaaa', 'expires_in': 300, 'token_type': 'Bearer', 'scope': 'profile'}
     sb = searcher_body or {'fromDate': '01.11.2026 00:00:00', 'toDate': '01.11.2026 23:59:59', 'documentState': ['PROCESSED'],
                            'documentType': ['UAH'], 'documentAccounts': [str(ACC_ID)], 'pagingRequest': {'pageSize': 1, 'orderedLastId': LAST_ID,
                                                            'orderedLastValue': SORTED}}
+    sb = dict(sb, **(extra_body or {}))
     searcher = _post('/document/searcher', sb)
     if raw_text is not None:
         searcher['body'] = raw_text
     ex = [
         R.make_exchange(1, 'pumb_auth', {'method': 'POST', 'host': 'auth.fuib.com', 'path': '/auth/realms/VegaNet/protocol/openid-connect/token', 'query': '',
                                           'bodyOmitted': 'автентифікація'}, _resp(auth)),
-        R.make_exchange(2, 'pumb_account', {'method': 'GET', 'host': 'service.fuib.com', 'port': 4103, 'path': '/war_veganet_api/account', 'query': ''},
+        R.make_exchange(2, 'pumb_account', {'method': 'GET', 'host': 'service.fuib.com', 'port': 4103, 'path': '/war_veganet_api/account', 'query': query},
                         _resp([account])),
         R.make_exchange(3, 'pumb_searcher', searcher, _resp([doc, doc2])),
         R.make_exchange(4, 'pumb_ptx', _post('/document/period-transactions', {'accountId': ACC_ID, 'dateFrom': '01.11.2026 00:00:00',
@@ -216,7 +217,7 @@ class PumbRequestBodyAndPersons(unittest.TestCase):
             res = env.check()
             self.assertGreater(res['hits'], 0, res)
 
-    def test_v_a6_ascii_purpose_keeps_byte_class_and_balance_pair_is_allowed_only_in_document_amount(self):
+    def test_v_a6_ascii_purpose_keeps_byte_class_and_balance_pair_is_allowed_only_in_amount_fields(self):
         # (б) строга: ASCII-оригінал PURPOSE -> ASCII-заміна (клас байтів зберігається), помилок (б) немає
         with tempfile.TemporaryDirectory() as d:
             env = Env(d)
@@ -239,8 +240,14 @@ class PumbRequestBodyAndPersons(unittest.TestCase):
             with mock.patch.object(A.Bank, 'ascii_purpose', lambda self, s: 'Український текст'):
                 env.anonymize()
             self.assertTrue(any('кодування тіла' in p for p in step2.check_b('pumb', env.raw, env.anon, env.map)['problems']))
-        # КОНТРОЛЬ (а): те саме значення залишку в будь-якому іншому полі (KEEP `number` документа; `amount` period-transactions) -- червоне
-        for kw in ({'doc2_number': REST}, {'ptx_amount': REST}):
+        # A7: `amount` ТРАНЗАКЦІЇ period-transactions теж дозволено (та сама операція в обох основах)
+        with tempfile.TemporaryDirectory() as d:
+            env = Env(d, ptx_amount=REST)
+            env.anonymize()
+            res = env.check()
+            self.assertEqual((res['hits'], res['pair_leaks']), (0, 0), res)
+        # КОНТРОЛЬ (а): те саме значення залишку в БУДЬ-ЯКОМУ іншому місці -- червоне: `number` документа, `documentNumber` транзакції, тіло запиту (запит з невідомим параметром знеособлювач відхиляє ще до перевірки)
+        for kw in ({'doc2_number': REST}, {'ptx_docnum': REST}, {'extra_body': {'documentAmount': REST}}):
             with tempfile.TemporaryDirectory() as d:
                 env = Env(d, **kw)
                 env.anonymize()

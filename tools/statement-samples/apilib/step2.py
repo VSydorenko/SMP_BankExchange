@@ -123,8 +123,8 @@ PAIRS = (('turnover_equals_SUM', ('balanceIn', 'balanceInEq', 'balanceOut', 'bal
                                   'turnoverDebt', 'turnoverDebtEq'), ('SUM', 'SUM_E')),)
 
 # ПУМБ (A6, рішення консультанта; за прецедентом `turnover_equals_SUM`): значення SCRAMBLE-поля залишку/обороту (`PUMB_PAIR_SOURCES`: `/account` і шапка period-transactions)
-# МОЖЕ лишитися лише в `amount` ДОКУМЕНТА searcher (KEEP); будь-де ще (інше поле, `amount` period-transactions, шлях, запит, тіло запиту) -- `pair_leaks`, червоне.
-# Причина: сума єдиного документа дорівнює залишку чи обороту (збіг значень, не зв'язок полів); суму оракул мусить бачити як є.
+# МОЖЕ лишитися лише в `amount` ДОКУМЕНТА searcher і `amount` ТРАНЗАКЦІЇ period-transactions (KEEP; A7), і більше ніде: будь-де ще (інше поле, зокрема `number`/`documentNumber`,
+# шлях, запит, тіло запиту) -- `pair_leaks`, червоне. Причина: сума єдиного документа/транзакції дорівнює залишку чи обороту (збіг значень, не зв'язок полів); суму оракул мусить бачити як є.
 PUMB_PAIR_SOURCES = frozenset({'balance', 'rest', 'holds', 'balanceUah', 'restUah', 'holdsUah', 'forecast', 'inWork', 'forecastWithHolds', 'restWithHolds',
                                'restWithHoldsUah', 'transactionHolds', 'transactionHoldsUah', 'inSaldo', 'outSaldo', 'debitTurn', 'creditTurn'})
 PUMB_PAIR_NAME = 'pumb_balance_equals_amount'
@@ -168,8 +168,6 @@ def pair_leaks(bank, rec, pair_exempt):
             if nd.kind == 'lit':
                 continue
             field = next((w for w in reversed(where) if isinstance(w, str)), '')
-            if bank == 'pumb' and field == 'amount' and not req['path'].endswith('/document/searcher'):
-                field = 'ptx.amount'                         # дозволено лише `amount` документа searcher, не period-transactions
             for t, allowed in pair_exempt.items():
                 if field not in allowed and t in nd.value:
                     n += 1
@@ -250,7 +248,7 @@ def collect(bank, rec, cfg):
             if bank == 'pumb' and part == 'body' and nd.kind in ('str', 'num'):
                 if field in PUMB_PAIR_SOURCES:
                     pumb_sources.add(str(val).strip())
-                elif field == 'amount' and req['path'].endswith('/document/searcher'):
+                elif field == 'amount' and req['path'].endswith(('/document/searcher', '/document/period-transactions')):
                     pumb_money.add(str(val).strip())
             if role == 'KEEP':
                 # число з поля KEEP виключається з (а) лише для явного переліку полів банку (`KEEP_NUM_FIELDS`); поле іншого роду винятку не має
