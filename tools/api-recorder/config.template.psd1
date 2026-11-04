@@ -199,6 +199,12 @@
         MaxPages          = 60   # запобіжник: скільки сторінок читати в одному сценарії
         MaxSaturatedPages = 40   # запобіжник для насиченого періоду
 
+        # run2: читання рівно у формі конектора (searcher без pagingRequest і без фільтрів, межі запиту «початок - 1 с … Мин(кінець + 1 с, момент)»,
+        # X-Flow-ID у форматі GUID:GUID:EX). Відповідь не менше порога — період ділиться навпіл за добами, як у конектора.
+        ConnectorThreshold   = 67    # поріг ділення (= ПорогОтвета() конектора)
+        ConnectorMaxRequests = 200   # запобіжник: скільки запитів у одному читанні connector_read
+        LongestPeriodDays    = 366   # довжина найдовшого періоду (діб, у кінець основного періоду), один запит без ділення
+
         Scenarios = @{
             SearcherSmall      = $true   # searcher: PROCESSED + UAH, малий pageSize, усі сторінки (продовження за orderedLastId)
             SearcherWork       = $true   # searcher: те саме з робочим pageSize
@@ -213,6 +219,14 @@
             Reversal           = $true   # період із поверненням (лише якщо ReversalPeriod заповнений)
             BoundaryPairs      = $false  # run3: включність меж fromDate/toDate — рекордер сам обирає операцію й робить 4 запити; $true — увімкнути
             Errors             = $true   # свідомі помилки: вигаданий токен, ВИГАДАНІ логін/пароль/секрет (не справжній логін), from > to, майбутній період, чужий рахунок, тіло не JSON
+
+            # --- run2 (читання у формі конектора; усі лише читають; нижче ConnectorRead залежать LongestPeriod, Reconcile, StmSigns, ConnectorBoundary) ---
+            ConnectorRead      = $true   # connector_read: для кожного рахунку, тіло й заголовки як у конектора, ділення навпіл при відповіді >= ConnectorThreshold
+            XFlowProbe         = $true   # xflow_probe: перший запит connector_read із X-Flow-ID попередника (5:6:EX) — порівняння, чи банк приймає обидві форми
+            ConnectorBoundary  = $true   # boundary_pairs у формі конектора: операція, єдина у своїй секунді; fromDate = t і t + 1, toDate = t і t - 1; значень немає
+            LongestPeriod      = $true   # longest_period: один запит конектора на LongestPeriodDays діб для найактивнішого рахунку; у зведенні лише кількість документів
+            StmSigns           = $true   # ознаки STM(d) - STM(d-1) проти чистого руху дня (лише кількості), по рахунку й для найдовшого періоду
+            Reconcile          = $true   # reconcile.txt для власника: найактивніший рахунок, UAH/CUR/STM окремо, кількість і сума вхідних і вихідних (суми лише в owner-only)
         }
     }
 }

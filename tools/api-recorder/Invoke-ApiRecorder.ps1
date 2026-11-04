@@ -995,6 +995,8 @@ function Test-PumbLoginGate {
 function Invoke-PumbApi {
     param($Ctx, [string]$Method, [string]$HostName, [int]$Port, [string]$Path, $BodyBytes = $null, [string]$Token = '',
         [switch]$Auth, [string]$DryStub = '[]', [switch]$NoRetry, [switch]$NoReauth,
+        # X-Flow-ID запиту: порожній — форма попередника (5:6:EX); run2 передає форму конектора (GUID:GUID:EX).
+        [string]$FlowId = '',
         # Тіло в банк іде як є, а в запис не потрапляє (bodyOmitted з цією причиною): навмисно нерозбірне тіло знеособлювач не прийняв би.
         [string]$OmitBodyReason = '')
     Assert-ReadOnlyRequest $Method $HostName $Path $Port
@@ -1013,7 +1015,7 @@ function Invoke-PumbApi {
         $uri = "https://$HostName" + $(if ($Port -ne 443) { ":$Port" } else { '' }) + $Path
         if ($Auth) { $headers = @{ 'User-Agent' = $script:UserAgent }; $ct = 'application/x-www-form-urlencoded' }
         else {
-            $headers = @{ 'User-Agent' = $script:UserAgent; 'Authorization' = "Bearer $Token"; 'X-App-Channel' = 'pure-api'; 'X-Flow-ID' = '5:6:EX' }
+            $headers = @{ 'User-Agent' = $script:UserAgent; 'Authorization' = "Bearer $Token"; 'X-App-Channel' = 'pure-api'; 'X-Flow-ID' = $(if ($FlowId) { $FlowId } else { '5:6:EX' }) }
             $ct = 'application/json'
         }
         if ($Ctx.Dry) {
@@ -1107,7 +1109,7 @@ function Update-PumbToken {
 
 # --- розбір відповідей для зведень (лише кількості; суми — власнику) -----------------------------
 function Add-PumbItemsDigest {
-    param($Ctx, $Items)
+    param($Ctx, $Items, [switch]$NoSums)
     $Ctx.Cur.Pages++
     $it = @($Items)
     Add-Count $Ctx 'розмір сторінки' ([string]$it.Count)
@@ -1120,7 +1122,7 @@ function Add-PumbItemsDigest {
         Add-Count $Ctx 'currencyCode' ([string]$t['currencyCode'])
         Add-IdValue $Ctx 'id' $t['id']
         Add-IdValue $Ctx 'docId' $t['docId']
-        Add-Sum $Ctx ("{0} {1}" -f $t['direction'], $t['currencyCode']) (ConvertTo-DecimalSafe $t['amount'])
+        if (-not $NoSums) { Add-Sum $Ctx ("{0} {1}" -f $t['direction'], $t['currencyCode']) (ConvertTo-DecimalSafe $t['amount']) }
     }
 }
 
@@ -1145,8 +1147,8 @@ function New-PumbSearchBody {
 }
 
 function Send-PumbSearch {
-    param($Ctx, [byte[]]$Body)
-    $r = Invoke-PumbApi $Ctx 'POST' $script:PumbApiHost $script:PumbApiPort "$($script:PumbApiPrefix)/document/searcher" $Body -DryStub '[]'
+    param($Ctx, [byte[]]$Body, [string]$FlowId = '')
+    $r = Invoke-PumbApi $Ctx 'POST' $script:PumbApiHost $script:PumbApiPort "$($script:PumbApiPrefix)/document/searcher" $Body -DryStub '[]' -FlowId $FlowId
     $j = ConvertFrom-BodyBytes $r.Body $r.Headers
     $items = $null
     if ($j -is [array]) { $items = @($j) }
@@ -1241,7 +1243,9 @@ function Select-PumbBoundary {
 # Пари запитів на включність меж: fromDate = t і t - 1 (toDate — t + 1 год, не пізніше кінця періоду); toDate = t і t + 1
 # (fromDate — t - 1 год, не раніше початку періоду). Кожен запит — окремий сценарій. Висновку про включність рекордер не робить.
 function Invoke-PumbBoundaryPairs {
-    param($Ctx, [string]$Prefix, [string]$AccId, $Pages, [datetime]$PeriodFrom, [datetime]$PeriodTo, [int]$PageSize)
+    param($Ctx, [string]$Prefix, [string]$AccId, $Pages, [datetime]$PeriodFrom, [datetime]$PeriodTo, [int]$PageSize, [switch]$Connector)
+    # -Connector (run2): запит у формі конектора (без pagingRequest і фільтрів, X-Flow-ID конектора); пари за рішенням консультанта:
+    # fromDate = t і t + 1; toDate = t і t - 1. Без значень: у зведення йде лише, чи є операція-кандидат у відповіді (так/ні).
     $cand = Select-PumbBoundary $Pages
     if ($null -eq $cand -and $Ctx.Dry) {
         Write-Host '[dry-run] у заглушках немає операцій — для плану запитів підставлено синтетичного кандидата'
@@ -1254,28 +1258,163 @@ function Invoke-PumbBoundaryPairs {
     $t = [datetime]$cand.Time
     $toA = if ($t.AddHours(1) -lt $PeriodTo) { $t.AddHours(1) } else { $PeriodTo }
     $fromB = if ($t.AddHours(-1) -gt $PeriodFrom) { $t.AddHours(-1) } else { $PeriodFrom }
+    $fromShift = if ($Connector) { $t.AddSeconds(1) } else { $t.AddSeconds(-1) }
+    $toShift = if ($Connector) { $t.AddSeconds(-1) } else { $t.AddSeconds(1) }
     $steps = @(
         @{ Tag = 'from_eq'; F = $t; T = $toA }
-        @{ Tag = 'from_shift'; F = $t.AddSeconds(-1); T = $toA }
+        @{ Tag = 'from_shift'; F = $fromShift; T = $toA }
         @{ Tag = 'to_eq'; F = $fromB; T = $t }
-        @{ Tag = 'to_shift'; F = $fromB; T = $t.AddSeconds(1) }
+        @{ Tag = 'to_shift'; F = $fromB; T = $toShift }
     )
     $first = $true
     foreach ($st in $steps) {
         $qf = Format-PumbDate $st.F; $qt = Format-PumbDate $st.T; $isFirst = $first; $first = $false
         Invoke-Scenario $Ctx "${Prefix}_boundary_$($st.Tag)" {
             if ($isFirst) { Add-Note $Ctx "кандидат обрано: придатних операцій $($cand.Candidates); секунд до найближчої іншої операції: $($cand.Gap)" }
-            $paging = if ($PageSize -gt 0) { [ordered]@{ pageSize = $PageSize } } else { $null }
-            $s = Send-PumbSearch $Ctx (New-PumbSearchBody $AccId $qf $qt 'PROCESSED' 'UAH' $paging)
-            if ($null -ne $s.Items) { Add-PumbItemsDigest $Ctx @($s.Items) }
+            if ($Connector) {
+                $s = Send-PumbSearch $Ctx (New-PumbSearchBody $AccId $qf $qt $null $null $null) -FlowId (New-PumbFlowId $Ctx.FlowSession)
+                Add-Count $Ctx 'X-Flow-ID' 'GUID:GUID:EX'
+                if ($null -ne $s.Items) {
+                    Add-PumbItemsDigest $Ctx @($s.Items) -NoSums
+                    $hit = @($s.Items | Where-Object { $_ -is [System.Collections.IDictionary] -and [string]$_['type'] -cne 'STM' -and ($d = ConvertFrom-PumbDate $_['operationDate']) -and $d -eq $t }).Count
+                    Add-Count $Ctx 'операція-кандидат у відповіді' $(if ($hit -gt 0) { 'так' } else { 'ні' })
+                }
+            }
+            else {
+                $paging = if ($PageSize -gt 0) { [ordered]@{ pageSize = $PageSize } } else { $null }
+                $s = Send-PumbSearch $Ctx (New-PumbSearchBody $AccId $qf $qt 'PROCESSED' 'UAH' $paging)
+                if ($null -ne $s.Items) { Add-PumbItemsDigest $Ctx @($s.Items) }
+            }
         }
     }
 }
 
+# =============================================================================================
+# run2 ПУМБ: читання рівно у формі конектора (без pagingRequest, без documentState/documentType, межі запиту A2, X-Flow-ID конектора),
+# ділення періоду навпіл за добами при відповіді не менше порога, ознаки STM, звірка для власника
+# =============================================================================================
+# X-Flow-ID конектора: GUID запиту : GUID сесії читання : EX (GUID — малі літери з дефісами, як Строка(УникальныйИдентификатор)).
+function New-PumbFlowId { param([string]$Session) "$([guid]::NewGuid().ToString()):${Session}:EX" }
+
+# Ділення [A, B] навпіл за добами, як ПоловинаПериода конектора: перша половина — Цел(діб / 2), межа — опівніч, без проміжку й перекриття. Доба — $null.
+function Get-PumbHalves {
+    param([datetime]$A, [datetime]$B)
+    $days = ($B.Date - $A.Date).Days + 1
+    if ($days -lt 2) { return $null }
+    $mid = $A.Date.AddDays([math]::Floor($days / 2))
+    , @(@{ From = $A; To = $mid.AddSeconds(-1) }, @{ From = $mid; To = $B })
+}
+
+# Читання connector_read: межі запиту [lo - 1 с, Мин(hi + 1 с, момент)]; відповідь не менше Threshold — не береться, період навпіл (ранішня половина першою);
+# доба на порозі — зупинка. Прийняті документи — лише у вікні [lo, hi] піддобу, без дублікатів за id. -NoSplit: один запит без ділення (стеля кількості).
+# Повертає: Docs, FirstCount (розмір першої відповіді), Requests, Splits, Complete.
+function Read-PumbConnector {
+    param($Ctx, [string]$AccId, [datetime]$From, [datetime]$To, [datetime]$Moment, [int]$Threshold, [int]$MaxRequests, [switch]$NoSplit)
+    $docs = [System.Collections.Generic.List[object]]::new()
+    $seen = [System.Collections.Generic.HashSet[string]]::new()
+    $res = [pscustomobject]@{ Docs = $docs; FirstCount = -1; Requests = 0; Splits = 0; Complete = $true }
+    $top = if ($To -lt $Moment) { $To } else { $Moment }
+    $stack = [System.Collections.Generic.Stack[object]]::new()
+    $stack.Push(@{ From = $From; To = $top })
+    while ($stack.Count -gt 0) {
+        if ($res.Requests -ge $MaxRequests) { Add-Note $Ctx "досягнуто запобіжника кількості запитів ($MaxRequests) — читання неповне"; $res.Complete = $false; break }
+        $sub = $stack.Pop(); $lo = [datetime]$sub.From; $hi = [datetime]$sub.To
+        $qFrom = $lo.AddSeconds(-1)
+        $qTo = $hi.AddSeconds(1); if ($qTo -gt $Moment) { $qTo = $Moment }
+        $s = Send-PumbSearch $Ctx (New-PumbSearchBody $AccId (Format-PumbDate $qFrom) (Format-PumbDate $qTo) $null $null $null) -FlowId (New-PumbFlowId $Ctx.FlowSession)
+        $res.Requests++
+        Add-Count $Ctx 'X-Flow-ID' 'GUID:GUID:EX'
+        if ($null -eq $s.Items) { Add-Note $Ctx "відповідь не масив (HTTP $($s.R.Status)) — читання зупинено"; $res.Complete = $false; break }
+        $items = @($s.Items)
+        Add-PumbItemsDigest $Ctx $items -NoSums
+        if ($res.FirstCount -lt 0) { $res.FirstCount = $items.Count }
+        if (-not $NoSplit -and $items.Count -ge $Threshold) {
+            $h = Get-PumbHalves $lo $hi
+            if ($null -eq $h) { Add-Note $Ctx "доба на порозі: відповідь $($items.Count) документів при порозі $Threshold; доба не ділиться, читання зупинено і неповне"; $res.Complete = $false; break }
+            $res.Splits++
+            Add-Count $Ctx 'ділення' 'відповідь на порозі'
+            $stack.Push($h[1]); $stack.Push($h[0])
+            continue
+        }
+        foreach ($d in $items) {
+            if ($d -isnot [System.Collections.IDictionary]) { continue }
+            $dt = ConvertFrom-PumbDate $d['operationDate']
+            if ($null -eq $dt) { Add-Count $Ctx 'документ без розбірної дати' 'так'; continue }
+            if ($dt -lt $qFrom -or $dt -gt $qTo) { Add-Count $Ctx 'аномалія меж запиту' 'так' }
+            if ($dt -lt $lo -or $dt -gt $hi) { Add-Count $Ctx 'відкинуто за вікном піддобу' 'так'; continue }
+            $key = [string]($d['id'] ?? $d['docId'])
+            if ($key -and -not $seen.Add($key)) { Add-Count $Ctx 'дублікат за id' 'так'; continue }
+            $docs.Add($d)
+        }
+    }
+    Add-Note $Ctx "підсумок: запитів $($res.Requests); ділень $($res.Splits); прийнято документів $($docs.Count); читання повне: $(if ($res.Complete) { 'так' } else { 'ні' })"
+    $res
+}
+
+# Ознаки гіпотези «STM = щоденний залишок»: STM(d) - STM(d-1) проти чистого руху не-STM документів (вхідні мінус вихідні) того ж і попереднього дня.
+# Лише кількості. Нічого не запитує.
+function Add-PumbStmSigns {
+    param($Ctx, $Docs, [string]$Group = 'ознаки STM')
+    $stm = @{}; $mov = @{}; $multi = 0
+    foreach ($d in @($Docs)) {
+        if ($d -isnot [System.Collections.IDictionary]) { continue }
+        $dt = ConvertFrom-PumbDate $d['operationDate']
+        if ($null -eq $dt) { continue }
+        $day = $dt.Date; $amt = ConvertTo-DecimalSafe $d['amount']
+        if ([string]$d['type'] -ceq 'STM') { if ($stm.ContainsKey($day)) { $multi++ }; $stm[$day] = $amt }
+        else {
+            $sign = switch ([string]$d['direction']) { 'INBOUND' { 1 } 'OUTBOUND' { -1 } default { 0 } }
+            $mov[$day] = [decimal]($mov[$day] ?? 0) + $sign * $amt
+        }
+    }
+    $pairs = 0; $nonzero = 0; $sameDay = 0; $prevDay = 0; $either = 0
+    foreach ($day in $stm.Keys) {
+        $prev = $day.AddDays(-1)
+        if (-not $stm.ContainsKey($prev)) { continue }
+        $pairs++
+        $diff = [decimal]$stm[$day] - [decimal]$stm[$prev]
+        if ($diff -eq 0) { continue }
+        $nonzero++
+        $a = ($mov.ContainsKey($day) -and [decimal]$mov[$day] -eq $diff)
+        $b = ($mov.ContainsKey($prev) -and [decimal]$mov[$prev] -eq $diff)
+        if ($a) { $sameDay++ }
+        if ($b) { $prevDay++ }
+        if ($a -or $b) { $either++ }
+    }
+    Add-Count $Ctx $Group 'днів із записом STM' $stm.Count
+    if ($multi -gt 0) { Add-Count $Ctx $Group 'днів із кількома STM' $multi }
+    Add-Count $Ctx $Group 'днів із рухом не-STM документів' $mov.Count
+    Add-Count $Ctx $Group 'пар сусідніх днів із STM' $pairs
+    Add-Count $Ctx $Group 'пар із ненульовою різницею STM' $nonzero
+    Add-Count $Ctx $Group 'з них різниця = рух того ж дня' $sameDay
+    Add-Count $Ctx $Group 'з них різниця = рух попереднього дня' $prevDay
+    Add-Count $Ctx $Group 'з них різниця = рух одного з двох днів' $either
+}
+
+# Звірка для власника: документи типу $Type у вікні [From, To] — кількість і сума вхідних і вихідних за валютою. Суми йдуть у Sums (лише reconcile.txt),
+# у зведення агента — лише кількості (Counts).
+function Add-PumbReconcile {
+    param($Ctx, $Docs, [string]$Type, [datetime]$From, [datetime]$To)
+    foreach ($d in @($Docs)) {
+        if ($d -isnot [System.Collections.IDictionary] -or [string]$d['type'] -cne $Type) { continue }
+        $dt = ConvertFrom-PumbDate $d['operationDate']
+        if ($null -eq $dt -or $dt -lt $From -or $dt -gt $To) { continue }
+        $Ctx.Cur.Ops++
+        $k = "{0} {1}" -f $d['direction'], $d['currencyCode']
+        Add-Count $Ctx 'кількість за напрямом і валютою' $k
+        Add-Sum $Ctx $k (ConvertTo-DecimalSafe $d['amount'])
+    }
+    if ($Ctx.Cur.Ops -eq 0) { Add-Note $Ctx "документів типу $Type у вікні періоду немає" }
+}
+
 function Invoke-PumbRun {
     param($Cfg, $Ctx)
-    foreach ($p in 'Token', 'TokenExpiry', 'Logins', 'Reauths', 'Cfg') { Add-Member -InputObject $Ctx -NotePropertyName $p -NotePropertyValue $null -Force }
+    foreach ($p in 'Token', 'TokenExpiry', 'Logins', 'Reauths', 'Cfg', 'FlowSession') { Add-Member -InputObject $Ctx -NotePropertyName $p -NotePropertyValue $null -Force }
     $Ctx.Logins = 0; $Ctx.Reauths = 0; $Ctx.Cfg = $Cfg
+    $Ctx.FlowSession = [guid]::NewGuid().ToString()   # GUID сесії читання для X-Flow-ID у формі конектора (випадковий, не секрет)
+    $connThreshold = [int]($Cfg.ConnectorThreshold ?? 67); $connMaxReq = [int]($Cfg.ConnectorMaxRequests ?? 200)
+    $moment = ConvertFrom-UnixKyiv ([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())
+    $script:pumbConn = [ordered]@{}   # n -> @{ Pre; AccId; Res } результат connector_read по рахунку
     $small = [int]($Cfg.SmallPageSize ?? 5); $work = [int]($Cfg.WorkPageSize ?? 100); $maxPages = [int]($Cfg.MaxPages ?? 60)
     $P = $Cfg.PeriodParsed
     $pFrom = Format-PumbDate $P.From; $pTo = Format-PumbDate $P.To.AddDays(1).AddSeconds(-1)
@@ -1416,6 +1555,60 @@ function Invoke-PumbRun {
             }
             Invoke-PumbBoundaryPairs $Ctx $pre $accId $pages $P.From $P.To.AddDays(1).AddSeconds(-1) $work
         }
+
+        # --- run2: читання у формі конектора ---
+        $pEnd = $P.To.AddDays(1).AddSeconds(-1)
+        $conn = $null
+        if (Test-ScenarioOn $Cfg 'ConnectorRead') {
+            Invoke-Scenario $Ctx "${pre}_connector_read" {
+                $script:connRes = Read-PumbConnector $Ctx $accId $P.From $pEnd $moment $connThreshold $connMaxReq
+            }
+            $conn = $script:connRes
+            if ($conn) { $script:pumbConn["a$n"] = @{ Pre = $pre; AccId = $accId; Res = $conn } }
+            $script:connRes = $null
+        }
+        if (Test-ScenarioOn $Cfg 'XFlowProbe') {
+            Invoke-Scenario $Ctx "${pre}_xflow_probe" {
+                $s = Send-PumbSearch $Ctx (New-PumbSearchBody $accId (Format-PumbDate $P.From.AddSeconds(-1)) (Format-PumbDate $(if ($pEnd.AddSeconds(1) -gt $moment) { $moment } else { $pEnd.AddSeconds(1) })) $null $null $null) -FlowId '5:6:EX'
+                Add-Count $Ctx 'X-Flow-ID' '5:6:EX'
+                if ($null -eq $s.Items) { Add-Note $Ctx "відповідь не масив (HTTP $($s.R.Status))"; return }
+                Add-PumbItemsDigest $Ctx @($s.Items) -NoSums
+                Add-Note $Ctx "розмір відповіді: $(@($s.Items).Count)"
+                if ($conn -and $conn.FirstCount -ge 0) { Add-Note $Ctx "розмір першої відповіді connector_read: $($conn.FirstCount); збіг: $(if ($conn.FirstCount -eq @($s.Items).Count) { 'так' } else { 'ні' })" }
+            }
+        }
+        if ($conn -and (Test-ScenarioOn $Cfg 'StmSigns')) {
+            Invoke-Scenario $Ctx "${pre}_connector_stm_signs" { Add-PumbStmSigns $Ctx $conn.Docs }
+        }
+        if ($conn -and (Test-ScenarioOn $Cfg 'ConnectorBoundary')) {
+            $nonStm = @($conn.Docs | Where-Object { [string]$_['type'] -cne 'STM' })
+            Invoke-PumbBoundaryPairs $Ctx "${pre}_connector" $accId @([pscustomobject]@{ Items = $nonStm; Limit = 0 }) $P.From $pEnd 0 -Connector
+        }
+    }
+
+    # --- run2: найактивніший рахунок за кількістю документів connector_read (при рівності — перший) ---
+    if ($script:pumbConn.Count -gt 0) {
+        $bestN = $null
+        foreach ($k in $script:pumbConn.Keys) { if ($null -eq $bestN -or $script:pumbConn[$k].Res.Docs.Count -gt $script:pumbConn[$bestN].Res.Docs.Count) { $bestN = $k } }
+        $best = $script:pumbConn[$bestN]
+        $bp = $best.Pre
+        $pEnd = $P.To.AddDays(1).AddSeconds(-1)
+        if (Test-ScenarioOn $Cfg 'LongestPeriod') {
+            $lDays = [int]($Cfg.LongestPeriodDays ?? 366)
+            Invoke-Scenario $Ctx "${bp}_longest_period" {
+                $lFrom = $P.To.AddDays(1 - $lDays)
+                Add-Note $Ctx "найактивніший рахунок за connector_read: ${bp}; період діб: $lDays; один запит без ділення"
+                $lr = Read-PumbConnector $Ctx $best.AccId $lFrom $pEnd $moment $connThreshold $connMaxReq -NoSplit
+                Add-Count $Ctx 'документів у відповіді (стеля кількості?)' ([string]$lr.FirstCount)
+                if (Test-ScenarioOn $Cfg 'StmSigns') { Add-PumbStmSigns $Ctx $lr.Docs 'ознаки STM (найдовший період)' }
+            }
+        }
+        if (Test-ScenarioOn $Cfg 'Reconcile') {
+            foreach ($ty in 'UAH', 'CUR', 'STM') {
+                $tyL = $ty
+                Invoke-Scenario $Ctx "${bp}_reconcile_$($ty.ToLowerInvariant())" { Add-PumbReconcile $Ctx $best.Res.Docs $tyL $P.From $pEnd }
+            }
+        }
     }
 
     if (Test-ScenarioOn $Cfg 'Errors') {
@@ -1467,10 +1660,13 @@ function Write-OwnerReconcile {
     $L.Add('ЗВІРКА З КАБІНЕТОМ — лише для власника. Містить суми й ідентифікатори. Не пересилати агентам.')
     $L.Add("Банк $($Ctx.BankKey), мітка прогону $($Ctx.Rec.RunLabel)")
     foreach ($s in $Ctx.Stats.Values) {
-        if ($s.Sums.Count -eq 0) { continue }
+        if ($s.Sums.Count -eq 0 -and $s.Name -notlike '*_reconcile_*') { continue }
         $L.Add('')
         $L.Add("--- $($s.Name): операцій $($s.Ops)")
-        foreach ($k in $s.Sums.Keys) { $L.Add(("  {0}: {1:N2}" -f $k, $s.Sums[$k])) }
+        foreach ($k in $s.Sums.Keys) {
+            $cnt = if ($s.Counts.Contains('кількість за напрямом і валютою') -and $s.Counts['кількість за напрямом і валютою'].Contains($k)) { "; кількість $($s.Counts['кількість за напрямом і валютою'][$k])" } else { '' }
+            $L.Add(("  {0}: {1:N2}{2}" -f $k, $s.Sums[$k], $cnt))
+        }
     }
     $L.Add('')
     $L.Add('--- рядки, що йшли в консоль під час прогону')
@@ -1787,7 +1983,7 @@ function Invoke-SelfTestMode {
     # --- ПУМБ, режим «усі рахунки» (Accounts = 'all') на змоканому /account: 3 вигадані рахунки (2 UAH, 1 USD); мок HTTP діє лише всередині блоку ---
     $acIban = @('UA111111111111111111111111111', 'UA222222222222222222222222222', 'UA333333333333333333333333333')
     $acId = @('7100001', '7100002', '7100003')
-    $acScen = @{ SearcherSmall = $true; TypesCurrency = $true; SearcherWork = $false; SearcherNoPaging = $false; StatesAll = $false; TypesNone = $false; PagingProbes = $false; DateFormats = $false; PeriodTransactions = $false; Saturated = $false; Reversal = $false; Errors = $false }
+    $acScen = @{ SearcherSmall = $true; TypesCurrency = $true; SearcherWork = $false; SearcherNoPaging = $false; StatesAll = $false; TypesNone = $false; PagingProbes = $false; DateFormats = $false; PeriodTransactions = $false; Saturated = $false; Reversal = $false; Errors = $false; ConnectorRead = $false; XFlowProbe = $false; ConnectorBoundary = $false; LongestPeriod = $false; StmSigns = $false; Reconcile = $false }
     $acRaw = @{ ClientId = 'AC-FAKE-CLIENT'; ClientSecret = 'AC-FAKE-SECRET-0001'; Login = 'ac-fake-login'; Password = 'AC-FAKE-PASSWORD-0002'; Accounts = 'all'; Period = @{ From = '2020-01-01'; To = '2020-01-03' }; Scenarios = $acScen }
     $acRun = {
         param($Raw, [string]$Tag)
@@ -1848,6 +2044,83 @@ function Invoke-SelfTestMode {
     $codeAcErr = Invoke-AccountLeakCheck $all2b.Dir $all2b.Ctx.AccountSecrets $Dir @($stderrAc)
     & $check 'ПУМБ, КОНТРОЛЬ витоку рахунків: чистий вивід — код 0; IBAN у консолі — код 3; accountId у stderr — код 3; LEAK-DETECTED.txt без значень' (
         ($codeAcOk -eq 0) -and ($codeAcLeak -eq 3) -and ($codeAcErr -eq 3) -and $leakTxtAc.Contains('console.log') -and -not $leakTxtAc.Contains($acIban[1]))
+
+    # --- ПУМБ run2: читання у формі конектора на змоканому searcher (70 документів: 67 не-STM + 3 STM за три доби → відповідь на порозі 67 → ділення) ---
+    $c2Iban = 'UA444444444444444444444444444'; $c2Id = '7200001'
+    $c2Docs = [System.Collections.Generic.List[object]]::new()
+    $c2N = @{ N = 0 }
+    $c2Add = {
+        param([datetime]$Dt, [string]$Type, [string]$Dir, [string]$Amt)
+        $c2N.N++
+        $c2Docs.Add([pscustomobject]@{ Dt = $Dt; Json = ('{{"id":{0},"docId":"C2-DOC-{0}","type":"{1}","direction":"{2}","currencyCode":"UAH","amount":{3},"operationDate":"{4}"}}' -f $c2N.N, $Type, $Dir, $Amt, $Dt.ToString('dd.MM.yyyy HH:mm:ss', [System.Globalization.CultureInfo]::InvariantCulture)) })
+    }
+    $c2Plan = @(@{ D = 0; In = 6; Out = 4; Stm = '1000.00' }, @{ D = 1; In = 20; Out = 17; Stm = '1115.00' }, @{ D = 2; In = 10; Out = 10; Stm = '1165.00' })
+    foreach ($pl in $c2Plan) {
+        $d0 = ([datetime]'2020-01-01').AddDays($pl.D)
+        & $c2Add $d0 'STM' 'INBOUND' $pl.Stm
+        $mi = 0
+        for ($k = 0; $k -lt $pl.In; $k++) { & $c2Add $d0.AddHours(8).AddMinutes($mi) 'UAH' 'INBOUND' '10.00'; $mi++ }
+        for ($k = 0; $k -lt $pl.Out; $k++) { & $c2Add $d0.AddHours(8).AddMinutes($mi) 'UAH' 'OUTBOUND' '5.00'; $mi++ }
+    }
+    $c2Fmt = [System.Globalization.CultureInfo]::InvariantCulture
+    $c2Scen = @{ SearcherSmall = $false; SearcherWork = $false; SearcherNoPaging = $false; StatesAll = $false; TypesNone = $false; TypesCurrency = $false; PagingProbes = $false; DateFormats = $false; PeriodTransactions = $false; Saturated = $false; Reversal = $false; Errors = $false }
+    $c2Raw = @{ ClientId = 'C2-FAKE-CLIENT'; ClientSecret = 'C2-FAKE-SECRET-0001'; Login = 'c2-fake-login'; Password = 'C2-FAKE-PASSWORD-0002'; Accounts = 'all'; Period = @{ From = '2020-01-01'; To = '2020-01-03' }; Scenarios = $c2Scen }
+    $c2Res = Resolve-BankConfig 'Pumb' $c2Raw $false
+    $c2Dir = Join-Path $Dir 'run2-connector'
+    if (Test-Path $c2Dir) { Remove-Item $c2Dir -Recurse -Force }
+    $c2Rec = New-Recording $c2Dir 'pumb' 'c2' ([ordered]@{ 'Pumb.Password' = 'C2-FAKE-PASSWORD-0002' })
+    $c2Ctx = New-Ctx 'pumb' 'service.fuib.com' 0.0 $c2Rec $c2Rec.Secrets $false
+    $c2Sent = [System.Collections.Generic.List[object]]::new()
+    $c2Acc = '[{"accountId":' + $c2Id + ',"iban":"' + $c2Iban + '","currency":"UAH"}]'
+    $c2Text = & {
+        function Invoke-HttpSend {
+            param([string]$Method, [string]$Uri, [hashtable]$Headers, [string]$ContentType, $Body = $null)
+            $o = '[]'
+            if ($Uri -like '*openid-connect/token*') { $o = '{"access_token":"C2-FAKE-ACCESS-TOKEN-ABCDEFGH","expires_in":300,"token_type":"Bearer"}' }
+            elseif ($Uri -like '*/account') { $o = $c2Acc }
+            elseif ($Method -ceq 'POST' -and $Uri -like '*/document/searcher') {
+                $txt = [System.Text.Encoding]::UTF8.GetString([byte[]]$Body)
+                $c2Sent.Add([pscustomobject]@{ Body = $txt; Flow = [string]$Headers['X-Flow-ID'] })
+                $bj = $txt | ConvertFrom-Json -AsHashtable -DateKind String
+                $lo = [datetime]::ParseExact([string]$bj['fromDate'], 'dd.MM.yyyy HH:mm:ss', $c2Fmt); $hi = [datetime]::ParseExact([string]$bj['toDate'], 'dd.MM.yyyy HH:mm:ss', $c2Fmt)
+                $o = '[' + ((@($c2Docs | Where-Object { $_.Dt -ge $lo -and $_.Dt -le $hi } | ForEach-Object { $_.Json })) -join ',') + ']'
+            }
+            [pscustomobject]@{ Status = 200; Headers = @(, @('Content-Type', 'application/json')); Body = [System.Text.Encoding]::UTF8.GetBytes($o); Failure = $null }
+        }
+        Invoke-PumbRun $c2Res.Cfg $c2Ctx
+    } 6>&1 | ForEach-Object { [string]$_ }
+    Write-AgentSummary $c2Ctx (Join-Path $c2Dir 'summary-agent.txt') 'ok'
+    Write-OwnerReconcile $c2Ctx (Join-Path $c2Dir 'reconcile.txt')
+    $c2Sum = [System.IO.File]::ReadAllText((Join-Path $c2Dir 'summary-agent.txt'))
+    $c2Own = [System.IO.File]::ReadAllText((Join-Path $c2Dir 'reconcile.txt'))
+    $c2Bodies = @($c2Sent | ForEach-Object { $_.Body | ConvertFrom-Json -AsHashtable -DateKind String })
+    # порядок запитів: connector_read (3: уся доба, ранішня половина, пізніша), xflow_probe (1), пари меж (4), longest_period (1)
+    $c2Form = $c2Sent.Count -eq 9 -and (@(0..2) | ForEach-Object { $b = $c2Bodies[$_]; (@($b.Keys) -join ',') -ceq 'fromDate,toDate,documentAccounts' -and (@($b['documentAccounts']) -join ',') -ceq $c2Id }) -notcontains $false
+    & $check 'ПУМБ run2, connector_read: тіло рівно як у конектора (fromDate, toDate, documentAccounts; без pagingRequest, documentState, documentType)' $c2Form "(запитів: $($c2Sent.Count))"
+    $c2Bounds = $c2Sent.Count -ge 3 -and $c2Bodies[0]['fromDate'] -ceq '31.12.2019 23:59:59' -and $c2Bodies[0]['toDate'] -ceq '04.01.2020 00:00:00' -and
+    $c2Bodies[1]['fromDate'] -ceq '31.12.2019 23:59:59' -and $c2Bodies[1]['toDate'] -ceq '02.01.2020 00:00:00' -and $c2Bodies[2]['fromDate'] -ceq '01.01.2020 23:59:59' -and $c2Bodies[2]['toDate'] -ceq '04.01.2020 00:00:00'
+    & $check 'ПУМБ run2, межі A2 і ділення: відповідь 70 >= 67 → дві половини за добами (1 доба + 2 доби), запас секунда з обох боків, верх не пізніше кінця періоду + 1 с' $c2Bounds
+    $flowRe = '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}:[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}:EX$'
+    $c2Flows = @($c2Sent | Select-Object -First 3 | ForEach-Object { $_.Flow })
+    & $check 'ПУМБ run2, X-Flow-ID конектора: GUID:GUID:EX, сесія однакова, GUID запиту різні; xflow_probe — 5:6:EX з тим самим тілом, що перший запит' (
+        ($c2Flows | Where-Object { $_ -match $flowRe }).Count -eq 3 -and (@($c2Flows | ForEach-Object { $_.Split(':')[1] } | Select-Object -Unique).Count -eq 1) -and (@($c2Flows | ForEach-Object { $_.Split(':')[0] } | Select-Object -Unique).Count -eq 3) -and
+        $c2Sent[3].Flow -ceq '5:6:EX' -and $c2Sent[3].Body -ceq $c2Sent[0].Body)
+    $c2Str = { param($B, [string]$K) [datetime]::ParseExact([string]$B[$K], 'dd.MM.yyyy HH:mm:ss', $c2Fmt) }
+    $c2T = & $c2Str $c2Bodies[4] 'fromDate'
+    $c2Pairs = $c2Sent.Count -ge 8 -and (& $c2Str $c2Bodies[5] 'fromDate') -eq $c2T.AddSeconds(1) -and (& $c2Str $c2Bodies[6] 'toDate') -eq $c2T -and (& $c2Str $c2Bodies[7] 'toDate') -eq $c2T.AddSeconds(-1) -and
+    ($c2Sent | Select-Object -Skip 4 -First 4 | Where-Object { $_.Flow -match $flowRe -and -not $_.Body.Contains('paging') }).Count -eq 4
+    $c2Hit = @('from_eq', 'from_shift', 'to_eq', 'to_shift') | ForEach-Object { $c2Ctx.Stats["pumb_a1_connector_boundary_$_"].Counts['операція-кандидат у відповіді'].Keys -join '' }
+    & $check 'ПУМБ run2, boundary_pairs: fromDate = t і t + 1, toDate = t і t - 1 у формі конектора; у зведенні лише так/ні (мок включний: так, ні, так, ні)' ($c2Pairs -and ($c2Hit -join ',') -ceq 'так,ні,так,ні')
+    $c2Long = $c2Ctx.Stats['pumb_a1_longest_period']
+    & $check 'ПУМБ run2, longest_period: один запит без ділення на 366 діб; у зведенні лише кількість документів у відповіді' (
+        $c2Sent.Count -ge 9 -and $c2Sent[8].Body.Contains('"fromDate":"02.01.2019 23:59:59"') -and $c2Long.Exchanges -eq 1 -and $c2Long.Counts['документів у відповіді (стеля кількості?)']['70'] -eq 1)
+    $c2Stm = $c2Ctx.Stats['pumb_a1_connector_stm_signs'].Counts['ознаки STM']
+    & $check 'ПУМБ run2, ознаки STM: 2 пари сусідніх днів, 2 ненульові різниці, обидві = рух того ж дня, жодна = рух попереднього' (
+        $c2Stm['пар сусідніх днів із STM'] -eq 2 -and $c2Stm['пар із ненульовою різницею STM'] -eq 2 -and $c2Stm['з них різниця = рух того ж дня'] -eq 2 -and $c2Stm['з них різниця = рух попереднього дня'] -eq 0)
+    $c2Money = { param([decimal]$V) '{0:N2}' -f $V }
+    & $check 'ПУМБ run2, reconcile: суми й кількості вхідних/вихідних за UAH і STM — у reconcile.txt; у summary-agent.txt лише кількості (жодної суми)' (
+        $c2Own.Contains('pumb_a1_reconcile_cur') -and $c2Own.Contains(('INBOUND UAH: {0}; кількість 36' -f (& $c2Money 360))) -and $c2Own.Contains(('OUTBOUND UAH: {0}; кількість 31' -f (& $c2Money 155))) -and $c2Own.Contains(('INBOUND UAH: {0}; кількість 3' -f (& $c2Money 3280))) -and
+        $c2Sum.Contains('кількість за напрямом і валютою: INBOUND UAH=36, OUTBOUND UAH=31') -and -not $c2Sum.Contains((& $c2Money 360)) -and -not $c2Sum.Contains((& $c2Money 3280)) -and -not $c2Sum.Contains('3280') -and -not $c2Sum.Contains($c2Iban) -and -not $c2Sum.Contains($c2Id))
 
     # --- запис ПУМБ у форматі v2, зроблений справжнім записувачем; значення вигадані ---
     $pSecrets = [ordered]@{ 'Pumb.ClientSecret' = 'ВИГАДАНИЙ-СЕКРЕТ-Zk3q9Lm2'; 'Pumb.Password' = 'ВИГАДАНИЙ-ПАРОЛЬ-Qw8r5Tn1' }
