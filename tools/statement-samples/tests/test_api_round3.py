@@ -99,7 +99,7 @@ class MonoForms(unittest.TestCase):
         self.assertEqual(ex['response']['status'], 400)
         self.assertTrue(R.header(ex, 'content-type').startswith('text/plain'))
         self.assertEqual(set(R.body_json(ex)), {'errorDescription'})                      # errorCode немає
-        for sid in ('СинтПериод400', 'СинтЧужойСчет400'):
+        for sid in ('СинтЧужойСчет400',):
             self.assertEqual(body(SCN[('mono-corp', sid)])['errorCode'], 'BAD_REQUEST')
         b = SCN[('mono-corp', 'СинтБалансыСбой')].exchanges[-1]
         self.assertEqual((b['response']['status'], R.body_json(b)['errorCode']), (500, 'INTERNAL_SERVER_ERROR'))

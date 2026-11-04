@@ -66,9 +66,8 @@ class FopBankModel(unittest.TestCase):
         часом на справжніх даних ФОП не виміряне (найбільша відповідь -- 31 операція), тож контроль лише цей."""
         rec = R.Recording.from_dir(READING_FOP)
         statements = [e for e in rec.exchanges if R.statement_window(e)]
-        # читання під межі D36 п. 11: справжня відповідь -- у першому (найновішому) запиті, другий -- змодельований порожній старіший відрізок
-        self.assertEqual(len(statements), 2)
-        self.assertEqual(R.body_json(statements[1]), [])
+        # читання під межі D36 п. 11 (похідний запис): один запит із запасом (S - 1, E + 1), відповідь справжня
+        self.assertEqual(len(statements), 1)
         recorded = R.body_json(statements[0])
         self.assertGreater(len(recorded), 1)
         _, frm, to = R.statement_window(statements[0])

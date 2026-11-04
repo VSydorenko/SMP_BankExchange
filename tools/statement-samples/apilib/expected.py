@@ -655,6 +655,15 @@ def _mono(rec, p, out, disabled):
     corp = rec.bank == 'mono-corp'
     bank = rec.bank
     exs = list(rec.exchanges)
+    if p.reading_moment is not None and p.period_end < p.period_start:
+        # Точка читання (`СМП_ЧитателиВыписок`) відхиляє перевернутий період ДО конектора: запитів немає, клас «дія людини», рядок Предупреждение
+        _fail(out, CLS_HUMAN, {}, 'period-reversed')
+        out.rules.add('rule_period_reversed')
+        return
+    windows = C.request_windows(p, not corp)                      # межі запиту із запасом (71b3771, a90f7ea); період у майбутньому -- запитів немає
+    if not windows:
+        out.items = 0
+        return                                                   # D36 п. 11: НачалоПериода пізніший за момент читання -- читати нічого
     if not corp and not p.old_cached_account_id:
         info = [e for e in exs if e['request']['path'] == C.FOP_CLIENT_INFO]
         if not info:
@@ -678,8 +687,6 @@ def _mono(rec, p, out, disabled):
     if not stmts:
         raise RecordingMismatch('у записі немає запитів виписки')
     # ФОП: відрізки ≤ 31 доби (кожен читається сторінками за D36 п. 11 -- як юросіб); юросіб: один відрізок, межі беруться із запиту
-    lo, hi = C.request_bounds(p)
-    windows = [(lo, hi)] if corp else C.fop_windows(lo, hi)           # межі запиту із запасом (71b3771, a90f7ea)
     seg = 0                                                  # поточний відрізок ФОП
     items, n, complete, i = [], 0, True, 0
     continuing = False                                       # запит продовження в тому самому відрізку ще попереду
@@ -909,9 +916,7 @@ def ops_equal_ignoring_order_within_moment(a, b):
 # ====================================================================== перевірка запитів запису
 def expected_windows(p, bank):
     """Відрізки читання, які зробив би конектор: ФОП — до 31 доби (місцевий час), юросіб — один."""
-    if bank == 'mono-fop':
-        return C.fop_windows(*C.request_bounds(p))
-    return [C.request_bounds(p)]
+    return C.request_windows(p, bank == 'mono-fop')
 
 
 def verify_requests(rec, p):

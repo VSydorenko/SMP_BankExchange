@@ -261,6 +261,12 @@ def bounds(start, end, moment=None):
     return C.request_bounds(Params(account='', period_start=start, period_end=end, reading_moment=moment or C.DEFAULT_READING_MOMENT))
 
 
+def fwins(start, end, moment=None):
+    """Запити ФОП (відрізки) за початком і кінцем періоду (місцевий час) і моментом читання (UTC)."""
+    m = moment or C.DEFAULT_READING_MOMENT
+    return C.fop_windows(to_unix(start), to_unix(end), int((m - kyiv.EPOCH).total_seconds()))
+
+
 def next_to(earliest_unix):
     """`to` наступного запиту після повної сторінки: УниверсальноеВремя(МестноеВремя(найраніший time)) (MF:456, 462)."""
     return kyiv.local_to_unix(kyiv.unix_to_local(earliest_unix))
@@ -361,7 +367,7 @@ def fop_paged(b, p, ops, limit, stop_after=None, from_inclusive=True, to_inclusi
     сторінки за D36 п. 11, як у юросіб (`corp_paged`); відрізки -- від найновішого, сусідні перекриваються на секунду (`C.fop_windows`): `to` продовження = Мин(найраніша `time` + 1, поточна `to`), застрягання -- крок
     Мин(E, U - 1). У запиті ФОП ліміту немає: `limit` -- поріг повної сторінки (шов розміру сторінки, `Params.page_limit`)."""
     bank = bankmodel.FopBank(ops, to_inclusive=to_inclusive, from_inclusive=from_inclusive)
-    for frm, upper in C.fop_windows(*W(p)):
+    for frm, upper in fwins(p.period_start, p.period_end, p.reading_moment):
         while True:
             page = bank.statement(frm, upper, limit)
             b.statement(frm, upper, resp_json(200, page))
@@ -657,7 +663,7 @@ def _fop_scenarios():
     start, end = _day(2026, 9, 5, 6, 30), _day(2026, 10, 15, 14, 20, 7)
     s, b = new('СинтОкна', 'monobank ФОП: період 40 діб -- два відрізки з перекриттям на секунду, межа посеред доби, старіший порожній', [3], start=start, end=end)
     info(b)
-    wins = C.fop_windows(*bounds(start, end))
+    wins = fwins(start, end)
     b.statement(wins[0][0], wins[0][1], resp_json(200, desc_ordered([
         ftx(g, t=utc(2026, 10, 10, 9), amount=-5000, desc='Покупка', cnt=cnt()),
         ftx(g, t=utc(2026, 10, 12, 9), amount=9000, desc='Надходження', cnt=cnt())])))
@@ -778,7 +784,7 @@ def _fop_scenarios():
     # конверті рівно раз. Без перекриття вона б загубилась.
     s, b = new('СинтГраницаОтрезков', 'monobank ФОП: операція на секунді межі відрізків -- від виключного from її повертає лише старіший відрізок (перекриття на секунду)', [3], start=start, end=end)
     info(b)
-    boundary_t = C.fop_windows(*bounds(start, end))[0][0]
+    boundary_t = fwins(start, end)[0][0]
     on_edge = [ftx(g, t=utc(2026, 10, 12, 9), amount=-1000, desc='новіша', tid=fid('G', 1)),
                ftx(g, t=boundary_t, amount=-2000, desc='на межі відрізків', tid=fid('G', 2)),
                ftx(g, t=utc(2026, 9, 10, 9), amount=3000, desc='старіша', tid=fid('G', 3))]
@@ -798,6 +804,32 @@ def _fop_scenarios():
             ftx(g, t=s0, amount=-1400, desc='рівно на НачалоПериода', tid=fid('D', 4)),
             ftx(g, t=s0 - 1, amount=-1500, desc='між НачалоПериода - 1 с і НачалоПериода', tid=fid('D', 5))]
     fop_paged(b, s.params, edge, C.PAGE_SIZE_MONO, from_inclusive=True, to_inclusive=True)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Період в одну секунду (НачалоПериода = КонецПериода): межі включні, тож це законний період, а не «навпаки» (0d071e2); запит (S - 1, S + 1),
+    # операція рівно на цій секунді лишається
+    one_sec = _day(2026, 10, 14, 12, 0, 0)
+    s, b = new('СинтПериодВОднуСекунду', 'monobank ФОП: НачалоПериода = КонецПериода -- законний період в одну секунду, запит є, операція на цій секунді лишається', [3],
+               start=one_sec, end=one_sec)
+    info(b)
+    fop_paged(b, s.params, [ftx(g, t=to_unix(one_sec), amount=-1600, desc='рівно на єдиній секунді періоду', tid=fid('H', 1))], C.PAGE_SIZE_MONO)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Період цілком у майбутньому (НачалоПериода пізніший за момент читання, D36 п. 11): запитів немає, конверт порожній, читання повне,
+    # межа довіри = НачалоПериода
+    s, b = new('СинтПериодЦеликомБудущий', 'monobank ФОП: НачалоПериода пізніший за момент читання -- запитів немає, порожнє повне читання, межа довіри = НачалоПериода', [3],
+               start=_day(2026, 11, 14), end=_day(2026, 12, 14))
+    s.exchanges = []
+    sc.append(s)
+
+    # Момент читання всередині періоду: запит (S - 1, момент); банк на майбутнє вікно відповідає 200 і порожнім масивом (спостережено у run1 для
+    # іншого майбутнього вікна, журнал e96aa7b); межа довіри не пізніша за момент читання
+    s, b = new('СинтМоментВнутриПериода', 'monobank ФОП: момент читання всередині періоду -- запит до моменту, порожня відповідь, межа довіри = момент читання', [3],
+               start=_day(2026, 11, 14), end=_day(2026, 12, 14), reading_moment=datetime(2026, 11, 20, 0, 0, 0))
+    info(b)
+    b.statement(*W(s.params), resp_json(200, []))
     s.exchanges = b.ex
     sc.append(s)
 
@@ -888,7 +920,7 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
             start_, end_ = _day(2026, 9, 5), _day(2026, 10, 15)
             s, b = new(sid, title, [4], start=start_, end=end_)
             info(b)
-            wins = C.fop_windows(*bounds(start_, end_))
+            wins = fwins(start_, end_)
             octo = utc(2026, 10, 10, 8)
             b.statement(wins[0][0], wins[0][1], resp_json(200, desc_ordered(
                 [ftx(g, t=octo + 100 * (i + 1), amount=-(500 + i), desc='запис %d' % i, cnt=cnt()) for i in range(2)])))
@@ -916,13 +948,11 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
         b.client_info(resp_json(403, {'errorDescription': "Unknown 'X-Token'"}, charset='utf-8'))
         s.exchanges = b.ex
         sc.append(s)
-        # параметри читання з початком пізніше за кінець (як у справжньому записі): конектор шле їх як є, один відрізок
-        s, b = new('СинтПериод400', 'monobank ФОП: початок пізніше за кінець -- HTTP 400, лише errorDescription (спостережено)', [4],
+        # Період навпаки (КонецПериода < НачалоПериода) відхиляє точка читання до конектора (D36 п. 11, 0d071e2): запитів немає, клас «дія людини».
+        # Відповідь банку на перевернутий запит (400, спостережено у run1) -- факт журналу, у Т1 не потрібна.
+        s, b = new('СинтПериодНаоборот', 'monobank ФОП: період задано навпаки (кінець раніший за початок) -- запитів немає, «дія людини» (точка читання)', [4],
                    start=_day(2026, 10, 15, 23, 59, 59), end=_day(2026, 10, 14))
-        info(b)
-        b.statement(*W(s.params),
-                    resp_json(400, {'errorDescription': "Value 'to' must be greater than 'from'"}))
-        s.exchanges = b.ex
+        s.exchanges = []
         sc.append(s)
         # конектор бере ідентифікатор із client-info за IBAN, тож «чужий» ідентифікатор у запиті не з'явиться; виписку на рахунок із
         # client-info банк відхиляє тим самим тілом (спостережено у run1 для чужого / неіснуючого ідентифікатора)
@@ -940,13 +970,6 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
         s, b = new('СинтТокен403', 'monobank юросіб: недійсний токен -- HTTP 403, errorCode forbidden [документальний, не спостерігалось]', [4])
         b.statement(*W(s.params),
                     resp_json(403, {'errorCode': 'forbidden', 'errorDescription': 'Invalid or expired token'}))
-        s.exchanges = b.ex
-        sc.append(s)
-        # параметри читання з початком пізніше за кінець (як у справжньому записі): конектор шле їх як є, запит у записі збігається
-        s, b = new('СинтПериод400', 'monobank юросіб: початок пізніше за кінець -- HTTP 400, BAD_REQUEST (спостережено)', [4],
-                   start=_day(2026, 10, 15, 23, 59, 59), end=_day(2026, 10, 14))
-        b.statement(*W(s.params),
-                    resp_json(400, {'errorCode': 'BAD_REQUEST', 'errorDescription': 'From date should be less than to date'}))
         s.exchanges = b.ex
         sc.append(s)
 
@@ -1118,6 +1141,18 @@ def _corp_scenarios():
     s.exchanges = b.ex
     sc.append(s)
 
+    # Період цілком у майбутньому і момент читання всередині періоду: див. ФОП (D36 п. 11, 0d071e2)
+    s, b = new('СинтПериодЦеликомБудущий', 'monobank юросіб: НачалоПериода пізніший за момент читання -- запитів немає, порожнє повне читання, межа довіри = НачалоПериода', [3],
+               start=_day(2026, 11, 14), end=_day(2026, 12, 14))
+    s.exchanges = []
+    sc.append(s)
+
+    s, b = new('СинтМоментВнутриПериода', 'monobank юросіб: момент читання всередині періоду -- запит до моменту, порожня відповідь, межа довіри = момент читання', [3],
+               start=_day(2026, 11, 14), end=_day(2026, 12, 14), reading_moment=datetime(2026, 11, 20, 0, 0, 0))
+    b.statement(*W(s.params), resp_json(200, []))
+    s.exchanges = b.ex
+    sc.append(s)
+
     # Повна сторінка без читаного `time` (поза виміряним; відповідь записана вручну як аномалія, модель банку не застосовується): курсора
     # немає, хоча «є ще» -- читання неповне, «повторити» (D36 п. 11); кожен рядок без часу -- Ошибка bad-date, операцій немає.
     s, b = new('СинтПолнаяБезВремени', 'monobank юросіб: повна сторінка без читаного time -- курсора немає, «повторити» (поза виміряним)', [3])
@@ -1201,7 +1236,7 @@ def _corp_scenarios():
 
     with_balances = {'СинтСтатусы', 'СинтПовтор', 'СинтПоля', 'СинтСтраницы', 'СинтКратнаяСтраница', 'СинтВремяВесна',
                      'СинтВремяОсень', 'СинтВалюта', 'СинтПусто', 'СинтЛимит429', 'СинтСекундаРаспалась', 'СинтГраницыПериода',
-                     'СинтЛимит429Дата'}
+                     'СинтЛимит429Дата', 'СинтМоментВнутриПериода'}
     for s in sc:
         if s.sid in with_balances:
             b = Builder('mono-corp', s.sid, s.params)
