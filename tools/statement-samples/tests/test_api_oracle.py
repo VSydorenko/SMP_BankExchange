@@ -197,7 +197,7 @@ class Expected(unittest.TestCase):
             b = S.Builder('mono-corp', 't', p)
             page = [corp('p%03d' % i, S.utc(2026, 10, 15, 6) + 3 * i, -(i + 1)) for i in range(C.CORP_WORKING_LIMIT)]
             b.statement(S.to_unix(p.period_start), S.to_unix(p.period_end), S.resp_json(200, sorted(page, key=lambda x: -x['time'])))
-            b.statement(S.to_unix(p.period_start), S.next_to(min(x['time'] for x in page)), resp, failure)
+            b.statement(S.to_unix(p.period_start), min(x['time'] for x in page) + 1, resp, failure)      # D36 п. 11: to = time + 1
             return E.run(R.Recording(R.make_manifest('mono-corp', 't', b.ex), b.ex), p)
         cases = [(S.resp_json(500, {'errorDescription': 'x'}), None, 'Повторить'), (S.resp_html(200), None, 'Повторить'),
                  (S.resp_json(503, {}), None, 'Повторить'), (S.resp_json(403, {'errorDescription': 'no'}), None, 'ДействиеЧеловека'),

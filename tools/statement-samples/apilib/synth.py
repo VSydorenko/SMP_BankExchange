@@ -19,7 +19,7 @@ import random
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
-from . import common as C, kyiv, recording as R
+from . import bankmodel, common as C, kyiv, recording as R
 from .common import Params
 
 import sslib.gen as sgen
@@ -314,6 +314,28 @@ def ctx_(g, *, t, amount, desc, status='DONE', done=None, reverse=False, cnt=Non
 
 def utc(y, mo, d, h=0, mi=0, s=0):
     return int((datetime(y, mo, d, h, mi, s) - kyiv.EPOCH).total_seconds())
+
+
+def corp_paged(b, p, ops, limit, first_headers=()):
+    """Обміни виписки юросіб, які дав би банк (модель `bankmodel.CorpBank`, лише виміряне) на запити конектора за D36 п. 11
+    (`44d22a1`): `to` наступного запиту = найраніша `time` сторінки + 1 (межова секунда охоплюється вдруге, повтори відкидає
+    конектор за `id`); повна сторінка, що лежить в одній секунді (продовження збіглося б із поточним), -- застряглий курсор:
+    читання йде далі з `to` = ця секунда (виключна). Кінець -- сторінка, коротша за `limit`, або `to` не вище за початок."""
+    bank = bankmodel.CorpBank(ops)
+    frm, upper, first = to_unix(p.period_start), to_unix(p.period_end), True
+    while True:
+        page = bank.statement(frm, upper, limit)
+        b.statement(frm, upper, resp_json(200, page, first_headers if first else ()))
+        first = False
+        if len(page) < limit:
+            return
+        earliest = min(o['time'] for o in page)
+        if earliest + 1 >= upper:
+            upper = earliest
+            if upper <= frm:
+                return
+        else:
+            upper = earliest + 1
 
 
 def desc_ordered(items):
@@ -703,7 +725,7 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
             if full:
                 page = full_page('E')
                 b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp_json(200, page))
-                b.statement(to_unix(s.params.period_start), next_to(min(x['time'] for x in page)), resp, failure)
+                b.statement(to_unix(s.params.period_start), min(x['time'] for x in page) + 1, resp, failure)    # D36 п. 11 (44d22a1): to = time + 1
             else:
                 b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end), resp, failure)
         s.exchanges = b.ex
@@ -743,8 +765,10 @@ def _mono_failures(sc, new, info, one, g, cnt, bank, t0):
                     resp_json(403, {'errorCode': 'forbidden', 'errorDescription': 'Invalid or expired token'}))
         s.exchanges = b.ex
         sc.append(s)
-        s, b = new('СинтПериод400', 'monobank юросіб: початок пізніше за кінець -- HTTP 400, BAD_REQUEST (спостережено)', [4])
-        b.statement(to_unix(s.params.period_end), to_unix(s.params.period_start),
+        # параметри читання з початком пізніше за кінець (як у справжньому записі): конектор шле їх як є, запит у записі збігається
+        s, b = new('СинтПериод400', 'monobank юросіб: початок пізніше за кінець -- HTTP 400, BAD_REQUEST (спостережено)', [4],
+                   start=_day(2026, 10, 15, 23, 59, 59), end=_day(2026, 10, 14))
+        b.statement(to_unix(s.params.period_start), to_unix(s.params.period_end),
                     resp_json(400, {'errorCode': 'BAD_REQUEST', 'errorDescription': 'From date should be less than to date'}))
         s.exchanges = b.ex
         sc.append(s)
@@ -816,34 +840,53 @@ def _corp_scenarios():
     sc.append(s)
 
     lim = C.CORP_WORKING_LIMIT
-    s, b = new('СинтСтраницы', 'monobank юросіб: повна сторінка (ліміт) із трьома записами в одну секунду на межі, дубль на другій; ліміт вичерпано', [3])
+    # Пагінацію будує модель банку (`bankmodel.CorpBank`, лише виміряне: порядок за спаданням `time`, `to` не повертає операцію з
+    # `time = to`, обрізання за `limit`) на запити конектора за D36 п. 11: `to` наступного запиту = найраніша `time` + 1.
+    s, b = new('СинтСтраницы', 'monobank юросіб: повна сторінка (ліміт) із трьома записами в одну секунду на межі; друга сторінка повертає їх вдруге (дубль) і дві старіші; ліміт вичерпано', [3])
     base_t = utc(2026, 10, 14, 6)
-    page1 = [ctx_(g, t=base_t + 10 * i, amount=-(100 + i), desc='п%d' % i, tid=seqid('P', i)) for i in range(1, lim - 2)]
+    newer = [ctx_(g, t=base_t + 10 * i, amount=-(100 + i), desc='п%d' % i, tid=seqid('P', i)) for i in range(1, lim - 2)]
     boundary = [ctx_(g, t=base_t, amount=-(900 + k), desc='межа%d' % k, tid=seqid('B', k)) for k in range(3)]
-    page1 += boundary
-    assert len(page1) == lim
-    one(b, page1, s.params.period_start, s.params.period_end, [('x-rate-limit-remaining', '0'), ('x-rate-limit-retry-after-seconds', '2')])
-    before = [ctx_(g, t=base_t - 5, amount=-777, desc='до межі', tid='A-aaaab'), ctx_(g, t=base_t - 60, amount=555, desc='раніше', tid='A-aaaac')]
-    b.statement(to_unix(s.params.period_start), next_to(base_t), resp_json(200, desc_ordered(boundary + before)))
+    older = [ctx_(g, t=base_t - 5, amount=-777, desc='до межі', tid='A-aaaab'), ctx_(g, t=base_t - 60, amount=555, desc='раніше', tid='A-aaaac')]
+    corp_paged(b, s.params, newer + boundary + older, lim, [('x-rate-limit-remaining', '0'), ('x-rate-limit-retry-after-seconds', '2')])
     s.exchanges = b.ex
     sc.append(s)
 
-    # кількість операцій кратна ліміту (D36 п. 11): остання сторінка порожня
-    s, b = new('СинтКратнаяСтраница', 'monobank юросіб: кількість операцій рівно дорівнює ліміту -- друга сторінка порожня', [3])
+    # секунда розпалась між сторінками (D36 п. 11, 44d22a1): з п'яти операцій однієї секунди на першу сторінку влізли дві, решта -- на
+    # другій разом із повтором перших двох. Кожна операція секунди в конверті рівно один раз.
+    s, b = new('СинтСекундаРаспалась', "monobank юросіб: секунда розпалась між сторінками (дві операції на першій, п'ять на другій з повтором) -- кожна рівно раз", [3])
+    split_t = utc(2026, 10, 14, 6)
+    newer = [ctx_(g, t=split_t + 10 * i, amount=-(200 + i), desc='н%d' % i, tid=seqid('N', i)) for i in range(1, lim - 1)]
+    second = [ctx_(g, t=split_t, amount=-(300 + k), desc='секунда%d' % k, tid=seqid('S', k)) for k in range(5)]
+    older = [ctx_(g, t=split_t - 10 * i, amount=-(400 + i), desc='ст%d' % i, tid=seqid('O', i)) for i in range(1, 5)]
+    corp_paged(b, s.params, newer + second + older, lim)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # кількість операцій рівно дорівнює ліміту (D36 п. 11): друга сторінка -- лише повтор межової операції (коротша за ліміт)
+    s, b = new('СинтКратнаяСтраница', 'monobank юросіб: кількість операцій рівно дорівнює ліміту -- друга сторінка лише повторює межову операцію', [3])
     base_t = utc(2026, 10, 14, 6)
-    full = [ctx_(g, t=base_t + 10 * i, amount=-(100 + i), desc='к%d' % i, tid=seqid('K', i)) for i in range(lim)]
-    one(b, full, s.params.period_start, s.params.period_end)
-    b.statement(to_unix(s.params.period_start), next_to(base_t), resp_json(200, []))
+    corp_paged(b, s.params, [ctx_(g, t=base_t + 10 * i, amount=-(100 + i), desc='к%d' % i, tid=seqid('K', i)) for i in range(lim)], lim)
     s.exchanges = b.ex
     sc.append(s)
 
-    # повна сторінка, усі операції на секунді початку відрізка: верхню межу посунути нікуди (найраніша time = початок), ознаки
-    # кінця немає -> неповне читання, «повторити» (D36 п. 11), а не нескінченний повтор того самого запиту. Тут конектор
-    # зупиняється сам: у записі лише один обмін, другого запиту транспорт відтворення не дасть. Запис для мутації «межа без зсуву».
-    s, b = new('СинтПолнаяНаНачале', 'monobank юросіб: повна сторінка, усі операції на секунді початку відрізка -- межу посунути нікуди, неповне читання (D36 п. 11)', [3])
-    at_start = to_unix(s.params.period_start)
-    one(b, [ctx_(g, t=at_start, amount=-(100 + i), desc='на початку %d' % i, tid=seqid('S', i)) for i in range(lim)],
-        s.params.period_start, s.params.period_end)
+    # Повна сторінка в одній секунді на початку відрізка (D36 п. 11, 44d22a1): продовження збіглося б із поточним -- «дія людини»,
+    # неповне читання; читання йде далі з межею в цю секунду (тут старших операцій немає). Припущення, не виміряне: операція
+    # на секунді `from` повертається (нижня межа `from` у моделі не змодельована).
+    s, b = new('СинтПолнаяНаНачале', 'monobank юросіб: повна сторінка, усі операції на секунді початку відрізка -- застряглий курсор, «дія людини» (D36 п. 11)', [3])
+    corp_paged(b, s.params, [ctx_(g, t=to_unix(s.params.period_start), amount=-(100 + i), desc='на початку %d' % i, tid=seqid('S', i))
+                              for i in range(lim)], lim)
+    s.exchanges = b.ex
+    sc.append(s)
+
+    # Застрягання посеред читання: дві звичайні сторінки, третя доходить до секунди, у якій більше операцій, ніж влізає на сторінку;
+    # запит продовження збігся б із поточним. Операції, старші за цю секунду, -- у конверті.
+    s, b = new('СинтЗастряла', 'monobank юросіб: застрягання посеред читання -- секунда з понад limit операцій; старіші операції в конверті (D36 п. 11)', [3])
+    stuck_t = utc(2026, 10, 14, 6)
+    newest = [ctx_(g, t=stuck_t + 2020 + 20 * (lim - i), amount=-(500 + i), desc='а%d' % i, tid=seqid('A', i)) for i in range(1, lim + 1)]
+    middle = [ctx_(g, t=stuck_t + 100 + 10 * (lim - i), amount=-(600 + i), desc='б%d' % i, tid=seqid('M', i)) for i in range(1, lim)]
+    crowd = [ctx_(g, t=stuck_t, amount=-(700 + i), desc='ті самі %d' % i, tid=seqid('Z', i)) for i in range(1, lim + 2)]
+    below = [ctx_(g, t=stuck_t - 30 * i, amount=-(800 + i), desc='вк%d' % i, tid=seqid('V', i)) for i in range(1, 6)]
+    corp_paged(b, s.params, newest + middle + crowd + below, lim)
     s.exchanges = b.ex
     sc.append(s)
 
@@ -899,7 +942,7 @@ def _corp_scenarios():
     sc.append(s)
 
     with_balances = {'СинтСтатусы', 'СинтПовтор', 'СинтПоля', 'СинтСтраницы', 'СинтКратнаяСтраница', 'СинтВремяВесна',
-                     'СинтВремяОсень', 'СинтВалюта', 'СинтПусто', 'СинтЛимит429'}
+                     'СинтВремяОсень', 'СинтВалюта', 'СинтПусто', 'СинтЛимит429', 'СинтСекундаРаспалась'}
     for s in sc:
         if s.sid in with_balances:
             b = Builder('mono-corp', s.sid, s.params)

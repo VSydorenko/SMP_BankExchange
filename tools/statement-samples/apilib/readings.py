@@ -150,4 +150,26 @@ def replay_exclusion(bank, rec, params):
             if pairs != want:
                 return 'вікно balances запису (%s) не збігається з періодом читання (%s): обмін узято з іншого сценарію' % (
                     '%s..%s' % (pairs.get('dateFrom'), pairs.get('dateTo')), '%s..%s' % (want['dateFrom'], want['dateTo']))
+    stmts = [e for e in rec.exchanges if R.statement_window(e)]
+    for prev, nxt in zip(stmts, stmts[1:]):
+        # D36 п. 11 (44d22a1): конектор продовжує з `to` = час найранішої операції + 1; рекордер продовжував з `to` = цей час
+        try:
+            page = R.body_json(prev)
+        except R.NotJson:
+            continue
+        times = [x.get('time') for x in page if isinstance(x, dict) and isinstance(x.get('time'), int)] if isinstance(page, list) else []
+        if times and R.statement_window(nxt)[2] == min(times):
+            return 'рекордер продовжував з `to` = межова секунда; конектор за D36 п. 11 (44d22a1) запитує `to` + 1'
+    if stmts:
+        last = stmts[-1]
+        if last['response'] and last['response']['status'] == 200:
+            try:
+                page = R.body_json(last)
+            except R.NotJson:
+                page = None
+            limit = next((int(v) for k, v in R.query_pairs(last) if k == 'limit' and v.isdigit()), 10)
+            _, frm, to = R.statement_window(last)
+            times = [x.get('time') for x in page if isinstance(x, dict) and isinstance(x.get('time'), int)] if isinstance(page, list) else []
+            if isinstance(page, list) and len(page) >= limit and times and frm < min(times) < to:
+                return 'запис кінчається повною сторінкою (limit %d), яку можна продовжити: наступного обміну немає, ознаки кінця немає' % limit
     return ''

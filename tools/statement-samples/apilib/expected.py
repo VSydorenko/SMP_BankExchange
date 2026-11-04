@@ -396,6 +396,17 @@ def rule_page_without_id(out, ex):
     out.rules.add('rule_page_without_id')
 
 
+def rule_cursor_stuck(out, second_unix, count):
+    """Застряглий курсор (D36 п. 11, п. 8; `44d22a1`): повна сторінка лежить в одній секунді, запит продовження збігся б із поточним.
+    Повтор дав би те саме -> клас «дія людини» (не «повторити»); читання неповне; діагностика називає секунду (київський час) і
+    кількість отриманих операцій; читання триває далі з межею в цю секунду, тож неповною лишається лише вона."""
+    out.failure_class = out.failure_class or CLS_HUMAN
+    out.complete = False
+    out.diag('Предупреждение', 0, 'cursor-stuck', None, Банк=BANK_NAMES[out.bank], Вид='cursor-stuck',
+             Секунда=kyiv.unix_to_local(second_unix).strftime('%d.%m.%Y %H:%M:%S'), Количество=count)
+    out.rules.add('rule_cursor_stuck')
+
+
 def rule_dedupe_by_id(out, items, ident_of, is_final, is_reversal):
     """Дублі в одному читанні — за ідентифікатором операції. Фільтр стану СПЕРШУ, як у попередника (MU:309-323,
     MF:312-324): неостаточний запис у `seen` не потрапляє, тож `DONE` з тим самим id на наступній сторінці не губиться.
@@ -681,23 +692,49 @@ def _mono(rec, p, out, disabled):
             _fail_not_json(out, bank, 'not-json' if page is None else 'not-array')
             break
         earliest = None
+        earliest_unix = None
         start_local, upper_local = kyiv.unix_to_local(frm), kyiv.unix_to_local(to)
         for tx in page:
             n += 1
             items.append(Item(n, tx, ex['seq']))
             t = kyiv.unix_to_local(int(tx.get('time')))
             earliest = t if earliest is None or t < earliest else earliest
+            earliest_unix = int(tx.get('time')) if earliest_unix is None or int(tx.get('time')) < earliest_unix else earliest_unix
         limit = requested_limit(ex) if corp else C.PAGE_SIZE_MONO
         if len(page) < limit:                       # D36 п. 11: коротша за запитаний ліміт -- остання (ФОП: гіпотеза документації)
             if corp:
                 break
             continue
+        if corp:
+            # D36 п. 11 (44d22a1): продовження за часом знову охоплює секунду найранішої операції (`to` = time + 1; банк `to` не
+            # включає); повтори відкидає дедуплікація за id. Запит продовження, що збігся б із поточним (вся повна сторінка в одній
+            # секунді), -- застряглий курсор: «дія людини», читання йде далі з `to` = ця секунда (виключна).
+            nxt = earliest_unix + 1 if earliest_unix is not None else None
+            if nxt is None:
+                _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-without-time', 'Статус': 200, 'ОписаниеБанка': ''},
+                      'page-without-time')
+                out.rules.add('rule_end_of_read')
+                break
+            if nxt >= to:
+                rule_cursor_stuck(out, earliest_unix, len(page))
+                nxt = earliest_unix
+                if nxt <= frm:
+                    break
+            if i < len(stmts) and R.statement_window(stmts[i])[2] != nxt:
+                raise RecordingMismatch('запит продовження запису (to = %d) не збігається з правилом D36 п. 11 (to = %d)'
+                                        % (R.statement_window(stmts[i])[2], nxt))
+            continue                                 # запис кінчається до ознаки кінця -- скаже while-else нижче
         if earliest is None or earliest <= start_local or earliest >= upper_local:
             # повна сторінка, а продовжити нічим (верхню межу не посунути): ознаки кінця немає -> неповне, «повторити» (п. 11)
             _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'page-cannot-continue', 'Статус': 200, 'ОписаниеБанка': ''},
                   'page-cannot-continue')
             out.rules.add('rule_end_of_read')
             break
+    else:
+        if corp:
+            # запис кінчається повною сторінкою, яку можна було продовжити: наступного обміну в записі немає, а ознаки кінця не було --
+            # читання оракулом не закінчується, мовчки вважати його повним не можна
+            raise RecordingMismatch('запис юросіб кінчається повною сторінкою без ознаки кінця й без наступного обміну')
     out.complete = out.complete and complete
     out.items = n
     _mono_items(out, items, p, disabled, corp)

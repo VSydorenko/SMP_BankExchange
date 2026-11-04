@@ -102,6 +102,13 @@ class ReplayExclusion(unittest.TestCase):
         params = dict(etalon.build(s)[0]['parameters'], КонецПериода='2030-01-01T23:59:59')
         self.assertIn('balances', readings.replay_exclusion('mono-corp', rec, params))
 
+    def test_record_truncated_on_a_full_page_excludes_but_a_stuck_page_does_not(self):
+        s, rec = self.corp()
+        rec.exchanges = [e for e in rec.exchanges if R.statement_window(e)][:1]      # обірвано на повній сторінці, яку можна продовжити
+        self.assertIn('повною сторінкою', readings.replay_exclusion('mono-corp', rec, etalon.build(s)[0]['parameters']))
+        stuck = next(x for x in synth.all_scenarios() if x.bank == 'mono-corp' and x.sid == 'СинтПолнаяНаНачале')
+        self.assertEqual(readings.replay_exclusion('mono-corp', stuck.recording(), etalon.build(stuck)[0]['parameters']), '')
+
     def test_other_banks_are_not_filtered(self):
         s, rec = self.corp()
         self.assertEqual(readings.replay_exclusion('privat', rec, etalon.build(s)[0]['parameters']), '')

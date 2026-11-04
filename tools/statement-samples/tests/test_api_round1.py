@@ -103,7 +103,7 @@ def corp_two_pages(extra_first, second, balances=True, size=None):
     page1 = [corp('f%03d' % i, base + 10 + 10 * i, -1) for i in range((size or C.CORP_WORKING_LIMIT) - 1)] + [dict(extra_first, time=base)]
     b = S.Builder('mono-corp', 't', p)
     b.statement(S.to_unix(p.period_start), S.to_unix(p.period_end), S.resp_json(200, sorted(page1, key=lambda x: -x['time'])))
-    b.statement(S.to_unix(p.period_start), S.next_to(base), S.resp_json(200, second))
+    b.statement(S.to_unix(p.period_start), base + 1, S.resp_json(200, second))       # D36 п. 11 (44d22a1): to = time + 1
     if balances:
         b.balances(S.resp_json(200, S.corp_balances_body(p)))
     return R.Recording(R.make_manifest('mono-corp', 't', b.ex), b.ex), p
@@ -378,21 +378,24 @@ class EndOfRead(unittest.TestCase):
         self.assertNotIn('СинтПусто', red)
         self.assertTrue(want <= red)
 
-    def test_corp_short_page_ends_and_exact_multiple_has_empty_last_page(self):
+    def test_corp_short_page_ends_and_exact_multiple_ends_on_the_page_that_repeats_only_the_boundary(self):
         s, e = run('mono-corp', 'СинтКратнаяСтраница')
         stmts = C.statement_exchanges(s.recording())
-        self.assertEqual((len(e.ops), e.complete, len(stmts), len(R.body_json(stmts[-1]))), (C.CORP_WORKING_LIMIT, True, 2, 0))
+        self.assertEqual((len(e.ops), e.complete, len(stmts), len(R.body_json(stmts[-1])), e.duplicates),
+                         (C.CORP_WORKING_LIMIT, True, 2, 1, 1))              # друга сторінка -- лише повтор межової операції
 
-    def test_corp_full_page_with_no_way_to_continue_is_incomplete_retry(self):
+    def test_corp_full_page_in_one_second_is_a_stuck_cursor_for_a_human_not_a_retry(self):
         p = Params(account=IBAN, period_start=DAY, period_end=datetime(2026, 10, 15, 23, 59, 59), old_account_currency='980')
         t0 = S.to_unix(p.period_start)
-        page = [corp('x%03d' % i, t0, -1) for i in range(C.CORP_WORKING_LIMIT)]       # усі в секунду початку: верхню межу не посунути
+        page = [corp('x%03d' % i, t0, -1) for i in range(C.CORP_WORKING_LIMIT)]       # усі в одну секунду: продовження збіглося б із поточним
         b = S.Builder('mono-corp', 't', p)
         b.statement(t0, S.to_unix(p.period_end), S.resp_json(200, page))
+        b.statement(t0, t0 + 1, S.resp_json(200, page))                              # to = time + 1; сторінка та сама -> курсор застряг
         e = E.run(R.Recording(R.make_manifest('mono-corp', 't', b.ex), b.ex), p)
-        self.assertEqual((e.failure_class, e.complete, e.trust), (E.CLS_RETRY, False, p.period_start))
-        self.assertEqual(e.diags[-1]['Уровень'], 'Предупреждение')
-        self.assertIn('rule_end_of_read', e.rules)
+        self.assertEqual((e.failure_class, e.complete, e.trust, len(e.ops)), (E.CLS_HUMAN, False, p.period_start, C.CORP_WORKING_LIMIT))
+        self.assertEqual((e.diags[-1]['Уровень'], e.diags[-1]['Суть'], e.diags[-1]['Факты']['Количество']),
+                         ('Предупреждение', 'cursor-stuck', C.CORP_WORKING_LIMIT))
+        self.assertIn('rule_cursor_stuck', e.rules)
 
     def test_working_limit_is_not_above_measured_page_maximum(self):
         """run1: limit=500 віддав 33 за раз, тож робочий ліміт юросіб ≤ 33. Сторож червоний на «ліміт понад виміряне»."""
