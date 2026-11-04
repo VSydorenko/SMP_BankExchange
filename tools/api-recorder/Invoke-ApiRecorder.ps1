@@ -394,7 +394,7 @@ function Read-PrivatPages {
         if ($j -isnot [System.Collections.IDictionary]) { Add-Note $Ctx 'тіло не JSON-об''єкт — читання зупинено'; return }
         if ([string]$j['status'] -ne 'SUCCESS') { Add-Count $Ctx 'status у тілі' ([string]$j['status']); Add-Note $Ctx 'status у тілі не SUCCESS — читання зупинено'; return }
         Add-Count $Ctx 'status у тілі' 'SUCCESS'
-        if ($Key -eq 'transactions') { Add-PrivatTxDigest $Ctx $j $Key }
+        if ($Key -eq 'transactions') { Add-PrivatTxDigest $Ctx $j $Key; $Ctx.Captured.Add(@($j[$Key])) }
         else {
             $Ctx.Cur.Pages++
             foreach ($b in @($j[$Key])) {
@@ -409,6 +409,27 @@ function Read-PrivatPages {
         if (-not $follow) { Add-Note $Ctx 'exist_next_page=true без next_page_id'; return }
         if ($Ctx.Cur.Pages -ge $MaxPages) { Add-Note $Ctx "досягнуто ліміту сторінок рекордера ($MaxPages) — решту не читано"; return }
     }
+}
+
+# Кандидат для виміру DAT_KL: операція, у якої день DAT_KL (dd.MM.yyyy) відмінний від дня DAT_OD. З кількох — з найбільшою
+# відстанню (у днях) від DAT_OD до найближчої межі періоду, щоб запит не збігся з основним. $Pages: масиви операцій сторінок.
+function Select-DatKlCandidate {
+    param($Pages, [datetime]$PeriodFrom, [datetime]$PeriodTo)
+    $ci = [System.Globalization.CultureInfo]::InvariantCulture
+    $best = $null; $bestDist = -1; $n = 0
+    foreach ($pg in @($Pages)) {
+        foreach ($t in @($pg)) {
+            $od = [datetime]::MinValue; $kl = [datetime]::MinValue
+            if (-not [datetime]::TryParseExact([string]$t['DAT_OD'], 'dd.MM.yyyy', $ci, [System.Globalization.DateTimeStyles]::None, [ref]$od)) { continue }
+            if (-not [datetime]::TryParseExact([string]$t['DAT_KL'], 'dd.MM.yyyy', $ci, [System.Globalization.DateTimeStyles]::None, [ref]$kl)) { continue }
+            if ($od -eq $kl) { continue }
+            $n++
+            $dist = [int][math]::Min(($od - $PeriodFrom.Date).TotalDays, ($PeriodTo.Date - $od).TotalDays)
+            if ($dist -gt $bestDist) { $best = $od; $bestDist = $dist }
+        }
+    }
+    if ($null -eq $best) { return $null }
+    [pscustomobject]@{ Day = $best; Dist = $bestDist; Candidates = $n }
 }
 
 function Invoke-PrivatRun {
@@ -449,8 +470,30 @@ function Invoke-PrivatRun {
         if (Test-ScenarioOn $Cfg 'TxSmallLimit') {
             Invoke-Scenario $Ctx "privat_${tag}_tx_small_limit" { Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$from", "endDate=$to", "limit=$small") 'transactions' $maxSmall }
         }
+        $memoTx = $null   # операції TxWorkLimit цього прогону (для виміру DAT_KL)
         if (Test-ScenarioOn $Cfg 'TxWorkLimit') {
             Invoke-Scenario $Ctx "privat_${tag}_tx_work_limit" { Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$from", "endDate=$to", "limit=$work") 'transactions' $maxPages }
+            $memoTx = @($Ctx.Captured)
+        }
+        if (Test-ScenarioOn $Cfg 'DatKlBoundary' $false) {
+            if ($null -eq $memoTx) {
+                Invoke-Scenario $Ctx "privat_${tag}_datkl_source" { Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$from", "endDate=$to", "limit=$work") 'transactions' $maxPages }
+                $memoTx = @($Ctx.Captured)
+            }
+            $dk = Select-DatKlCandidate $memoTx $P.From $P.To
+            if ($null -eq $dk -and $Ctx.Dry) { Write-Host '[dry-run] у заглушках немає операцій — для плану запитів підставлено синтетичного кандидата'; $dk = [pscustomobject]@{ Day = $P.From; Dist = 0; Candidates = 0 } }
+            if ($null -eq $dk) {
+                Invoke-Scenario $Ctx "privat_${tag}_datkl_boundary" {
+                    Add-RecorderFailure $Ctx $tx (Join-Query @("acc=$acc14", "startDate=$from", "endDate=$to", "limit=$work")) 'no_candidate' 'немає операції з днем DAT_KL, відмінним від дня DAT_OD, у прочитаних сторінках; запиту не робили'
+                }
+            }
+            else {
+                $dkDay = Format-PrivatDate $dk.Day
+                Invoke-Scenario $Ctx "privat_${tag}_datkl_boundary" {
+                    Add-Note $Ctx "кандидат обрано: придатних операцій $($dk.Candidates); днів до найближчої межі періоду: $($dk.Dist)"
+                    Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$dkDay", "endDate=$dkDay", "limit=$work") 'transactions' $maxPages
+                }
+            }
         }
         if (Test-ScenarioOn $Cfg 'TxDefaultLimit') {
             Invoke-Scenario $Ctx "privat_${tag}_tx_default_limit" { Read-PrivatPages $Ctx $tx @("acc=$acc14", "startDate=$from", "endDate=$to") 'transactions' $maxSmall }

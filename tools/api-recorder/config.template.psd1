@@ -60,6 +60,7 @@
             TxCp1251            = $true   # той самий запит із Content-Type charset=cp1251
             Reversal            = $true   # період зі скасуванням/поверненням (лише якщо ReversalPeriod заповнений)
             Errors              = $true   # свідомі помилки: вигаданий токен, startDate > endDate, майбутній період, чужий рахунок
+            DatKlBoundary       = $false  # run3: рекордер сам обирає операцію з днем DAT_KL відмінним від DAT_OD і запитує її день; значень не вписувати; $true — увімкнути
         }
     }
 
