@@ -116,7 +116,7 @@ def cmd_guard_files(a):
 
 def cmd_sets(a):
     """12 файлів наборів для макетів тестового розширення (R15): записи й еталони пакетами, синтетика і run1."""
-    for name, kind, n, size in sets_mod.build(a.anon_root, a.out, a.anon_root_run3):
+    for name, kind, n, size in sets_mod.build(a.anon_root, a.out, a.anon_root_run3, a.anon_root_pumb):
         print('%-40s %-10s записів %3d  байтів %8d' % (name, kind, n, size))
     for bank, ident, reason, kind in sets_mod.EXCLUDED:
         print('виключено з %s: %s %s -- %s' % (kind, bank, ident, reason))
@@ -300,6 +300,7 @@ def main(argv):
     p = sub.add_parser('sets')
     p.add_argument('--anon-root', required=True, help='знеособлений вихід run1 (etalons/, readings/)')
     p.add_argument('--anon-root-run3', help='знеособлений вихід run3 (etalons/, readings/); без нього макетів Run3 немає')
+    p.add_argument('--anon-root-pumb', help='знеособлений вихід run1b ПУМБ (etalons/, readings/); з ним додаються 4 макети ПУМБ (синтетика, run1)')
     p.add_argument('--out', required=True)
     p.set_defaults(fn=cmd_sets)
     p = sub.add_parser('pack')

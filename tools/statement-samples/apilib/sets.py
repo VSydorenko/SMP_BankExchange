@@ -29,7 +29,8 @@ EXCLUDED = []                      # (банк, ід, причина, вид н�
 RECORD_SET = 'smp-api-record-set'
 ETALON_SET = 'smp-api-etalon-set'
 KINDS = {'synthetic': 'Синт', 'run1': 'Run1', 'run3': 'Run3'}
-BANKS = ('privat', 'mono-fop', 'mono-corp')       # набори pumb (синтетика, run1) з'являються разом зі Step 3 / записом: порожні набори не пишемо
+BANKS = ('privat', 'mono-fop', 'mono-corp')       # банки 5а: 12 макетів; ПУМБ -- окремо (`PUMB`, `--anon-root-pumb`), щоб 12 і хеші 5а не змінились
+PUMB = 'pumb'
 
 
 def names(bank, kind):
@@ -87,26 +88,28 @@ def run1_sets(bank, anon_root, kind='run1'):
     return recs, ets
 
 
-def build(anon_root, out_dir, anon_root3=None):
+def build(anon_root, out_dir, anon_root3=None, anon_root_pumb=None):
     """Пише 12 файлів у `out_dir`: `<Макет>.bin` (записи) і `<Макет>.txt` (еталони). -> [(макет, тип, кількість записів, байтів)]."""
     os.makedirs(out_dir, exist_ok=True)
     report = []
-    for bank in BANKS:
-        for kind in KINDS:
-            if kind == 'run3' and not anon_root3:
-                continue
-            recs, ets = synthetic_sets(bank) if kind == 'synthetic' else run1_sets(bank, anon_root3 if kind == 'run3' else anon_root, kind)
-            if sorted(recs) != sorted(ets):
-                raise ValueError('набори записів і еталонів не збігаються: %s %s' % (bank, kind))
-            rname, ename = names(bank, kind)
-            # версія набору — найвища з версій записів у ньому (v1, поки жоден запис не використовує v2)
-            head = {'formatVersion': max([p['formatVersion'] for p in recs.values()] + [R.VERSION]), 'bank': bank, 'kind': kind}
-            rtext = _dumps(dict(head, format=RECORD_SET, records=recs))
-            etext = _dumps(dict(head, format=ETALON_SET, etalons=ets))
-            with open(os.path.join(out_dir, rname + '.bin'), 'wb') as f:
-                f.write(rtext.encode('utf-8'))
-            with open(os.path.join(out_dir, ename + '.txt'), 'wb') as f:
-                f.write(b'\xef\xbb\xbf' + etext.encode('utf-8'))
-            report.append((rname, 'BinaryData', len(recs), len(rtext.encode('utf-8'))))
-            report.append((ename, 'Text', len(ets), len(etext.encode('utf-8')) + 3))
+    plan = [(bank, kind) for bank in BANKS for kind in KINDS if not (kind == 'run3' and not anon_root3)]
+    if anon_root_pumb:
+        # ПУМБ: синтетика і знеособлені читання run1b (вид `run1`: run1 ПУМБ документів не мав, читань 0; run3 немає)
+        plan += [(PUMB, 'synthetic'), (PUMB, 'run1')]
+    for bank, kind in plan:
+        root = anon_root3 if kind == 'run3' else (anon_root_pumb if bank == PUMB else anon_root)
+        recs, ets = synthetic_sets(bank) if kind == 'synthetic' else run1_sets(bank, root, kind)
+        if sorted(recs) != sorted(ets):
+            raise ValueError('набори записів і еталонів не збігаються: %s %s' % (bank, kind))
+        rname, ename = names(bank, kind)
+        # версія набору — найвища з версій записів у ньому (v1, поки жоден запис не використовує v2)
+        head = {'formatVersion': max([p['formatVersion'] for p in recs.values()] + [R.VERSION]), 'bank': bank, 'kind': kind}
+        rtext = _dumps(dict(head, format=RECORD_SET, records=recs))
+        etext = _dumps(dict(head, format=ETALON_SET, etalons=ets))
+        with open(os.path.join(out_dir, rname + '.bin'), 'wb') as f:
+            f.write(rtext.encode('utf-8'))
+        with open(os.path.join(out_dir, ename + '.txt'), 'wb') as f:
+            f.write(b'\xef\xbb\xbf' + etext.encode('utf-8'))
+        report.append((rname, 'BinaryData', len(recs), len(rtext.encode('utf-8'))))
+        report.append((ename, 'Text', len(ets), len(etext.encode('utf-8')) + 3))
     return report

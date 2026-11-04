@@ -40,7 +40,10 @@ class Reading:
 
 
 def reading_id(bank, scenario):
-    words = [w for w in re.split(r'[_\W]+', scenario) if w and w.lower() not in ('privat', 'corp', 'fop', 'a1', 'a2', 'a3')]
+    # a1..a3 -- ім'я рахунку-сценарію ПУМБ (a1..a10 різні читання): без них три читання зливались в один ідентифікатор і перезаписували одне одного;
+    # для банків 5а слова лишаються відкинутими (імена їхніх макетів не змінюються)
+    skip = ('privat', 'corp', 'fop') + (() if bank == 'pumb' else ('a1', 'a2', 'a3'))
+    words = [w for w in re.split(r'[_\W]+', scenario) if w and w.lower() not in skip]
     return 'Зап' + ''.join(w.capitalize() for w in words)
 
 
