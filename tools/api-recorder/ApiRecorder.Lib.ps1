@@ -1,8 +1,9 @@
 ﻿# Спільні функції рекордера: білі списки, запис обмінів, пошук секретів. Підключається з Invoke-ApiRecorder.ps1.
 # Принцип: рекордер НІКОЛИ не отримує заголовків запиту в функції запису — токен у запис потрапити не може структурно.
 
-$script:RecorderVersion = '1.0'
-$script:FormatVersion = 1
+$script:RecorderVersion = '1.1'
+$script:FormatVersion = 1        # версія запису без нічого з v2 (лише GET, стандартний порт, без тіла запиту)
+$script:FormatVersionV2 = 2      # метод POST, request.port, тіло запиту — FORMAT.md, розділ «Версія 2»; правило те саме, що в apilib/recording.py (_uses_v2)
 $script:Cp1251 = [System.Text.Encoding]::GetEncoding(1251)
 $script:Cp866 = [System.Text.Encoding]::GetEncoding(866)
 $script:Utf8NoBom = [System.Text.UTF8Encoding]::new($false)
@@ -10,8 +11,11 @@ $script:Utf8Strict = [System.Text.UTF8Encoding]::new($false, $true)
 $script:Latin1 = [System.Text.Encoding]::Latin1
 
 # --- білі списки: лише читання -----------------------------------------------------------------
-# Метод лише GET: жоден із трьох API не вимагає POST для читання виписок (документація банків).
-$script:AllowedHosts = @('acp.privatbank.ua', 'corp-api.monobank.ua', 'api.monobank.ua')
+# Метод: GET для трьох перших API (жоден не вимагає POST для читання виписок). ПУМБ вимагає POST на токен-ендпоінт і на
+# два читальні пошуки (searcher, period-transactions) — їх білий список називає поіменно; будь-який інший POST відхиляється.
+$script:AllowedHosts = @('acp.privatbank.ua', 'corp-api.monobank.ua', 'api.monobank.ua', 'auth.fuib.com', 'service.fuib.com')
+# Порт за замовчуванням 443; ПУМБ віддає API на нестандартному порту (у записі він іде полем request.port).
+$script:AllowedPorts = @{ 'service.fuib.com' = 4103 }
 $script:AllowedReadPaths = @(
     # ПриватБанк, «Автоклієнт»: розділ «Отримання балансів і транзакцій за рахунками»
     '^acp\.privatbank\.ua GET /api/statements/settings$'
@@ -23,14 +27,25 @@ $script:AllowedReadPaths = @(
     # monobank ФОП, персональне API v250818
     '^api\.monobank\.ua GET /personal/client-info$'
     '^api\.monobank\.ua GET /personal/statement/[A-Za-z0-9_-]+/-?\d+/-?\d+$'
+    # ПУМБ (Vega/VegaNet): форма на токен-ендпоінт і три читальні операції (шляхи swagger.json з префіксом war_veganet_api)
+    '^auth\.fuib\.com POST /auth/realms/VegaNet/protocol/openid-connect/token$'
+    '^service\.fuib\.com GET /war_veganet_api/account$'
+    '^service\.fuib\.com POST /war_veganet_api/document/searcher$'
+    '^service\.fuib\.com POST /war_veganet_api/document/period-transactions$'
 )
+# Друга лінія оборони: платіжні й змінювальні операції відхиляються за назвою, навіть якщо білий список колись помилково розширять.
+$script:ForbiddenPathPattern = '(?i)order|/(delete|sign|send|accept|import|create|update|save|remove|pre-filled|forecast)(/|$)'
 
 function Assert-ReadOnlyRequest {
-    param([string]$Method, [string]$HostName, [string]$Path)
-    if ($Method -cne 'GET') { throw "Рекордер лише читає: метод $Method заборонено." }
+    param([string]$Method, [string]$HostName, [string]$Path, [int]$Port = 443)
+    if ($Method -cnotin 'GET', 'POST') { throw "Рекордер лише читає: метод $Method заборонено." }
+    if ($Path -match $script:ForbiddenPathPattern) { throw "Рекордер лише читає: платіжний чи змінювальний шлях заборонено: $HostName $Path" }
     $key = "$HostName $Method $Path"
-    foreach ($re in $script:AllowedReadPaths) { if ($key -cmatch $re) { return } }
-    throw "Шлях не входить до білого списку читання: $HostName $Path"
+    $listed = $false
+    foreach ($re in $script:AllowedReadPaths) { if ($key -cmatch $re) { $listed = $true; break } }
+    if (-not $listed) { throw "Шлях не входить до білого списку читання: $Method $HostName $Path" }
+    $expectedPort = if ($script:AllowedPorts.ContainsKey($HostName)) { [int]$script:AllowedPorts[$HostName] } else { 443 }
+    if ($Port -ne $expectedPort) { throw "Порт $Port не входить до білого списку для $HostName." }
 }
 
 # Заголовки відповіді, які потрапляють у запис (білий список). Решта відкидається.
@@ -106,7 +121,7 @@ function New-Recording {
     param([string]$Dir, [string]$Bank, [string]$RunLabel, $Secrets)
     [pscustomobject]@{
         Dir = $Dir; Bank = $Bank; RunLabel = $RunLabel; Seq = 0; Secrets = $Secrets
-        StartedUtc = [datetime]::UtcNow; Index = [System.Collections.Generic.List[object]]::new()
+        StartedUtc = [datetime]::UtcNow; Index = [System.Collections.Generic.List[object]]::new(); MaxVersion = $script:FormatVersion
     }
 }
 
@@ -114,8 +129,18 @@ function New-Recording {
 function Save-Exchange {
     param(
         $Rec, [string]$Scenario, [string]$HostName, [string]$Path, [string]$Query,
-        $Status, $ResponseHeaders, [byte[]]$Body, $Failure, [datetime]$StartedUtc, [int]$DurationMs
+        $Status, $ResponseHeaders, [byte[]]$Body, $Failure, [datetime]$StartedUtc, [int]$DurationMs,
+        # Лише для запитів версії 2 (FORMAT.md). Заголовків запиту й тут немає. Тіло запиту — для POST рівно одна з двох форм:
+        # байти як пішли (-RequestBody) або «тіло не записується» з причиною (-BodyOmittedReason; автентифікація: пароль, секрет).
+        [string]$Method = 'GET', $Port = $null, $RequestBody = $null, [string]$BodyOmittedReason = ''
     )
+    if ($null -ne $Port -and [int]$Port -eq 443) { $Port = $null }   # стандартний порт схеми в запис не пишемо
+    $hasBody = ($null -ne $RequestBody); $omitted = (-not [string]::IsNullOrEmpty($BodyOmittedReason))
+    if ($hasBody -and $omitted) { throw 'Save-Exchange: тіло запиту — рівно одна форма (байти або bodyOmitted).' }
+    if ($Method -cne 'GET' -and -not ($hasBody -or $omitted)) { throw 'Save-Exchange: для POST потрібна форма тіла запиту.' }
+    $isV2 = ($Method -cne 'GET') -or ($null -ne $Port) -or $hasBody -or $omitted   # те саме правило, що в apilib/recording.py
+    $exVersion = if ($isV2) { $script:FormatVersionV2 } else { $script:FormatVersion }
+    if ($exVersion -gt $Rec.MaxVersion) { $Rec.MaxVersion = $exVersion }
     $Rec.Seq++
     $file = '{0:D4}.json' -f $Rec.Seq
     $failObj = $null
@@ -131,11 +156,15 @@ function Save-Exchange {
             bodyBase64 = [Convert]::ToBase64String($Body)
         }
     }
+    $reqObj = [ordered]@{ method = $Method; host = $HostName; path = $Path; query = $Query }
+    if ($null -ne $Port) { $reqObj['port'] = [int]$Port }
+    if ($hasBody) { $rb = [byte[]]$RequestBody; $reqObj['bodyBase64'] = [Convert]::ToBase64String($rb); $reqObj['bodyLength'] = $rb.Length }
+    if ($omitted) { $reqObj['bodyOmitted'] = $true; $reqObj['bodyOmittedReason'] = $BodyOmittedReason }
     $doc = [ordered]@{
-        format = 'smp-api-exchange'; formatVersion = $script:FormatVersion
+        format = 'smp-api-exchange'; formatVersion = $exVersion
         seq = $Rec.Seq; scenario = $Scenario
         startedUtc = $StartedUtc.ToString('yyyy-MM-ddTHH:mm:ss.fffZ'); durationMs = $DurationMs
-        request = [ordered]@{ method = 'GET'; host = $HostName; path = $Path; query = $Query }
+        request = $reqObj
         response = $respObj
         failure = $failObj
     }
@@ -153,7 +182,7 @@ function Save-Exchange {
 function Save-Manifest {
     param($Rec, [string]$State, [string]$Note = '')
     $doc = [ordered]@{
-        format = 'smp-api-recording'; formatVersion = $script:FormatVersion
+        format = 'smp-api-recording'; formatVersion = $Rec.MaxVersion
         recorderVersion = $script:RecorderVersion
         bank = $Rec.Bank; runLabel = $Rec.RunLabel
         startedUtc = $Rec.StartedUtc.ToString('yyyy-MM-ddTHH:mm:ssZ')
@@ -262,6 +291,77 @@ function Find-SecretForms {
     , $hits.ToArray()
 }
 
+# Читання файлу, який може ще писатись іншим процесом (перенаправлений stderr): без блокування запису.
+function Read-FileShared {
+    param([string]$Path)
+    $fs = [System.IO.FileStream]::new($Path, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, ([System.IO.FileShare]::ReadWrite -bor [System.IO.FileShare]::Delete))
+    try { $ms = [System.IO.MemoryStream]::new(); $fs.CopyTo($ms); , $ms.ToArray() } finally { $fs.Dispose() }
+}
+
+# --- автентифікація ПУМБ: маскування відповіді й облік виданих банком значень ---------------------
+# Відповідь автентифікації в запис іде замаскованою: кожне рядкове значення (access_token, refresh_token, id_token, session_state, …)
+# замінюється маркером тієї ж форми й довжини (мала літера -> a, велика -> A, цифра -> 9, решта — як є; у JWT лишаються крапки).
+# Ключі, що несуть лише форму відповіді (token_type, scope, error, error_description, error_uri), лишаються, якщо не містять відомого секрету.
+# Числа й булеві не змінюються. Видані банком значення додаються до набору секретів прогону: самоперевірка шукає їх так само,
+# як токени з конфігурації. Справжнє тіло відповіді далі не живе: ні в запис, ні в консоль.
+$script:AuthKeepKeys = @('token_type', 'scope', 'error', 'error_description', 'error_uri')
+
+function ConvertTo-MaskShape {
+    param([string]$Text)
+    $sb = [System.Text.StringBuilder]::new($Text.Length)
+    foreach ($ch in $Text.ToCharArray()) {
+        if ([char]::IsLetter($ch)) { [void]$sb.Append($(if ([char]::IsUpper($ch)) { 'A' } else { 'a' })) }
+        elseif ([char]::IsDigit($ch)) { [void]$sb.Append('9') }
+        else { [void]$sb.Append($ch) }
+    }
+    $sb.ToString()
+}
+
+function Protect-AuthNode {
+    param($Node, [string]$Key, $Secrets, $Issued)
+    if ($Node -is [System.Collections.IDictionary]) {
+        $o = [ordered]@{}
+        foreach ($k in @($Node.Keys)) { $o[[string]$k] = Protect-AuthNode $Node[$k] ([string]$k) $Secrets $Issued }
+        return $o
+    }
+    if ($Node -is [System.Collections.IList]) {
+        $l = [System.Collections.Generic.List[object]]::new()
+        foreach ($e in $Node) { $l.Add((Protect-AuthNode $e $Key $Secrets $Issued)) }
+        return , $l.ToArray()
+    }
+    if ($Node -is [string]) {
+        $keep = ($Key -in $script:AuthKeepKeys) -and ((Remove-SecretValues $Node $Secrets) -ceq $Node)
+        if ($keep) { return $Node }
+        if ($Node.Length -ge 8) { $Issued.Add(@{ Key = $Key; Value = $Node }) }
+        return (ConvertTo-MaskShape $Node)
+    }
+    $Node
+}
+
+# Повертає Body (замасковані байти для запису) і Issued (скільки виданих значень додано до $Secrets).
+function Protect-AuthResponse {
+    param([byte[]]$Body, $Headers, $Secrets)
+    $issued = [System.Collections.Generic.List[object]]::new()
+    if ($null -eq $Body -or $Body.Length -eq 0) { return [pscustomobject]@{ Body = [byte[]]@(); Issued = 0 } }
+    $json = ConvertFrom-BodyBytes $Body $Headers
+    if ($json -is [System.Collections.IDictionary]) {
+        $masked = (Protect-AuthNode $json '' $Secrets $issued) | ConvertTo-Json -Depth 10 -Compress
+    }
+    else {
+        $charset = ''
+        foreach ($h in $Headers) { if ($h[0] -eq 'content-type' -and $h[1] -match 'charset=([\w-]+)') { $charset = $Matches[1].ToLowerInvariant() } }
+        $text = if ($charset -in 'cp1251', 'windows-1251') { $script:Cp1251.GetString($Body) } else { try { $script:Utf8Strict.GetString($Body) } catch { $script:Cp1251.GetString($Body) } }
+        $masked = ConvertTo-MaskShape $text
+    }
+    $n = 0
+    foreach ($i in $issued) {
+        $name = 'PUMB.issued.' + ([regex]::Replace([string]$i.Key, '[^A-Za-z0-9_-]', '_')) + '.' + ($Secrets.Count + 1)
+        $Secrets[$name] = [string]$i.Value
+        $n++
+    }
+    [pscustomobject]@{ Body = $script:Utf8NoBom.GetBytes([string]$masked); Issued = $n }
+}
+
 # Скануємо кожен файл теки: сирі байти та (для обмінів) розкодоване тіло. Повертає знахідки: файл, мітка секрету, форма, де.
 function Test-SecretsInFiles {
     param([string[]]$Files, $Secrets, [string]$BaseDir)
@@ -270,7 +370,7 @@ function Test-SecretsInFiles {
     foreach ($k in $Secrets.Keys) { if (-not [string]::IsNullOrEmpty([string]$Secrets[$k])) { $needleSets[$k] = Get-SecretNeedles ([string]$Secrets[$k]) } }
     if ($needleSets.Count -eq 0) { throw 'Самоперевірка неможлива: набір секретів порожній (перевірка без що шукати не є доказом).' }
     foreach ($f in $Files) {
-        $bytes = [System.IO.File]::ReadAllBytes($f)
+        $bytes = Read-FileShared $f
         $rel = if ($BaseDir -and $f.StartsWith($BaseDir)) { $f.Substring($BaseDir.Length).TrimStart('\', '/') } else { $f }
         $targets = [System.Collections.Generic.List[object]]::new()
         $targets.Add(@{ Where = 'файл'; Bytes = $bytes })

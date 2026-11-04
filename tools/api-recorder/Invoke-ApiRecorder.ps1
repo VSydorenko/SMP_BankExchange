@@ -1,9 +1,11 @@
 ﻿#Requires -Version 7.5
 <#
 .SYNOPSIS
-  Рекордер відповідей API ПриватБанку («Автоклієнт»), monobank юросіб (corp-api) і monobank ФОП (персональне API).
+  Рекордер відповідей API ПриватБанку («Автоклієнт»), monobank юросіб (corp-api), monobank ФОП (персональне API) і ПУМБ (Vega/VegaNet).
 .DESCRIPTION
-  Лише читання в банку: тільки GET, шляхи — з білого списку (ApiRecorder.Lib.ps1). Відповіді зберігаються як
+  Лише читання в банку: методи й шляхи (метод + хост + порт + шлях) — з білого списку (ApiRecorder.Lib.ps1); POST лише там, де
+  банк вимагає його для читання (ПУМБ: форма на токен-ендпоінт, searcher, period-transactions). ПУМБ — лише за явним -Bank pumb
+  (у 'all' не входить) і лише з ключем LoginApproved = $true у конфігурації (його виставляє власник). Відповіді зберігаються як
   упорядкована послідовність обмінів (FORMAT.md): тіло — байтами, заголовка запиту з токеном у записі немає.
   Після прогону рекордер сам шукає значення кожного токена в кожному записаному файлі в усіх кодуваннях.
   Режими: звичайний; -CheckRun (перевірка наявного запису на токени); -DryRun (план запитів без мережі); -SelfTest (перевірка самого пошуку секретів, без мережі).
@@ -13,7 +15,7 @@
 param(
     # Справжня конфігурація — лише в temp основного дерева (гітігнорована), поза git.
     [string]$Config = 'R:/github/SMP_BankExchange/temp/api-recorder/config.psd1',
-    [ValidateSet('all', 'privat', 'monoCorp', 'monoFop')][string[]]$Bank = 'all',
+    [ValidateSet('all', 'privat', 'monoCorp', 'monoFop', 'pumb')][string[]]$Bank = 'all',
     # Мітка прогону = назва теки запису. Другий прогін — та сама команда з новою міткою.
     [string]$RunLabel = (Get-Date -Format 'yyyyMMdd-HHmmss'),
     [string]$OutRoot = 'R:/github/SMP_BankExchange/temp/api-recordings',
@@ -23,6 +25,8 @@ param(
     [switch]$SelfTest,
     # Перевірити НАЯВНУ теку запису (-Bank, -RunLabel) і відповідну теку owner-only на токени з конфігурації. Без мережі.
     [switch]$CheckRun,
+    # Файл, у який власник перенаправив stderr прогону (2> файл): самоперевірка шукає секрети й у ньому (як і в консольному журналі console.log теки запису).
+    [string]$StderrLog = '',
     [string]$SelfTestDir = ''
 )
 
@@ -117,7 +121,7 @@ function Invoke-Scenario {
 }
 
 # =============================================================================================
-# HTTP (лише GET, тіло байтами, без автоперенаправлень)
+# HTTP (тіло байтами, без автоперенаправлень; GET — три банки, POST — лише ПУМБ за білим списком)
 # =============================================================================================
 function Get-HttpClient {
     if ($null -eq $script:Http) {
@@ -130,14 +134,15 @@ function Get-HttpClient {
     $script:Http
 }
 
-function Invoke-HttpGet {
-    param([string]$Uri, [hashtable]$Headers, [string]$ContentType)
+function Invoke-HttpSend {
+    param([string]$Method, [string]$Uri, [hashtable]$Headers, [string]$ContentType, $Body = $null)
     $client = Get-HttpClient
-    $req = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Get, $Uri)
+    $req = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::new($Method), $Uri)
     foreach ($k in $Headers.Keys) { [void]$req.Headers.TryAddWithoutValidation($k, [string]$Headers[$k]) }
-    if ($ContentType) {
-        $req.Content = [System.Net.Http.ByteArrayContent]::new([byte[]]@())
-        [void]$req.Content.Headers.TryAddWithoutValidation('Content-Type', $ContentType)
+    if ($ContentType -or $null -ne $Body) {
+        $bytes = if ($null -ne $Body) { [byte[]]$Body } else { [byte[]]@() }
+        $req.Content = [System.Net.Http.ByteArrayContent]::new($bytes)
+        if ($ContentType) { [void]$req.Content.Headers.TryAddWithoutValidation('Content-Type', $ContentType) }
     }
     try {
         $resp = $client.SendAsync($req).GetAwaiter().GetResult()
@@ -156,6 +161,11 @@ function Invoke-HttpGet {
         return [pscustomobject]@{ Status = $null; Headers = @(); Body = [byte[]]@(); Failure = [pscustomobject]@{ Kind = $kind; Text = "$($ex.GetType().Name): $($ex.Message)" } }
     }
     finally { $req.Dispose() }
+}
+
+function Invoke-HttpGet {
+    param([string]$Uri, [hashtable]$Headers, [string]$ContentType)
+    Invoke-HttpSend 'GET' $Uri $Headers $ContentType $null
 }
 
 function Get-HeaderValue {
@@ -260,7 +270,7 @@ function Resolve-BankConfig {
     $sc = @{}
     if ($Raw.Scenarios -is [System.Collections.IDictionary]) { foreach ($k in $Raw.Scenarios.Keys) { $sc[$k] = [bool]$Raw.Scenarios[$k] } }
     $c.Scenarios = $sc
-    $label = @{ Privat = 'Privat'; MonoCorp = 'MonoCorp'; MonoFop = 'MonoFop' }[$Key]
+    $label = @{ Privat = 'Privat'; MonoCorp = 'MonoCorp'; MonoFop = 'MonoFop'; Pumb = 'Pumb' }[$Key]
 
     $needText = {
         param([string]$Field, [string]$Fake, [string]$Hint)
@@ -278,6 +288,12 @@ function Resolve-BankConfig {
         }
         'MonoCorp' { & $needText 'Token' 'DRYRUN-FAKE-TOKEN-0000000000' 'Токен із web.monobank.ua (кабінет юросіб, розділ токенів, обрана компанія).' }
         'MonoFop' { & $needText 'Token' 'DRYRUN-FAKE-TOKEN-0000000000' 'Особистий токен із api.monobank.ua.' }
+        'Pumb' {
+            & $needText 'ClientId' 'DRYRUN-FAKE-CLIENT' 'client_id із файлу налаштувань ПУМБ (settings.txt).'
+            & $needText 'ClientSecret' 'DRYRUN-FAKE-SECRET-0000000000' 'client_secret із файлу налаштувань ПУМБ (settings.txt).'
+            & $needText 'Login' 'dryrun-fake-login' 'Логін користувача інтернет-клієнт-банку ПУМБ.'
+            & $needText 'Password' 'DRYRUN-FAKE-PASSWORD-0000' 'Пароль користувача інтернет-клієнт-банку ПУМБ.'
+        }
     }
 
     # рахунки
@@ -318,7 +334,7 @@ function Resolve-BankConfig {
     $fakeTo = if ($Key -eq 'MonoFop') { '2020-02-20' } else { '2020-01-03' }
     $c.PeriodParsed = & $parsePeriod 'Period' $Raw.Period $true '2020-01-01' $fakeTo
     $c.ReversalParsed = & $parsePeriod 'ReversalPeriod' $Raw.ReversalPeriod $false '' ''
-    if ($Key -in 'MonoFop', 'MonoCorp') { $c.SaturatedParsed = & $parsePeriod 'SaturatedPeriod' $Raw.SaturatedPeriod $false '' '' }
+    if ($Key -in 'MonoFop', 'MonoCorp', 'Pumb') { $c.SaturatedParsed = & $parsePeriod 'SaturatedPeriod' $Raw.SaturatedPeriod $false '' '' }
     # за замовчуванням сценарій «період із поверненням» вмикається, лише якщо період заданий
     foreach ($n in 'Reversal') { if (-not $c.ReversalParsed) { $c.Scenarios[$n] = $false } }
     [pscustomobject]@{ Problems = $problems.ToArray(); Notes = $notes.ToArray(); Cfg = $c }
@@ -924,13 +940,467 @@ function Invoke-MonoFopRun {
 }
 
 # =============================================================================================
+# ПУМБ (Vega/VegaNet): автентифікація password grant і читальні операції
+# =============================================================================================
+$script:PumbAuthHost = 'auth.fuib.com'
+$script:PumbAuthPath = '/auth/realms/VegaNet/protocol/openid-connect/token'
+$script:PumbApiHost = 'service.fuib.com'
+$script:PumbApiPort = 4103
+$script:PumbApiPrefix = '/war_veganet_api'
+# Вигадані очевидно фальшиві значення для сценаріїв «свідомі помилки». Справжній логін із хибним паролем не використовується ніколи.
+$script:FakeLogin = 'invalid-user-for-recorder'
+$script:FakePassword = 'INVALID-PASSWORD-FOR-RECORDER'
+$script:FakeClientSecret = 'INVALID-SECRET-FOR-RECORDER-0000'
+$script:FakePumbAccountId = '999999999'
+
+# Ключ «вхід погоджено»: його виставляє лише власник (після відповіді на питання, чи не заважає вхід рекордера робочій інтеграції).
+# Рівно булеве $true; відсутній, $false, рядок — відмова. Повертає текст відмови або $null, якщо вхід погоджено.
+function Test-PumbLoginGate {
+    param($Cfg)
+    $v = $null
+    if ($Cfg -is [System.Collections.IDictionary] -and $Cfg.Contains('LoginApproved')) { $v = $Cfg['LoginApproved'] }
+    if ($v -is [bool] -and $v) { return $null }
+    'Вхід у банк не погоджено: у блоці Pumb конфігурації немає LoginApproved = $true. Цей ключ виставляє власник, коли відповів, що вхід рекордера (password grant) не заважає робочій інтеграції ПУМБ і що ліміт сесій це витримує (README, «Перед першим запуском»). До банку нічого не надіслано.'
+}
+
+# Єдина точка запиту до ПУМБ. Auth: тіло запиту в запис не потрапляє (bodyOmitted), відповідь замасковується, видані банком значення
+# додаються до набору секретів; справжнє тіло автентифікації не друкується й не зберігається (повертається лише розібране в .AuthReal).
+function Invoke-PumbApi {
+    param($Ctx, [string]$Method, [string]$HostName, [int]$Port, [string]$Path, $BodyBytes = $null, [string]$Token = '',
+        [switch]$Auth, [string]$DryStub = '[]', [switch]$NoRetry, [switch]$NoReauth)
+    Assert-ReadOnlyRequest $Method $HostName $Path $Port
+    $useCtxToken = (-not $Auth) -and (-not $Token)
+    $retried429 = $false; $reauthed = $false
+    $result = $null
+    for ($try = 1; $try -le 3; $try++) {
+        if ($useCtxToken) {
+            if (-not $Ctx.Dry -and $Ctx.TokenExpiry -and [datetime]::UtcNow -gt $Ctx.TokenExpiry) { Update-PumbToken $Ctx 'строк дії токена добігає кінця' }
+            $Token = [string]$Ctx.Token
+        }
+        Wait-Gap $Ctx
+        $started = [datetime]::UtcNow
+        $sw = [System.Diagnostics.Stopwatch]::StartNew()
+        $Ctx.Requests++
+        $uri = "https://$HostName" + $(if ($Port -ne 443) { ":$Port" } else { '' }) + $Path
+        if ($Auth) { $headers = @{ 'User-Agent' = $script:UserAgent }; $ct = 'application/x-www-form-urlencoded' }
+        else {
+            $headers = @{ 'User-Agent' = $script:UserAgent; 'Authorization' = "Bearer $Token"; 'X-App-Channel' = 'pure-api'; 'X-Flow-ID' = '5:6:EX' }
+            $ct = 'application/json'
+        }
+        if ($Ctx.Dry) {
+            Write-Host ("[план] {0} {1}{2}{3}" -f $Method, $HostName, $(if ($Port -ne 443) { ":$Port" } else { '' }), $Path)
+            $r = [pscustomobject]@{ Status = 200; Headers = @(, @('content-type', 'application/json')); Body = $script:Utf8NoBom.GetBytes($DryStub); Failure = $null }
+        }
+        else { $r = Invoke-HttpSend $Method $uri $headers $ct $BodyBytes }
+        $sw.Stop()
+        $Ctx.LastEnd = [datetime]::UtcNow
+        $Ctx.NextGap = $Ctx.MinIntervalSec
+        $Ctx.Cur.Exchanges++
+        if ($null -ne $r.Failure) { Add-Count $Ctx 'HTTP' ('збій:' + $r.Failure.Kind) } else { Add-Count $Ctx 'HTTP' ([string]$r.Status) }
+        $authReal = $null
+        if ($Auth -and $null -eq $r.Failure -and -not $Ctx.Dry) {
+            $real = ConvertFrom-BodyBytes $r.Body $r.Headers
+            if ($real -is [System.Collections.IDictionary]) { $authReal = $real }
+            $prot = Protect-AuthResponse $r.Body $r.Headers $Ctx.Secrets
+            $r = [pscustomobject]@{ Status = $r.Status; Headers = $r.Headers; Body = $prot.Body; Failure = $null }
+        }
+        if (-not $Ctx.Dry) {
+            if ($Auth) {
+                [void](Save-Exchange $Ctx.Rec $Ctx.Cur.Name $HostName $Path '' $r.Status $r.Headers $r.Body $r.Failure $started ([int]$sw.ElapsedMilliseconds) `
+                        -Method $Method -Port $Port -BodyOmittedReason 'автентифікація: пароль і секрет клієнта в запис не потрапляють')
+            }
+            else {
+                $reqBody = $null
+                if ($Method -ceq 'POST') { $reqBody = [byte[]]$BodyBytes }
+                [void](Save-Exchange $Ctx.Rec $Ctx.Cur.Name $HostName $Path '' $r.Status $r.Headers $r.Body $r.Failure $started ([int]$sw.ElapsedMilliseconds) `
+                        -Method $Method -Port $Port -RequestBody $reqBody)
+            }
+            $line = if ($null -ne $r.Failure) { "збій мережі ($($r.Failure.Kind))" } elseif ($Auth) { "HTTP $($r.Status) (тіло автентифікації не друкується)" } else { "HTTP $($r.Status), $($r.Body.Length) байт" }
+            Write-Host ("  [{0:D4}] {1} {2} -> {3}" -f $Ctx.Rec.Seq, $Method, $Path, $line)
+        }
+        $result = [pscustomobject]@{ Status = $r.Status; Headers = $r.Headers; Body = $r.Body; Failure = $r.Failure; AuthReal = $authReal }
+        if ($r.Status -eq 429) {
+            if ($NoRetry) { Add-Note $Ctx '429 на запит без повтору — записано, повтору немає'; break }
+            $wait = Get-RetryWaitSeconds $r.Headers
+            if (-not $retried429) { $retried429 = $true; Add-Note $Ctx "банк відповів 429 — чекаю $wait с і повторюю один раз"; $Ctx.NextGap = $wait; continue }
+            throw 'SCENARIO_STOP: 429 повторно після паузи — сценарій зупинено, ліміт не провокується'
+        }
+        if ($r.Status -eq 401 -and $useCtxToken -and -not $NoReauth -and -not $reauthed -and -not $Ctx.Dry) {
+            $reauthed = $true
+            Update-PumbToken $Ctx 'банк відповів 401 на запит зі справжнім токеном'
+            continue
+        }
+        break
+    }
+    $result
+}
+
+# Вхід (password grant). Справжній вхід — один, без повторних спроб: хибна спроба входу ризикує блокуванням облікового запису.
+# -Fake: сценарій «свідомі помилки» — вигадані логін, пароль і секрет клієнта (справжній логін із хибним паролем не використовується).
+function Invoke-PumbLogin {
+    param($Ctx, $Cfg, [switch]$Fake)
+    $esc = { param($v) [uri]::EscapeDataString([string]$v) }
+    if ($Fake) { $login = $script:FakeLogin; $pw = $script:FakePassword; $sec = $script:FakeClientSecret }
+    else { $login = [string]$Cfg.Login; $pw = [string]$Cfg.Password; $sec = [string]$Cfg.ClientSecret }
+    $form = 'grant_type=password&client_id={0}&username={1}&password={2}&client_secret={3}' -f (& $esc $Cfg.ClientId), (& $esc $login), (& $esc $pw), (& $esc $sec)
+    $bytes = $script:Utf8NoBom.GetBytes($form)
+    $form = $null
+    if ($Ctx.Dry) {
+        Write-Host "[план] POST $($script:PumbAuthHost)$($script:PumbAuthPath) (тіло автентифікації не друкується)"
+        $Ctx.Requests++; $Ctx.Cur.Exchanges++
+        if (-not $Fake) { $Ctx.Token = 'DRYRUN-TOKEN' }
+        return
+    }
+    $Ctx.Logins++
+    $r = Invoke-PumbApi $Ctx 'POST' $script:PumbAuthHost 443 $script:PumbAuthPath $bytes -Auth -NoRetry
+    $bytes = $null
+    if ($Fake) { return }
+    $tok = $null; $expires = 0
+    if ($r.Status -eq 200 -and $r.AuthReal -is [System.Collections.IDictionary]) {
+        $tok = [string]$r.AuthReal['access_token']
+        [void][int]::TryParse([string]$r.AuthReal['expires_in'], [ref]$expires)
+    }
+    if (-not $tok) {
+        $Ctx.Abort = "вхід не вдався (HTTP $($r.Status)); повторних спроб немає — хибна спроба входу ризикує блокуванням облікового запису"
+        throw 'SCENARIO_STOP: вхід не вдався'
+    }
+    $Ctx.Token = $tok
+    $Ctx.TokenExpiry = if ($expires -gt 0) { [datetime]::UtcNow.AddSeconds([math]::Max($expires - 30, 30)) } else { $null }
+}
+
+function Update-PumbToken {
+    param($Ctx, [string]$Why)
+    if ($Ctx.Reauths -ge 3) { throw 'SCENARIO_STOP: повторних входів у прогоні вже 3 — зупинено, щоб не навантажувати автентифікацію' }
+    $Ctx.Reauths++
+    Add-Note $Ctx "повторний вхід ($Why)"
+    Invoke-PumbLogin $Ctx $Ctx.Cfg
+}
+
+# --- розбір відповідей для зведень (лише кількості; суми — власнику) -----------------------------
+function Add-PumbItemsDigest {
+    param($Ctx, $Items)
+    $Ctx.Cur.Pages++
+    $it = @($Items)
+    Add-Count $Ctx 'розмір сторінки' ([string]$it.Count)
+    foreach ($t in $it) {
+        if ($t -isnot [System.Collections.IDictionary]) { continue }
+        $Ctx.Cur.Ops++
+        Add-Count $Ctx 'state' ([string]$t['state'])
+        Add-Count $Ctx 'direction' ([string]$t['direction'])
+        Add-Count $Ctx 'type' ([string]$t['type'])
+        Add-Count $Ctx 'currencyCode' ([string]$t['currencyCode'])
+        Add-IdValue $Ctx 'id' $t['id']
+        Add-IdValue $Ctx 'docId' $t['docId']
+        Add-Sum $Ctx ("{0} {1}" -f $t['direction'], $t['currencyCode']) (ConvertTo-DecimalSafe $t['amount'])
+    }
+}
+
+function Format-PumbDate { param([datetime]$D, [string]$Fmt = 'dd.MM.yyyy HH:mm:ss') $D.ToString($Fmt, [System.Globalization.CultureInfo]::InvariantCulture) }
+
+function ConvertFrom-PumbDate {
+    param($Text)
+    $d = [datetime]::MinValue
+    $fmts = [string[]]@('dd.MM.yyyy HH:mm:ss', 'yyyy-MM-ddTHH:mm:ss', 'yyyy-MM-dd HH:mm:ss')
+    if ([datetime]::TryParseExact([string]$Text, $fmts, [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::None, [ref]$d)) { return $d }
+    $null
+}
+
+function New-PumbSearchBody {
+    param([string]$AccountId, [string]$From, [string]$To, $States, $Types, $Paging)
+    $b = [ordered]@{ fromDate = $From; toDate = $To }
+    if ($null -ne $States) { $b['documentState'] = [string[]]@($States) }
+    if ($null -ne $Types) { $b['documentType'] = [string[]]@($Types) }
+    $b['documentAccounts'] = [string[]]@($AccountId)
+    if ($null -ne $Paging) { $b['pagingRequest'] = $Paging }
+    , $script:Utf8NoBom.GetBytes(($b | ConvertTo-Json -Depth 6 -Compress))
+}
+
+function Send-PumbSearch {
+    param($Ctx, [byte[]]$Body)
+    $r = Invoke-PumbApi $Ctx 'POST' $script:PumbApiHost $script:PumbApiPort "$($script:PumbApiPrefix)/document/searcher" $Body -DryStub '[]'
+    $j = ConvertFrom-BodyBytes $r.Body $r.Headers
+    $items = $null
+    if ($j -is [array]) { $items = @($j) }
+    [pscustomobject]@{ R = $r; Items = $items }
+}
+
+# Читає searcher. PageSize 0 — без pagingRequest. -Cursor: продовження за orderedLastId останньої операції сторінки; зупинка на порожній
+# сторінці, неповній сторінці, курсорі, що не просувається, або MaxPages. Ознаку «є ще» рекордер не вигадує — лише записує відповіді.
+function Read-PumbSearcher {
+    param($Ctx, [string]$AccId, [string]$From, [string]$To, $States, $Types, [int]$PageSize, [int]$MaxPages, [switch]$Cursor)
+    $last = $null; $prevFirst = $null; $pageNo = 0
+    while ($true) {
+        $paging = $null
+        if ($PageSize -gt 0) { $paging = [ordered]@{ pageSize = $PageSize }; if ($null -ne $last) { $paging['orderedLastId'] = [long]$last['id'] } }
+        $s = Send-PumbSearch $Ctx (New-PumbSearchBody $AccId $From $To $States $Types $paging)
+        if ($null -eq $s.Items) { Add-Note $Ctx "відповідь не масив (HTTP $($s.R.Status)) — читання зупинено"; return }
+        $items = @($s.Items)
+        Add-PumbItemsDigest $Ctx $items
+        $Ctx.Captured.Add([pscustomobject]@{ Items = $items; Limit = $PageSize })
+        if ($items.Count -eq 0) { Add-Note $Ctx 'порожня сторінка — кінець'; return }
+        if (-not $Cursor -or $PageSize -le 0) { return }
+        if ($items.Count -lt $PageSize) { Add-Note $Ctx "неповна сторінка ($($items.Count) < $PageSize) — кінець"; return }
+        $newLast = $items[$items.Count - 1]
+        if ($newLast -isnot [System.Collections.IDictionary] -or $null -eq $newLast['id']) { Add-Note $Ctx 'в останній операції сторінки немає id — продовження неможливе'; return }
+        $first = $items[0]
+        if ($null -ne $prevFirst -and $first -is [System.Collections.IDictionary] -and [string]$first['id'] -ceq $prevFirst) { Add-Note $Ctx 'курсор не просувається (перша операція сторінки та сама) — зупинено'; return }
+        $prevFirst = if ($first -is [System.Collections.IDictionary]) { [string]$first['id'] } else { $null }
+        $pageNo++
+        if ($pageNo -ge $MaxPages) { Add-Note $Ctx "досягнуто ліміту сторінок рекордера ($MaxPages)"; return }
+        $last = $newLast
+    }
+}
+
+function Invoke-PumbPeriodTx {
+    param($Ctx, [string]$AccId, [string]$From, [string]$To)
+    $body = $script:Utf8NoBom.GetBytes(([ordered]@{ accountId = [long]$AccId; dateFrom = $From; dateTo = $To } | ConvertTo-Json -Compress))
+    $r = Invoke-PumbApi $Ctx 'POST' $script:PumbApiHost $script:PumbApiPort "$($script:PumbApiPrefix)/document/period-transactions" $body -DryStub '{"header":{},"transactions":[]}'
+    $j = ConvertFrom-BodyBytes $r.Body $r.Headers
+    if ($j -isnot [System.Collections.IDictionary]) { Add-Note $Ctx "відповідь не об'єкт (HTTP $($r.Status))"; return }
+    $Ctx.Cur.Pages++
+    $tx = @($j['transactions'])
+    $Ctx.Cur.Ops += $tx.Count
+    Add-Count $Ctx 'транзакцій у відповіді' ([string]$tx.Count)
+    if ($j['header'] -is [System.Collections.IDictionary]) {
+        Add-Note $Ctx ('поля header: ' + ((@($j['header'].Keys) | Sort-Object) -join ', '))
+        foreach ($k in 'inSaldo', 'outSaldo') { if ($null -ne $j['header'][$k]) { Add-Sum $Ctx $k (ConvertTo-DecimalSafe $j['header'][$k]) } }
+    }
+    if ($tx.Count -gt 0 -and $tx[0] -is [System.Collections.IDictionary]) {
+        Add-Note $Ctx ('поля транзакції: ' + ((@($tx[0].Keys) | Sort-Object) -join ', '))
+        foreach ($t in $tx) { if ($t -is [System.Collections.IDictionary]) { Add-IdValue $Ctx 'transactionId' $t['transactionId'] } }
+    }
+}
+
+# Операція, єдина у своїй секунді operationDate (серед усіх сторінок вибірки), лише зі сторінки, НЕ повної за її pageSize.
+function Select-PumbBoundary {
+    param($Pages)
+    $count = @{}
+    foreach ($pg in @($Pages)) {
+        foreach ($op in @($pg.Items)) {
+            if ($op -isnot [System.Collections.IDictionary]) { continue }
+            $d = ConvertFrom-PumbDate $op['operationDate']
+            if ($null -eq $d) { continue }
+            $k = [long]($d.Ticks / 10000000)
+            $count[$k] = 1 + [int]($count[$k] ?? 0)
+        }
+    }
+    $cand = [System.Collections.Generic.HashSet[long]]::new()
+    foreach ($pg in @($Pages)) {
+        if ([int]$pg.Limit -gt 0 -and @($pg.Items).Count -ge [int]$pg.Limit) { continue }
+        foreach ($op in @($pg.Items)) {
+            if ($op -isnot [System.Collections.IDictionary]) { continue }
+            $d = ConvertFrom-PumbDate $op['operationDate']
+            if ($null -eq $d) { continue }
+            $k = [long]($d.Ticks / 10000000)
+            if ($count[$k] -eq 1) { [void]$cand.Add($k) }
+        }
+    }
+    if ($cand.Count -eq 0) { return $null }
+    $sorted = @($count.Keys | ForEach-Object { [long]$_ } | Sort-Object)
+    $best = $null; $bestGap = [long]-1
+    for ($i = 0; $i -lt $sorted.Count; $i++) {
+        $t = [long]$sorted[$i]
+        if (-not $cand.Contains($t)) { continue }
+        $gap = [long]31536000
+        if ($i -gt 0) { $gap = [math]::Min($gap, $t - [long]$sorted[$i - 1]) }
+        if ($i -lt $sorted.Count - 1) { $gap = [math]::Min($gap, [long]$sorted[$i + 1] - $t) }
+        if ($gap -gt $bestGap) { $best = $t; $bestGap = $gap }
+    }
+    [pscustomobject]@{ Time = [datetime]::new([long]$best * 10000000); Gap = $bestGap; Candidates = $cand.Count }
+}
+
+# Пари запитів на включність меж: fromDate = t і t - 1 (toDate — t + 1 год, не пізніше кінця періоду); toDate = t і t + 1
+# (fromDate — t - 1 год, не раніше початку періоду). Кожен запит — окремий сценарій. Висновку про включність рекордер не робить.
+function Invoke-PumbBoundaryPairs {
+    param($Ctx, [string]$Prefix, [string]$AccId, $Pages, [datetime]$PeriodFrom, [datetime]$PeriodTo, [int]$PageSize)
+    $cand = Select-PumbBoundary $Pages
+    if ($null -eq $cand -and $Ctx.Dry) {
+        Write-Host '[dry-run] у заглушках немає операцій — для плану запитів підставлено синтетичного кандидата'
+        $cand = [pscustomobject]@{ Time = $PeriodFrom.AddDays(1); Gap = 0; Candidates = 0 }
+    }
+    if ($null -eq $cand) {
+        Invoke-Scenario $Ctx "${Prefix}_boundary_candidate" { Add-Note $Ctx 'немає операції, єдиної у своїй секунді, на неповній сторінці вибірки; пар не робили (запитів немає)' }
+        return
+    }
+    $t = [datetime]$cand.Time
+    $toA = if ($t.AddHours(1) -lt $PeriodTo) { $t.AddHours(1) } else { $PeriodTo }
+    $fromB = if ($t.AddHours(-1) -gt $PeriodFrom) { $t.AddHours(-1) } else { $PeriodFrom }
+    $steps = @(
+        @{ Tag = 'from_eq'; F = $t; T = $toA }
+        @{ Tag = 'from_shift'; F = $t.AddSeconds(-1); T = $toA }
+        @{ Tag = 'to_eq'; F = $fromB; T = $t }
+        @{ Tag = 'to_shift'; F = $fromB; T = $t.AddSeconds(1) }
+    )
+    $first = $true
+    foreach ($st in $steps) {
+        $qf = Format-PumbDate $st.F; $qt = Format-PumbDate $st.T; $isFirst = $first; $first = $false
+        Invoke-Scenario $Ctx "${Prefix}_boundary_$($st.Tag)" {
+            if ($isFirst) { Add-Note $Ctx "кандидат обрано: придатних операцій $($cand.Candidates); секунд до найближчої іншої операції: $($cand.Gap)" }
+            $paging = if ($PageSize -gt 0) { [ordered]@{ pageSize = $PageSize } } else { $null }
+            $s = Send-PumbSearch $Ctx (New-PumbSearchBody $AccId $qf $qt 'PROCESSED' 'UAH' $paging)
+            if ($null -ne $s.Items) { Add-PumbItemsDigest $Ctx @($s.Items) }
+        }
+    }
+}
+
+function Invoke-PumbRun {
+    param($Cfg, $Ctx)
+    foreach ($p in 'Token', 'TokenExpiry', 'Logins', 'Reauths', 'Cfg') { Add-Member -InputObject $Ctx -NotePropertyName $p -NotePropertyValue $null -Force }
+    $Ctx.Logins = 0; $Ctx.Reauths = 0; $Ctx.Cfg = $Cfg
+    $small = [int]($Cfg.SmallPageSize ?? 5); $work = [int]($Cfg.WorkPageSize ?? 100); $maxPages = [int]($Cfg.MaxPages ?? 60)
+    $P = $Cfg.PeriodParsed
+    $pFrom = Format-PumbDate $P.From; $pTo = Format-PumbDate $P.To.AddDays(1).AddSeconds(-1)
+    $apiPath = { param($Op) "$($script:PumbApiPrefix)$Op" }
+
+    # без входу немає нічого: решта сценаріїв потребує токена
+    Invoke-Scenario $Ctx 'pumb_auth' { Invoke-PumbLogin $Ctx $Cfg }
+    if (-not $Ctx.Token) { Write-Host '[увага] токен не отримано — решту сценаріїв пропущено'; if (-not $Ctx.Dry) { $Ctx.Failed = $true }; return }
+
+    $script:pumbAcc = @{}
+    $stub = '[{"accountId":1,"iban":"' + @($Cfg.Accounts)[0] + '","currency":"UAH"}]'
+    Invoke-Scenario $Ctx 'pumb_account' {
+        $r = Invoke-PumbApi $Ctx 'GET' $script:PumbApiHost $script:PumbApiPort (& $apiPath '/account') -DryStub $stub
+        $j = ConvertFrom-BodyBytes $r.Body $r.Headers
+        if ($j -isnot [array]) { Add-Note $Ctx "відповідь не масив (HTTP $($r.Status))"; return }
+        $Ctx.Cur.Pages++
+        Add-Count $Ctx 'рахунків у відповіді' ([string]@($j).Count)
+        foreach ($a in $j) {
+            if ($a -isnot [System.Collections.IDictionary]) { continue }
+            $Ctx.Cur.Ops++
+            Add-Count $Ctx 'currency' ([string]$a['currency'])
+            if ($a['iban'] -and -not $script:pumbAcc.ContainsKey([string]$a['iban'])) { $script:pumbAcc[[string]$a['iban']] = @{ Id = [string]$a['accountId']; Currency = [string]$a['currency'] } }
+        }
+    }
+
+    $n = 0
+    $firstAccId = $null
+    foreach ($iban in @($Cfg.Accounts)) {
+        $n++
+        $pre = "pumb_a$n"
+        $acc = $script:pumbAcc[[string]$iban]
+        if ($null -eq $acc -or -not $acc.Id) {
+            Invoke-Scenario $Ctx "${pre}_missing" { Add-Note $Ctx 'рахунок із конфігурації не знайдено у відповіді /account — сценарії рахунку пропущено'; if (-not $Ctx.Dry) { $Ctx.Failed = $true } }
+            continue
+        }
+        $accId = $acc.Id; $isUah = ($acc.Currency -ceq 'UAH')
+        if ($null -eq $firstAccId) { $firstAccId = $accId }
+        $workPages = $null
+
+        if (Test-ScenarioOn $Cfg 'SearcherSmall') {
+            Invoke-Scenario $Ctx "${pre}_searcher_small" { Read-PumbSearcher $Ctx $accId $pFrom $pTo 'PROCESSED' 'UAH' $small $maxPages -Cursor }
+        }
+        if (Test-ScenarioOn $Cfg 'SearcherWork') {
+            Invoke-Scenario $Ctx "${pre}_searcher_work" { Read-PumbSearcher $Ctx $accId $pFrom $pTo 'PROCESSED' 'UAH' $work $maxPages -Cursor }
+            $workPages = @($Ctx.Captured)
+        }
+        if (Test-ScenarioOn $Cfg 'SearcherNoPaging') {
+            Invoke-Scenario $Ctx "${pre}_searcher_nopaging" { Read-PumbSearcher $Ctx $accId $pFrom $pTo 'PROCESSED' 'UAH' 0 1 }
+        }
+        if (Test-ScenarioOn $Cfg 'StatesAll') {
+            # без фільтра станів: розподіл state і direction
+            Invoke-Scenario $Ctx "${pre}_searcher_states_all" { Read-PumbSearcher $Ctx $accId $pFrom $pTo $null 'UAH' $work 1 }
+        }
+        if (Test-ScenarioOn $Cfg 'TypesNone') {
+            Invoke-Scenario $Ctx "${pre}_searcher_types_none" { Read-PumbSearcher $Ctx $accId $pFrom $pTo 'PROCESSED' $null $work 1 }
+        }
+        if ((Test-ScenarioOn $Cfg 'TypesCurrency') -and -not $isUah) {
+            Invoke-Scenario $Ctx "${pre}_searcher_types_cur" { Read-PumbSearcher $Ctx $accId $pFrom $pTo 'PROCESSED' 'CUR' $work 1 }
+        }
+        if (Test-ScenarioOn $Cfg 'PagingProbes') {
+            # допустимі форми pagingRequest: перша сторінка, далі по одному запиту на форму (безпечні читальні запити)
+            Invoke-Scenario $Ctx "${pre}_paging_probes" {
+                $s = Send-PumbSearch $Ctx (New-PumbSearchBody $accId $pFrom $pTo 'PROCESSED' 'UAH' ([ordered]@{ pageSize = $small }))
+                if ($null -eq $s.Items) { Add-Note $Ctx "відповідь не масив (HTTP $($s.R.Status))"; return }
+                $items = @($s.Items); Add-PumbItemsDigest $Ctx $items
+                if ($items.Count -eq 0) { Add-Note $Ctx 'порожня перша сторінка — проб немає'; return }
+                $lastItem = $items[$items.Count - 1]
+                $probes = [System.Collections.Generic.List[object]]::new()
+                if ($lastItem -is [System.Collections.IDictionary] -and $null -ne $lastItem['id']) {
+                    $probes.Add(@{ Tag = 'orderedLastId'; P = [ordered]@{ pageSize = $small; orderedLastId = [long]$lastItem['id'] } })
+                    $probes.Add(@{ Tag = 'orderedLastId_sortField_id'; P = [ordered]@{ pageSize = $small; orderedLastId = [long]$lastItem['id']; sortField = 'id' } })
+                    if ($lastItem['operationDate']) {
+                        $probes.Add(@{ Tag = 'orderedLastId_orderedLastValue_operationDate'; P = [ordered]@{ pageSize = $small; orderedLastId = [long]$lastItem['id']; orderedLastValue = [string]$lastItem['operationDate']; sortField = 'operationDate' } })
+                    }
+                }
+                foreach ($d in 0, 1, -1) { $probes.Add(@{ Tag = "direction_$d"; P = [ordered]@{ pageSize = $small; direction = $d } }) }
+                $probes.Add(@{ Tag = 'pagingSessionId_probe'; P = [ordered]@{ pageSize = $small; pagingSessionId = 'recorder-probe-session' } })
+                foreach ($pr in $probes) {
+                    $s2 = Send-PumbSearch $Ctx (New-PumbSearchBody $accId $pFrom $pTo 'PROCESSED' 'UAH' $pr.P)
+                    $cnt = if ($null -ne $s2.Items) { @($s2.Items).Count } else { -1 }
+                    Add-Note $Ctx "проба $($pr.Tag): обмін $($Ctx.Rec.Seq), HTTP $($s2.R.Status), елементів $cnt"
+                    if ($null -ne $s2.Items) { Add-PumbItemsDigest $Ctx @($s2.Items) }
+                }
+            }
+        }
+        if (Test-ScenarioOn $Cfg 'DateFormats') {
+            # формат дат запиту: той, що знаємо (dd.MM.yyyy HH:mm:ss), іде в усіх сценаріях; тут — інші форми, по запиту на форму
+            Invoke-Scenario $Ctx "${pre}_date_formats" {
+                foreach ($f in @(@('dmy', 'dd.MM.yyyy'), @('iso', "yyyy-MM-dd'T'HH:mm:ss"), @('iso_date', 'yyyy-MM-dd'))) {
+                    $s = Send-PumbSearch $Ctx (New-PumbSearchBody $accId (Format-PumbDate $P.From $f[1]) (Format-PumbDate $P.To $f[1]) 'PROCESSED' 'UAH' ([ordered]@{ pageSize = $small }))
+                    Add-Note $Ctx "формат $($f[0]): обмін $($Ctx.Rec.Seq), HTTP $($s.R.Status)"
+                    if ($null -ne $s.Items) { Add-PumbItemsDigest $Ctx @($s.Items) }
+                }
+            }
+        }
+        if (Test-ScenarioOn $Cfg 'PeriodTransactions') {
+            # те саме, що searcher, іншою операцією — основа порівняння для Р4 (повнота, id, межі)
+            Invoke-Scenario $Ctx "${pre}_period_tx_dmy" { Invoke-PumbPeriodTx $Ctx $accId $pFrom $pTo }
+            Invoke-Scenario $Ctx "${pre}_period_tx_iso" { Invoke-PumbPeriodTx $Ctx $accId (Format-PumbDate $P.From "yyyy-MM-dd'T'HH:mm:ss") (Format-PumbDate $P.To.AddDays(1).AddSeconds(-1) "yyyy-MM-dd'T'HH:mm:ss") }
+        }
+        if ((Test-ScenarioOn $Cfg 'Saturated') -and $Cfg.SaturatedParsed) {
+            $sp = $Cfg.SaturatedParsed
+            Invoke-Scenario $Ctx "${pre}_searcher_saturated" {
+                Read-PumbSearcher $Ctx $accId (Format-PumbDate $sp.From) (Format-PumbDate $sp.To.AddDays(1).AddSeconds(-1)) 'PROCESSED' 'UAH' $work ([int]($Cfg.MaxSaturatedPages ?? 40)) -Cursor
+            }
+            Invoke-Scenario $Ctx "${pre}_period_tx_saturated" { Invoke-PumbPeriodTx $Ctx $accId (Format-PumbDate $sp.From) (Format-PumbDate $sp.To.AddDays(1).AddSeconds(-1)) }
+        }
+        if ((Test-ScenarioOn $Cfg 'Reversal') -and $Cfg.ReversalParsed) {
+            $rp = $Cfg.ReversalParsed
+            Invoke-Scenario $Ctx "${pre}_searcher_reversal" {
+                Read-PumbSearcher $Ctx $accId (Format-PumbDate $rp.From) (Format-PumbDate $rp.To.AddDays(1).AddSeconds(-1)) $null $null $work $maxPages -Cursor
+            }
+        }
+        if (Test-ScenarioOn $Cfg 'BoundaryPairs' $false) {
+            $pages = $workPages
+            if ($null -eq $pages) {
+                Invoke-Scenario $Ctx "${pre}_boundary_source" { Read-PumbSearcher $Ctx $accId $pFrom $pTo 'PROCESSED' 'UAH' $work 1 }
+                $pages = @($Ctx.Captured)
+            }
+            Invoke-PumbBoundaryPairs $Ctx $pre $accId $pages $P.From $P.To.AddDays(1).AddSeconds(-1) $work
+        }
+    }
+
+    if (Test-ScenarioOn $Cfg 'Errors') {
+        $today = (ConvertFrom-UnixKyiv ([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())).Date
+        $eAcc = if ($firstAccId) { $firstAccId } else { $script:FakePumbAccountId }
+        Invoke-Scenario $Ctx 'pumb_errors_invalid_token' {
+            [void](Invoke-PumbApi $Ctx 'GET' $script:PumbApiHost $script:PumbApiPort (& $apiPath '/account') -Token $script:FakeToken -DryStub '{}' -NoReauth)
+        }
+        Invoke-Scenario $Ctx 'pumb_errors_invalid_credentials' { Invoke-PumbLogin $Ctx $Cfg -Fake }
+        Invoke-Scenario $Ctx 'pumb_errors_from_after_to' {
+            [void](Send-PumbSearch $Ctx (New-PumbSearchBody $eAcc $pTo $pFrom 'PROCESSED' 'UAH' ([ordered]@{ pageSize = $small })))
+        }
+        Invoke-Scenario $Ctx 'pumb_errors_future_period' {
+            [void](Send-PumbSearch $Ctx (New-PumbSearchBody $eAcc (Format-PumbDate $today.AddDays(30)) (Format-PumbDate $today.AddDays(60)) 'PROCESSED' 'UAH' ([ordered]@{ pageSize = $small })))
+        }
+        Invoke-Scenario $Ctx 'pumb_errors_foreign_account' {
+            [void](Send-PumbSearch $Ctx (New-PumbSearchBody $script:FakePumbAccountId $pFrom $pTo 'PROCESSED' 'UAH' ([ordered]@{ pageSize = $small })))
+            Invoke-PumbPeriodTx $Ctx $script:FakePumbAccountId $pFrom $pTo
+        }
+        Invoke-Scenario $Ctx 'pumb_errors_body_not_json' {
+            [void](Invoke-PumbApi $Ctx 'POST' $script:PumbApiHost $script:PumbApiPort (& $apiPath '/document/searcher') ([System.Text.Encoding]::UTF8.GetBytes('this is not json')) -DryStub '{}')
+        }
+    }
+}
+
+# =============================================================================================
 # Зведення: для агента (лише кількості) і для власника (суми)
 # =============================================================================================
 function Write-AgentSummary {
     param($Ctx, [string]$Path, [string]$State)
     $L = [System.Collections.Generic.List[string]]::new()
     $L.Add("Зведення прогону для агента: лише кількості. Без сум, ідентифікаторів, IBAN, імен.")
-    $L.Add("Рекордер $script:RecorderVersion, формат запису $script:FormatVersion, банк $($Ctx.BankKey), мітка прогону $($Ctx.Rec.RunLabel), стан: $State")
+    $L.Add("Рекордер $script:RecorderVersion, формат запису $($Ctx.Rec.MaxVersion), банк $($Ctx.BankKey), мітка прогону $($Ctx.Rec.RunLabel), стан: $State")
     $L.Add("Обмінів усього: $($Ctx.Rec.Seq)")
     foreach ($s in $Ctx.Stats.Values) {
         $L.Add('')
@@ -964,10 +1434,15 @@ function Write-OwnerReconcile {
 # Перевірка наявної теки запису (і теки звірки) на значення секретів. Без мережі. Повертає код виходу: 0 чисто, 3 знайдено.
 # Порожній набір секретів — виняток (Test-SecretsInFiles), а не «чисто».
 function Invoke-SecretCheck {
-    param([string]$RunDir, [string]$OwnerDir, $Secrets, [string]$BaseDir)
+    param([string]$RunDir, [string]$OwnerDir, $Secrets, [string]$BaseDir, [string[]]$ExtraFiles = @())
     if (-not (Test-Path -LiteralPath $RunDir -PathType Container)) { throw "Теки запису немає: $RunDir" }
     $files = @(Get-ChildItem -LiteralPath $RunDir -Recurse -File | ForEach-Object FullName)
     if ($OwnerDir -and (Test-Path -LiteralPath $OwnerDir -PathType Container)) { $files += @(Get-ChildItem -LiteralPath $OwnerDir -Recurse -File | ForEach-Object FullName) }
+    # додаткові файли (перенаправлений stderr): файл, якого немає, — помилка, а не «чисто»
+    foreach ($x in @($ExtraFiles | Where-Object { $_ })) {
+        if (-not (Test-Path -LiteralPath $x -PathType Leaf)) { throw "Файлу для самоперевірки немає: $x" }
+        $files += $x
+    }
     $findings = Test-SecretsInFiles $files $Secrets $BaseDir
     if ($findings.Count -gt 0) {
         $lines = foreach ($f in $findings) { "файл: $($f.File); секрет: $($f.Secret); форма: $($f.Where), $($f.Form)" }
@@ -978,6 +1453,13 @@ function Invoke-SecretCheck {
     }
     Write-Host ("Самоперевірка: токенів у {0} файлах не знайдено." -f $files.Count)
     0
+}
+
+# Які банки йдуть у прогін: 'all' — три банки зі старого переліку; ПУМБ (вхід у банк) — лише за явним -Bank pumb.
+function Get-SelectedBanks {
+    param([string[]]$Bank)
+    if ($Bank -contains 'all') { return @('privat', 'monoCorp', 'monoFop') }
+    @($Bank)
 }
 
 # Чи лежить $Inner усередині $Outer (або збігається з ним). Шляхи порівнюються без урахування регістру.
@@ -1134,6 +1616,188 @@ function Invoke-SelfTestMode {
     # --- заглушки ---
     & $check 'заглушки розпізнаються' ((Test-Placeholder '<ВПИШІТЬ_ТОКЕН>') -and (Test-Placeholder '') -and (Test-Placeholder $null) -and -not (Test-Placeholder 'abc123'))
 
+    # =============================================================================================
+    # ПУМБ: білий список, формат v2, маскування автентифікації, ключ «вхід погоджено», самоперевірка витоку.
+    # Усі значення тут ВИГАДАНІ (позначені FAKE/ВИГАДАНИЙ); мережі й справжніх токенів немає.
+    # =============================================================================================
+    Write-Host ''
+    Write-Host 'ПУМБ (вигадані значення, без мережі):'
+    $pf = '/war_veganet_api'
+    $authPath = '/auth/realms/VegaNet/protocol/openid-connect/token'
+
+    # --- білий список: дозволені операції проходять ---
+    $okOps = @(
+        @('POST', 'auth.fuib.com', $authPath, 443), @('GET', 'service.fuib.com', "$pf/account", 4103),
+        @('POST', 'service.fuib.com', "$pf/document/searcher", 4103), @('POST', 'service.fuib.com', "$pf/document/period-transactions", 4103)
+    )
+    $allOk = $true
+    foreach ($o in $okOps) { try { Assert-ReadOnlyRequest $o[0] $o[1] $o[2] $o[3] } catch { $allOk = $false } }
+    & $check 'ПУМБ, білий список: форма на токен-ендпоінт, GET /account, searcher, period-transactions проходять' $allOk
+
+    # --- контроль, що вміє впасти: платіжний метод ПУМБ мусить бути відхилений ---
+    $payRejected = & $thrown { Assert-ReadOnlyRequest 'POST' 'service.fuib.com' "$pf/document/payment/order" 4103 }
+    & $check 'ПУМБ, КОНТРОЛЬ: платіжний метод POST /document/payment/order відхилено (якщо пропущено — самотест падає)' $payRejected
+    $badOps = @(
+        @('POST', 'service.fuib.com', "$pf/document/currency/buy/order", 4103), @('POST', 'service.fuib.com', "$pf/document/currency/payment/order", 4103),
+        @('POST', 'service.fuib.com', "$pf/document/limits/payment/order", 4103), @('POST', 'service.fuib.com', "$pf/document/payment/order/delete", 4103),
+        @('PUT', 'service.fuib.com', "$pf/document/payment/order", 4103), @('GET', 'service.fuib.com', "$pf/document/payment/order/structure", 4103),
+        @('POST', 'service.fuib.com', "$pf/document/payment/order/transfer-possibility", 4103), @('POST', 'auth.fuib.com', '/accounting/payment/order', 443),
+        @('POST', 'service.fuib.com', "$pf/account/filtered", 4103), @('POST', 'service.fuib.com', "$pf/account/forecast/balance", 4103),
+        @('GET', 'service.fuib.com', "$pf/document/body/1/2", 4103), @('GET', 'service.fuib.com', "$pf/document/searcher", 4103),
+        @('POST', 'service.fuib.com', "$pf/account", 4103), @('DELETE', 'service.fuib.com', "$pf/account", 4103),
+        @('POST', 'service.fuib.com', "$pf/document/searcher", 443), @('POST', 'auth.fuib.com', $authPath, 4103), @('POST', 'example.org', "$pf/document/searcher", 4103)
+    )
+    $badPassed = @($badOps | Where-Object { -not (& $thrown { Assert-ReadOnlyRequest $_[0] $_[1] $_[2] $_[3] }) })
+    & $check 'ПУМБ, білий список: усі document/*/order, змінювальні, зайві методи, чужий порт і хост відхилено' ($badPassed.Count -eq 0) "(пропущено: $($badPassed.Count) із $($badOps.Count))"
+
+    # --- ключ «вхід погоджено» ---
+    $gateOpen = @{ LoginApproved = $true }
+    & $check 'ПУМБ, ключ «вхід погоджено»: відсутній, $false, рядок «true», число 1 — відмова; лише булеве $true — дозвіл' (
+        ($null -ne (Test-PumbLoginGate @{})) -and ($null -ne (Test-PumbLoginGate @{ LoginApproved = $false })) -and
+        ($null -ne (Test-PumbLoginGate @{ LoginApproved = 'true' })) -and ($null -ne (Test-PumbLoginGate @{ LoginApproved = 1 })) -and ($null -eq (Test-PumbLoginGate $gateOpen)))
+    & $check "'all' не включає ПУМБ (вхід у банк лише за явним -Bank pumb)" ((@(Get-SelectedBanks @('all')) -notcontains 'pumb') -and (@(Get-SelectedBanks @('pumb')) -contains 'pumb'))
+
+    # --- запис ПУМБ у форматі v2, зроблений справжнім записувачем; значення вигадані ---
+    $pSecrets = [ordered]@{ 'Pumb.ClientSecret' = 'ВИГАДАНИЙ-СЕКРЕТ-Zk3q9Lm2'; 'Pumb.Password' = 'ВИГАДАНИЙ-ПАРОЛЬ-Qw8r5Tn1' }
+    $pDir = Join-Path $Dir 'pumb-sample'
+    if (Test-Path $pDir) { Remove-Item $pDir -Recurse -Force }
+    $pRec = New-Recording $pDir 'pumb' 'selftest' $pSecrets
+    $fakeAccess = 'FAKEJWT-eyJhbGciOiJGQUtFIn0.eyJzdWIiOiJmYWtlLXVzZXIifQ.FAKE_signature-Zq7Lm'
+    $fakeRefresh = 'FAKE-REFRESH-0123456789abcdefXYZ'
+    $fakeSession = 'fake0000-aaaa-bbbb-cccc-111122223333'
+    $authJson = '{"access_token":"' + $fakeAccess + '","expires_in":300,"refresh_expires_in":1800,"refresh_token":"' + $fakeRefresh + '","token_type":"Bearer","not-before-policy":0,"session_state":"' + $fakeSession + '","scope":"profile email"}'
+    $jsonHdr = @(, @('content-type', 'application/json'))
+    $prot = Protect-AuthResponse ([System.Text.Encoding]::UTF8.GetBytes($authJson)) $jsonHdr $pSecrets
+    $maskedText = [System.Text.Encoding]::UTF8.GetString($prot.Body)
+    $maskedObj = $maskedText | ConvertFrom-Json -AsHashtable
+    $shape = { param([string]$t) [regex]::Replace($t, '[A-Za-z0-9]', 'x') }
+    & $check 'ПУМБ, маскування автентифікації: видані значення відсутні в замаскованій відповіді, token_type/scope/числа лишились' (
+        -not $maskedText.Contains($fakeAccess) -and -not $maskedText.Contains($fakeRefresh) -and -not $maskedText.Contains($fakeSession) -and
+        ($maskedObj['token_type'] -ceq 'Bearer') -and ($maskedObj['scope'] -ceq 'profile email') -and ($maskedObj['expires_in'] -eq 300))
+    & $check 'ПУМБ, маскування автентифікації: маркер тієї ж довжини й форми (крапки JWT на місці)' (
+        ($maskedObj['access_token'].Length -eq $fakeAccess.Length) -and ($maskedObj['refresh_token'].Length -eq $fakeRefresh.Length) -and
+        ((& $shape $maskedObj['access_token']) -ceq (& $shape $fakeAccess)) -and ($maskedObj['access_token'].Split('.').Count -eq 3))
+    & $check 'ПУМБ, значення, видані банком у прогоні, додано до набору секретів (динамічно): 3 значення' (
+        ($prot.Issued -eq 3) -and (@($pSecrets.Values) -contains $fakeAccess) -and (@($pSecrets.Values) -contains $fakeRefresh) -and (@($pSecrets.Values) -contains $fakeSession))
+    $maskedErr = Protect-AuthResponse ([System.Text.Encoding]::UTF8.GetBytes('{"error":"invalid_grant","error_description":"Invalid user credentials"}')) $jsonHdr ([ordered]@{ A = 'не-збігається-1234' })
+    & $check 'ПУМБ, маскування: форма помилки (error, error_description) лишається читабельною' ([System.Text.Encoding]::UTF8.GetString($maskedErr.Body).Contains('invalid_grant'))
+    $maskedHtml = Protect-AuthResponse ([System.Text.Encoding]::UTF8.GetBytes('<html>Gateway 502 code 7713</html>')) @(, @('content-type', 'text/html')) ([ordered]@{ A = 'не-збігається-1234' })
+    & $check 'ПУМБ, маскування: не-JSON відповідь автентифікації маскується цілком тієї ж довжини' ([System.Text.Encoding]::UTF8.GetString($maskedHtml.Body) -ceq '<aaaa>Aaaaaaa 999 aaaa 9999</aaaa>')
+
+    $now = [datetime]::UtcNow
+    $f1 = Save-Exchange $pRec 'pumb_auth' 'auth.fuib.com' $authPath '' 200 $jsonHdr $prot.Body $null $now 5 -Method 'POST' -Port 443 -BodyOmittedReason 'автентифікація: пароль і секрет клієнта в запис не потрапляють'
+    $f2 = Save-Exchange $pRec 'pumb_account' 'service.fuib.com' "$pf/account" '' 200 $jsonHdr ([System.Text.Encoding]::UTF8.GetBytes('[{"accountId":1,"iban":"UA000000000000000000000000000","currency":"UAH"}]')) $null $now 5 -Method 'GET' -Port 4103
+    $searchBody = New-PumbSearchBody '1' '01.01.2020 00:00:00' '03.01.2020 23:59:59' 'PROCESSED' 'UAH' ([ordered]@{ pageSize = 5 })
+    $f3 = Save-Exchange $pRec 'pumb_a1_searcher_small' 'service.fuib.com' "$pf/document/searcher" '' 200 $jsonHdr ([System.Text.Encoding]::UTF8.GetBytes('[]')) $null $now 5 -Method 'POST' -Port 4103 -RequestBody $searchBody
+    Save-Manifest $pRec 'ok'
+    $j1 = Get-Content (Join-Path $pDir $f1) -Raw | ConvertFrom-Json -AsHashtable
+    $j2 = Get-Content (Join-Path $pDir $f2) -Raw | ConvertFrom-Json -AsHashtable
+    $j3 = Get-Content (Join-Path $pDir $f3) -Raw | ConvertFrom-Json -AsHashtable
+    $jm = Get-Content (Join-Path $pDir 'recording.json') -Raw | ConvertFrom-Json -AsHashtable
+    & $check 'ПУМБ, формат v2: автентифікація — метод POST, bodyOmitted + причина, порту немає (443), тіла запиту немає' (
+        $j1.formatVersion -eq 2 -and $j1.request.method -ceq 'POST' -and $j1.request.bodyOmitted -eq $true -and $j1.request.bodyOmittedReason -and
+        -not $j1.request.ContainsKey('port') -and -not $j1.request.ContainsKey('bodyBase64'))
+    & $check 'ПУМБ, формат v2: GET /account на порту 4103 — request.port, без тіла' ($j2.formatVersion -eq 2 -and $j2.request.port -eq 4103 -and $j2.request.method -ceq 'GET' -and -not $j2.request.ContainsKey('bodyBase64'))
+    $rawBody = [Convert]::FromBase64String($j3.request.bodyBase64)
+    & $check 'ПУМБ, формат v2: тіло searcher — bodyBase64 + bodyLength як пішло; documentAccounts — масив' (
+        $j3.formatVersion -eq 2 -and $j3.request.bodyLength -eq $rawBody.Length -and ([System.Text.Encoding]::UTF8.GetString($rawBody) -match '"documentAccounts":\["1"\]') -and ([System.Text.Encoding]::UTF8.GetString($rawBody) -match '"pageSize":5'))
+    & $check 'ПУМБ, формат v2: версія маніфесту = найвища з версій обмінів (2)' ($jm.formatVersion -eq 2 -and $jm.exchanges.Count -eq 3)
+
+    # запис лише з GET лишається версією 1, байти запиту — як у 5а
+    $v1Rec = New-Recording (Join-Path $Dir 'v1-sample') 'selftest' 'x' $secrets
+    $v1f = Save-Exchange $v1Rec 'selftest' 'api.monobank.ua' '/personal/client-info' '' 200 $jsonHdr ([System.Text.Encoding]::UTF8.GetBytes('{}')) $null $now 1
+    Save-Manifest $v1Rec 'ok'
+    $v1j = Get-Content (Join-Path $v1Rec.Dir $v1f) -Raw | ConvertFrom-Json -AsHashtable
+    $v1m = Get-Content (Join-Path $v1Rec.Dir 'recording.json') -Raw | ConvertFrom-Json -AsHashtable
+    & $check 'формат: запис лише з GET без тіла й порту лишається версією 1 (обмін і маніфест)' (
+        $v1j.formatVersion -eq 1 -and $v1m.formatVersion -eq 1 -and -not $v1j.request.ContainsKey('port') -and -not $v1j.request.ContainsKey('bodyBase64') -and $v1j.request.method -ceq 'GET')
+    & $check 'формат: POST без форми тіла запиту — відмова записувача (форма обов''язкова)' (& $thrown { Save-Exchange $v1Rec 'x' 'service.fuib.com' "$pf/document/searcher" '' 200 $jsonHdr ([byte[]]@()) $null $now 1 -Method 'POST' -Port 4103 })
+
+    # --- самоперевірка витоку: у записі видані значення відсутні; підкладений вигаданий «токен» у консолі й stderr — код 3 ---
+    $pOwn = Join-Path $Dir 'pumb-owner'
+    New-Item -ItemType Directory -Path $pOwn -Force | Out-Null
+    $leakFound = Test-SecretsInFiles @(Get-ChildItem $pDir -Recurse -File | ForEach-Object FullName) $pSecrets $pDir
+    & $check 'ПУМБ, самоперевірка: у записі (з урахуванням виданих банком значень) знахідок немає' ($leakFound.Count -eq 0) "(знахідок: $($leakFound.Count))"
+    $codeClean = Invoke-SecretCheck $pDir $pOwn $pSecrets $pDir
+    & $check 'ПУМБ, самоперевірка: чиста тека — код 0' ($codeClean -eq 0)
+    $consoleLog = Join-Path $pDir 'console.log'
+    [System.IO.File]::WriteAllText($consoleLog, "[0002] POST $authPath -> HTTP 200`r`n  debug: access_token=$fakeAccess`r`n", $script:Utf8NoBom)
+    $codeCon = Invoke-SecretCheck $pDir $pOwn $pSecrets $pDir
+    & $check 'ПУМБ, КОНТРОЛЬ витоку: виданий банком токен у консольному журналі (console.log) — код 3, LEAK-DETECTED.txt без значення' (
+        ($codeCon -eq 3) -and (Test-Path (Join-Path $pDir 'LEAK-DETECTED.txt')) -and -not ([System.IO.File]::ReadAllText((Join-Path $pDir 'LEAK-DETECTED.txt'))).Contains($fakeAccess))
+    $configOnly = [ordered]@{ 'Pumb.ClientSecret' = $pSecrets['Pumb.ClientSecret']; 'Pumb.Password' = $pSecrets['Pumb.Password'] }
+    Remove-Item (Join-Path $pDir 'LEAK-DETECTED.txt') -Force -ErrorAction SilentlyContinue
+    $codeStatic = Invoke-SecretCheck $pDir $pOwn $configOnly $pDir
+    & $check 'ПУМБ, КОНТРОЛЬ динамічності: без виданих значень у наборі той самий токен у консолі НЕ знаходиться (набір секретів — з прогону)' ($codeStatic -eq 0)
+    Remove-Item $consoleLog -Force
+    if (Test-Path (Join-Path $pDir 'LEAK-DETECTED.txt')) { Remove-Item (Join-Path $pDir 'LEAK-DETECTED.txt') -Force }
+    $stderrFile = Join-Path $Dir 'pumb-stderr.log'
+    [System.IO.File]::WriteAllText($stderrFile, "Error: boom $($pSecrets['Pumb.Password']) tail", $script:Utf8NoBom)
+    $codeErr = Invoke-SecretCheck $pDir $pOwn $pSecrets $pDir @($stderrFile)
+    & $check 'ПУМБ, КОНТРОЛЬ витоку: пароль у перенаправленому stderr — код 3' ($codeErr -eq 3)
+    Remove-Item (Join-Path $pDir 'LEAK-DETECTED.txt') -Force -ErrorAction SilentlyContinue
+    [System.IO.File]::WriteAllText($stderrFile, 'Error: boom, nothing secret', $script:Utf8NoBom)
+    & $check 'ПУМБ, самоперевірка: чистий stderr — код 0' ((Invoke-SecretCheck $pDir $pOwn $pSecrets $pDir @($stderrFile)) -eq 0)
+    & $check 'ПУМБ, самоперевірка: -StderrLog, якого немає, — помилка, не «чисто»' (& $thrown2 { Invoke-SecretCheck $pDir $pOwn $pSecrets $pDir @((Join-Path $Dir 'нема.log')) })
+
+    # --- наскрізно через справжній скрипт (дочірній процес): без ключа — код 2 і жодного запису; dry-run без мережі; витік у stderr — код 3 ---
+    $e2e = Join-Path $Dir 'e2e'
+    if (Test-Path $e2e) { Remove-Item $e2e -Recurse -Force }
+    New-Item -ItemType Directory -Path $e2e | Out-Null
+    $fakeCfg = Join-Path $e2e 'config.psd1'
+    $cfgText = @'
+@{
+    Pumb = @{
+        Enabled = $true
+        ClientId = 'SELFTEST-FAKE-CLIENT'
+        ClientSecret = 'SELFTEST-FAKE-SECRET-0001'
+        Login = 'selftest-fake-login'
+        Password = 'SELFTEST-FAKE-PASSWORD-0002'
+        Accounts = @('UA000000000000000000000000000')
+        Period = @{ From = '2020-01-01'; To = '2020-01-03' }
+    }
+}
+'@
+    [System.IO.File]::WriteAllText($fakeCfg, $cfgText, $script:Utf8NoBom)
+    $pwsh = (Get-Process -Id $PID).Path
+    $outRoot = Join-Path $e2e 'rec'; $ownRoot = Join-Path $e2e 'own'
+    # Захист від мережі: дочірні процеси йдуть через проксі на закритий локальний порт 9, тож навіть зламаний ключ «вхід погоджено»
+    # не дасть запиту дійти до справжнього хоста (HttpClient у PowerShell 7 бере HTTPS_PROXY/HTTP_PROXY/ALL_PROXY, NO_PROXY порожній).
+    $proxyVars = 'HTTPS_PROXY', 'HTTP_PROXY', 'ALL_PROXY', 'NO_PROXY', 'https_proxy', 'http_proxy', 'all_proxy', 'no_proxy'
+    $savedEnv = @{}
+    foreach ($v in $proxyVars) { $savedEnv[$v] = [Environment]::GetEnvironmentVariable($v) }
+    foreach ($v in 'HTTPS_PROXY', 'HTTP_PROXY', 'ALL_PROXY', 'https_proxy', 'http_proxy', 'all_proxy') { [Environment]::SetEnvironmentVariable($v, 'http://127.0.0.1:9') }
+    foreach ($v in 'NO_PROXY', 'no_proxy') { [Environment]::SetEnvironmentVariable($v, '') }
+    try {
+    # передумова захисту: дочірній процес із цим середовищем на недосяжному імені хоста дає відмову з'єднання з проксі (ConnectionRefused), а не помилку імені
+    $guardProbe = (& $pwsh -NoProfile -Command '$h=[System.Net.Http.HttpClient]::new(); $h.Timeout=[TimeSpan]::FromSeconds(15); try { $h.GetAsync("https://selftest-guard.invalid/").GetAwaiter().GetResult()|Out-Null; "reached" } catch { $e=$_.Exception; while($e.InnerException){$e=$e.InnerException}; if ($e -is [System.Net.Sockets.SocketException]) { [string]$e.SocketErrorCode } else { $e.GetType().Name } }' 2>&1 | Out-String).Trim()
+    & $check 'захист від мережі: дочірній процес іде через проксі 127.0.0.1:9 (відмова з''єднання з проксі, не помилка імені хоста)' ($guardProbe -ceq 'ConnectionRefused') "($guardProbe)"
+    $o1 = & $pwsh -NoProfile -File $PSCommandPath -Bank pumb -Config $fakeCfg -OutRoot $outRoot -OwnerRoot $ownRoot -RunLabel e2e1 2>&1 | Out-String
+    $c1 = $LASTEXITCODE
+    & $check 'ПУМБ, без ключа «вхід погоджено» сценарій з автентифікацією — код 2, записів немає, у виводі немає значень облікових даних' (
+        ($c1 -eq 2) -and $o1.Contains('Вхід у банк не погоджено') -and -not (Test-Path (Join-Path $outRoot 'pumb')) -and
+        -not $o1.Contains('SELFTEST-FAKE-PASSWORD-0002') -and -not $o1.Contains('SELFTEST-FAKE-SECRET-0001')) "(код $c1)"
+    $o2 = & $pwsh -NoProfile -File $PSCommandPath -Bank pumb -Config $fakeCfg -OutRoot $outRoot -OwnerRoot $ownRoot -RunLabel e2e2 -DryRun 2>&1 | Out-String
+    $c2 = $LASTEXITCODE
+    & $check 'ПУМБ, -DryRun: план запитів без мережі, код 0, нічого не записано, тіло автентифікації не друкується' (
+        ($c2 -eq 0) -and $o2.Contains('[план] POST auth.fuib.com') -and $o2.Contains('[план] POST service.fuib.com:4103/war_veganet_api/document/searcher') -and
+        -not $o2.Contains('SELFTEST-FAKE-PASSWORD-0002') -and -not $o2.Contains('grant_type') -and -not (Test-Path (Join-Path $outRoot 'pumb'))) "(код $c2)"
+    $ckRunDir = Join-Path $outRoot 'pumb\e2e3'
+    New-Item -ItemType Directory -Path $ckRunDir -Force | Out-Null
+    [System.IO.File]::WriteAllText((Join-Path $ckRunDir '0001.json'), '{"x":"clean"}', $script:Utf8NoBom)
+    $stderrE2e = Join-Path $e2e 'stderr.log'
+    [System.IO.File]::WriteAllText($stderrE2e, 'Error: SELFTEST-FAKE-PASSWORD-0002 echoed', $script:Utf8NoBom)
+    $o3 = & $pwsh -NoProfile -File $PSCommandPath -CheckRun -Bank pumb -RunLabel e2e3 -Config $fakeCfg -OutRoot $outRoot -OwnerRoot $ownRoot -StderrLog $stderrE2e 2>&1 | Out-String
+    $c3 = $LASTEXITCODE
+    & $check 'ПУМБ, -CheckRun: підкладене значення секрету в перенаправленому stderr — код 3 (через справжній скрипт)' ($c3 -eq 3 -and -not $o3.Contains('SELFTEST-FAKE-PASSWORD-0002')) "(код $c3)"
+    Remove-Item (Join-Path $ckRunDir 'LEAK-DETECTED.txt') -Force -ErrorAction SilentlyContinue
+    [System.IO.File]::WriteAllText($stderrE2e, 'Error: nothing', $script:Utf8NoBom)
+    $o4 = & $pwsh -NoProfile -File $PSCommandPath -CheckRun -Bank pumb -RunLabel e2e3 -Config $fakeCfg -OutRoot $outRoot -OwnerRoot $ownRoot -StderrLog $stderrE2e 2>&1 | Out-String
+    $c4 = $LASTEXITCODE
+    & $check 'ПУМБ, -CheckRun: чистий stderr і чиста тека — код 0' ($c4 -eq 0) "(код $c4)"
+    }
+    finally { foreach ($v in $proxyVars) { [Environment]::SetEnvironmentVariable($v, $savedEnv[$v]) } }
+
     $failed = @($results | Where-Object { -not $_.Ok }).Count
     Write-Host ''
     Write-Host ("САМОТЕСТ: перевірок {0}, успішних {1}, провалених {2}" -f $results.Count, ($results.Count - $failed), $failed)
@@ -1150,13 +1814,14 @@ $bankMap = [ordered]@{
     privat   = @{ Key = 'Privat'; Dir = 'privat'; Host = 'acp.privatbank.ua'; Gap = 1.2; Run = ${function:Invoke-PrivatRun} }
     monoCorp = @{ Key = 'MonoCorp'; Dir = 'mono-corp'; Host = 'corp-api.monobank.ua'; Gap = 1.5; Run = ${function:Invoke-MonoCorpRun} }
     monoFop  = @{ Key = 'MonoFop'; Dir = 'mono-fop'; Host = 'api.monobank.ua'; Gap = 61.0; Run = ${function:Invoke-MonoFopRun} }
+    pumb     = @{ Key = 'Pumb'; Dir = 'pumb'; Host = 'service.fuib.com'; Gap = 1.0; Run = ${function:Invoke-PumbRun} }
 }
 if (Test-PathInside $OwnerRoot $OutRoot) {
     Write-Host "ВІДМОВА: -OwnerRoot ($OwnerRoot) лежить усередині -OutRoot ($OutRoot): файли із сумами потрапили б у теку, яку читає агент."
     Write-Host 'Вкажіть -OwnerRoot поза текою записів (за замовчуванням temp/api-recorder/owner-only).'
     exit 2
 }
-$selected = if ($Bank -contains 'all') { @($bankMap.Keys) } else { @($Bank) }
+$selected = Get-SelectedBanks $Bank
 
 if (-not (Test-Path -LiteralPath $Config)) {
     if ($DryRun) { $fallback = Join-Path $PSScriptRoot 'config.template.psd1'; Write-Host "[dry-run] конфігурації немає ($Config); беру шаблон $fallback"; $Config = $fallback }
@@ -1166,7 +1831,7 @@ $raw = Import-PowerShellDataFile -LiteralPath $Config
 
 # усі значення секретів із конфігурації (для самоперевірки й маскування тексту збоїв)
 $allSecrets = [ordered]@{}
-foreach ($pair in @(@('Privat', 'Token'), @('Privat', 'ClientId'), @('MonoCorp', 'Token'), @('MonoFop', 'Token'))) {
+foreach ($pair in @(@('Privat', 'Token'), @('Privat', 'ClientId'), @('MonoCorp', 'Token'), @('MonoFop', 'Token'), @('Pumb', 'ClientId'), @('Pumb', 'ClientSecret'), @('Pumb', 'Login'), @('Pumb', 'Password'))) {
     $v = if ($raw[$pair[0]] -is [System.Collections.IDictionary]) { $raw[$pair[0]][$pair[1]] } else { $null }
     if (-not (Test-Placeholder $v)) { $allSecrets["$($pair[0]).$($pair[1])"] = [string]$v }
 }
@@ -1181,7 +1846,7 @@ if ($CheckRun) {
         if (-not (Test-Path -LiteralPath $dir -PathType Container)) { if ($Bank -notcontains 'all') { Write-Host "Теки запису немає: $dir"; $ckExit = 2 }; continue }
         $found++
         Write-Host "Перевіряю $dir"
-        $c = Invoke-SecretCheck $dir (Join-Path $OwnerRoot (Join-Path $m.Dir $RunLabel)) $allSecrets $OutRoot
+        $c = Invoke-SecretCheck $dir (Join-Path $OwnerRoot (Join-Path $m.Dir $RunLabel)) $allSecrets $OutRoot @($StderrLog)
         if ($c -eq 3) { $ckExit = 3 } elseif ($c -ne 0 -and $ckExit -ne 3) { $ckExit = $c }
     }
     if ($found -eq 0 -and $ckExit -eq 0) { Write-Host "Жодної теки запису з міткою $RunLabel у $OutRoot не знайдено."; $ckExit = 2 }
@@ -1206,6 +1871,11 @@ foreach ($b in $selected) {
         continue
     }
     $cfg = $res.Cfg
+    if ($m.Key -eq 'Pumb' -and -not $DryRun) {
+        # ключ «вхід погоджено»: без нього жодного входу в банк (dry-run мережі не має, тож його не потребує)
+        $gateMsg = Test-PumbLoginGate $cfg
+        if ($gateMsg) { Write-Host "ВІДМОВА: $gateMsg"; $refused = $true; continue }
+    }
     $runDir = Join-Path $OutRoot (Join-Path $m.Dir $RunLabel)
     if (-not $DryRun -and (Test-Path -LiteralPath $runDir)) { Write-Host "ВІДМОВА: тека $runDir вже існує. Задайте нову мітку прогону: -RunLabel <мітка>."; $refused = $true; continue }
 
@@ -1221,6 +1891,16 @@ foreach ($b in $selected) {
     }
     # Справжній прогін: самоперевірка й позначка стану виконуються ЗАВЖДИ (finally), зокрема після Ctrl+C чи винятку.
     $state = 'interrupted'
+    $transcribing = $false
+    if ($m.Key -eq 'Pumb') {
+        # консольний журнал прогону ПУМБ ведеться у файл теки запису (console.log): самоперевірка шукає секрети й у ньому
+        try {
+            New-Item -ItemType Directory -Path $runDir -Force | Out-Null
+            Start-Transcript -Path (Join-Path $runDir 'console.log') -UseMinimalHeader | Out-Null
+            $transcribing = $true
+        }
+        catch { Write-Host 'ВІДМОВА: консольний журнал вести неможливо — без нього самоперевірка неповна, до банку нічого не надіслано.'; $refused = $true; continue }
+    }
     $ownerFile = Join-Path $OwnerRoot (Join-Path $m.Dir (Join-Path $RunLabel 'reconcile.txt'))
     try {
         & $m.Run $cfg $ctx
@@ -1233,6 +1913,7 @@ foreach ($b in $selected) {
         Write-Host ('ПОМИЛКА: ' + (Remove-SecretValues ([string]$_.Exception.Message) $bankSecrets))
     }
     finally {
+        if ($transcribing) { try { Stop-Transcript | Out-Null } catch { } }
         if ($state -eq 'interrupted') { $failedAny = $true; Write-Host 'Прогін перервано — виконую самоперевірку на те, що встигло записатись.' }
         try {
             New-Item -ItemType Directory -Path $runDir -Force | Out-Null
@@ -1240,7 +1921,7 @@ foreach ($b in $selected) {
             Write-AgentSummary $ctx (Join-Path $runDir 'summary-agent.txt') $state
             Write-OwnerReconcile $ctx $ownerFile
             Save-Manifest $rec $state
-            $files = @(Get-ChildItem -LiteralPath $runDir -Recurse -File | ForEach-Object FullName) + @($ownerFile)
+            $files = @(Get-ChildItem -LiteralPath $runDir -Recurse -File | ForEach-Object FullName) + @($ownerFile) + @($StderrLog | Where-Object { $_ })
             $findings = Test-SecretsInFiles $files $bankSecrets $OutRoot
             if ($findings.Count -gt 0) {
                 $leak = $true
