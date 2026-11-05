@@ -373,9 +373,29 @@ def is_short_numeric_id(v):
     return 0 < len(v) <= SHORT_ID_MAX and v.isascii() and v.isdigit()
 
 
-def make_fakes(cfg, words, nums, map_path, ids=()):
+def doc_numbers(bank, rec):
+    """Сирі номери документів (поля `schema.DOC_NUMBER_FIELDS` з роллю KEEP чи ID): заміна жодного ID їм не дорівнює (`make_fakes`)."""
+    out = set()
+    fields = schema.DOC_NUMBER_FIELDS.get(bank)
+    if not fields:
+        return out
+    for ex in rec.exchanges:
+        if not ex['response']:
+            continue
+        try:
+            root = jsonspan.parse(R.body_text(ex))
+            leaves = schema.leaves(bank, ex['request']['path'], ex['response']['status'], root)
+        except jsonspan.JsonSpanError:
+            continue
+        for role, nd, where in leaves:
+            if role in ('KEEP', 'ID') and nd.kind in ('str', 'num') and where and where[-1] in fields and str(nd.value).strip():
+                out.add(str(nd.value).strip())
+    return out
+
+
+def make_fakes(cfg, words, nums, map_path, ids=(), numbers=()):
     fk = gen.Fakes(forbidden_words=words, forbidden_numbers=nums, allowed_words=cfg.get('allowed_words', []))
-    fk.forbidden_ids = {v.strip() for v in ids if is_short_numeric_id(v)}
+    fk.forbidden_ids = {v.strip() for v in ids if is_short_numeric_id(v)} | {v.strip() for v in numbers}
     if map_path and os.path.exists(map_path):
         with open(map_path, encoding='utf-8') as f:
             fk.load(json.load(f))
@@ -391,7 +411,7 @@ def anonymize_bank(bank, raw_dir, out_dir, map_path, cfg=None):
         raise schema.UnknownField('%s: у маніфесті інший банк' % bank)
     refs, ibans, words, nums = prescan(bank, rec)
     ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
-    fk = make_fakes(cfg, words, nums, map_path, ids)
+    fk = make_fakes(cfg, words, nums, map_path, ids, doc_numbers(bank, rec))
     b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     b.build_sweep()
     new = [b.exchange(ex) for ex in rec.exchanges]
@@ -410,6 +430,6 @@ def load_bank(bank, raw_dir, map_path, cfg=None):
     rec = R.Recording.from_dir(raw_dir)
     refs, ibans, words, nums = prescan(bank, rec)
     ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
-    fk = make_fakes(cfg, words, nums, map_path, ids)
+    fk = make_fakes(cfg, words, nums, map_path, ids, doc_numbers(bank, rec))
     b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     return rec, b

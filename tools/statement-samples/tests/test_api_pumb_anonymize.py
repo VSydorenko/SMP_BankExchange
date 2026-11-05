@@ -188,9 +188,68 @@ class PumbRequestBodyAndPersons(unittest.TestCase):
             res = env.check()
             self.assertGreater(res['hits_short_ids'], 0, res)
         with tempfile.TemporaryDirectory() as d:                                     # ACC без змін: коротке значення шукається підрядком (4-значне altNumber усередині number)
-            env = Env(d, alt='5521', doc_number='N5521K')
+            env = Env(d, alt='5521', doc_number='55210')
             env.anonymize()
             self.assertGreater(env.check()['hits_short'], 0)
+
+    # ---- раунд D2c: буквений номер документа -- роль ID за формою значення
+    @staticmethod
+    def _numbers(env):
+        """(number документів searcher, documentNumber транзакції ptx) знеособленого запису."""
+        def body(seq):
+            return json.loads(base64.b64decode(anon_exchange(env, seq)['response']['bodyBase64']).decode('utf-8'))
+        return [d['number'] for d in body(3)], body(4)['transactions'][0]['documentNumber']
+
+    def test_vii_alpha_number_is_id_same_map_same_shape_and_numeric_stays_keep(self):
+        raw = 'AB-4821/фЖk7'                                 # латиниця, цифри, роздільники, кирилиця обох регістрів
+        with tempfile.TemporaryDirectory() as d:
+            env = Env(d, doc_number=raw, doc2_number=raw, ptx_docnum=raw)
+            env.anonymize()
+            res = env.check()
+            self.assertEqual((res['hits'], res['unchanged_alpha_number']), (0, 0), res)       # зелений парний прогін
+            docs, ptx = self._numbers(env)
+            self.assertEqual(len(set(docs) | {ptx}), 1)                                       # той самий сирий -> та сама заміна в усіх документах і відповідях
+            new = docs[0]
+            self.assertNotEqual(new, raw)
+            self.assertEqual(len(new), len(raw))
+            for a, b in zip(raw, new):                                                        # форма: клас, регістр, алфавіт, роздільники
+                if a.isdigit():
+                    self.assertTrue(b.isdigit(), (a, b))
+                elif a.isalpha():
+                    self.assertTrue(b.isalpha() and a.isupper() == b.isupper() and (a.isascii() == b.isascii()), (a, b))
+                else:
+                    self.assertEqual(a, b)
+            self.assertNotIn(raw, anon_text(env))
+        with tempfile.TemporaryDirectory() as d:                                              # суто цифровий -- KEEP, без змін
+            env = Env(d, doc_number='48150', doc2_number='48151', ptx_docnum='48152')
+            env.anonymize()
+            self.assertEqual(self._numbers(env), (['48150', '48151'], '48152'))
+            self.assertEqual(env.check()['hits'], 0)
+
+    def test_viii_raw_alpha_number_left_in_anonymized_record_is_red(self):
+        raw = 'К12'                                                                       # короткий (<6): на своєму місці -- збіг за будь-якої довжини
+        orig = A.Bank.ident
+        with tempfile.TemporaryDirectory() as d:                                              # контроль 1: на своєму місці (заміну вимкнено)
+            env = Env(d, doc_number=raw)
+            with mock.patch.object(A.Bank, 'ident', lambda self, s: s if s == raw else orig(self, s)):
+                env.anonymize()
+            res = env.check()
+            self.assertGreater(res['unchanged_alpha_number'], 0, res)
+            self.assertGreater(res['hits'], 0, res)
+        with tempfile.TemporaryDirectory() as d:                                              # контроль 2: в іншому полі (поле KEEP тіла запиту), номер замінено
+            env = Env(d, doc_number=raw, extra_body={'bankMfo': raw})
+            env.anonymize()
+            res = env.check()
+            self.assertEqual(res['unchanged_alpha_number'], 0, res)
+            self.assertGreater(res['hits_short'], 0, res)
+
+    def test_ix_generator_forbids_raw_document_numbers(self):
+        with tempfile.TemporaryDirectory() as d:
+            env = Env(d, doc_number='AB1', doc2_number='48153', ptx_docnum='C2')
+            rec = R.Recording.from_dir(env.raw)
+            self.assertEqual(A.doc_numbers('pumb', rec), {'AB1', '48153', 'C2'})
+            fk = A.make_fakes({}, set(), set(), None, (), A.doc_numbers('pumb', rec))
+            self.assertTrue({'AB1', '48153', 'C2'} <= fk.forbidden_ids)
 
     def test_vi_generator_never_issues_a_replacement_equal_to_a_raw_short_id(self):
         fk = gen.Fakes()

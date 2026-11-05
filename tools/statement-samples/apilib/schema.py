@@ -236,12 +236,17 @@ def request_leaves(bank, path, root):
 # (ID: узгоджена заміна з мапи, однакова у відповіді й наступному запиті). ЧОМУ: роль ID для дати кидала б її в `build_sweep`, і збіжна KEEP-дата
 # (`operationDate`) тихо змінювалась би, зсуваючи ключ D17 і межу довіри однаково в сирому й знеособленому записі -- жодна перевірка цього не бачить.
 SHAPED_FIELDS = {'pumb': frozenset({'sortedValue', 'orderedLastValue'})}
+# Номер документа ПУМБ (`number` searcher, `documentNumber` period-transactions; роль KEEP): ЯКЩО в значенні є хоч одна літера будь-якого алфавіту -- роль ID (форма значення, ЄДИНЕ місце,
+# як курсор вище): сторож бачив слово призначення в KEEP-номері, а правило не послаблює сторожа. Суто цифровий номер лишається KEEP. Поле `number` рахунку (роль ACC) не зачіпається.
+DOC_NUMBER_FIELDS = {'pumb': frozenset({'number', 'documentNumber'})}
 _DATE_RX = re.compile(r'\d{2}\.\d{2}\.\d{4}(?: \d{2}:\d{2}:\d{2})?|\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}:\d{2})?')
 _NUM_RX = re.compile(r'-?\d+(?:\.\d+)?')
 
 
 def _by_shape(bank, key, role, nd):
     """Роль скаляра: для `SHAPED_FIELDS` -- KEEP, якщо значення ПОВНІСТЮ дата/час чи число, інакше таблична (ID)."""
+    if role == 'KEEP' and key in DOC_NUMBER_FIELDS.get(bank, ()) and nd.kind == 'str' and any(c.isalpha() for c in nd.value):
+        return 'ID'
     if key not in SHAPED_FIELDS.get(bank, ()) or nd.kind in ('lit',):
         return role
     if nd.kind == 'num':

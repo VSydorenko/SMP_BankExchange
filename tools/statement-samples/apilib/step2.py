@@ -104,6 +104,7 @@ class Sensitive:
         self.person = set()           # значення полів-осіб (`PERSON_FIELDS`) і їхні похідні (ініціали, «Прізвище І.Б.»): підрядок без нижньої межі довжини, без регістру, БЕЗ винятку `exempt`
         self.short = set()            # цілі значення ролей ID / ACC / NAME коротші за MIN_WHOLE (не більш як 2 різних символи -- винятком): пошук у значеннях полів, без нижньої межі довжини
         self.short_ids = set()        # ЦИФРОВІ значення ролі ID довжиною <= `A.SHORT_ID_MAX` (не більш як 2 різних символи -- винятком): (а) шукає їх лише ЦІЛИМ значенням поля (будь-якого, включно з KEEP, шляху, запиту), підрядком -- ні
+        self.alpha_numbers = set()    # сирі буквені номери документів ПУМБ (роль ID за формою, `schema.DOC_NUMBER_FIELDS`): підрядком (як усі ID) і, на відміну від решти коротких, ЗАВЖДИ збіг, якщо лишились на своєму місці
         self.generic = set()          # загальні фрази словника замін
         self.pair_exempt = {}         # токен -> {поля, у яких він МОЖЕ лишитися}: вузькі винятки за парою полів
         self.pair_counts = {}         # назва пари -> кількість випадків у сирому записі (іде у звіт)
@@ -261,6 +262,8 @@ def collect(bank, rec, cfg):
                 continue
             if nd.kind == 'str' and role == 'NAME' and field in PERSON_FIELDS.get(bank, ()):
                 sens.person |= person_tokens(val)
+            if role == 'ID' and nd.kind == 'str' and field in schema.DOC_NUMBER_FIELDS.get(bank, ()) and any(c.isalpha() for c in val):
+                sens.alpha_numbers.add(val.strip())
             texts.append((role, val.strip() if nd.kind == 'str' else val))
             sens.positional.append((idx, (part,) + tuple(where), role, val))
     for role, v in texts:
@@ -481,7 +484,7 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
     sub, lex = haystacks(target, bank)
     whole = scan_whole(sub, sens.whole)
     nums, names = scan_lexemes(lex, sens.nums, sens.names)
-    unchanged_long = unchanged_short = unchanged_short_id = misaligned = 0
+    unchanged_long = unchanged_short = unchanged_short_id = unchanged_alpha = misaligned = 0
     if not control:
         anon = R.Recording.from_dir(anon_dir)
         pos_anon = positional_values(bank, anon)
@@ -489,9 +492,11 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
             av = pos_anon.get((idx, where))
             if av is None:
                 misaligned += 1
-            elif av == val and not sens.exempt(val):
+            elif av == val and (not sens.exempt(val) or str(val).strip() in sens.alpha_numbers):
                 if len(str(val)) >= MIN_WHOLE_POSITIONAL:
                     unchanged_long += 1
+                elif str(val).strip() in sens.alpha_numbers:
+                    unchanged_alpha += 1                    # буквений номер документа на своєму місці -- збіг за будь-якої довжини
                 elif role == 'ID' and A.is_short_numeric_id(str(val)):
                     unchanged_short_id += 1                 # короткий цифровий ID на своєму місці -- збіг (а не лише довідка)
                 else:
@@ -501,10 +506,10 @@ def check_a(bank, raw_dir, anon_dir, cfg=None, control=False):
     short = scan_short(target_rec, sens.short)
     short_ids = scan_short_ids(target_rec, sens.short_ids)
     person = scan_person(target_rec, sens.person)
-    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair + len(short) + len(short_ids) + unchanged_short_id + len(person)
+    hits = len(whole) + len(nums) + len(names) + unchanged_long + pair + len(short) + len(short_ids) + unchanged_short_id + unchanged_alpha + len(person)
     return {'pair_counts': dict(sens.pair_counts), 'pair_leaks': pair, 'bank': bank, 'control': control, 'exchanges': len(raw.exchanges), 'tokens': sens.counts(),
             'hits_whole': len(whole), 'hits_nums': len(nums), 'hits_names': len(names), 'hits_short': len(short), 'short_tokens': len(sens.short), 'hits_short_ids': len(short_ids), 'short_id_tokens': len(sens.short_ids), 'unchanged_short_id': unchanged_short_id, 'hits_person': len(person), 'person_tokens': len(sens.person),
-            'unchanged_long': unchanged_long, 'unchanged_short_info': unchanged_short, 'misaligned': misaligned,
+            'unchanged_alpha_number': unchanged_alpha, 'unchanged_long': unchanged_long, 'unchanged_short_info': unchanged_short, 'misaligned': misaligned,
             'hits': hits, 'problems': ['збіги: %d' % hits] if hits else []}
 
 
