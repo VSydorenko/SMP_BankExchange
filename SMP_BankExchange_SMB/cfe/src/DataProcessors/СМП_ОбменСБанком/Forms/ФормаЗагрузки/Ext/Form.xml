@@ -121,6 +121,26 @@
 			<ShowTitle>false</ShowTitle>
 			<ExtendedTooltip name="ГруппаПланРасширеннаяПодсказка" id="7"/>
 			<ChildItems>
+				<CheckBoxField name="ЗапомнитьСтатью" id="423">
+					<DataPath>ЗапомнитьСтатью</DataPath>
+					<TitleLocation>Right</TitleLocation>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>При изменении статьи в строке плана статья записывается в договор (если контрагент ведет расчеты по договорам и договор известен), иначе - контрагенту. Контрагент или договор, который только будет создан, не записывается. Положение флажка запоминается для пользователя.</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Під час зміни статті в рядку плану стаття записується в договір (якщо контрагент веде розрахунки за договорами і договір відомий), інакше - контрагенту. Контрагент або договір, який лише буде створено, не записується. Положення прапорця запам'ятовується для користувача.</v8:content>
+						</v8:item>
+					</ToolTip>
+					<CheckBoxType>Auto</CheckBoxType>
+					<ContextMenu name="ЗапомнитьСтатьюКонтекстноеМеню" id="424"/>
+					<ExtendedTooltip name="ЗапомнитьСтатьюРасширеннаяПодсказка" id="425"/>
+					<Events>
+						<Event name="OnChange">ЗапомнитьСтатьюПриИзменении</Event>
+					</Events>
+				</CheckBoxField>
 				<Table name="ПланПроекция" id="40">
 					<ChangeRowSet>false</ChangeRowSet>
 					<ChangeRowOrder>false</ChangeRowOrder>
@@ -1221,6 +1241,21 @@
 			</Type>
 		</Attribute>
 		<Attribute name="ЕстьОстаток" id="29">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗапомнитьСтатью" id="30">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запомнить статью</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Запам'ятати статтю</v8:content>
+				</v8:item>
+			</Title>
 			<Type>
 				<v8:Type>xs:boolean</v8:Type>
 			</Type>
