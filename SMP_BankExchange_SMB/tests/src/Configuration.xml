@@ -79,6 +79,7 @@
 			<CommonModule>СМП_ТестыЗаписиЗаполнение</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиНастройки</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиЗачет</CommonModule>
+			<CommonModule>СМП_ТестыЗаписиПерезапись</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиОснование</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиОснованиеРасчеты</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиОснованиеПоручение</CommonModule>
