@@ -300,7 +300,7 @@ def main(argv):
     p = sub.add_parser('sets')
     p.add_argument('--anon-root', required=True, help='знеособлений вихід run1 (etalons/, readings/)')
     p.add_argument('--anon-root-run3', help='знеособлений вихід run3 (etalons/, readings/); без нього макетів Run3 немає')
-    p.add_argument('--anon-root-pumb', help='знеособлений вихід run1b ПУМБ (etalons/, readings/); з ним додаються 4 макети ПУМБ (синтетика, run1)')
+    p.add_argument('--anon-root-pumb', nargs='+', help='знеособлений вихід ПУМБ (etalons/, readings/); кілька коренів (run3 run4) зливаються в один набір, ідентифікатори з суфіксом `_Run3`/`_Run4`; з ним додаються 4 макети ПУМБ (синтетика, Run1)')
     p.add_argument('--out', required=True)
     p.set_defaults(fn=cmd_sets)
     p = sub.add_parser('pack')

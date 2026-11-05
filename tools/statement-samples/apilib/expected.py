@@ -290,6 +290,7 @@ PRIVAT_AUTH_SERVICE_PREFIX = 'CLIENT_AUTH'      # privat.txt: CLIENT_AUTH, _DENY
 
 
 PUMB_CUT_MARK = '<вирізано>'
+PUMB_RECORDER_FORM = 'перший запит searcher у формі рекордера (межі рівно по періоду, фільтри стану й типу), не конектора (межі цілими добами, без фільтрів)'   # run1b, run2
 
 
 def pumb_error_description(ex, secrets=()):
@@ -1102,7 +1103,6 @@ def _mono_items(out, items, p, disabled, corp):
 # Вимкнений відступ -- поведінка попередника (ПУМБ:342-385). Формат `operationDate` -- гіпотеза `dd.MM.yyyy HH:mm:ss`, інший -- явна відмова (`C.PumbDateFormat`).
 PUMB_DEVIATIONS = {
     'pumb1': 'чужий рахунок (D30; фільтр конектора за рахунком: IBAN запитаного серед сторін або його number/altNumber серед номерів сторін) і чужа валюта -- діагностика, не операція й не мовчазний пропуск (валюта рахунку -- зі списку /account); `direction`, що не збігся з боком за запитаним рахунком, -- Ошибка рядка',
-    'pumb2': 'валютний рахунок: попередник читає лише UAH і 980; без виміру -- гривня й Предупреждение про невизначену валюту',
     'pumb3': 'непроведені й скасовані -- Предупреждение, у Операции лише PROCESSED; запит без фільтра станів; межа довіри не пізніша за першу неостаточну',
     'pumb4': 'повернення -- до виміру (а: окремий документ свого напряму, б: рядок Ошибка); без виміру нічого не вгадується',
     'pumb5': "призначення не обрізається; від'ємна чи нульова сума -- діагностика, не операція",
@@ -1127,24 +1127,12 @@ class PaginationUnmeasured(ValueError):
 
 
 def pumb1_foreign_currency(out, disabled, n, doc_code, acc_code, ident):
-    """Операція валюти, відмінної від валюти рахунку (зі списку /account): Предупреждение, у Операции не йде. -> True, якщо відкинуто."""
+    """Операція валюти, відмінної від валюти рахунку (зі списку /account): Ошибка рядка, у Операции не йде. -> True, якщо відкинуто."""
     if 'pumb1' in disabled or not doc_code or not acc_code or doc_code == acc_code:
         return False
-    out.diag('Предупреждение', n, 'foreign-currency', 'pumb1', Ид=ident, Код=doc_code)
+    out.diag('Ошибка', n, 'foreign-currency', 'pumb1', Ид=ident, Код=doc_code)
     out.applied.add('pumb1')
     return True
-
-
-def pumb2_account_currency(out, disabled, ccy):
-    """Валюта операцій: для рахунку в гривні -- 980; для іншого без виміру -- теж гривня (код 980) і Предупреждение про невизначену валюту. Вимкнено -- код порожній
-    (попередник ставив 980 лише для type = UAH, ПУМБ:366-368). -> числовий код валюти операцій."""
-    if C.numeric_currency(ccy) == '980':
-        return '980'
-    if 'pumb2' in disabled:
-        return ''
-    out.diag('Предупреждение', 0, 'currency-unknown', 'pumb2', Банк=BANK_NAMES['pumb'], Код=C.to_str(ccy))
-    out.applied.add('pumb2')
-    return '980'
 
 
 def pumb3_state(out, disabled, n, state, moment, ident):
@@ -1384,7 +1372,6 @@ def _pumb(rec, p, out, disabled):
     if not searches:
         raise RecordingMismatch('у записі ПУМБ немає запиту searcher')
     acc_ccy = C.to_str(mine.get('currency'))
-    code = pumb2_account_currency(out, disabled, acc_ccy)
     moment_local = kyiv.to_local(p.reading_moment) if p.reading_moment is not None else None
     top = min(p.period_end, moment_local) if moment_local is not None else p.period_end
     filtered = p.reading_moment is not None or len(searches) > 1       # відсів за періодом (піддобу): запас меж запиту й суміжні запити дають документи поза ним
@@ -1402,7 +1389,7 @@ def _pumb(rec, p, out, disabled):
                 body = json.loads(R.request_body_text(search))
                 want = C.pumb_request_bounds(lo, hi)
                 if (C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))) != want or set(body) != {'fromDate', 'toDate', 'documentAccounts'}:
-                    raise RecordingMismatch(C.PUMB_AWAITING_RUN2 if used == 1 else 'межі запиту searcher не збігаються з половиною періоду')
+                    raise RecordingMismatch(PUMB_RECORDER_FORM if used == 1 else 'межі запиту searcher не збігаються з половиною періоду')
             if search['failure'] or search['response']['status'] != 200:
                 _failure(out, search, bank, p.credentials)                          # 429 тут -- без повтору: модель пауз зі Step 3
                 return
@@ -1435,7 +1422,7 @@ def _pumb(rec, p, out, disabled):
                 n += 1
                 if not isinstance(r, dict):
                     raise ValueError("елемент відповіді ПУМБ не є об'єктом")
-                _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, (lo, hi) if filtered else None)
+                _pumb_doc(out, p, disabled, n, r, mine, acc_ccy, (lo, hi) if filtered else None)
         if used < len(searches):
             raise RecordingMismatch('у записі ПУМБ більше запитів searcher, ніж робить модель читання')
     finally:                                                           # рядок на читання (з кількістю) -- і коли читання зупинилось відмовою: прочитане лишається
@@ -1443,7 +1430,7 @@ def _pumb(rec, p, out, disabled):
             out.diag('Предупреждение', 0, 'foreign-account', 'pumb1', Количество=len(out.foreign_docs))   # рахунок сторін не збігся ні з IBAN, ні з номером запитаного рахунку; текст -- точка читання
 
 
-def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
+def _pumb_doc(out, p, disabled, n, r, mine, acc_ccy, window):
     moment = pumb7_local_time(r.get('operationDate'))
     if window is not None and not (window[0] <= moment <= window[1]):
         out.out_of_period.append(n)                              # D36 п. 11: поза [Начало, Конец] (піддобу), але в межах запиту -- відкидається мовчки
@@ -1475,10 +1462,10 @@ def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
     if pumb_direction_conflict(out, n, r, outgoing, number):
         return
     doc_ccy = C.numeric_currency(C.to_str(r.get('currencyCode')))
-    if doc_ccy is None or (doc_ccy == '' and 'pumb2' not in disabled):
-        out.diag('Предупреждение', n, 'currency-unknown', 'pumb2', Ид=number, Код=C.to_str(r.get('currencyCode')))
-        out.applied.add('pumb2')
-    elif pumb1_foreign_currency(out, disabled, n, doc_ccy, C.numeric_currency(acc_ccy), number):
+    if doc_ccy is None:                                                 # літерний код поза довідником ISO: ніколи не гривня (D4b)
+        out.diag('Ошибка', n, 'unknown-currency', None, Ид=number, Код=C.to_str(r.get('currencyCode')))
+        return
+    if pumb1_foreign_currency(out, disabled, n, doc_ccy, C.numeric_currency(acc_ccy), number):
         return
     amount = pumb5_amount(out, disabled, n, r.get('amount'), number)
     if amount is None:
@@ -1486,7 +1473,7 @@ def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
     purpose = pumb5_purpose(out, disabled, C.to_str(r.get('description')))
     cside = 'correspondent' if outgoing else 'sender'
     out.ops.append({
-        'ПорядковыйНомер': n, 'НомерСчета': own, 'Валюта': code, 'ДатаОперации': C.iso(moment), 'НомерДокумента': number,
+        'ПорядковыйНомер': n, 'НомерСчета': own, 'Валюта': doc_ccy, 'ДатаОперации': C.iso(moment), 'НомерДокумента': number,
         'ДатаДокумента': C.iso_day(moment), 'Сумма': C.amount_str(amount), 'Направление': 'Списано' if outgoing else 'Поступило',
         'ИдентификаторОперации': ident, 'КонтрагентНаименование': C.to_str(r.get(cside + 'Name')),
         'КонтрагентНомерСчета': rcv if outgoing else snd, 'КонтрагентКод': C.to_str(r.get(cside + 'TaxId')),

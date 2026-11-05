@@ -65,8 +65,8 @@ class PumbExpected(unittest.TestCase):
         e = E.run(rec, p)
         ops, diags = summary(e)
         self.assertEqual(ops, [(1, '100.50', 'Списано', '8001', OTHER), (2, '200.00', 'Поступило', '8002', OTHER)])
-        self.assertEqual(diags, [('Ошибка', 5, 'bad-amount'), ('Предупреждение', 3, 'nonfinal'), ('Предупреждение', 4, 'cancelled'),
-                                 ('Предупреждение', 6, 'foreign-currency')])
+        self.assertEqual(diags, [('Ошибка', 5, 'bad-amount'), ('Ошибка', 6, 'foreign-currency'), ('Предупреждение', 3, 'nonfinal'),
+                                 ('Предупреждение', 4, 'cancelled')])
         self.assertEqual([(o['ИдентификаторОперации'], o['Валюта'], o['ДатаОперации'], o['ДатаДокумента']) for o in e.ops],
                          [('8001', '980', '2026-11-01T10:00:00', '2026-11-01'), ('8002', '980', '2026-11-01T11:00:00', '2026-11-01')])
         self.assertEqual((e.complete, e.failure_class), (True, ''))
@@ -90,7 +90,7 @@ class PumbExpected(unittest.TestCase):
         rec, p = reading([doc(1)], search_body=body)
         with self.assertRaises(E.RecordingMismatch) as cm:
             E.run(rec, p)
-        self.assertEqual(str(cm.exception), C.PUMB_AWAITING_RUN2)
+        self.assertEqual(str(cm.exception), E.PUMB_RECORDER_FORM)
         import dataclasses
         self.assertEqual(len(E.run(rec, dataclasses.replace(p, strict_first_request=False)).ops), 1)
 

@@ -153,7 +153,8 @@ class HandExpected(unittest.TestCase):
         e = run('СинтПУМБПоляОтсутствуют')
         self.assertEqual(numbers(e.ops), [1, 2, 3, 4])
         self.assertEqual([(d['ПорядковыйНомер'], d['Уровень'], d['Суть']) for d in e.diags],
-                         [(4, 'Предупреждение', 'currency-unknown'), (5, 'Ошибка', 'bad-amount'), (6, 'Ошибка', 'unknown-state'), (8, 'Ошибка', 'no-iban'), (0, 'Предупреждение', 'foreign-account')])        # Р-д: без IBAN обох сторін -- Ошибка, рахунок із accountId запиту не виводиться
+                         [(5, 'Ошибка', 'bad-amount'), (6, 'Ошибка', 'unknown-state'), (8, 'Ошибка', 'no-iban'), (0, 'Предупреждение', 'foreign-account')])        # Р-д: без IBAN обох сторін -- Ошибка, рахунок із accountId запиту не виводиться
+        self.assertEqual(e.ops[3]['Валюта'], '')                                                      # без currencyCode -- валюта порожня (= валюта рахунку за контрактом), не 980, без діагностики
         self.assertEqual([o['ИдентификаторОперации'] for o in e.ops], ['2201', '2202', '2203', '2204'])      # ідентифікатор -- docId (відступ 6; id -- null чи відсутній, на нього не дивимось)
         self.assertEqual(e.ops[0]['НазначениеПлатежа'], '')                                           # без description -- порожнє, не «Неопределено»
         self.assertEqual(e.ops[2]['КонтрагентНаименование'] + e.ops[2]['КонтрагентКод'] + e.ops[2]['КонтрагентМФО'], '')
@@ -259,9 +260,12 @@ class HandExpected(unittest.TestCase):
         self.assertEqual((numbers(e.ops), e.foreign, [(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags]),
                          ([1], {}, [('Предупреждение', 'foreign-account', 0)]))                          # фільтр конектора за рахунком (pumb1/D30): діагностика, не операція
         e = run('СинтПУМБЧужаяВалюта')
-        self.assertEqual((numbers(e.ops), [(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags]), ([1], [('Предупреждение', 'foreign-currency', 2)]))
+        self.assertEqual((numbers(e.ops), [(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags]), ([1], [('Ошибка', 'foreign-currency', 2)]))
         e = run('СинтПУМБВалютныйСчет')
-        self.assertEqual(([o['Валюта'] for o in e.ops], [d['Суть'] for d in e.diags]), (['980'], ['currency-unknown']))
+        self.assertEqual(([o['Валюта'] for o in e.ops], [d['Суть'] for d in e.diags]), (['840'], []))      # D4b: валюта операції -- з документа, не 980 за замовчуванням
+        e = run('СинтПУМБВалютаНеизвестна')                                                              # D4b: літерний код поза довідником -- Ошибка, ніколи не гривня
+        self.assertEqual((numbers(e.ops), [o['Валюта'] for o in e.ops], [(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags]),
+                         ([1], ['980'], [('Ошибка', 'unknown-currency', 2)]))
 
 
 class Contract(unittest.TestCase):
@@ -282,8 +286,8 @@ class Contract(unittest.TestCase):
                 self.assertTrue(all(d['Уровень'] == 'Предупреждение' for d in e.diags), s.sid)
             else:
                 self.assertTrue(e.complete, s.sid)
-            # нічого не зникає мовчки: кожен документ відповіді -- операція, рядок діагностики або запас поза періодом (рядок currency-unknown -- застереження до операції)
-            nums = numbers(e.ops) + [d['ПорядковыйНомер'] for d in e.diags if d['ПорядковыйНомер'] > 0 and d['Суть'] != 'currency-unknown']
+            # нічого не зникає мовчки: кожен документ відповіді -- операція, рядок діагностики або запас поза періодом
+            nums = numbers(e.ops) + [d['ПорядковыйНомер'] for d in e.diags if d['ПорядковыйНомер'] > 0]
             self.assertEqual(len(nums), len(set(nums)), s.sid)
             if not e.failure_class:
                 self.assertEqual(len(nums) + len(e.out_of_period) + len(e.skipped_nonmove) + len(e.foreign_docs) + e.silent, e.items, s.sid)
