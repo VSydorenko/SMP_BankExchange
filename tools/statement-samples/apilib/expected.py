@@ -1296,7 +1296,7 @@ def pumb_select_account(out, accounts, p):
     пара неоднозначна -- `account-ambiguous`, «дія людини» ДО запиту виписки. Обидва випадки -- один клас «рахунку немає в банку». -> рахунок чи None (відмова записана)."""
     same = [a for a in accounts if isinstance(a, dict) and a.get('iban') == p.account]
     if not same:
-        _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb']}, 'account-not-found')
+        _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb'], 'Количество': 0}, 'account-not-found')       # факт `Количество` = 0: Т1 відрізняє «немає за IBAN» від «кілька під IBAN»
         return None
     if len(same) == 1:
         return same[0]
@@ -1304,7 +1304,10 @@ def pumb_select_account(out, accounts, p):
     by_pair = [a for a in same if want and C.numeric_currency(C.to_str(a.get('currency'))) == want]
     if len(by_pair) == 1:
         return by_pair[0]
-    _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb']}, 'account-ambiguous')
+    facts = {'Банк': BANK_NAMES['pumb'], 'Количество': len(same)}                                       # скільки рахунків під IBAN
+    if want:
+        facts['Код'] = want                                                                          # числовий код валюти, який передано (порожнього не передано -- факту немає)
+    _fail(out, CLS_HUMAN, facts, 'account-ambiguous')
     return None
 
 

@@ -224,7 +224,7 @@
             # --- run2 (читання у формі конектора; усі лише читають; нижче ConnectorRead залежать LongestPeriod, Reconcile, StmSigns, ConnectorBoundary) ---
             ConnectorRead      = $true   # connector_read: для кожного рахунку, тіло й заголовки як у конектора, ділення навпіл при відповіді >= ConnectorThreshold
             XFlowProbe         = $true   # xflow_probe: перший запит connector_read із X-Flow-ID попередника (5:6:EX) — порівняння, чи банк приймає обидві форми
-            ConnectorBoundary  = $true   # boundary_pairs у формі конектора: операція, єдина у своїй секунді; fromDate = t і t + 1, toDate = t і t - 1; значень немає
+            ConnectorBoundary  = $false  # секундна семантика не потрібна: банк фільтрує цілими добами (run2, вимір); зонд лишено для довідки: boundary_pairs, fromDate = t і t + 1, toDate = t і t - 1
             LongestPeriod      = $true   # longest_period: один запит конектора на LongestPeriodDays діб для найактивнішого рахунку; у зведенні лише кількість документів
             StmSigns           = $true   # ознаки STM(d) - STM(d-1) проти чистого руху дня (лише кількості), по рахунку й для найдовшого періоду
             Reconcile          = $true   # reconcile.txt для власника: найактивніший рахунок, UAH/CUR/STM окремо, кількість і сума вхідних і вихідних (суми лише в owner-only)
