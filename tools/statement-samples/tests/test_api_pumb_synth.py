@@ -318,7 +318,12 @@ class Deviations(unittest.TestCase):
 
     @staticmethod
     def expected_part(s, disabled=()):
-        return json.dumps(etalon.build(s, frozenset(disabled))[0]['expected'], sort_keys=True, ensure_ascii=False)
+        try:
+            return json.dumps(etalon.build(s, frozenset(disabled))[0]['expected'], sort_keys=True, ensure_ascii=False)
+        except E.RecordingMismatch:
+            if not disabled:
+                raise
+            return 'RecordingMismatch'          # без відступу модель читає далі, ніж кінчається запис (відмова зупиняла читання: запиту наступної половини в записі немає) -- це зміна еталона
 
     def test_disabling_a_deviation_changes_exactly_the_records_where_it_fires(self):
         for dev in sorted(set(E.PUMB_DEVIATIONS) - set(self.NO_TRACE)):
