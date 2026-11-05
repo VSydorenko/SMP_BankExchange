@@ -144,6 +144,11 @@
 								<CommandName>Form.Command.ИзменитьРеквизиты</CommandName>
 								<ExtendedTooltip name="ПланПроекцияКонтекстноеМенюИзменитьРеквизитыРасширеннаяПодсказка" id="403"/>
 							</Button>
+							<Button name="ПланПроекцияКонтекстноеМенюРеквизитыКонтрагента" id="406">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.РеквизитыКонтрагента</CommandName>
+								<ExtendedTooltip name="ПланПроекцияКонтекстноеМенюРеквизитыКонтрагентаРасширеннаяПодсказка" id="407"/>
+							</Button>
 						</ChildItems>
 					</ContextMenu>
 					<AutoCommandBar name="ПланПроекцияКоманднаяПанель" id="42">
@@ -173,6 +178,11 @@
 								<Type>CommandBarButton</Type>
 								<CommandName>Form.Command.ИзменитьРеквизиты</CommandName>
 								<ExtendedTooltip name="ПланПроекцияИзменитьРеквизитыРасширеннаяПодсказка" id="401"/>
+							</Button>
+							<Button name="ПланПроекцияРеквизитыКонтрагента" id="404">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.РеквизитыКонтрагента</CommandName>
+								<ExtendedTooltip name="ПланПроекцияРеквизитыКонтрагентаРасширеннаяПодсказка" id="405"/>
 							</Button>
 						</ChildItems>
 					</AutoCommandBar>
@@ -1534,6 +1544,29 @@
 				</v8:item>
 			</ToolTip>
 			<Action>ИзменитьРеквизитыСтрокПлана</Action>
+		</Command>
+		<Command name="РеквизитыКонтрагента" id="8">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Реквизиты контрагента</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Реквізити контрагента</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Контрагент, счет и договор текущей строки: создать при загрузке, выбрать существующего или не создавать; банк нового счета.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Контрагент, рахунок і договір поточного рядка: створити під час завантаження, обрати існуючого або не створювати; банк нового рахунку.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ОткрытьПомощникКонтрагента</Action>
 		</Command>
 	</Commands>
 	<Parameters>
