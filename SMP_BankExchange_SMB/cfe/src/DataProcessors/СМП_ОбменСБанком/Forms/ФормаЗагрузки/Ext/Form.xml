@@ -105,6 +105,31 @@
 					<CommandName>Form.Command.ОтменитьЧтение</CommandName>
 					<ExtendedTooltip name="ОтменитьЧтениеРасширеннаяПодсказка" id="28"/>
 				</Button>
+				<UsualGroup name="ГруппаПравила" id="436">
+					<Title>
+					<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Правила</v8:content>
+					</v8:item>
+					<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Правила</v8:content>
+					</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаПравилаРасширеннаяПодсказка" id="437"/>
+					<ChildItems>
+						<Button name="ПравилаПоНазначению" id="438">
+							<CommandName>Form.Command.ПравилаПоНазначению</CommandName>
+							<ExtendedTooltip name="ПравилаПоНазначениюРасширеннаяПодсказка" id="439"/>
+						</Button>
+						<Button name="ЗаполнитьТиповыеПравила" id="440">
+							<CommandName>Form.Command.ЗаполнитьТиповыеПравила</CommandName>
+							<ExtendedTooltip name="ЗаполнитьТиповыеПравилаРасширеннаяПодсказка" id="441"/>
+						</Button>
+					</ChildItems>
+				</UsualGroup>
 			</ChildItems>
 		</UsualGroup>
 		<UsualGroup name="ГруппаПлан" id="6">
@@ -1690,6 +1715,52 @@
 				</v8:item>
 			</ToolTip>
 			<Action>ЗагрузитьТекущуюСтрокуПлана</Action>
+		</Command>
+		<Command name="ПравилаПоНазначению" id="11">
+			<Title>
+			<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Правила по назначению платежа</v8:content>
+			</v8:item>
+			<v8:item>
+			<v8:lang>uk</v8:lang>
+			<v8:content>Правила за призначенням платежу</v8:content>
+			</v8:item>
+			</Title>
+			<ToolTip>
+			<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Открыть справочник правил: по фразе в назначении платежа он подсказывает вид операции. Список открывается отдельным окном.</v8:content>
+			</v8:item>
+			<v8:item>
+			<v8:lang>uk</v8:lang>
+			<v8:content>Відкрити довідник правил: за фразою в призначенні платежу він підказує вид операції. Список відкривається окремим вікном.</v8:content>
+			</v8:item>
+			</ToolTip>
+			<Action>ПравилаПоНазначению</Action>
+		</Command>
+		<Command name="ЗаполнитьТиповыеПравила" id="12">
+			<Title>
+			<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Заполнить типовыми правилами</v8:content>
+			</v8:item>
+			<v8:item>
+			<v8:lang>uk</v8:lang>
+			<v8:content>Заповнити типовими правилами</v8:content>
+			</v8:item>
+			</Title>
+			<ToolTip>
+			<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Добавить в справочник правил типовые строки (комиссия банка, возвраты). Уже имеющиеся фразы не дублируются и не меняются.</v8:content>
+			</v8:item>
+			<v8:item>
+			<v8:lang>uk</v8:lang>
+			<v8:content>Додати в довідник правил типові рядки (комісія банку, повернення). Наявні фрази не дублюються і не змінюються.</v8:content>
+			</v8:item>
+			</ToolTip>
+			<Action>ЗаполнитьТиповыеПравилаКоманда</Action>
 		</Command>
 	</Commands>
 	<Parameters>
