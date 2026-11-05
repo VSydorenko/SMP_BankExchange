@@ -39,8 +39,10 @@ CASES = [
     ('без пагінації: відповідь понад спостережений максимум (імітація обрізаної стелею) -- ділиться', 'СинтПУМБОтсечёнСтеля'),
     ('direction проти боку за запитаним рахунком; переказ між своїми', 'СинтПУМБПереводМеждуСвоими'),
     ('STM у відповіді -- не операції і без Предупреждение', 'СинтПУМБSTM'),
+    ('валютний рахунок: CUR_ADV -- рух, CUR / CUR_C / CUR_S / STM поруч -- не рух, мовчки', 'СинтПУМБВалютаТипыДвижения'),
+    ('невідомий тип документа -- відмова всього читання, дія людини', 'СинтПУМБНеизвестныйТип'), ('порожній тип документа -- так само невідомий', 'СинтПУМБТипПустой'),
     ('кілька рахунків під IBAN: пара (IBAN, валюта) однозначна', 'СинтПУМБМультиВалюта'), ('кілька рахунків під IBAN: пари немає', 'СинтПУМБМультиВалютаНетПары'),
-    ('кілька рахунків під IBAN: ВалютаСчета порожнє', 'СинтПУМБМультиВалютаПусто'), ('CUR без IBAN: номер рахунку = запитаному', 'СинтПУМБНомерСчета'),
+    ('кілька рахунків під IBAN: ВалютаСчета порожнє', 'СинтПУМБМультиВалютаПусто'), ('документ без IBAN: номер рахунку = запитаному', 'СинтПУМБНомерСчета'),
     ('документ без свого рахунку -- діагностика', 'СинтПУМБНетСвоегоСчета'),
     ('аномалія меж', 'СинтПУМБАномалияПосле'),
     ('стани', 'СинтПУМБНеокончательные'), ('скасовані', 'СинтПУМБОтменённые'),
@@ -310,7 +312,7 @@ def _scenarios(refused):
     def bulk(count, n0, day):
         """`count` повних, але лінійних документів PROCESSED доби `day`, по одному на хвилину від 00:00 (відповідь нижче порога -- береться в операції)."""
         return [pdoc(g, own, n0 + i, when=_day(day) + timedelta(minutes=i), out=bool(i % 2), amount='%d.00' % (1 + i % 7), cp=mate_lean, desc='Оплата %d' % i,
-                     drop=('hostId', 'viewTemplateId', 'signTemplateId', 'createdOn', 'isImported', 'origin', 'system', 'isRead', 'accountId', 'type', 'number', 'date',
+                     drop=('hostId', 'viewTemplateId', 'signTemplateId', 'createdOn', 'isImported', 'origin', 'system', 'isRead', 'accountId', 'number', 'date',
                            'senderName', 'correspondentName', 'senderTaxId', 'correspondentTaxId', 'senderBankMfo', 'correspondentBankMfo')) for i in range(count)]
 
     s, r = new('СинтПУМБНижеПорога', 'ПУМБ: відповідь на 1 менша за поріг (1190) -- один запит за весь період, без ділення; усі документи беруться в операції', [4], **two_days)
@@ -356,9 +358,21 @@ def _scenarios(refused):
         return pdoc(g, own, n, when=at(0, 0, 0), type='STM', direction='INBOUND', amount='500.00', drop=('senderIBAN', 'correspondentIBAN'))
     s, r = new('СинтПУМБSTM', 'ПУМБ: документи STM (щоденний запис залишку рахунку, виміряно run1b/run2) -- не операції і без Предупреждение; решта документів -- як звичайно', [4])
     done(s, r.full([pdoc(g, own, 1, when=at(9), amount='10.00'), stm(2), stm(3), pdoc(g, own, 4, when=at(15), out=False, amount='40.00'), stm(5)]))
+    s, r = new('СинтПУМБВалютаТипыДвижения', 'ПУМБ: валютний рахунок (USD): рух коштів -- CUR_ADV (авізо), поруч CUR, CUR_C, CUR_S (заявки, пара на гривневому рахунку) і STM (залишок) -- не операції і без Предупреждение (виміряно run4)', [4, 5])
+    usd = lambda n, t, **kw: pdoc(g, own, n, when=at(8 + n), type=t, ccy='USD', amount='%d.00' % (10 * n), **kw)
+    done(s, r.full([usd(1, 'CUR_ADV'), usd(2, 'CUR'), usd(3, 'CUR_C'), usd(4, 'CUR_ADV', out=False), usd(5, 'CUR_S'), usd(6, 'STM', drop=('senderIBAN', 'correspondentIBAN'))],
+                   accounts=[own.account_item(currency='USD')]))
+    s, r = new('СинтПУМБНеизвестныйТип', 'ПУМБ: у відповіді поруч зі звичайними документами два документи невідомого типу (різні дні) і ще один іншого невідомого типу -- відмова ВСЬОГО читання, «дія людини»; без операцій; діагностика називає перший невідомий тип, кількість його документів і найраніший день', [4],
+               period_end=_day(2, 23, 59, 59))
+    r.auth(); r.accounts()
+    r.search_for(s.params.period_start, s.params.period_end, [pdoc(g, own, 1, when=at(9), amount='10.00'), pdoc(g, own, 2, when=at(10, d=2), type='CUR_NEW', amount='20.00'),
+                                                              pdoc(g, own, 3, when=at(11), type='CUR_NEW', amount='30.00'), pdoc(g, own, 4, when=at(12), type='XFER_NEW', amount='40.00')])
+    done(s, r)
+    s, r = new('СинтПУМБТипПустой', 'ПУМБ: у документа порожній тип (поля type немає) -- невідомий тип: відмова ВСЬОГО читання, «дія людини», без операцій', [4])
+    done(s, r.full([pdoc(g, own, 1, when=at(9), amount='10.00'), pdoc(g, own, 2, when=at(10), amount='20.00', drop=('type',))]))
     alt = '26009000000042'
-    s, r = new('СинтПУМБНомерСчета', 'ПУМБ: документи без IBAN нашої сторони, але з номером рахунку = number (CUR, відправник) чи altNumber (CUR_ADV, одержувач) запитаного -- операції; номер чужий і IBAN немає (з direction і без нього) -- Ошибка no-iban, не операція', [4])
-    done(s, r.full([pdoc(g, own, 1, when=at(9), type='CUR', amount='10.00', senderAccountNumber=own.iban[-14:], drop=('senderIBAN',)),
+    s, r = new('СинтПУМБНомерСчета', 'ПУМБ: документи без IBAN нашої сторони, але з номером рахунку = number (UAH, відправник) чи altNumber (CUR_ADV, одержувач) запитаного -- операції; номер чужий і IBAN немає (з direction і без нього) -- Ошибка no-iban, не операція', [4])
+    done(s, r.full([pdoc(g, own, 1, when=at(9), type='UAH', amount='10.00', senderAccountNumber=own.iban[-14:], drop=('senderIBAN',)),
                     pdoc(g, own, 2, when=at(10), type='CUR_ADV', out=False, amount='20.00', correspondentAccountNumber=alt, drop=('senderIBAN', 'correspondentIBAN')),
                     pdoc(g, own, 3, when=at(11), type='CUR_ADV', amount='30.00', senderAccountNumber='26000000000000', drop=('senderIBAN', 'correspondentIBAN')),
                     pdoc(g, own, 4, when=at(12), type='CUR_ADV', amount='40.00', senderAccountNumber='26000000000000', drop=('senderIBAN', 'correspondentIBAN', 'direction'))],     # без direction: фільтр рахунку -- єдина перепона

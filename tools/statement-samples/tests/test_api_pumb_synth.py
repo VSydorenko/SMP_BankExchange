@@ -228,9 +228,9 @@ class HandExpected(unittest.TestCase):
     def test_by_hand_stm_and_account_filter(self):
         # STM (щоденний запис залишку, виміряно run1b/run2): не операції і БЕЗ Предупреждение; решта -- як звичайно
         e = run('СинтПУМБSTM')
-        self.assertEqual((numbers(e.ops), e.diags, e.complete, len(e.skipped_stm)), ([1, 4], [], True, 3))
+        self.assertEqual((numbers(e.ops), e.diags, e.complete, len(e.skipped_nonmove)), ([1, 4], [], True, 3))
         self.assertEqual([d['Суть'] for d in run('СинтПУМБSTM', {'pumb9'}).diags], ['no-iban'] * 3)      # відступ вимкнено -- STM йдуть як звичайні документи (без IBAN -- Ошибка)
-        # номер рахунку: CUR без IBAN відправника, номер = number запитаного -> Списано; CUR_ADV без IBAN обох, номер одержувача = altNumber -> Поступило; чужий номер без IBAN -- no-iban
+        # номер рахунку: UAH без IBAN відправника, номер = number запитаного -> Списано; CUR_ADV без IBAN обох, номер одержувача = altNumber -> Поступило; чужий номер без IBAN -- no-iban
         e = run('СинтПУМБНомерСчета')
         self.assertEqual((numbers(e.ops), [o['Направление'] for o in e.ops], {o['НомерСчета'] for o in e.ops}), ([1, 2], ['Списано', 'Поступило'], {BY['СинтПУМБНомерСчета'].params.account}))
         self.assertEqual([(d['Уровень'], d['Суть'], d['ПорядковыйНомер']) for d in e.diags], [('Ошибка', 'no-iban', 3), ('Ошибка', 'no-iban', 4)])       # 4: без IBAN, чужий номер, БЕЗ direction -- так само не операція (фільтр рахунку -- єдина перепона)
@@ -286,7 +286,7 @@ class Contract(unittest.TestCase):
             nums = numbers(e.ops) + [d['ПорядковыйНомер'] for d in e.diags if d['ПорядковыйНомер'] > 0 and d['Суть'] != 'currency-unknown']
             self.assertEqual(len(nums), len(set(nums)), s.sid)
             if not e.failure_class:
-                self.assertEqual(len(nums) + len(e.out_of_period) + len(e.skipped_stm) + len(e.foreign_docs) + e.silent, e.items, s.sid)
+                self.assertEqual(len(nums) + len(e.out_of_period) + len(e.skipped_nonmove) + len(e.foreign_docs) + e.silent, e.items, s.sid)
             self.assertEqual(e.silent, 0, s.sid)
 
     def test_sets_for_pumb_are_buildable_with_equal_ids(self):

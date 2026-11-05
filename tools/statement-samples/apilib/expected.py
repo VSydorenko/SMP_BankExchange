@@ -103,7 +103,7 @@ class Expected:
     used: list = field(default_factory=list)         # обміни запису, які оракул СПОЖИВ, у порядку споживання
     account_currency: object = None                  # валюта рахунку ПриватБанку з /balance (буквений код); None -- невідома
     out_of_period: list = field(default_factory=list)  # номери записів поза періодом (відкинуто мовчки), D36 п. 11
-    skipped_stm: list = field(default_factory=list)    # ПУМБ: номери документів STM -- щоденні записи залишку (виміряно run1b/run2), не операції; ЛІЧИЛЬНИК для звірки «нічого не зникає мовчки», рядка діагностики немає
+    skipped_nonmove: list = field(default_factory=list)  # ПУМБ: номери документів відомих типів «не рух» (STM, CUR, CUR_C, CUR_S; див. `PUMB_NONMOVEMENT_TYPES`), не операції; ЛІЧИЛЬНИК для звірки «нічого не зникає мовчки», рядка діагностики немає
     foreign_docs: list = field(default_factory=list)   # ПУМБ: номери документів, чий рахунок сторін не збігся ні з IBAN, ні з номером запитаного (не операції; один рядок Предупреждение на читання з кількістю, відступ pumb1)
 
     def diag(self, level, n, essence, dev=None, **facts):
@@ -1109,8 +1109,13 @@ PUMB_DEVIATIONS = {
     'pumb6': 'ідентифікатор операції -- docId (виміряно: присутній 595 із 595, id майже завжди null); порожній docId -- Ошибка bad-identifier; стабільність -- run2',
     'pumb7': 'усі дати -- київський час з явним поясом; формат operationDate -- гіпотеза, інший формат -- відмова',
     'pumb8': 'без пагінації (Р4): запит за весь період, відповідь на порозі ділить період навпіл до доби (D36 п. 11); запит з pagingRequest оракул відхиляє явно',
-    'pumb9': 'STM -- щоденний запис залишку рахунку (виміряно run1b і run2: Р11 закрито), не рух грошей: не операція і без Предупреждение; попередник їх вантажив як операції',
+    'pumb9': 'тип документа: рух коштів -- лише UAH і CUR_ADV (білий список); відомі «не рух» (STM, CUR, CUR_C, CUR_S) -- не операція і без Предупреждение; будь-який інший тип (зокрема порожній) -- відмова всього читання, «дія людини»; попередник вантажив усе, що віддав банк',
 }
+# Тип документа searcher (виміряно run4, 60 днів: перебір комбінацій типів проти зміни щоденного залишку STM): рух коштів по рахунку -- UAH (гривня) і CUR_ADV (авізо валюти);
+# STM -- щоденний запис залишку; CUR, CUR_C, CUR_S -- заявки/доручення, кожна має пару на гривневому рахунку під тим самим IBAN, а рух валюти банк віддає авізо CUR_ADV.
+# Решта типів -- невідомі: читання зупиняється людиною (див. `rule_unknown_doc_type`), а не мовчки пропускає й не вантажить.
+PUMB_MOVEMENT_TYPES = frozenset({'UAH', 'CUR_ADV'})
+PUMB_NONMOVEMENT_TYPES = frozenset({'STM', 'CUR', 'CUR_C', 'CUR_S'})
 PUMB_CANCELLED = frozenset({'REJECTED', 'REJECTED_BY_ACCO', 'REJECTED_BY_OPER', 'SYSTEM_ERROR'})
 PUMB_NONFINAL = frozenset({'INPUT', 'ACCEPTING', 'ACCEPTED', 'READY_TO_SEND', 'SENDING', 'TAKE_IN', 'ROUTED', 'UPLOADED', 'ACCEPTED_BY_ACCO',
                            'ACCEPTED_BY_OPER', 'SENT_TO_EPS'})          # стани за swagger (enum VeganetDocumentItem.state); PROCESSED -- проведений
@@ -1257,6 +1262,34 @@ def rule_day_at_threshold(out, day, count):
     out.rules.add('rule_day_at_threshold')
 
 
+def rule_unknown_doc_type(out, docs, window):
+    """Контрактне правило (рішення консультанта після run4): документ searcher невідомого типу (не з `PUMB_MOVEMENT_TYPES` і не з `PUMB_NONMOVEMENT_TYPES`; порожній тип -- теж невідомий) --
+    відмова ВСЬОГО читання, «дія людини» (повтор не допоможе: людина вирішує, чи це рух коштів), операції цієї відповіді в конверт не йдуть. Діагностика називає ПЕРШИЙ невідомий тип у порядку документів
+    відповіді, кількість документів цього типу в ній і найраніший день `operationDate` серед них (факти: `Значение` -- тип, `Документов`, `Сутки`); інші невідомі типи побачить людина після виправлення.
+    Розглядаються лише документи в періоді (поза ним -- мовчазний відсів, як і для решти правил). -> True, якщо відмову записано."""
+    first, count, day = None, 0, None
+    for r in docs:
+        if not isinstance(r, dict):
+            continue
+        t = C.to_str(r.get('type'))
+        if t in PUMB_MOVEMENT_TYPES or t in PUMB_NONMOVEMENT_TYPES:
+            continue
+        moment = pumb7_local_time(r.get('operationDate'))
+        if window is not None and not (window[0] <= moment <= window[1]):
+            continue
+        if first is None:
+            first = t
+        if t == first:
+            count += 1
+            day = moment if day is None else min(day, moment)
+    if first is None:
+        return False
+    _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb'], 'Вид': 'unknown-doc-type', 'Статус': 200, 'ОписаниеБанка': '', 'Значение': first, 'Документов': count,
+                           'Сутки': day.strftime('%d.%m.%Y')}, 'unknown-doc-type')
+    out.rules.add('rule_unknown_doc_type')
+    return True
+
+
 def pumb_direction_conflict(out, n, doc, outgoing, ident):
     """Напрям за ознакою банку проти боку, визначеного за запитаним рахунком (рішення консультанта, A9): `direction` не збігся з боком -- Ошибка `direction-mismatch` (хибний знак руху грошей), не операція;
     значення поза OUTBOUND/INBOUND -- `unknown-direction`; відсутній `direction` -- не розбіжність (бік уже визначено рахунком). Переказ між своїми рахунками: бік -- за запитаним, direction мусить збігтися. -> True, якщо відхилено."""
@@ -1393,6 +1426,10 @@ def _pumb(rec, p, out, disabled):
                 out.rules.add('rule_split_at_threshold')
                 stack.extend(reversed(halves))
                 continue
+            if 'pumb9' not in disabled and rule_unknown_doc_type(out, docs, (lo, hi) if filtered else None):
+                out.items += len(docs)
+                out.applied.add('pumb9')
+                return                                                     # відмова всього читання: операцій цієї відповіді в конверті немає
             out.items += len(docs)
             for r in docs:
                 n += 1
@@ -1411,8 +1448,8 @@ def _pumb_doc(out, p, disabled, n, r, mine, code, acc_ccy, window):
     if window is not None and not (window[0] <= moment <= window[1]):
         out.out_of_period.append(n)                              # D36 п. 11: поза [Начало, Конец] (піддобу), але в межах запиту -- відкидається мовчки
         return
-    if r.get('type') == 'STM' and 'pumb9' not in disabled:
-        out.skipped_stm.append(n)                                # STM -- щоденний запис залишку рахунку (виміряно run1b/run2), не рух грошей: не операція і без Предупреждение
+    if C.to_str(r.get('type')) in PUMB_NONMOVEMENT_TYPES and 'pumb9' not in disabled:
+        out.skipped_nonmove.append(n)                            # відомий «не рух» (STM -- щоденний запис залишку; CUR, CUR_C, CUR_S -- заявки; виміряно run4): не операція і без Предупреждение
         out.applied.add('pumb9')
         return
     number, ident = pumb6_identifier(out, disabled, r)
