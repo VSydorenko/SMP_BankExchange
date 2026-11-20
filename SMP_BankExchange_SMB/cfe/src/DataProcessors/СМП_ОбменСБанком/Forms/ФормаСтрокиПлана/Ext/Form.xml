@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Строка выписки</v8:content>
+		</v8:item>
+		<v8:item>
+			<v8:lang>uk</v8:lang>
+			<v8:content>Рядок виписки</v8:content>
+		</v8:item>
+	</Title>
+	<AutoTitle>false</AutoTitle>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<Events>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="ГруппаФакты" id="14">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Факты банка</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Факти банку</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<ExtendedTooltip name="ГруппаФактыРасширеннаяПодсказка" id="15"/>
+			<ChildItems>
+				<Table name="Факты" id="1">
+					<ReadOnly>true</ReadOnly>
+					<ChangeRowSet>false</ChangeRowSet>
+					<ChangeRowOrder>false</ChangeRowOrder>
+					<HeightInTableRows>9</HeightInTableRows>
+					<DataPath>Факты</DataPath>
+					<RowFilter xsi:nil="true"/>
+					<ContextMenu name="ФактыКонтекстноеМеню" id="2"/>
+					<AutoCommandBar name="ФактыКоманднаяПанель" id="3">
+						<Autofill>false</Autofill>
+					</AutoCommandBar>
+					<ExtendedTooltip name="ФактыРасширеннаяПодсказка" id="4"/>
+					<SearchStringAddition name="ФактыСтрокаПоиска" id="300">
+						<AdditionSource>
+							<Item>Факты</Item>
+							<Type>SearchStringRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ФактыСтрокаПоискаКонтекстноеМеню" id="301"/>
+						<ExtendedTooltip name="ФактыСтрокаПоискаРасширеннаяПодсказка" id="302"/>
+					</SearchStringAddition>
+					<ViewStatusAddition name="ФактыСостояниеПросмотра" id="303">
+						<AdditionSource>
+							<Item>Факты</Item>
+							<Type>ViewStatusRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ФактыСостояниеПросмотраКонтекстноеМеню" id="304"/>
+						<ExtendedTooltip name="ФактыСостояниеПросмотраРасширеннаяПодсказка" id="305"/>
+					</ViewStatusAddition>
+					<SearchControlAddition name="ФактыУправлениеПоиском" id="306">
+						<AdditionSource>
+							<Item>Факты</Item>
+							<Type>SearchControl</Type>
+						</AdditionSource>
+						<ContextMenu name="ФактыУправлениеПоискомКонтекстноеМеню" id="307"/>
+						<ExtendedTooltip name="ФактыУправлениеПоискомРасширеннаяПодсказка" id="308"/>
+					</SearchControlAddition>
+					<ChildItems>
+						<InputField name="ФактыЗаголовок" id="5">
+							<DataPath>Факты.Заголовок</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Показатель</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Показник</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ФактыЗаголовокКонтекстноеМеню" id="6"/>
+							<ExtendedTooltip name="ФактыЗаголовокРасширеннаяПодсказка" id="7"/>
+						</InputField>
+						<InputField name="ФактыЗначение" id="8">
+							<DataPath>Факты.Значение</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Значение</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Значення</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ФактыЗначениеКонтекстноеМеню" id="9"/>
+							<ExtendedTooltip name="ФактыЗначениеРасширеннаяПодсказка" id="10"/>
+						</InputField>
+					</ChildItems>
+				</Table>
+				<InputField name="СырыеДанные" id="11">
+					<DataPath>СырыеДанные</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Исходные данные операции</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Вихідні дані операції</v8:content>
+						</v8:item>
+					</Title>
+					<Height>4</Height>
+					<MultiLine>true</MultiLine>
+					<ContextMenu name="СырыеДанныеКонтекстноеМеню" id="12"/>
+					<ExtendedTooltip name="СырыеДанныеРасширеннаяПодсказка" id="13"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="ГруппаРешения" id="29">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Решения распознавания</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Рішення розпізнавання</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<ExtendedTooltip name="ГруппаРешенияРасширеннаяПодсказка" id="30"/>
+			<ChildItems>
+				<Table name="Решения" id="16">
+					<ReadOnly>true</ReadOnly>
+					<ChangeRowSet>false</ChangeRowSet>
+					<ChangeRowOrder>false</ChangeRowOrder>
+					<HeightInTableRows>9</HeightInTableRows>
+					<DataPath>Решения</DataPath>
+					<RowFilter xsi:nil="true"/>
+					<ContextMenu name="РешенияКонтекстноеМеню" id="17"/>
+					<AutoCommandBar name="РешенияКоманднаяПанель" id="18">
+						<Autofill>false</Autofill>
+					</AutoCommandBar>
+					<ExtendedTooltip name="РешенияРасширеннаяПодсказка" id="19"/>
+					<SearchStringAddition name="РешенияСтрокаПоиска" id="309">
+						<AdditionSource>
+							<Item>Решения</Item>
+							<Type>SearchStringRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="РешенияСтрокаПоискаКонтекстноеМеню" id="310"/>
+						<ExtendedTooltip name="РешенияСтрокаПоискаРасширеннаяПодсказка" id="311"/>
+					</SearchStringAddition>
+					<ViewStatusAddition name="РешенияСостояниеПросмотра" id="312">
+						<AdditionSource>
+							<Item>Решения</Item>
+							<Type>ViewStatusRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="РешенияСостояниеПросмотраКонтекстноеМеню" id="313"/>
+						<ExtendedTooltip name="РешенияСостояниеПросмотраРасширеннаяПодсказка" id="314"/>
+					</ViewStatusAddition>
+					<SearchControlAddition name="РешенияУправлениеПоиском" id="315">
+						<AdditionSource>
+							<Item>Решения</Item>
+							<Type>SearchControl</Type>
+						</AdditionSource>
+						<ContextMenu name="РешенияУправлениеПоискомКонтекстноеМеню" id="316"/>
+						<ExtendedTooltip name="РешенияУправлениеПоискомРасширеннаяПодсказка" id="317"/>
+					</SearchControlAddition>
+					<ChildItems>
+						<InputField name="РешенияЗаголовок" id="20">
+							<DataPath>Решения.Заголовок</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Решение</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Рішення</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="РешенияЗаголовокКонтекстноеМеню" id="21"/>
+							<ExtendedTooltip name="РешенияЗаголовокРасширеннаяПодсказка" id="22"/>
+						</InputField>
+						<InputField name="РешенияЗначение" id="23">
+							<DataPath>Решения.Значение</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Значение</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Значення</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="РешенияЗначениеКонтекстноеМеню" id="24"/>
+							<ExtendedTooltip name="РешенияЗначениеРасширеннаяПодсказка" id="25"/>
+						</InputField>
+						<InputField name="РешенияИсточник" id="26">
+							<DataPath>Решения.Источник</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Источник</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Джерело</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="РешенияИсточникКонтекстноеМеню" id="27"/>
+							<ExtendedTooltip name="РешенияИсточникРасширеннаяПодсказка" id="28"/>
+						</InputField>
+					</ChildItems>
+				</Table>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="ГруппаЗамечания" id="44">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Замечания к строке</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Зауваження до рядка</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<ExtendedTooltip name="ГруппаЗамечанияРасширеннаяПодсказка" id="45"/>
+			<ChildItems>
+				<Table name="Замечания" id="31">
+					<ReadOnly>true</ReadOnly>
+					<ChangeRowSet>false</ChangeRowSet>
+					<ChangeRowOrder>false</ChangeRowOrder>
+					<HeightInTableRows>4</HeightInTableRows>
+					<DataPath>Замечания</DataPath>
+					<RowFilter xsi:nil="true"/>
+					<ContextMenu name="ЗамечанияКонтекстноеМеню" id="32"/>
+					<AutoCommandBar name="ЗамечанияКоманднаяПанель" id="33">
+						<Autofill>false</Autofill>
+					</AutoCommandBar>
+					<ExtendedTooltip name="ЗамечанияРасширеннаяПодсказка" id="34"/>
+					<SearchStringAddition name="ЗамечанияСтрокаПоиска" id="318">
+						<AdditionSource>
+							<Item>Замечания</Item>
+							<Type>SearchStringRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ЗамечанияСтрокаПоискаКонтекстноеМеню" id="319"/>
+						<ExtendedTooltip name="ЗамечанияСтрокаПоискаРасширеннаяПодсказка" id="320"/>
+					</SearchStringAddition>
+					<ViewStatusAddition name="ЗамечанияСостояниеПросмотра" id="321">
+						<AdditionSource>
+							<Item>Замечания</Item>
+							<Type>ViewStatusRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ЗамечанияСостояниеПросмотраКонтекстноеМеню" id="322"/>
+						<ExtendedTooltip name="ЗамечанияСостояниеПросмотраРасширеннаяПодсказка" id="323"/>
+					</ViewStatusAddition>
+					<SearchControlAddition name="ЗамечанияУправлениеПоиском" id="324">
+						<AdditionSource>
+							<Item>Замечания</Item>
+							<Type>SearchControl</Type>
+						</AdditionSource>
+						<ContextMenu name="ЗамечанияУправлениеПоискомКонтекстноеМеню" id="325"/>
+						<ExtendedTooltip name="ЗамечанияУправлениеПоискомРасширеннаяПодсказка" id="326"/>
+					</SearchControlAddition>
+					<ChildItems>
+						<InputField name="ЗамечанияПоле" id="35">
+							<DataPath>Замечания.Поле</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Поле</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Поле</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ЗамечанияПолеКонтекстноеМеню" id="36"/>
+							<ExtendedTooltip name="ЗамечанияПолеРасширеннаяПодсказка" id="37"/>
+						</InputField>
+						<InputField name="ЗамечанияУровень" id="38">
+							<DataPath>Замечания.Уровень</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Уровень</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Рівень</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ЗамечанияУровеньКонтекстноеМеню" id="39"/>
+							<ExtendedTooltip name="ЗамечанияУровеньРасширеннаяПодсказка" id="40"/>
+						</InputField>
+						<InputField name="ЗамечанияТекст" id="41">
+							<DataPath>Замечания.Текст</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Замечание</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Зауваження</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ЗамечанияТекстКонтекстноеМеню" id="42"/>
+							<ExtendedTooltip name="ЗамечанияТекстРасширеннаяПодсказка" id="43"/>
+						</InputField>
+					</ChildItems>
+				</Table>
+			</ChildItems>
+		</UsualGroup>
+		<Button name="Закрыть" id="46">
+			<Type>UsualButton</Type>
+			<CommandName>Form.StandardCommand.Close</CommandName>
+			<ExtendedTooltip name="ЗакрытьРасширеннаяПодсказка" id="47"/>
+		</Button>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.СМП_ОбменСБанком</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="Факты" id="2">
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Заголовок" id="1">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Значение" id="2">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="СырыеДанные" id="3">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="Решения" id="4">
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Заголовок" id="1">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Значение" id="2">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Источник" id="3">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="Замечания" id="5">
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Поле" id="1">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Уровень" id="2">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Текст" id="3">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+	</Attributes>
+	<Parameters>
+		<Parameter name="АдресПлана">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Parameter>
+		<Parameter name="ПорядковыйНомер">
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>0</v8:FractionDigits>
+					<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Parameter>
+	</Parameters>
+</Form>

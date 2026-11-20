@@ -41,6 +41,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.КлиентБанкЗаголовокВыгрузка</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.КлиентБанкЗаголовокЗагрузка</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_КлиентБанк</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.СМП_ОбменСБанком</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonPicture.СМП_BankExchange</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">CommonModule.КоннекторHTTP_BankExchange</xr:Item>
 			</Content>

@@ -1,0 +1,1777 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Загрузка выписки из банка</v8:content>
+		</v8:item>
+		<v8:item>
+			<v8:lang>uk</v8:lang>
+			<v8:content>Завантаження виписки з банку</v8:content>
+		</v8:item>
+	</Title>
+	<AutoTitle>false</AutoTitle>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<Events>
+		<Event name="BeforeClose">ПередЗакрытием</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="ГруппаШапка" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Шапка</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Шапка</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаШапкаРасширеннаяПодсказка" id="2"/>
+			<ChildItems>
+				<InputField name="БанковскийСчет" id="3">
+					<DataPath>БанковскийСчет</DataPath>
+					<ContextMenu name="БанковскийСчетКонтекстноеМеню" id="4"/>
+					<ExtendedTooltip name="БанковскийСчетРасширеннаяПодсказка" id="5"/>
+					<Events>
+						<Event name="OnChange">БанковскийСчетПриИзменении</Event>
+					</Events>
+				</InputField>
+				<InputField name="УчетнаяЗапись" id="10">
+					<DataPath>УчетнаяЗапись</DataPath>
+					<ContextMenu name="УчетнаяЗаписьКонтекстноеМеню" id="11"/>
+					<ExtendedTooltip name="УчетнаяЗаписьРасширеннаяПодсказка" id="12"/>
+					<Events>
+						<Event name="OnChange">УчетнаяЗаписьПриИзменении</Event>
+					</Events>
+				</InputField>
+				<InputField name="ИдентификаторФормата" id="13">
+					<DataPath>ИдентификаторФормата</DataPath>
+					<ListChoiceMode>true</ListChoiceMode>
+					<ContextMenu name="ИдентификаторФорматаКонтекстноеМеню" id="14"/>
+					<ExtendedTooltip name="ИдентификаторФорматаРасширеннаяПодсказка" id="15"/>
+					<Events>
+						<Event name="OnChange">ИдентификаторФорматаПриИзменении</Event>
+					</Events>
+				</InputField>
+				<LabelField name="ТекстВнешнейОбработки" id="16">
+					<DataPath>ТекстВнешнейОбработки</DataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Формат выписки</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Формат виписки</v8:content>
+						</v8:item>
+					</Title>
+					<ContextMenu name="ТекстВнешнейОбработкиКонтекстноеМеню" id="17"/>
+					<ExtendedTooltip name="ТекстВнешнейОбработкиРасширеннаяПодсказка" id="18"/>
+				</LabelField>
+				<LabelDecoration name="ДекорацияПредупрежденияФормата" id="19">
+					<TextColor>web:FireBrick</TextColor>
+					<Title formatted="false">
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content> </v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content> </v8:content>
+						</v8:item>
+					</Title>
+					<ContextMenu name="ДекорацияПредупрежденияФорматаКонтекстноеМеню" id="20"/>
+					<ExtendedTooltip name="ДекорацияПредупрежденияФорматаРасширеннаяПодсказка" id="21"/>
+				</LabelDecoration>
+				<InputField name="ИмяФайла" id="22">
+					<DataPath>ИмяФайла</DataPath>
+					<ChoiceButton>true</ChoiceButton>
+					<TextEdit>false</TextEdit>
+					<ContextMenu name="ИмяФайлаКонтекстноеМеню" id="23"/>
+					<ExtendedTooltip name="ИмяФайлаРасширеннаяПодсказка" id="24"/>
+					<Events>
+						<Event name="StartChoice">ИмяФайлаНачалоВыбора</Event>
+					</Events>
+				</InputField>
+				<Button name="ПрочитатьВыписку" id="25">
+					<Type>UsualButton</Type>
+					<CommandName>Form.Command.ПрочитатьВыписку</CommandName>
+					<ExtendedTooltip name="ПрочитатьВыпискуРасширеннаяПодсказка" id="26"/>
+				</Button>
+				<Button name="ОтменитьЧтение" id="27">
+					<Type>UsualButton</Type>
+					<CommandName>Form.Command.ОтменитьЧтение</CommandName>
+					<ExtendedTooltip name="ОтменитьЧтениеРасширеннаяПодсказка" id="28"/>
+				</Button>
+				<UsualGroup name="ГруппаПравила" id="436">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Правила</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Правила</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаПравилаРасширеннаяПодсказка" id="437"/>
+					<ChildItems>
+						<Button name="ПравилаПоНазначению" id="438">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.ПравилаПоНазначению</CommandName>
+							<ExtendedTooltip name="ПравилаПоНазначениюРасширеннаяПодсказка" id="439"/>
+						</Button>
+						<Button name="ЗаполнитьТиповыеПравила" id="440">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.ЗаполнитьТиповыеПравила</CommandName>
+							<ExtendedTooltip name="ЗаполнитьТиповыеПравилаРасширеннаяПодсказка" id="441"/>
+						</Button>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="ГруппаПлан" id="6">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>План</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>План</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаПланРасширеннаяПодсказка" id="7"/>
+			<ChildItems>
+				<CheckBoxField name="ЗапомнитьСтатью" id="423">
+					<DataPath>ЗапомнитьСтатью</DataPath>
+					<TitleLocation>Right</TitleLocation>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>При изменении статьи в строке плана статья записывается в договор (если контрагент ведет расчеты по договорам и договор известен), иначе - контрагенту. Контрагент или договор, который только будет создан, не записывается. Положение флажка запоминается для пользователя.</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Під час зміни статті в рядку плану стаття записується в договір (якщо контрагент веде розрахунки за договорами і договір відомий), інакше - контрагенту. Контрагент або договір, який лише буде створено, не записується. Положення прапорця запам'ятовується для користувача.</v8:content>
+						</v8:item>
+					</ToolTip>
+					<CheckBoxType>Auto</CheckBoxType>
+					<ContextMenu name="ЗапомнитьСтатьюКонтекстноеМеню" id="424"/>
+					<ExtendedTooltip name="ЗапомнитьСтатьюРасширеннаяПодсказка" id="425"/>
+					<Events>
+						<Event name="OnChange">ЗапомнитьСтатьюПриИзменении</Event>
+					</Events>
+				</CheckBoxField>
+				<Table name="ПланПроекция" id="40">
+					<ChangeRowSet>false</ChangeRowSet>
+					<ChangeRowOrder>false</ChangeRowOrder>
+					<HeightInTableRows>10</HeightInTableRows>
+					<DataPath>ПланПроекция</DataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>План загрузки</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>План завантаження</v8:content>
+						</v8:item>
+					</Title>
+					<RowFilter xsi:nil="true"/>
+					<ContextMenu name="ПланПроекцияКонтекстноеМеню" id="41">
+						<ChildItems>
+							<Button name="ПланПроекцияКонтекстноеМенюИзменитьРеквизиты" id="402">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.ИзменитьРеквизиты</CommandName>
+								<ExtendedTooltip name="ПланПроекцияКонтекстноеМенюИзменитьРеквизитыРасширеннаяПодсказка" id="403"/>
+							</Button>
+							<Button name="ПланПроекцияКонтекстноеМенюРеквизитыКонтрагента" id="406">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.РеквизитыКонтрагента</CommandName>
+								<ExtendedTooltip name="ПланПроекцияКонтекстноеМенюРеквизитыКонтрагентаРасширеннаяПодсказка" id="407"/>
+							</Button>
+						</ChildItems>
+					</ContextMenu>
+					<AutoCommandBar name="ПланПроекцияКоманднаяПанель" id="42">
+						<Autofill>false</Autofill>
+						<ChildItems>
+							<Button name="ПланПроекцияОтметитьВсе" id="43">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.ОтметитьВсе</CommandName>
+								<ExtendedTooltip name="ПланПроекцияОтметитьВсеРасширеннаяПодсказка" id="44"/>
+							</Button>
+							<Button name="ПланПроекцияСнятьВсе" id="45">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.СнятьВсе</CommandName>
+								<ExtendedTooltip name="ПланПроекцияСнятьВсеРасширеннаяПодсказка" id="46"/>
+							</Button>
+							<Button name="ПланПроекцияСнятьСПредупреждениями" id="47">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.СнятьСПредупреждениями</CommandName>
+								<ExtendedTooltip name="ПланПроекцияСнятьСПредупреждениямиРасширеннаяПодсказка" id="48"/>
+							</Button>
+							<Button name="ПланПроекцияОткрытьСтрокуПлана" id="49">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.ОткрытьСтрокуПлана</CommandName>
+								<ExtendedTooltip name="ПланПроекцияОткрытьСтрокуПланаРасширеннаяПодсказка" id="50"/>
+							</Button>
+							<Button name="ПланПроекцияИзменитьРеквизиты" id="400">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.ИзменитьРеквизиты</CommandName>
+								<ExtendedTooltip name="ПланПроекцияИзменитьРеквизитыРасширеннаяПодсказка" id="401"/>
+							</Button>
+							<Button name="ПланПроекцияРеквизитыКонтрагента" id="404">
+								<Type>CommandBarButton</Type>
+								<CommandName>Form.Command.РеквизитыКонтрагента</CommandName>
+								<ExtendedTooltip name="ПланПроекцияРеквизитыКонтрагентаРасширеннаяПодсказка" id="405"/>
+							</Button>
+						</ChildItems>
+					</AutoCommandBar>
+					<ExtendedTooltip name="ПланПроекцияРасширеннаяПодсказка" id="51"/>
+					<SearchStringAddition name="ПланПроекцияСтрокаПоиска" id="300">
+						<AdditionSource>
+							<Item>ПланПроекция</Item>
+							<Type>SearchStringRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ПланПроекцияСтрокаПоискаКонтекстноеМеню" id="301"/>
+						<ExtendedTooltip name="ПланПроекцияСтрокаПоискаРасширеннаяПодсказка" id="302"/>
+					</SearchStringAddition>
+					<ViewStatusAddition name="ПланПроекцияСостояниеПросмотра" id="303">
+						<AdditionSource>
+							<Item>ПланПроекция</Item>
+							<Type>ViewStatusRepresentation</Type>
+						</AdditionSource>
+						<ContextMenu name="ПланПроекцияСостояниеПросмотраКонтекстноеМеню" id="304"/>
+						<ExtendedTooltip name="ПланПроекцияСостояниеПросмотраРасширеннаяПодсказка" id="305"/>
+					</ViewStatusAddition>
+					<SearchControlAddition name="ПланПроекцияУправлениеПоиском" id="306">
+						<AdditionSource>
+							<Item>ПланПроекция</Item>
+							<Type>SearchControl</Type>
+						</AdditionSource>
+						<ContextMenu name="ПланПроекцияУправлениеПоискомКонтекстноеМеню" id="307"/>
+						<ExtendedTooltip name="ПланПроекцияУправлениеПоискомРасширеннаяПодсказка" id="308"/>
+					</SearchControlAddition>
+					<Events>
+						<Event name="Selection">ПланПроекцияВыбор</Event>
+					</Events>
+					<ChildItems>
+						<CheckBoxField name="ПланПроекцияЗагружать" id="52">
+							<DataPath>ПланПроекция.Загружать</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Загружать</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Завантажувати</v8:content>
+								</v8:item>
+							</Title>
+							<CheckBoxType>Auto</CheckBoxType>
+							<ContextMenu name="ПланПроекцияЗагружатьКонтекстноеМеню" id="53"/>
+							<ExtendedTooltip name="ПланПроекцияЗагружатьРасширеннаяПодсказка" id="54"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияЗагружатьПриИзменении</Event>
+							</Events>
+						</CheckBoxField>
+						<CheckBoxField name="ПланПроекцияПерезаписать" id="55">
+							<DataPath>ПланПроекция.Перезаписать</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Перезаписать</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Перезаписати</v8:content>
+								</v8:item>
+							</Title>
+							<CheckBoxType>Auto</CheckBoxType>
+							<ContextMenu name="ПланПроекцияПерезаписатьКонтекстноеМеню" id="56"/>
+							<ExtendedTooltip name="ПланПроекцияПерезаписатьРасширеннаяПодсказка" id="57"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияПерезаписатьПриИзменении</Event>
+							</Events>
+						</CheckBoxField>
+						<InputField name="ПланПроекцияПорядковыйНомер" id="58">
+							<DataPath>ПланПроекция.ПорядковыйНомер</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>№</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>№</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияПорядковыйНомерКонтекстноеМеню" id="59"/>
+							<ExtendedTooltip name="ПланПроекцияПорядковыйНомерРасширеннаяПодсказка" id="60"/>
+						</InputField>
+						<InputField name="ПланПроекцияНомерДокумента" id="61">
+							<DataPath>ПланПроекция.НомерДокумента</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Номер документа</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Номер документа</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияНомерДокументаКонтекстноеМеню" id="62"/>
+							<ExtendedTooltip name="ПланПроекцияНомерДокументаРасширеннаяПодсказка" id="63"/>
+						</InputField>
+						<InputField name="ПланПроекцияДатаДокумента" id="64">
+							<DataPath>ПланПроекция.ДатаДокумента</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Дата документа</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Дата документа</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияДатаДокументаКонтекстноеМеню" id="65"/>
+							<ExtendedTooltip name="ПланПроекцияДатаДокументаРасширеннаяПодсказка" id="66"/>
+						</InputField>
+						<InputField name="ПланПроекцияСуммаПоступление" id="67">
+							<DataPath>ПланПроекция.СуммаПоступление</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Поступило</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Надійшло</v8:content>
+								</v8:item>
+							</Title>
+							<Format>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>ЧН=</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>ЧН=</v8:content>
+								</v8:item>
+							</Format>
+							<ContextMenu name="ПланПроекцияСуммаПоступлениеКонтекстноеМеню" id="68"/>
+							<ExtendedTooltip name="ПланПроекцияСуммаПоступлениеРасширеннаяПодсказка" id="69"/>
+						</InputField>
+						<InputField name="ПланПроекцияСуммаСписание" id="70">
+							<DataPath>ПланПроекция.СуммаСписание</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Списано</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Списано</v8:content>
+								</v8:item>
+							</Title>
+							<Format>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>ЧН=</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>ЧН=</v8:content>
+								</v8:item>
+							</Format>
+							<ContextMenu name="ПланПроекцияСуммаСписаниеКонтекстноеМеню" id="71"/>
+							<ExtendedTooltip name="ПланПроекцияСуммаСписаниеРасширеннаяПодсказка" id="72"/>
+						</InputField>
+						<InputField name="ПланПроекцияКонтрагентПредставление" id="73">
+							<DataPath>ПланПроекция.КонтрагентПредставление</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Контрагент</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Контрагент</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияКонтрагентПредставлениеКонтекстноеМеню" id="74"/>
+							<ExtendedTooltip name="ПланПроекцияКонтрагентПредставлениеРасширеннаяПодсказка" id="75"/>
+						</InputField>
+						<InputField name="ПланПроекцияНазначениеПлатежа" id="76">
+							<DataPath>ПланПроекция.НазначениеПлатежа</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Назначение платежа</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Призначення платежу</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияНазначениеПлатежаКонтекстноеМеню" id="77"/>
+							<ExtendedTooltip name="ПланПроекцияНазначениеПлатежаРасширеннаяПодсказка" id="78"/>
+						</InputField>
+						<InputField name="ПланПроекцияВидОперации" id="79">
+							<DataPath>ПланПроекция.ВидОперации</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Вид операции</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Вид операції</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияВидОперацииКонтекстноеМеню" id="80"/>
+							<ExtendedTooltip name="ПланПроекцияВидОперацииРасширеннаяПодсказка" id="81"/>
+						</InputField>
+						<CheckBoxField name="ПланПроекцияПроверьтеОперацию" id="82">
+							<DataPath>ПланПроекция.ПроверьтеОперацию</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Проверьте операцию</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Перевірте операцію</v8:content>
+								</v8:item>
+							</Title>
+							<CheckBoxType>Auto</CheckBoxType>
+							<ContextMenu name="ПланПроекцияПроверьтеОперациюКонтекстноеМеню" id="83"/>
+							<ExtendedTooltip name="ПланПроекцияПроверьтеОперациюРасширеннаяПодсказка" id="84"/>
+						</CheckBoxField>
+						<InputField name="ПланПроекцияСтатьяДДС" id="85">
+							<DataPath>ПланПроекция.СтатьяДДС</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Статья ДДС</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Стаття ДДС</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияСтатьяДДСКонтекстноеМеню" id="86"/>
+							<ExtendedTooltip name="ПланПроекцияСтатьяДДСРасширеннаяПодсказка" id="87"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияСтатьяДДСПриИзменении</Event>
+							</Events>
+						</InputField>
+						<InputField name="ПланПроекцияКорреспонденция" id="88">
+							<DataPath>ПланПроекция.Корреспонденция</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Корреспонденция</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Кореспонденція</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияКорреспонденцияКонтекстноеМеню" id="89"/>
+							<ExtendedTooltip name="ПланПроекцияКорреспонденцияРасширеннаяПодсказка" id="90"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияКорреспонденцияПриИзменении</Event>
+							</Events>
+						</InputField>
+						<InputField name="ПланПроекцияДоговор" id="91">
+							<DataPath>ПланПроекция.Договор</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Договор</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Договір</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияДоговорКонтекстноеМеню" id="92"/>
+							<ExtendedTooltip name="ПланПроекцияДоговорРасширеннаяПодсказка" id="93"/>
+						</InputField>
+						<InputField name="ПланПроекцияСчетКонтрагента" id="94">
+							<DataPath>ПланПроекция.СчетКонтрагента</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Счет контрагента</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Рахунок контрагента</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияСчетКонтрагентаКонтекстноеМеню" id="95"/>
+							<ExtendedTooltip name="ПланПроекцияСчетКонтрагентаРасширеннаяПодсказка" id="96"/>
+						</InputField>
+						<InputField name="ПланПроекцияПлатежноеПоручение" id="97">
+							<DataPath>ПланПроекция.ПлатежноеПоручение</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Платежное поручение</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Платіжне доручення</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияПлатежноеПоручениеКонтекстноеМеню" id="98"/>
+							<ExtendedTooltip name="ПланПроекцияПлатежноеПоручениеРасширеннаяПодсказка" id="99"/>
+						</InputField>
+						<InputField name="ПланПроекцияСпособЗачета" id="420">
+							<DataPath>ПланПроекция.СпособЗачета</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Способ зачета</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Спосіб заліку</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияСпособЗачетаКонтекстноеМеню" id="421"/>
+							<ExtendedTooltip name="ПланПроекцияСпособЗачетаРасширеннаяПодсказка" id="422"/>
+							<Events>
+								<Event name="OnChange">ПланПроекцияСпособЗачетаПриИзменении</Event>
+							</Events>
+						</InputField>
+						<InputField name="ПланПроекцияОснова" id="100">
+							<DataPath>ПланПроекция.Основа</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Основа</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Основа</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияОсноваКонтекстноеМеню" id="101"/>
+							<ExtendedTooltip name="ПланПроекцияОсноваРасширеннаяПодсказка" id="102"/>
+						</InputField>
+						<InputField name="ПланПроекцияЗагруженныйДокумент" id="103">
+							<DataPath>ПланПроекция.ЗагруженныйДокумент</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Найденный документ</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Знайдений документ</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="ПланПроекцияЗагруженныйДокументКонтекстноеМеню" id="104"/>
+							<ExtendedTooltip name="ПланПроекцияЗагруженныйДокументРасширеннаяПодсказка" id="105"/>
+						</InputField>
+						<InputField name="ПланПроекцияКоличествоЗамечаний" id="106">
+							<DataPath>ПланПроекция.КоличествоЗамечаний</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Замечания</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Зауваження</v8:content>
+								</v8:item>
+							</Title>
+							<Format>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>ЧН=</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>ЧН=</v8:content>
+								</v8:item>
+							</Format>
+							<ContextMenu name="ПланПроекцияКоличествоЗамечанийКонтекстноеМеню" id="107"/>
+							<ExtendedTooltip name="ПланПроекцияКоличествоЗамечанийРасширеннаяПодсказка" id="108"/>
+						</InputField>
+					</ChildItems>
+				</Table>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="ГруппаПодвал" id="8">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Подвал</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Підвал</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Vertical</Group>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаПодвалРасширеннаяПодсказка" id="9"/>
+			<ChildItems>
+				<UsualGroup name="ГруппаИтоги" id="109">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Итоги</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Підсумки</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаИтогиРасширеннаяПодсказка" id="110"/>
+					<ChildItems>
+						<InputField name="ИтогоСтрок" id="111">
+							<DataPath>ИтогоСтрок</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Строк в плане</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Рядків у плані</v8:content>
+								</v8:item>
+							</Title>
+							<Width>8</Width>
+							<ContextMenu name="ИтогоСтрокКонтекстноеМеню" id="112"/>
+							<ExtendedTooltip name="ИтогоСтрокРасширеннаяПодсказка" id="113"/>
+						</InputField>
+						<InputField name="ИтогоПоступление" id="114">
+							<DataPath>ИтогоПоступление</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>К поступлению</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>До надходження</v8:content>
+								</v8:item>
+							</Title>
+							<Width>14</Width>
+							<ContextMenu name="ИтогоПоступлениеКонтекстноеМеню" id="115"/>
+							<ExtendedTooltip name="ИтогоПоступлениеРасширеннаяПодсказка" id="116"/>
+						</InputField>
+						<InputField name="ИтогоСписание" id="117">
+							<DataPath>ИтогоСписание</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>К списанию</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>До списання</v8:content>
+								</v8:item>
+							</Title>
+							<Width>14</Width>
+							<ContextMenu name="ИтогоСписаниеКонтекстноеМеню" id="118"/>
+							<ExtendedTooltip name="ИтогоСписаниеРасширеннаяПодсказка" id="119"/>
+						</InputField>
+						<InputField name="ИтогоПерезаписать" id="120">
+							<DataPath>ИтогоПерезаписать</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Будет перезаписано</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Буде перезаписано</v8:content>
+								</v8:item>
+							</Title>
+							<Width>8</Width>
+							<ContextMenu name="ИтогоПерезаписатьКонтекстноеМеню" id="121"/>
+							<ExtendedTooltip name="ИтогоПерезаписатьРасширеннаяПодсказка" id="122"/>
+						</InputField>
+						<InputField name="ОстатокНаСчете" id="123">
+							<DataPath>ОстатокНаСчете</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Остаток на счете</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Залишок на рахунку</v8:content>
+								</v8:item>
+							</Title>
+							<ToolTip>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Остаток по данным учета на текущий момент, до загрузки выписки.</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Залишок за даними обліку на поточний момент, до завантаження виписки.</v8:content>
+								</v8:item>
+							</ToolTip>
+							<Width>14</Width>
+							<ContextMenu name="ОстатокНаСчетеКонтекстноеМеню" id="124"/>
+							<ExtendedTooltip name="ОстатокНаСчетеРасширеннаяПодсказка" id="125"/>
+						</InputField>
+					</ChildItems>
+				</UsualGroup>
+				<UsualGroup name="ГруппаЗагрузка" id="430">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Загрузка</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Завантаження</v8:content>
+						</v8:item>
+					</Title>
+					<Group>Horizontal</Group>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="ГруппаЗагрузкаРасширеннаяПодсказка" id="431"/>
+					<ChildItems>
+						<Button name="ЗагрузитьВыбранные" id="432">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.ЗагрузитьВыбранные</CommandName>
+							<ExtendedTooltip name="ЗагрузитьВыбранныеРасширеннаяПодсказка" id="433"/>
+						</Button>
+						<Button name="ЗагрузитьТекущуюСтроку" id="434">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.ЗагрузитьТекущуюСтроку</CommandName>
+							<ExtendedTooltip name="ЗагрузитьТекущуюСтрокуРасширеннаяПодсказка" id="435"/>
+						</Button>
+					</ChildItems>
+				</UsualGroup>
+				<InputField name="СводкаЧтения" id="29">
+					<DataPath>СводкаЧтения</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<TitleLocation>None</TitleLocation>
+					<Height>6</Height>
+					<MultiLine>true</MultiLine>
+					<ContextMenu name="СводкаЧтенияКонтекстноеМеню" id="30"/>
+					<ExtendedTooltip name="СводкаЧтенияРасширеннаяПодсказка" id="31"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="10">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.СМП_ОбменСБанком</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="БанковскийСчет" id="11">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Банковский счет</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Банківський рахунок</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>cfg:CatalogRef.БанковскиеСчета</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="УчетнаяЗапись" id="12">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Учетная запись банка</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Обліковий запис банку</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>cfg:CatalogRef.СМП_УчетныеЗаписиБанков</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ИдентификаторФормата" id="13">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Формат выписки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Формат виписки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>100</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ВнешняяОбработка" id="14">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ТекстВнешнейОбработки" id="15">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Формат выписки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Формат виписки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ИмяФайла" id="16">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Файл выписки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Файл виписки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="АдресФайла" id="17">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="АдресПлана" id="18">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЧтениеИдет" id="19">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ИдентификаторЗадания" id="20">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>36</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="СводкаЧтения" id="21">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ДанныеФорматов" id="22">
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Идентификатор" id="1">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>100</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Подсказка" id="2">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Предупреждение" id="3">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="ПланПроекция" id="23">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>План загрузки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>План завантаження</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Загружать" id="1">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ЗагружатьДоступно" id="2">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="Перезаписать" id="3">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ПерезаписатьДоступно" id="4">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ПорядковыйНомер" id="5">
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="НомерДокумента" id="6">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ДатаДокумента" id="7">
+					<Type>
+						<v8:Type>xs:dateTime</v8:Type>
+						<v8:DateQualifiers>
+							<v8:DateFractions>Date</v8:DateFractions>
+						</v8:DateQualifiers>
+					</Type>
+				</Column>
+				<Column name="СуммаПоступление" id="8">
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>15</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="СуммаСписание" id="9">
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>15</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="КонтрагентНаименование" id="10">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="Контрагент" id="11">
+					<Type>
+						<v8:Type>cfg:CatalogRef.Сотрудники</v8:Type>
+						<v8:Type>cfg:CatalogRef.Контрагенты</v8:Type>
+					</Type>
+				</Column>
+				<Column name="КонтрагентПредставление" id="12">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="НазначениеПлатежа" id="13">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ВидОперации" id="14">
+					<Type>
+						<v8:Type>cfg:EnumRef.ВидыОперацийРасходСоСчета</v8:Type>
+						<v8:Type>cfg:EnumRef.ВидыОперацийПоступлениеНаСчет</v8:Type>
+					</Type>
+				</Column>
+				<Column name="СтатьяДДС" id="15">
+					<Type>
+						<v8:Type>cfg:CatalogRef.СтатьиДвиженияДенежныхСредств</v8:Type>
+					</Type>
+				</Column>
+				<Column name="Корреспонденция" id="16">
+					<Type>
+						<v8:Type>cfg:ChartOfAccountsRef.Управленческий</v8:Type>
+					</Type>
+				</Column>
+				<Column name="Договор" id="17">
+					<Type>
+						<v8:Type>cfg:CatalogRef.ДоговорыКонтрагентов</v8:Type>
+					</Type>
+				</Column>
+				<Column name="СчетКонтрагента" id="18">
+					<Type>
+						<v8:Type>cfg:CatalogRef.БанковскиеСчета</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ПлатежноеПоручение" id="19">
+					<Type>
+						<v8:Type>cfg:DocumentRef.ПлатежноеПоручение</v8:Type>
+					</Type>
+				</Column>
+				<Column name="Основа" id="20">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ЗагруженныйДокумент" id="21">
+					<Type>
+						<v8:Type>cfg:DocumentRef.ПоступлениеНаСчет</v8:Type>
+						<v8:Type>cfg:DocumentRef.РасходСоСчета</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ЗагруженныйПомеченНаУдаление" id="22">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ВерсияДокумента" id="23">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ПроверьтеОперацию" id="24">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="УровеньЗамечаний" id="25">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="ЕстьОшибка" id="26">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ЕстьПредупреждение" id="27">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="КоличествоЗамечаний" id="28">
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="СтрокаНеЗаписывается" id="29">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+				<Column name="СпособЗачета" id="30">
+					<Type>
+						<v8:Type>cfg:EnumRef.СпособыЗачетаИРаспределенияПлатежей</v8:Type>
+					</Type>
+				</Column>
+				<Column name="ОсноваДоступна" id="31">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="ИтогоСтрок" id="24">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Строк в плане</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Рядків у плані</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>0</v8:FractionDigits>
+					<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ИтогоПоступление" id="25">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>К поступлению</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>До надходження</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>15</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ИтогоСписание" id="26">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>К списанию</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>До списання</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>15</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ИтогоПерезаписать" id="27">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Будет перезаписано</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Буде перезаписано</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>0</v8:FractionDigits>
+					<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ОстатокНаСчете" id="28">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Остаток на счете</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Залишок на рахунку</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>15</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЕстьОстаток" id="29">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗапомнитьСтатью" id="30">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запомнить статью</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Запам'ятати статтю</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаписьИдет" id="31">
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="АдресДанныхЧтения" id="32">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<ConditionalAppearance>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекция</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ЗагруженныйДокумент</dcsset:left>
+						<dcsset:comparisonType>Filled</dcsset:comparisonType>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>ЦветТекста</dcscor:parameter>
+						<dcscor:value xsi:type="v8ui:Color">web:Gray</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекция</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ЕстьПредупреждение</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>ЦветТекста</dcscor:parameter>
+						<dcscor:value xsi:type="v8ui:Color">web:DarkGoldenRod</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекция</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ЕстьОшибка</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>ЦветТекста</dcscor:parameter>
+						<dcscor:value xsi:type="v8ui:Color">web:FireBrick</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекция</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.Перезаписать</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>ЦветФона</dcscor:parameter>
+						<dcscor:value xsi:type="v8ui:Color">web:LemonChiffon</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекцияВидОперации</dcsset:field>
+					</dcsset:item>
+					<dcsset:item>
+						<dcsset:field>ПланПроекцияПроверьтеОперацию</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ПроверьтеОперацию</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>ЦветФона</dcscor:parameter>
+						<dcscor:value xsi:type="v8ui:Color">web:Khaki</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекцияЗагружать</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ЗагружатьДоступно</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">false</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>Доступность</dcscor:parameter>
+						<dcscor:value xsi:type="xs:boolean">false</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекцияПерезаписать</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ПерезаписатьДоступно</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">false</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>Доступность</dcscor:parameter>
+						<dcscor:value xsi:type="xs:boolean">false</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+			<dcsset:item>
+				<dcsset:selection>
+					<dcsset:item>
+						<dcsset:field>ПланПроекцияОснова</dcsset:field>
+					</dcsset:item>
+				</dcsset:selection>
+				<dcsset:filter>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ПланПроекция.ОсноваДоступна</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">false</dcsset:right>
+					</dcsset:item>
+				</dcsset:filter>
+				<dcsset:appearance>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>ЦветТекста</dcscor:parameter>
+						<dcscor:value xsi:type="v8ui:Color">web:Gray</dcscor:value>
+					</dcscor:item>
+					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+						<dcscor:parameter>Текст</dcscor:parameter>
+						<dcscor:value xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>определяется автоматически</v8:content>
+							</v8:item>
+							<v8:item>
+								<v8:lang>uk</v8:lang>
+								<v8:content>визначається автоматично</v8:content>
+							</v8:item>
+						</dcscor:value>
+					</dcscor:item>
+				</dcsset:appearance>
+			</dcsset:item>
+		</ConditionalAppearance>
+	</Attributes>
+	<Commands>
+		<Command name="ПрочитатьВыписку" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Прочитать выписку</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Прочитати виписку</v8:content>
+				</v8:item>
+			</Title>
+			<Action>ПрочитатьВыписку</Action>
+		</Command>
+		<Command name="ОтменитьЧтение" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Отменить чтение</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Скасувати читання</v8:content>
+				</v8:item>
+			</Title>
+			<Action>ОтменитьЧтение</Action>
+		</Command>
+		<Command name="ОтметитьВсе" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Отметить все</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Відмітити все</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Отметить все строки, которые можно загрузить. Перезапись не отмечается.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Відмітити всі рядки, які можна завантажити. Перезапис не відмічається.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ОтметитьВсе</Action>
+		</Command>
+		<Command name="СнятьВсе" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Снять все</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Зняти все</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Снять отметку «Загружать» со всех строк.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Зняти відмітку «Завантажувати» з усіх рядків.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>СнятьВсе</Action>
+		</Command>
+		<Command name="СнятьСПредупреждениями" id="5">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Снять с предупреждениями</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Зняти з попередженнями</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Снять отметку «Загружать» со строк, у которых есть предупреждения.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Зняти відмітку «Завантажувати» з рядків, у яких є попередження.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>СнятьСПредупреждениями</Action>
+		</Command>
+		<Command name="ОткрытьСтрокуПлана" id="6">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Строка выписки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Рядок виписки</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Показать факты банка, решения распознавания и замечания текущей строки.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Показати факти банку, рішення розпізнавання та зауваження поточного рядка.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ОткрытьСтрокуПлана</Action>
+		</Command>
+		<Command name="ИзменитьРеквизиты" id="7">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Изменить реквизиты</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Змінити реквізити</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Изменить вид операции, статью ДДС, корреспонденцию и вид налога у выделенных строк.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Змінити вид операції, статтю ДДС, кореспонденцію та вид податку у виділених рядках.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ИзменитьРеквизитыСтрокПлана</Action>
+		</Command>
+		<Command name="РеквизитыКонтрагента" id="8">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Реквизиты контрагента</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Реквізити контрагента</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Контрагент, счет и договор текущей строки: создать при загрузке, выбрать существующего или не создавать; банк нового счета.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Контрагент, рахунок і договір поточного рядка: створити під час завантаження, обрати існуючого або не створювати; банк нового рахунку.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ОткрытьПомощникКонтрагента</Action>
+		</Command>
+		<Command name="ЗагрузитьВыбранные" id="9">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Завантажити</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Записать в базу выбранные строки: новые с отметкой «Загружать» и найденные с отметкой «Перезаписать». Перед перезаписью будет предупреждение.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Записати в базу вибрані рядки: нові з позначкою «Завантажувати» і знайдені з позначкою «Перезаписати». Перед перезаписом буде попередження.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗагрузитьВыбранныеСтроки</Action>
+		</Command>
+		<Command name="ЗагрузитьТекущуюСтроку" id="10">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить текущую строку</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Завантажити поточний рядок</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Записать в базу только текущую строку плана. Протокол, окно завершения и оповещение списков - те же, что у «Загрузить».</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Записати в базу лише поточний рядок плану. Протокол, вікно завершення і сповіщення списків - ті самі, що й у «Завантажити».</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗагрузитьТекущуюСтрокуПлана</Action>
+		</Command>
+		<Command name="ПравилаПоНазначению" id="11">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Правила по назначению платежа</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Правила за призначенням платежу</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть справочник правил: по фразе в назначении платежа он подсказывает вид операции. Список открывается отдельным окном.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Відкрити довідник правил: за фразою в призначенні платежу він підказує вид операції. Список відкривається окремим вікном.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ПравилаПоНазначению</Action>
+		</Command>
+		<Command name="ЗаполнитьТиповыеПравила" id="12">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заполнить типовыми правилами</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Заповнити типовими правилами</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Добавить в справочник правил типовые строки (комиссия банка, возвраты). Уже имеющиеся фразы не дублируются и не меняются.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Додати в довідник правил типові рядки (комісія банку, повернення). Наявні фрази не дублюються і не змінюються.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗаполнитьТиповыеПравилаКоманда</Action>
+		</Command>
+	</Commands>
+	<Parameters>
+		<Parameter name="БанковскийСчетОрганизации">
+			<Type>
+				<v8:Type>cfg:CatalogRef.БанковскиеСчета</v8:Type>
+			</Type>
+		</Parameter>
+	</Parameters>
+</Form>

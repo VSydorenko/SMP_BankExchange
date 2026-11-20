@@ -473,6 +473,33 @@
 									<ContextMenu name="ГруппаДоступаДляНовыхКонтрагентовКонтекстноеМеню" id="50"/>
 									<ExtendedTooltip name="ГруппаДоступаДляНовыхКонтрагентовРасширеннаяПодсказка" id="51"/>
 								</InputField>
+								<InputField name="ГлубинаПоискаДокументовМесяцев" id="152">
+									<DataPath>Объект.ГлубинаПоискаДокументовМесяцев</DataPath>
+									<ToolTipRepresentation>Button</ToolTipRepresentation>
+									<InputHint>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>12 по умолчанию</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>uk</v8:lang>
+											<v8:content>12 за замовчуванням</v8:content>
+										</v8:item>
+									</InputHint>
+									<ContextMenu name="ГлубинаПоискаДокументовМесяцевКонтекстноеМеню" id="153"/>
+									<ExtendedTooltip name="ГлубинаПоискаДокументовМесяцевРасширеннаяПодсказка" id="154">
+										<Title formatted="false">
+											<v8:item>
+												<v8:lang>ru</v8:lang>
+												<v8:content>Как далеко назад от даты операции искать заказы и счета на оплату по номеру в назначении платежа. Пусто - 12 месяцев. Документов расчетов не касается.</v8:content>
+											</v8:item>
+											<v8:item>
+												<v8:lang>uk</v8:lang>
+												<v8:content>Як далеко назад від дати операції шукати замовлення та рахунки на оплату за номером у призначенні платежу. Порожньо - 12 місяців. Документів розрахунків не стосується.</v8:content>
+											</v8:item>
+										</Title>
+									</ExtendedTooltip>
+								</InputField>
 							</ChildItems>
 						</UsualGroup>
 						<UsualGroup name="ГруппаРегламентноеЗадание" id="30">
