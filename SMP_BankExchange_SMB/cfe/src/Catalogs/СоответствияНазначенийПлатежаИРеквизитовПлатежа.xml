@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
 	<Catalog uuid="3120d84f-bf08-46b1-aa71-0360993bdce6">
 		<InternalInfo>
@@ -29,8 +29,7 @@
 			<Comment/>
 			<ExtendedConfigurationObject>95c7495d-e8c4-4274-8ed7-e558ae4ae47e</ExtendedConfigurationObject>
 		</Properties>
-		<ChildObjects>&#13;
-			<Form>ФормаЭлемента</Form>&#13;
+		<ChildObjects>
 			<Attribute uuid="e29a96fc-84bc-4166-9926-ed8ffc567f83">
 				<Properties>
 					<Name>СМП_ВидНалога</Name>
@@ -75,7 +74,6 @@
 					<DataHistory>Use</DataHistory>
 				</Properties>
 			</Attribute>
-		
 			<Attribute uuid="10aeca52-51de-4f13-bb18-d523294f885a">
 				<InternalInfo/>
 				<Properties>
@@ -164,6 +162,7 @@
 					</Type>
 				</Properties>
 			</Attribute>
+			<Form>ФормаЭлемента</Form>
 		</ChildObjects>
 	</Catalog>
 </MetaDataObject>

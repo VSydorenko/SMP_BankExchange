@@ -74,17 +74,6 @@
 		</right>
 	</object>
 	<object>
-		<name>DataProcessor.СМП_ОбменСБанком</name>
-		<right>
-			<name>Use</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>InformationRegister.СМП_ДанныеАутентификации</name>
 		<right>
 			<name>Read</name>
@@ -265,6 +254,17 @@
 		<name>Catalog.СМП_УчетныеЗаписиБанков</name>
 		<right>
 			<name>Read</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>DataProcessor.СМП_ОбменСБанком</name>
+		<right>
+			<name>Use</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>

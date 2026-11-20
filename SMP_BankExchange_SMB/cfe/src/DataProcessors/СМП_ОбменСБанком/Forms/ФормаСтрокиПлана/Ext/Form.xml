@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcssch="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
 	<Title>
 		<v8:item>
 			<v8:lang>ru</v8:lang>
@@ -28,7 +28,6 @@
 				</v8:item>
 			</Title>
 			<Group>Vertical</Group>
-			<ShowTitle>true</ShowTitle>
 			<ExtendedTooltip name="ГруппаФактыРасширеннаяПодсказка" id="15"/>
 			<ChildItems>
 				<Table name="Факты" id="1">
@@ -36,8 +35,8 @@
 					<ChangeRowSet>false</ChangeRowSet>
 					<ChangeRowOrder>false</ChangeRowOrder>
 					<HeightInTableRows>9</HeightInTableRows>
-					<AutoInsertNewRow>false</AutoInsertNewRow>
 					<DataPath>Факты</DataPath>
+					<RowFilter xsi:nil="true"/>
 					<ContextMenu name="ФактыКонтекстноеМеню" id="2"/>
 					<AutoCommandBar name="ФактыКоманднаяПанель" id="3">
 						<Autofill>false</Autofill>
@@ -115,8 +114,8 @@
 							<v8:content>Вихідні дані операції</v8:content>
 						</v8:item>
 					</Title>
-					<MultiLine>true</MultiLine>
 					<Height>4</Height>
+					<MultiLine>true</MultiLine>
 					<ContextMenu name="СырыеДанныеКонтекстноеМеню" id="12"/>
 					<ExtendedTooltip name="СырыеДанныеРасширеннаяПодсказка" id="13"/>
 				</InputField>
@@ -134,7 +133,6 @@
 				</v8:item>
 			</Title>
 			<Group>Vertical</Group>
-			<ShowTitle>true</ShowTitle>
 			<ExtendedTooltip name="ГруппаРешенияРасширеннаяПодсказка" id="30"/>
 			<ChildItems>
 				<Table name="Решения" id="16">
@@ -142,8 +140,8 @@
 					<ChangeRowSet>false</ChangeRowSet>
 					<ChangeRowOrder>false</ChangeRowOrder>
 					<HeightInTableRows>9</HeightInTableRows>
-					<AutoInsertNewRow>false</AutoInsertNewRow>
 					<DataPath>Решения</DataPath>
+					<RowFilter xsi:nil="true"/>
 					<ContextMenu name="РешенияКонтекстноеМеню" id="17"/>
 					<AutoCommandBar name="РешенияКоманднаяПанель" id="18">
 						<Autofill>false</Autofill>
@@ -238,7 +236,6 @@
 				</v8:item>
 			</Title>
 			<Group>Vertical</Group>
-			<ShowTitle>true</ShowTitle>
 			<ExtendedTooltip name="ГруппаЗамечанияРасширеннаяПодсказка" id="45"/>
 			<ChildItems>
 				<Table name="Замечания" id="31">
@@ -246,8 +243,8 @@
 					<ChangeRowSet>false</ChangeRowSet>
 					<ChangeRowOrder>false</ChangeRowOrder>
 					<HeightInTableRows>4</HeightInTableRows>
-					<AutoInsertNewRow>false</AutoInsertNewRow>
 					<DataPath>Замечания</DataPath>
+					<RowFilter xsi:nil="true"/>
 					<ContextMenu name="ЗамечанияКонтекстноеМеню" id="32"/>
 					<AutoCommandBar name="ЗамечанияКоманднаяПанель" id="33">
 						<Autofill>false</Autofill>
