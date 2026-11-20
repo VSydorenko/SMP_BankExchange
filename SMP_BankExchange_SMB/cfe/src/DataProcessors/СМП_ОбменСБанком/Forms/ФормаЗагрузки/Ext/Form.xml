@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcssch="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
 	<Title>
 		<v8:item>
 			<v8:lang>ru</v8:lang>
@@ -13,8 +13,8 @@
 	<AutoTitle>false</AutoTitle>
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
 	<Events>
-		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
 		<Event name="BeforeClose">ПередЗакрытием</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
 	</Events>
 	<ChildItems>
 		<UsualGroup name="ГруппаШапка" id="1">
@@ -98,33 +98,37 @@
 					</Events>
 				</InputField>
 				<Button name="ПрочитатьВыписку" id="25">
+					<Type>UsualButton</Type>
 					<CommandName>Form.Command.ПрочитатьВыписку</CommandName>
 					<ExtendedTooltip name="ПрочитатьВыпискуРасширеннаяПодсказка" id="26"/>
 				</Button>
 				<Button name="ОтменитьЧтение" id="27">
+					<Type>UsualButton</Type>
 					<CommandName>Form.Command.ОтменитьЧтение</CommandName>
 					<ExtendedTooltip name="ОтменитьЧтениеРасширеннаяПодсказка" id="28"/>
 				</Button>
 				<UsualGroup name="ГруппаПравила" id="436">
 					<Title>
-					<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Правила</v8:content>
-					</v8:item>
-					<v8:item>
-					<v8:lang>uk</v8:lang>
-					<v8:content>Правила</v8:content>
-					</v8:item>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Правила</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Правила</v8:content>
+						</v8:item>
 					</Title>
 					<Group>Horizontal</Group>
 					<ShowTitle>false</ShowTitle>
 					<ExtendedTooltip name="ГруппаПравилаРасширеннаяПодсказка" id="437"/>
 					<ChildItems>
 						<Button name="ПравилаПоНазначению" id="438">
+							<Type>UsualButton</Type>
 							<CommandName>Form.Command.ПравилаПоНазначению</CommandName>
 							<ExtendedTooltip name="ПравилаПоНазначениюРасширеннаяПодсказка" id="439"/>
 						</Button>
 						<Button name="ЗаполнитьТиповыеПравила" id="440">
+							<Type>UsualButton</Type>
 							<CommandName>Form.Command.ЗаполнитьТиповыеПравила</CommandName>
 							<ExtendedTooltip name="ЗаполнитьТиповыеПравилаРасширеннаяПодсказка" id="441"/>
 						</Button>
@@ -171,7 +175,6 @@
 					<ChangeRowSet>false</ChangeRowSet>
 					<ChangeRowOrder>false</ChangeRowOrder>
 					<HeightInTableRows>10</HeightInTableRows>
-					<AutoInsertNewRow>false</AutoInsertNewRow>
 					<DataPath>ПланПроекция</DataPath>
 					<Title>
 						<v8:item>
@@ -183,6 +186,7 @@
 							<v8:content>План завантаження</v8:content>
 						</v8:item>
 					</Title>
+					<RowFilter xsi:nil="true"/>
 					<ContextMenu name="ПланПроекцияКонтекстноеМеню" id="41">
 						<ChildItems>
 							<Button name="ПланПроекцияКонтекстноеМенюИзменитьРеквизиты" id="402">
@@ -785,8 +789,8 @@
 					<DataPath>СводкаЧтения</DataPath>
 					<ReadOnly>true</ReadOnly>
 					<TitleLocation>None</TitleLocation>
-					<MultiLine>true</MultiLine>
 					<Height>6</Height>
+					<MultiLine>true</MultiLine>
 					<ContextMenu name="СводкаЧтенияКонтекстноеМеню" id="30"/>
 					<ExtendedTooltip name="СводкаЧтенияРасширеннаяПодсказка" id="31"/>
 				</InputField>
@@ -1060,8 +1064,8 @@
 				</Column>
 				<Column name="Контрагент" id="11">
 					<Type>
-						<v8:Type>cfg:CatalogRef.Контрагенты</v8:Type>
 						<v8:Type>cfg:CatalogRef.Сотрудники</v8:Type>
+						<v8:Type>cfg:CatalogRef.Контрагенты</v8:Type>
 					</Type>
 				</Column>
 				<Column name="КонтрагентПредставление" id="12">
@@ -1084,8 +1088,8 @@
 				</Column>
 				<Column name="ВидОперации" id="14">
 					<Type>
-						<v8:Type>cfg:EnumRef.ВидыОперацийПоступлениеНаСчет</v8:Type>
 						<v8:Type>cfg:EnumRef.ВидыОперацийРасходСоСчета</v8:Type>
+						<v8:Type>cfg:EnumRef.ВидыОперацийПоступлениеНаСчет</v8:Type>
 					</Type>
 				</Column>
 				<Column name="СтатьяДДС" id="15">
@@ -1363,7 +1367,7 @@
 				<dcsset:appearance>
 					<dcscor:item xsi:type="dcsset:SettingsParameterValue">
 						<dcscor:parameter>ЦветТекста</dcscor:parameter>
-						<dcscor:value xsi:type="v8ui:Color">web:DarkGoldenrod</dcscor:value>
+						<dcscor:value xsi:type="v8ui:Color">web:DarkGoldenRod</dcscor:value>
 					</dcscor:item>
 				</dcsset:appearance>
 			</dcsset:item>
@@ -1718,47 +1722,47 @@
 		</Command>
 		<Command name="ПравилаПоНазначению" id="11">
 			<Title>
-			<v8:item>
-			<v8:lang>ru</v8:lang>
-			<v8:content>Правила по назначению платежа</v8:content>
-			</v8:item>
-			<v8:item>
-			<v8:lang>uk</v8:lang>
-			<v8:content>Правила за призначенням платежу</v8:content>
-			</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Правила по назначению платежа</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Правила за призначенням платежу</v8:content>
+				</v8:item>
 			</Title>
 			<ToolTip>
-			<v8:item>
-			<v8:lang>ru</v8:lang>
-			<v8:content>Открыть справочник правил: по фразе в назначении платежа он подсказывает вид операции. Список открывается отдельным окном.</v8:content>
-			</v8:item>
-			<v8:item>
-			<v8:lang>uk</v8:lang>
-			<v8:content>Відкрити довідник правил: за фразою в призначенні платежу він підказує вид операції. Список відкривається окремим вікном.</v8:content>
-			</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть справочник правил: по фразе в назначении платежа он подсказывает вид операции. Список открывается отдельным окном.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Відкрити довідник правил: за фразою в призначенні платежу він підказує вид операції. Список відкривається окремим вікном.</v8:content>
+				</v8:item>
 			</ToolTip>
 			<Action>ПравилаПоНазначению</Action>
 		</Command>
 		<Command name="ЗаполнитьТиповыеПравила" id="12">
 			<Title>
-			<v8:item>
-			<v8:lang>ru</v8:lang>
-			<v8:content>Заполнить типовыми правилами</v8:content>
-			</v8:item>
-			<v8:item>
-			<v8:lang>uk</v8:lang>
-			<v8:content>Заповнити типовими правилами</v8:content>
-			</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заполнить типовыми правилами</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Заповнити типовими правилами</v8:content>
+				</v8:item>
 			</Title>
 			<ToolTip>
-			<v8:item>
-			<v8:lang>ru</v8:lang>
-			<v8:content>Добавить в справочник правил типовые строки (комиссия банка, возвраты). Уже имеющиеся фразы не дублируются и не меняются.</v8:content>
-			</v8:item>
-			<v8:item>
-			<v8:lang>uk</v8:lang>
-			<v8:content>Додати в довідник правил типові рядки (комісія банку, повернення). Наявні фрази не дублюються і не змінюються.</v8:content>
-			</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Добавить в справочник правил типовые строки (комиссия банка, возвраты). Уже имеющиеся фразы не дублируются и не меняются.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Додати в довідник правил типові рядки (комісія банку, повернення). Наявні фрази не дублюються і не змінюються.</v8:content>
+				</v8:item>
 			</ToolTip>
 			<Action>ЗаполнитьТиповыеПравилаКоманда</Action>
 		</Command>
