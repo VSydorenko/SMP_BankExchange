@@ -26,6 +26,13 @@ def fake_anon_root(root):
 
 
 class Sets(unittest.TestCase):
+    def test_zero_real_records_is_a_problem_for_every_bank(self):
+        # правило «не менше однієї справжньої записи» однакове для всіх банків, ПУМБ теж (виняток очікування run2 знято)
+        for bank in ('privat', 'mono-fop', 'mono-corp', 'pumb'):
+            self.assertEqual(sets.real_records_problem(bank, 1), '')
+            self.assertIn(bank, sets.real_records_problem(bank, 0))
+        self.assertFalse(hasattr(sets, 'AWAITING_REAL_RECORDS'))
+
     def test_names_carry_the_synthetic_mark(self):
         for bank in sets.BANKS:
             a, e = sets.names(bank, 'synthetic')

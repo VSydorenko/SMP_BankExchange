@@ -22,7 +22,7 @@
 |      | кількість і зміст операцій від цього не змінюються |
 
 **Контрактні правила** (не відступи, а розвиток D28/D36 п. 8 для API): `rule_failure_class`, `rule_complete`,
-`rule_trust_boundary`, `rule_unknown_state`, `rule_unknown_direction`, `rule_page_without_id`, `rule_dedupe_by_id`.
+`rule_trust_boundary`, `rule_unknown_state`, `rule_unknown_direction`, `rule_page_without_id`, `rule_dedupe_by_id`; ПУМБ: `rule_identifier_length` (D28), `rule_no_iban` (Р-д).
 Їхні рішення — окремий рядок звіту виконавця: планувальник підтверджує або відкидає.
 """
 import json
@@ -52,7 +52,7 @@ PRIVAT_LIMIT = 100                  # dev9: «рекомендовано не б
 PRIVAT_PAUSE_SECONDS = 1            # dev9: «не частіше 1 запиту в секунду»
 PAUSE_CEILING = C.PAUSE_CEILING_SECONDS
 MONO_PAUSE_SECONDS = 60             # MF:485-490: ліміт monobank ФОП — 1 запит на 60 с
-BANK_NAMES = {'privat': 'ПриватБанк', 'mono-fop': 'monobank ФОП', 'mono-corp': 'monobank юросіб'}
+BANK_NAMES = {'privat': 'ПриватБанк', 'mono-fop': 'monobank ФОП', 'mono-corp': 'monobank юросіб', 'pumb': 'ПУМБ'}
 OP_COLUMNS = ['ПорядковыйНомер', 'НомерСчета', 'Валюта', 'ДатаОперации', 'НомерДокумента', 'ДатаДокумента', 'Сумма',
               'Направление', 'ИдентификаторОперации', 'КонтрагентНаименование', 'КонтрагентНомерСчета', 'КонтрагентКод',
               'КонтрагентМФО', 'НазначениеПлатежа']
@@ -103,6 +103,8 @@ class Expected:
     used: list = field(default_factory=list)         # обміни запису, які оракул СПОЖИВ, у порядку споживання
     account_currency: object = None                  # валюта рахунку ПриватБанку з /balance (буквений код); None -- невідома
     out_of_period: list = field(default_factory=list)  # номери записів поза періодом (відкинуто мовчки), D36 п. 11
+    skipped_nonmove: list = field(default_factory=list)  # ПУМБ: номери документів відомих типів «не рух» (STM, CUR, CUR_C, CUR_S; див. `PUMB_NONMOVEMENT_TYPES`), не операції; ЛІЧИЛЬНИК для звірки «нічого не зникає мовчки», рядка діагностики немає
+    foreign_docs: list = field(default_factory=list)   # ПУМБ: номери документів, чий рахунок сторін не збігся ні з IBAN, ні з номером запитаного (не операції; один рядок Предупреждение на читання з кількістю, відступ pumb1)
 
     def diag(self, level, n, essence, dev=None, **facts):
         self.diags.append({'Уровень': level, 'ПорядковыйНомер': n, 'Суть': essence, 'Отступ': dev or '', 'Факты': facts})
@@ -110,14 +112,30 @@ class Expected:
             self.applied.add(dev)
 
 
+def request_entry(e, bank):
+    """Запит для `Запросы` еталона. Для ПУМБ (формат v2) -- ще `Порт` і `Тело` (JSON розібраний; `bodyOmitted` -- `ТелоОпущено`), лише для ПУМБ."""
+    rq = e['request']
+    d = {'Метод': rq['method'], 'Хост': rq['host'], 'Путь': rq['path'], 'Запрос': [list(kv) for kv in R.query_pairs(e)]}
+    if bank == 'pumb':
+        if rq.get('port'):
+            d['Порт'] = rq['port']
+        if rq.get('bodyOmitted'):
+            d['ТелоОпущено'] = True
+        elif 'bodyBase64' in rq or 'bodyMasked' in rq:
+            d['Тело'] = json.loads(R.request_body_text(e))
+    return d
+
+
 def run(rec, p, disabled=frozenset()):
-    if rec.bank not in C.BANKS:
+    if rec.bank != 'pumb' and rec.bank not in C.BANKS:
         raise ValueError('невідомий банк ' + rec.bank)
     out = Expected(rec.bank)
-    {'privat': _privat, 'mono-fop': _mono, 'mono-corp': _mono}[rec.bank](rec, p, out, frozenset(disabled))
+    if rec.bank == 'pumb':
+        _pumb(rec, p, out, frozenset(disabled))
+    else:
+        {'privat': _privat, 'mono-fop': _mono, 'mono-corp': _mono}[rec.bank](rec, p, out, frozenset(disabled))
     # Запити й паузи -- лише обміни, які конектор справді зробить: відмова зупиняє читання, обміну балансів після неї немає (I1)
-    out.requests = [{'Метод': e['request']['method'], 'Хост': e['request']['host'], 'Путь': e['request']['path'],
-                     'Запрос': [list(kv) for kv in R.query_pairs(e)]} for e in out.used]
+    out.requests = [request_entry(e, rec.bank) for e in out.used]
     out.pauses = dev9_pauses(Consumed(rec.bank, out.used), p, 'dev9' not in disabled, out)
     out.trust = rule_trust_boundary(out, p)
     out.complete = rule_complete(out)
@@ -271,16 +289,39 @@ def _retry_seconds(ex):
 PRIVAT_AUTH_SERVICE_PREFIX = 'CLIENT_AUTH'      # privat.txt: CLIENT_AUTH, _DENY, _BADSESSION, _P24_CHECK_ERR, _P24_NOT_VALID, _ERROR
 
 
-def rule_failure_class(bank, ex):
+PUMB_CUT_MARK = '<вирізано>'
+PUMB_RECORDER_FORM = 'перший запит searcher у формі рекордера (межі рівно по періоду, фільтри стану й типу), не конектора (межі цілими добами, без фільтрів)'   # run1b, run2
+
+
+def pumb_error_description(ex, secrets=()):
+    """Опис помилки ПУМБ для діагностики (Р-е): `error_description` (Keycloak/OAuth2), далі `errorDescription`, `message`; немає -- порожньо. Текст береться ЛИШЕ через
+    вирізання значень облікових даних (`secrets`: логін тощо, без регістру; довші першими) -- замість кожного входження `<вирізано>`. Самих значень не повертає й не пише."""
+    try:
+        js = R.body_json(ex)
+    except R.NotJson:
+        return ''
+    if not isinstance(js, dict):
+        return ''
+    for k in ('error_description', 'errorDescription', 'message'):
+        if js.get(k) is not None:
+            text = C.to_str(js[k])
+            for sec in sorted({C.to_str(x) for x in secrets if C.to_str(x)}, key=len, reverse=True):
+                text = re.sub(re.escape(sec), PUMB_CUT_MARK, text, flags=re.IGNORECASE)
+            return text
+    return ''
+
+
+def rule_failure_class(bank, ex, secrets=()):
     """Клас відмови (D36 п. 8) і факти для тексту людині. Принцип: чи допоможе повтор?
     «Повторити» — мережа, таймаут, 408, 429 (після дозволеного повтору), 5xx, 2xx крім 200;
-    «дія людини» — 401, 403 та інші 4xx (токен, права, формат запиту, рахунку немає), а також 1xx і 3xx (тлумачення п. 8)."""
+    «дія людини» — 401, 403 та інші 4xx (токен, права, формат запиту, рахунку немає), а також 1xx і 3xx (тлумачення п. 8).
+    `secrets` -- лише ПУМБ: значення облікових даних, що вирізаються з опису банку (`pumb_error_description`)."""
     facts = {'Банк': BANK_NAMES[bank]}
     if ex['failure']:
         facts.update(Вид=ex['failure']['kind'], Статус='', ОписаниеБанка='')
         return CLS_RETRY, facts
     st = ex['response']['status']
-    facts.update(Вид='http', Статус=st, ОписаниеБанка=C.error_description(ex))
+    facts.update(Вид='http', Статус=st, ОписаниеБанка=pumb_error_description(ex, secrets) if bank == 'pumb' else C.error_description(ex))
     if st in (408, 429) or st >= 500:
         return CLS_RETRY, facts
     if 200 <= st < 300:
@@ -391,8 +432,8 @@ def _fail(out, cls, facts, essence='read-failed'):
     out.rules.add('rule_failure_class')
 
 
-def _failure(out, ex, bank):
-    cls, facts = rule_failure_class(bank, ex)
+def _failure(out, ex, bank, secrets=()):
+    cls, facts = rule_failure_class(bank, ex, secrets)
     _fail(out, cls, facts)
 
 
@@ -1055,6 +1096,388 @@ def _mono_items(out, items, p, disabled, corp):
             'НазначениеПлатежа': dev5_purpose(oracle_old._mono_purpose_full(r, corp), disabled)})
         if len(oracle_old._mono_purpose_full(r, corp)) > 255:
             out.applied.add('dev5') if 'dev5' not in disabled else None
+
+
+# ====================================================================== ПУМБ (VegaNet), задача 2a Step 2
+# Відступи від попередника (план 05б-2, «Відступи від попередника», ПУМБ 1-8) -- окремий реєстр: наявний тест вимагає, щоб кожен відступ 5а (`DEVIATIONS`) спрацьовував на синтетиці.
+# Вимкнений відступ -- поведінка попередника (ПУМБ:342-385). Формат `operationDate` -- гіпотеза `dd.MM.yyyy HH:mm:ss`, інший -- явна відмова (`C.PumbDateFormat`).
+PUMB_DEVIATIONS = {
+    'pumb1': 'чужий рахунок (D30; фільтр конектора за рахунком: IBAN запитаного серед сторін або його number/altNumber серед номерів сторін) і чужа валюта -- діагностика, не операція й не мовчазний пропуск (валюта рахунку -- зі списку /account); `direction`, що не збігся з боком за запитаним рахунком, -- Ошибка рядка',
+    'pumb3': 'непроведені й скасовані -- Предупреждение, у Операции лише PROCESSED; запит без фільтра станів; межа довіри не пізніша за першу неостаточну',
+    'pumb4': 'повернення -- до виміру (а: окремий документ свого напряму, б: рядок Ошибка); без виміру нічого не вгадується',
+    'pumb5': "призначення не обрізається; від'ємна чи нульова сума -- діагностика, не операція",
+    'pumb6': 'ідентифікатор операції -- docId (виміряно: присутній 595 із 595, id майже завжди null); порожній docId -- Ошибка bad-identifier; стабільність -- run2',
+    'pumb7': 'усі дати -- київський час з явним поясом; формат operationDate -- гіпотеза, інший формат -- відмова',
+    'pumb8': 'без пагінації (Р4): запит за весь період, відповідь на порозі ділить період навпіл до доби (D36 п. 11); запит з pagingRequest оракул відхиляє явно',
+    'pumb9': 'тип документа: рух коштів -- лише UAH і CUR_ADV (білий список); відомі «не рух» (STM, CUR, CUR_C, CUR_S) -- не операція і без Предупреждение; будь-який інший тип (зокрема порожній) -- відмова всього читання, «дія людини»; попередник вантажив усе, що віддав банк',
+}
+# Тип документа searcher (виміряно run4, 60 днів: перебір комбінацій типів проти зміни щоденного залишку STM): рух коштів по рахунку -- UAH (гривня) і CUR_ADV (авізо валюти);
+# STM -- щоденний запис залишку; CUR, CUR_C, CUR_S -- заявки/доручення, кожна має пару на гривневому рахунку під тим самим IBAN, а рух валюти банк віддає авізо CUR_ADV.
+# Решта типів -- невідомі: читання зупиняється людиною (див. `rule_unknown_doc_type`), а не мовчки пропускає й не вантажить.
+PUMB_MOVEMENT_TYPES = frozenset({'UAH', 'CUR_ADV'})
+PUMB_NONMOVEMENT_TYPES = frozenset({'STM', 'CUR', 'CUR_C', 'CUR_S'})
+PUMB_CANCELLED = frozenset({'REJECTED', 'REJECTED_BY_ACCO', 'REJECTED_BY_OPER', 'SYSTEM_ERROR'})
+PUMB_NONFINAL = frozenset({'INPUT', 'ACCEPTING', 'ACCEPTED', 'READY_TO_SEND', 'SENDING', 'TAKE_IN', 'ROUTED', 'UPLOADED', 'ACCEPTED_BY_ACCO',
+                           'ACCEPTED_BY_OPER', 'SENT_TO_EPS'})          # стани за swagger (enum VeganetDocumentItem.state); PROCESSED -- проведений
+PUMB_PURPOSE_OLD_LIMIT = 1024                                           # ПУМБ:299 -- колонка НазначениеПлатежа (1024); з коду, не виміряно
+
+
+class PaginationUnmeasured(ValueError):
+    """ПУМБ: запит із `pagingRequest` -- конектор пагінації не використовує (Р4), оракул такий запис явно відхиляє, його модель не вгадується."""
+
+
+def pumb1_foreign_currency(out, disabled, n, doc_code, acc_code, ident):
+    """Операція валюти, відмінної від валюти рахунку (зі списку /account): Ошибка рядка, у Операции не йде. -> True, якщо відкинуто."""
+    if 'pumb1' in disabled or not doc_code or not acc_code or doc_code == acc_code:
+        return False
+    out.diag('Ошибка', n, 'foreign-currency', 'pumb1', Ид=ident, Код=doc_code)
+    out.applied.add('pumb1')
+    return True
+
+
+def pumb3_state(out, disabled, n, state, moment, ident):
+    """Стан документа: PROCESSED -- операція; скасований (`REJECTED*`, `SYSTEM_ERROR`) і неостаточний -- рядок Предупреждение (неостаточний утримує межу довіри);
+    невідомий -- Ошибка. Вимкнено -- попередник фільтрував PROCESSED на боці банку: решта зникає без сліду. -> 'emit' | 'handled' | 'silent'."""
+    if state == 'PROCESSED':
+        return 'emit'
+    if 'pumb3' in disabled:
+        out.silent += 1
+        return 'silent'
+    if state in PUMB_CANCELLED:
+        out.diag('Предупреждение', n, 'cancelled', 'pumb3', Состояние=state, Ид=ident, Момент=C.iso(moment))
+    elif state in PUMB_NONFINAL:
+        out.diag('Предупреждение', n, 'nonfinal', 'pumb3', Состояние=state, Ид=ident, Момент=C.iso(moment))
+        out.nonfinal.append(moment)
+    else:
+        rule_unknown_state(out, n, state, ident)
+        out.applied.add('pumb3')                                 # невідомий стан -- теж слід відступу (вимкнений: мовчазне відкидання попередника)
+        return 'handled'
+    out.applied.add('pumb3')
+    return 'handled'
+
+
+def pumb4_returns(out, disabled, n, doc, ident):
+    """Повернення: ДО ВИМІРУ (випадок (а) окремий документ свого напряму з ключем != ключ оригіналу; випадок (б) -- рядок Ошибка до правила 5б). Ознак повернення в
+    полях swagger немає, тож оракул нічого не вгадує: документ іде як звичайний, еталон несе залежність `ВозвратПУМБ`. -> 'emit'."""
+    return 'emit'
+
+
+def pumb5_amount(out, disabled, n, raw, ident):
+    """Сума документа: від'ємна, нульова чи нерозбірна -- Ошибка `bad-amount`, не операція (D28). Вимкнено -- попередник брав модуль (КБ). -> Decimal | None."""
+    try:
+        amount = C.number(raw)
+    except ValueError:
+        out.diag('Ошибка', n, 'bad-amount', None, Ид=ident)
+        return None
+    if amount <= 0 and 'pumb5' not in disabled:
+        out.diag('Ошибка', n, 'bad-amount', 'pumb5', Ид=ident)
+        out.applied.add('pumb5')
+        return None
+    return abs(amount)
+
+
+def pumb5_purpose(out, disabled, text):
+    """Призначення не обрізається (довжину перевіряє платформа). Вимкнено -- як колонка попередника (1024)."""
+    if 'pumb5' in disabled and len(text) > PUMB_PURPOSE_OLD_LIMIT:
+        return text[:PUMB_PURPOSE_OLD_LIMIT]
+    if len(text) > PUMB_PURPOSE_OLD_LIMIT:
+        out.applied.add('pumb5')
+    return text
+
+
+def pumb6_identifier(out, disabled, doc):
+    """Ідентифікатор: `docId` (виміряно, run1b: присутній 595 із 595 входжень; `id` -- null у 593, непорожній у 2 і != `docId`, тож основним не є). Порожній `docId` (null, відсутній, '')
+    -> порожній ідентифікатор -> `rule_identifier_length` дає Ошибка bad-identifier. Стабільність між прогонами -- run2. -> (НомерДокумента, ИдентификаторОперации);
+    вимкнено -- попередник СМП_ИДТранзакцииБанка не писав: ідентифікатор операції порожній."""
+    num = C.to_str(doc.get('docId'))
+    if 'pumb6' in disabled:
+        return num, ''
+    if num:
+        out.applied.add('pumb6')
+    return num, num
+
+
+def pumb7_local_time(text):
+    """Київський місцевий час з явним поясом (платформа подає зсув сама); формат лише `dd.MM.yyyy HH:mm:ss`, інший -- `PumbDateFormat`."""
+    return C.pumb_date(text)
+
+
+def pumb8_pagination(searches):
+    """Без пагінації (Р4): оракул моделює читання з кількома запитами `searcher` (ділення навпіл), але явно відхиляє запит із `pagingRequest` -- конектор його не шле
+    (`readings.pumb_refusal` відсіює такі читання заздалегідь)."""
+    from . import readings as RD
+    why = RD.pumb_refusal(searches)
+    if 'pagingRequest' in why:
+        raise PaginationUnmeasured(why)
+
+
+PUMB_IDENTIFIER_MAX = 50           # D28: довжина ідентифікатора операції
+
+
+def rule_identifier_length(out, n, ident):
+    """Контрактне правило D28 (не відступ): ідентифікатор операції -- від 1 до 50 символів; порожній чи довший -- операція не подається, рядок `Ошибка` `bad-identifier`
+    (довжина без значення: ідентифікатор довгого значення в діагностику не йде). Вимкнений відступ pumb6 дає порожній ідентифікатор за побудовою, правило тоді не діє. -> True, якщо відхилено."""
+    if 1 <= len(ident) <= PUMB_IDENTIFIER_MAX:
+        return False
+    out.diag('Ошибка', n, 'bad-identifier', None, Количество=len(ident))
+    out.rules.add('rule_identifier_length')
+    return True
+
+
+def rule_no_iban(out, n, ident):
+    """Контрактне правило (Р-д, не відступ): документ без IBAN ОБОХ сторін -- чий це рух, не встановити (рахунок із `accountId` запиту не виводиться): операція не подається,
+    рядок `Ошибка` `no-iban`; діагностика несе лише ідентифікатор. -> True (завжди відхилено)."""
+    out.diag('Ошибка', n, 'no-iban', None, Ид=ident)
+    out.rules.add('rule_no_iban')
+    return True
+
+
+def pumb_out_of_bounds(search, docs):
+    """Аномалія меж (D36 п. 11): `operationDate` документа раніше за `fromDate` або пізніше за `toDate` ЗАПИТУ (межі -- з тіла запиту searcher, той самий строгий формат).
+    Межі запиту -- цілі доби (`C.pumb_request_bounds`: 00:00:00 першої і 23:59:59 останньої), тож аномалія -- лише документ, ДЕНЬ `operationDate` якого поза днями запиту; документ тієї ж доби, але поза
+    періодом (піддобою), -- не аномалія, а мовчазне відкидання фільтром конектора (див. `_pumb`)."""
+    body = json.loads(R.request_body_text(search))
+    lo, hi = C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))
+    return any(isinstance(r, dict) and not (lo <= C.pumb_date(r.get('operationDate')) <= hi) for r in docs)
+
+
+def rule_day_at_threshold(out, day, count):
+    """Контрактне правило (D36 п. 11, Р4): доба, що й сама дала відповідь не менше за поріг (`C.PUMB_RESPONSE_THRESHOLD`), -- читання неповне, «дія людини» (повтор не зменшить
+    відповідь); діагностика називає добу (дата, не значення поля) і кількість документів і радить звузити період (формулювання -- текст точки читання); межа довіри -- за D36 п. 10
+    (відмова -> `НачалоПериода`), прочитане раніше лишається."""
+    _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb'], 'Вид': 'day-at-threshold', 'Статус': 200, 'ОписаниеБанка': '', 'Сутки': day.strftime('%d.%m.%Y'), 'Документов': count,
+                           'Порог': C.PUMB_RESPONSE_THRESHOLD}, 'day-at-threshold')
+    out.rules.add('rule_day_at_threshold')
+
+
+def rule_unknown_doc_type(out, docs, window):
+    """Контрактне правило (рішення консультанта після run4): документ searcher невідомого типу (не з `PUMB_MOVEMENT_TYPES` і не з `PUMB_NONMOVEMENT_TYPES`; порожній тип -- теж невідомий) --
+    відмова ВСЬОГО читання, «дія людини» (повтор не допоможе: людина вирішує, чи це рух коштів), операції цієї відповіді в конверт не йдуть. Діагностика називає ПЕРШИЙ невідомий тип у порядку документів
+    відповіді, кількість документів цього типу в ній і найраніший день `operationDate` серед них (факти: `Значение` -- тип, `Документов`, `Сутки`); інші невідомі типи побачить людина після виправлення.
+    Розглядаються лише документи в періоді (поза ним -- мовчазний відсів, як і для решти правил). -> True, якщо відмову записано."""
+    first, count, day = None, 0, None
+    for r in docs:
+        if not isinstance(r, dict):
+            continue
+        t = C.to_str(r.get('type'))
+        if t in PUMB_MOVEMENT_TYPES or t in PUMB_NONMOVEMENT_TYPES:
+            continue
+        moment = pumb7_local_time(r.get('operationDate'))
+        if window is not None and not (window[0] <= moment <= window[1]):
+            continue
+        if first is None:
+            first = t
+        if t == first:
+            count += 1
+            day = moment if day is None else min(day, moment)
+    if first is None:
+        return False
+    _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb'], 'Вид': 'unknown-doc-type', 'Статус': 200, 'ОписаниеБанка': '', 'Значение': first, 'Документов': count,
+                           'Сутки': day.strftime('%d.%m.%Y')}, 'unknown-doc-type')
+    out.rules.add('rule_unknown_doc_type')
+    return True
+
+
+def pumb_direction_conflict(out, n, doc, outgoing, ident):
+    """Напрям за ознакою банку проти боку, визначеного за запитаним рахунком (рішення консультанта, A9): `direction` не збігся з боком -- Ошибка `direction-mismatch` (хибний знак руху грошей), не операція;
+    значення поза OUTBOUND/INBOUND -- `unknown-direction`; відсутній `direction` -- не розбіжність (бік уже визначено рахунком). Переказ між своїми рахунками: бік -- за запитаним, direction мусить збігтися. -> True, якщо відхилено."""
+    d = doc.get('direction')
+    if d is None or d == '':
+        return False
+    if d not in ('OUTBOUND', 'INBOUND'):
+        rule_unknown_direction(out, n, C.to_str(d), ident)
+        return True
+    if (d == 'OUTBOUND') != outgoing:
+        out.diag('Ошибка', n, 'direction-mismatch', None, Ид=ident)
+        out.rules.add('rule_direction_mismatch')
+        return True
+    return False
+
+
+def pumb1_account_side(own, mine, doc):
+    """Фільтр конектора за рахунком (відступ pumb1/D30): чи документ нашого рахунку і з якого боку. Наш -- запитаний IBAN серед `senderIBAN`/`correspondentIBAN`, АБО номер запитаного рахунку
+    (`number`/`altNumber` зі списку /account) серед `senderAccountNumber`/`correspondentAccountNumber` (виміряно run1b: 1 CUR без IBAN відправника з номером = запитаному). IBAN старший за номер.
+    -> 'out' (рахунок -- відправник) | 'in' (одержувач) | None (чужий)."""
+    snd, rcv = C.to_str(doc.get('senderIBAN')), C.to_str(doc.get('correspondentIBAN'))
+    if snd == own:
+        return 'out'
+    if rcv == own:
+        return 'in'
+    nums = {C.trim(C.to_str(mine.get(k))) for k in ('number', 'altNumber')} - {''}
+    if C.trim(C.to_str(doc.get('senderAccountNumber'))) in nums:
+        return 'out'
+    if C.trim(C.to_str(doc.get('correspondentAccountNumber'))) in nums:
+        return 'in'
+    return None
+
+
+def pumb_select_account(out, accounts, p):
+    """Рахунок банку за запитаним IBAN (D36 п. 2, 8 @ 21f0ab0). Під IBAN може бути кілька рахунків у різних валютах (виміряно run2: 14 рахунків, 11 IBAN). Один -- беремо його (поле
+    `ВалютаСчета` не читається); кілька -- за парою (IBAN, числовий код валюти `/account`) з `Параметры.ВалютаСчета`; немає IBAN -- `account-not-found`; поле порожнє / пари немає /
+    пара неоднозначна -- `account-ambiguous`, «дія людини» ДО запиту виписки. Обидва випадки -- один клас «рахунку немає в банку». -> рахунок чи None (відмова записана)."""
+    same = [a for a in accounts if isinstance(a, dict) and a.get('iban') == p.account]
+    if not same:
+        _fail(out, CLS_HUMAN, {'Банк': BANK_NAMES['pumb'], 'Количество': 0}, 'account-not-found')       # факт `Количество` = 0: Т1 відрізняє «немає за IBAN» від «кілька під IBAN»
+        return None
+    if len(same) == 1:
+        return same[0]
+    want = C.to_str(p.account_currency_code)
+    by_pair = [a for a in same if want and C.numeric_currency(C.to_str(a.get('currency'))) == want]
+    if len(by_pair) == 1:
+        return by_pair[0]
+    facts = {'Банк': BANK_NAMES['pumb'], 'Количество': len(same)}                                       # скільки рахунків під IBAN
+    if want:
+        facts['Код'] = want                                                                          # числовий код валюти, який передано (порожнього не передано -- факту немає)
+    _fail(out, CLS_HUMAN, facts, 'account-ambiguous')
+    return None
+
+
+def _pumb(rec, p, out, disabled):
+    bank = 'pumb'
+    exs = list(rec.exchanges)
+    if p.reading_moment is not None and p.period_end < p.period_start:
+        _fail(out, CLS_HUMAN, {}, 'period-reversed')             # D36 п. 11: перевернутий період відхиляє точка читання до конектора, запитів немає
+        out.rules.add('rule_period_reversed')
+        return
+    if p.reading_moment is not None and p.period_start > kyiv.to_local(p.reading_moment):
+        out.items = 0                                            # D36 п. 11: НачалоПериода пізніший за момент читання -- запитів немає, порожнє повне читання
+        return
+    searches = [e for e in exs if e['request']['path'].endswith('/document/searcher')]
+    if not exs:
+        raise RecordingMismatch('у записі ПУМБ немає обмінів')
+    if searches:
+        pumb8_pagination(searches)
+    auth = exs[0]
+    use(out, auth)
+    if auth['failure'] or auth['response']['status'] != 200:
+        _failure(out, auth, bank, p.credentials)                                # автентифікація: 4xx -- дія людини, 5xx/збій -- повторити; запис може кінчатися тут (searcher не потрібен)
+        return
+    if len(exs) < 2:
+        raise RecordingMismatch('у записі ПУМБ немає списку рахунків')
+    account = exs[1]
+    use(out, account)
+    if account['failure'] or account['response']['status'] != 200:
+        _failure(out, account, bank, p.credentials)
+        return
+    try:
+        accounts = R.body_json(account)
+    except R.NotJson:
+        accounts = None
+    if not isinstance(accounts, list):
+        _fail_not_json(out, bank)
+        return
+    mine = pumb_select_account(out, accounts, p)
+    if mine is None:
+        return
+    if not searches:
+        raise RecordingMismatch('у записі ПУМБ немає запиту searcher')
+    acc_ccy = C.to_str(mine.get('currency'))
+    moment_local = kyiv.to_local(p.reading_moment) if p.reading_moment is not None else None
+    top = min(p.period_end, moment_local) if moment_local is not None else p.period_end
+    filtered = p.reading_moment is not None or len(searches) > 1       # відсів за періодом (піддобу): запас меж запиту й суміжні запити дають документи поза ним
+    n = 0                                                              # ПорядковыйНомер -- наскрізний за всіма прийнятими відповідями
+    stack, used = [(p.period_start, top)], 0                           # обхід навпіл: спершу ранішня половина (порядок запитів у записі)
+    try:
+        while stack:
+            lo, hi = stack.pop()
+            if used >= len(searches):
+                raise RecordingMismatch('у записі ПУМБ немає запиту searcher для піддобу (запис кінчається раніше за модель ділення)')
+            search = searches[used]
+            used += 1
+            use(out, search)
+            if used > 1 or p.strict_first_request:                         # КОЖЕН запит (і перший) -- межі цілими добами і форма тіла конектора; перший запит запису у формі рекордера (до run2) відхиляється
+                body = json.loads(R.request_body_text(search))
+                want = C.pumb_request_bounds(lo, hi)
+                if (C.pumb_date(body.get('fromDate')), C.pumb_date(body.get('toDate'))) != want or set(body) != {'fromDate', 'toDate', 'documentAccounts'}:
+                    raise RecordingMismatch(PUMB_RECORDER_FORM if used == 1 else 'межі запиту searcher не збігаються з половиною періоду')
+            if search['failure'] or search['response']['status'] != 200:
+                _failure(out, search, bank, p.credentials)                          # 429 тут -- без повтору: модель пауз зі Step 3
+                return
+            try:
+                docs = R.body_json(search)
+            except R.NotJson:
+                docs = None
+            if not isinstance(docs, list):
+                _fail_not_json(out, bank)
+                return
+            if pumb_out_of_bounds(search, docs):
+                _fail(out, CLS_RETRY, {'Банк': BANK_NAMES[bank], 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''}, 'out-of-bounds')
+                out.rules.add('rule_response_out_of_bounds')              # D36 п. 11: аномалія меж -- «повторити», ЦЯ сторінка в конверт не береться
+                out.items += len(docs)
+                return
+            if len(docs) >= C.PUMB_RESPONSE_THRESHOLD:                    # D36 п. 11, Р4: відповідь на порозі -- ділення навпіл (відповідь не береться, половини перечитують її)
+                halves = C.pumb_halves(lo, hi)
+                if halves is None:
+                    rule_day_at_threshold(out, lo, len(docs))
+                    return
+                out.rules.add('rule_split_at_threshold')
+                stack.extend(reversed(halves))
+                continue
+            if 'pumb9' not in disabled and rule_unknown_doc_type(out, docs, (lo, hi) if filtered else None):
+                out.items += len(docs)
+                out.applied.add('pumb9')
+                return                                                     # відмова всього читання: операцій цієї відповіді в конверті немає
+            out.items += len(docs)
+            for r in docs:
+                n += 1
+                if not isinstance(r, dict):
+                    raise ValueError("елемент відповіді ПУМБ не є об'єктом")
+                _pumb_doc(out, p, disabled, n, r, mine, acc_ccy, (lo, hi) if filtered else None)
+        if used < len(searches):
+            raise RecordingMismatch('у записі ПУМБ більше запитів searcher, ніж робить модель читання')
+    finally:                                                           # рядок на читання (з кількістю) -- і коли читання зупинилось відмовою: прочитане лишається
+        if out.foreign_docs:
+            out.diag('Предупреждение', 0, 'foreign-account', 'pumb1', Количество=len(out.foreign_docs))   # рахунок сторін не збігся ні з IBAN, ні з номером запитаного рахунку; текст -- точка читання
+
+
+def _pumb_doc(out, p, disabled, n, r, mine, acc_ccy, window):
+    moment = pumb7_local_time(r.get('operationDate'))
+    if window is not None and not (window[0] <= moment <= window[1]):
+        out.out_of_period.append(n)                              # D36 п. 11: поза [Начало, Конец] (піддобу), але в межах запиту -- відкидається мовчки
+        return
+    if C.to_str(r.get('type')) in PUMB_NONMOVEMENT_TYPES and 'pumb9' not in disabled:
+        out.skipped_nonmove.append(n)                            # відомий «не рух» (STM -- щоденний запис залишку; CUR, CUR_C, CUR_S -- заявки; виміряно run4): не операція і без Предупреждение
+        out.applied.add('pumb9')
+        return
+    number, ident = pumb6_identifier(out, disabled, r)
+    if pumb3_state(out, disabled, n, C.to_str(r.get('state')), moment, number) != 'emit':
+        return
+    pumb4_returns(out, disabled, n, r, number)
+    if 'pumb6' not in disabled and rule_identifier_length(out, n, ident):
+        return
+    snd, rcv = C.to_str(r.get('senderIBAN')), C.to_str(r.get('correspondentIBAN'))
+    side = pumb1_account_side(p.account, mine, r)
+    if side is None:
+        if not snd and not rcv:
+            rule_no_iban(out, n, number)                         # IBAN обох сторін немає й номер рахунку не збігся: чий це рух, не встановити
+            return
+        if 'pumb1' in disabled:
+            side = 'out' if r.get('direction') == 'OUTBOUND' else 'in'     # попередник рахунок не звіряв: усе, що банк віддав, -- наше
+        else:
+            out.foreign_docs.append(n)
+            out.applied.add('pumb1')
+            return
+    outgoing = side == 'out'
+    own = p.account
+    if pumb_direction_conflict(out, n, r, outgoing, number):
+        return
+    doc_ccy = C.numeric_currency(C.to_str(r.get('currencyCode')))
+    if doc_ccy is None:                                                 # літерний код поза довідником ISO: ніколи не гривня (D4b)
+        out.diag('Ошибка', n, 'unknown-currency', None, Ид=number, Код=C.to_str(r.get('currencyCode')))
+        return
+    if pumb1_foreign_currency(out, disabled, n, doc_ccy, C.numeric_currency(acc_ccy), number):
+        return
+    amount = pumb5_amount(out, disabled, n, r.get('amount'), number)
+    if amount is None:
+        return
+    purpose = pumb5_purpose(out, disabled, C.to_str(r.get('description')))
+    cside = 'correspondent' if outgoing else 'sender'
+    out.ops.append({
+        'ПорядковыйНомер': n, 'НомерСчета': own, 'Валюта': doc_ccy, 'ДатаОперации': C.iso(moment), 'НомерДокумента': number,
+        'ДатаДокумента': C.iso_day(moment), 'Сумма': C.amount_str(amount), 'Направление': 'Списано' if outgoing else 'Поступило',
+        'ИдентификаторОперации': ident, 'КонтрагентНаименование': C.to_str(r.get(cside + 'Name')),
+        'КонтрагентНомерСчета': rcv if outgoing else snd, 'КонтрагентКод': C.to_str(r.get(cside + 'TaxId')),
+        'КонтрагентМФО': C.to_str(r.get(cside + 'BankMfo')), 'НазначениеПлатежа': purpose})
 
 
 def _mono_currency(v):

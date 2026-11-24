@@ -25,8 +25,8 @@ from .common import Params
 
 import sslib.gen as sgen
 
-BANK_KEYS = {'privat': 'Приват', 'mono-fop': 'МоноФОП', 'mono-corp': 'МоноЮр'}
-HOSTS = {'privat': 'acp.privatbank.ua', 'mono-fop': 'api.monobank.ua', 'mono-corp': 'corp-api.monobank.ua'}
+BANK_KEYS = {'privat': 'Приват', 'mono-fop': 'МоноФОП', 'mono-corp': 'МоноЮр', 'pumb': 'ПУМБ'}
+HOSTS = {'privat': 'acp.privatbank.ua', 'mono-fop': 'api.monobank.ua', 'mono-corp': 'corp-api.monobank.ua', 'pumb': 'service.fuib.com'}
 PRIVAT_LIMIT = C.PRIVAT_WORKING_LIMIT
 UA_PHRASES = [p for k in ('services', 'goods', 'other', 'tax') for p in sgen.PHRASES[k]]
 
@@ -402,6 +402,17 @@ def all_scenarios():
     out += _fop_scenarios()
     out += _corp_scenarios()
     return out
+
+
+def pumb_scenarios():
+    """Синтетика ПУМБ (задача 2a, Step 3; `synth_pumb.py`). Окремо від `all_scenarios()` -- ТІЛЬКИ банки 5а (їхній перелік, хеші записів і тести лишаються без змін)."""
+    from . import synth_pumb
+    return synth_pumb.scenarios()
+
+
+def every_scenario():
+    """Усі синтетичні сценарії всіх банків: 5а і ПУМБ."""
+    return all_scenarios() + pumb_scenarios()
 
 
 def by_name(name):

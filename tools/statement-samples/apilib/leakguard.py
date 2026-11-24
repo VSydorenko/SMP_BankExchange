@@ -26,7 +26,7 @@ def lexicon(raw_root, config_path=None):
 def generate(outdir):
     """Пише всі записи (тека), пакети й еталони у `outdir`. -> перелік шляхів файлів."""
     paths = []
-    for s in synth.all_scenarios():
+    for s in synth.every_scenario():
         rec = s.recording()
         d = os.path.join(outdir, 'recordings', s.bank, s.sid)
         rec.to_dir(d)

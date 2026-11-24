@@ -11,7 +11,7 @@ from decimal import Decimal, InvalidOperation
 
 from . import kyiv, recording as rec_mod
 
-BANKS = ('privat', 'mono-fop', 'mono-corp')
+BANKS = ('privat', 'mono-fop', 'mono-corp', 'pumb')      # банки з МОДЕЛЛЮ оракулу й синтетикою (синтетика ПУМБ -- `synth.pumb_scenarios()`, окремо від `synth.all_scenarios()` -- банків 5а); `recording.BANKS` -- усі формати
 PRIVAT_PATH = '/api/statements/transactions'
 PRIVAT_SETTINGS_PATH = '/api/statements/settings'
 PRIVAT_BALANCE_PATH = '/api/statements/balance'
@@ -95,6 +95,15 @@ class Params:
     page_ceiling: object = None
     # момент читання `Транспорт.ТекущийМомент()` (UTC, naive); None -- банк без правила верхньої межі (Приват), у еталон не пишеться
     reading_moment: object = None
+    # ПУМБ (Р-е): значення облікових даних, що їх знає платформа (логін тощо) і які ВИРІЗАЮТЬСЯ з тексту помилки банку (`error_description`).
+    # Лише для оракула й тестів; в еталон (`to_json`) НЕ пишуться. Порожній кортеж -- нічого не вирізати.
+    credentials: tuple = ()
+    # ПУМБ: чи звіряти з правилом меж і формою тіла ПЕРШИЙ запит `searcher` (в еталон не пишеться). Так (типово): перший запит справжнього запису -- форма рекордера, не конектора -- відхиляється;
+    # False лише у перевірці (в) знеособлення, де порівнюється розбір сирого й знеособленого запису, а не форма запиту.
+    strict_first_request: bool = True
+    # ПУМБ: `Параметры.ВалютаСчета` -- числовий код ISO 4217 рядком із 3 цифр, який точка читання ЗАВЖДИ кладе для API з банківського рахунку 1С (D36 п. 2, D28 @ 21f0ab0).
+    # None -- поля в параметрах читання немає (банки 5а його не читають, в еталон не пишеться); '' -- поле є, але порожнє (рахунок 1С без валюти).
+    account_currency_code: object = None
 
     def to_json(self):
         d = {'НомерСчета': self.account, 'НачалоПериода': iso(self.period_start), 'КонецПериода': iso(self.period_end)}
@@ -104,6 +113,8 @@ class Params:
             d['ПотолокСтраниц'] = self.page_ceiling
         if self.reading_moment is not None:
             d['МоментЧтения'] = iso(self.reading_moment)
+        if self.account_currency_code is not None:
+            d['ВалютаСчета'] = self.account_currency_code
         return d
 
 
@@ -147,6 +158,49 @@ def parse_1c_date(s):
         return datetime(y, mo, d, h, mi, se)
     except ValueError:
         raise ValueError('Преобразование значения к типу Дата не может быть выполнено')
+
+
+_PUMB_DATE_RX = re.compile(r'\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}')
+
+
+class PumbDateFormat(ValueError):
+    """Дата ПУМБ не в гіпотезі `dd.MM.yyyy HH:mm:ss`: оракул ЯВНО відмовляє, формат не вгадується (значення в повідомленні немає)."""
+
+
+def pumb_date(text):
+    """`dd.MM.yyyy HH:mm:ss` (гіпотеза за swagger і запитами попередника, до виміру) -> naive datetime (київський час). Інший формат -- `PumbDateFormat`."""
+    s = to_str(text)
+    if not _PUMB_DATE_RX.fullmatch(s):
+        raise PumbDateFormat('дата ПУМБ не у форматі dd.MM.yyyy HH:mm:ss (гіпотеза, не виміряно)')
+    try:
+        return datetime.strptime(s, '%d.%m.%Y %H:%M:%S')
+    except ValueError:
+        raise PumbDateFormat('дата ПУМБ не у форматі dd.MM.yyyy HH:mm:ss (гіпотеза, не виміряно)')
+
+
+# ПУМБ (Р4, рішення консультанта, редакція 5 плану): основа читання -- `searcher` БЕЗ пагінації (D36 п. 11, абзац «API, що віддає період однією відповіддю», `e937fbd`).
+# Відповідь із кількістю документів >= ПОРОГА ділить період навпіл (рекурсивно до доби); доба з відповіддю >= порога -- «дія людини».
+# Поріг 1191 -- найбільший спостережений розмір відповіді (run2 LongestPeriod, 70fb320); стеля банку C >= спостереженого, обрізана відповідь має розмір рівно C,
+# тож поріг <= спостереженого гарантує ділення; поріг понад спостережене -- мовчазна втрата. Перерахувати, якщо трапиться більша відповідь.
+PUMB_RESPONSE_THRESHOLD = 1191
+
+# Запит `searcher` форми рекордера (run1b, run2: межі рівно по періоду, фільтри `documentState`/`documentType`) конектор не відтворює (межі цілими добами, без фільтрів, відступ pumb3): оракул відхиляє такий запит; справжні записи ПУМБ -- run3 і run4 (знято у формі конектора).
+
+
+def pumb_request_bounds(a, b):
+    """Межі запиту `searcher` для піддобу періоду [a, b] (місцеві `datetime`; `b` вже не пізніший за момент читання): ПУМБ фільтрує цілими календарними добами, обидві межі включно
+    (D36 п. 11, run2 70fb320) -- `fromDate` = доба `a` 00:00:00, `toDate` = доба `b` 23:59:59; запасу в секунду немає. Точний період дає фільтр конектора за `operationDate`."""
+    return datetime(a.year, a.month, a.day), datetime(b.year, b.month, b.day, 23, 59, 59)
+
+
+def pumb_halves(a, b):
+    """Ділення періоду [a, b] навпіл за ДОБАМИ (D36 п. 11): перша половина -- `n // 2` діб, друга -- решта; межа -- опівночі, половини без проміжку й без перекриття
+    ([a, опівніч - 1 с] і [опівніч, b], секундна точність). Період в межах однієї доби не ділиться -> None."""
+    days = (datetime(b.year, b.month, b.day) - datetime(a.year, a.month, a.day)).days + 1
+    if days < 2:
+        return None
+    mid = datetime(a.year, a.month, a.day) + timedelta(days=days // 2)
+    return (a, mid - timedelta(seconds=1)), (mid, b)
 
 
 def number(s):

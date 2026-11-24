@@ -88,6 +88,7 @@
 			<CommonModule>СМП_ТестыКоннектораМонобанк</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораМонобанкЮр</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораПриватБанк</CommonModule>
+			<CommonModule>СМП_ТестыКоннектораПУМБ</CommonModule>
 			<CommonModule>СМП_ТестыКоннекторовОбщее</CommonModule>
 			<CommonModule>СМП_ТестыКонтрактаВыписки</CommonModule>
 			<CommonModule>СМП_ТестыКонтрольХарнеса</CommonModule>

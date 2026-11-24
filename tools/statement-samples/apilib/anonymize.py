@@ -12,6 +12,7 @@
 Жодна функція не друкує значення."""
 import base64
 import copy
+import hashlib
 import json
 import os
 import re
@@ -27,7 +28,12 @@ FREE_TEXT_KEEP = ('message', 'errorDescription')       # KEEP-поля з віл
 # Слова, які генератор сам видає у вигаданих призначеннях (словники `gen.PHRASES` / `gen.SHORT`): за побудовою не ідентифікують, тож не чистяться з полів KEEP і не рахуються витоком у (а). ЄДИНИЙ такий
 # словник; явні слова публічного словника -- `allowed_words`, `guard_allowed_words`, `api_guard_allowed_words` із `config.json` (юридичні форми, назви банків, міста).
 GEN_WORDS = frozenset(w.casefold() for lst in list(gen.PHRASES.values()) + list(gen.SHORT.values()) for p in lst for w in WORD.findall(p))
+SHORT_ID_MAX = 5                                       # роль ID з чисто цифровим значенням довжиною <= цього: «короткий цифровий ID» -- (а) шукає його лише ЦІЛИМ значенням поля, а генератор не видає заміни, рівної сирому такому ID (README, «Короткі цифрові ID»)
 SWEEP_MIN = 6                                          # найкоротше значення ролі ID / ACC, яке підмінюється всередині рядків KEEP (коротші лише ловить перевірка (а))
+# Вигадані призначення для ASCII-оригіналу ролі PURPOSE (A6, рішення консультанта; ЗАГАЛЬНЕ правило для всіх банків, не виняток): клас байтів оригіналу зберігається
+# (ASCII -> ASCII), тож перевірка (б) «кодування тіла» лишається строгою. Слова -- рядкові (перевірка (а) шукає власні назви з великої літери).
+ASCII_PURPOSE = ('service notice', 'general message', 'standard notice', 'processing note', 'request note', 'system message', 'operation notice', 'status note',
+                 'information note', 'general information about the operation', 'standard text of the service message for this request')
 REPLACED = ('CODE', 'ACC', 'NAME', 'BANKNAME', 'PURPOSE', 'SCRAMBLE', 'ID')
 PRIVAT_KEEP_QUERY = ('startDate', 'endDate', 'limit')
 CORP_KEEP_QUERY = ('limit', 'direction', 'dateFrom', 'dateTo')
@@ -59,6 +65,26 @@ def path_segments(bank, path):
 
 def query_pairs_raw(query):
     return [(p.partition('=')[0], p.partition('=')[1], p.partition('=')[2]) for p in query.split('&')] if query else []
+
+
+def request_body(bank, ex):
+    """Тіло запиту обміну (формат v2) для обходу: (текст, [(роль, вузол, шлях)]). Тіла немає або `bodyOmitted` -> (None, []).
+    Маркер `<masked>` форми `bodyMasked` значенням не є і в перелік не йде. Тіло не UTF-8 / не JSON -> `UnknownField`
+    (позиція й код, НЕ фрагмент вхідного тексту): мовчазного копіювання тіла немає."""
+    rq = ex['request']
+    if 'bodyBase64' not in rq and 'bodyMasked' not in rq:
+        return None, []
+    try:
+        text = R.request_body_text(ex)
+    except UnicodeDecodeError as e:
+        raise schema.UnknownField('%s: тіло запиту не UTF-8 (позиція %d)' % (bank, e.start))
+    try:
+        root = jsonspan.parse(text)
+    except jsonspan.JsonSpanError as e:
+        raise schema.UnknownField('%s: тіло запиту не є JSON (%s)' % (bank, e))
+    masked = 'bodyMasked' in rq
+    return text, [(role, nd, where) for role, nd, where in schema.request_leaves(bank, rq['path'], root)
+                  if not (masked and nd.kind == 'str' and nd.value == R.MASK_MARKER)]
 
 
 class Bank:
@@ -105,7 +131,20 @@ class Bank:
             return self.acc(s)
         if role == 'SCRAMBLE':
             return self.scramble(s)
-        return self.fakes.apply(role, s)
+        new = self.fakes.apply(role, s)
+        if role == 'PURPOSE' and s.isascii() and not new.isascii():
+            new = self.ascii_purpose(s)
+        return new
+
+    def ascii_purpose(self, s):
+        """ASCII-оригінал PURPOSE -> ASCII-заміна (та сама для того самого тексту: ключ у мапі `text`, префікс `ascii:`)."""
+        key = 'ascii:' + ' '.join(s.split())
+        text = self.fakes.m['text']
+        if key not in text:
+            pool = [p for p in ASCII_PURPOSE if len(p) <= max(len(s.strip()), 15)] or [min(ASCII_PURPOSE, key=len)]
+            # вибір -- за хешем тексту (окремий детермінований потік): основну послідовність ГПВЧ мапи не зсуває, тож решта значень записів не змінюється
+            text[key] = pool[int.from_bytes(hashlib.sha256(key.encode('utf-8')).digest()[:8], 'big') % len(pool)]
+        return text[key]
 
     def clean_text(self, s):
         for raw, fake in self.sweep:
@@ -159,7 +198,27 @@ class Bank:
         out = dict(req)
         out['path'] = '/'.join(seg)
         out['query'] = '&'.join(pairs)
+        self._request_body(req, out)
         return out
+
+    def _request_body(self, req, out):
+        """Тіло запиту v2: `port` і `bodyOmitted` лишаються як є; `bodyBase64` -- розкодувати, знеособити ТІЄЮ САМОЮ мапою й ролями, що й
+        відповідь, закодувати, перерахувати `bodyLength`; `bodyMasked` -- знеособити `text`, маркери лишити."""
+        text, leaves = request_body(self.bank, {'request': req})
+        if text is None:
+            return
+        edits = []
+        for role, nd, where in leaves:
+            new = self.replace_node(role, nd, next((w for w in reversed(where) if isinstance(w, str)), ''), '\\u' in text)
+            if new is not None:
+                edits.append((nd.start, nd.end, new))
+        new_text = jsonspan.replace_spans(text, edits)
+        if 'bodyBase64' in req:
+            body = new_text.encode('utf-8')
+            out['bodyBase64'] = base64.b64encode(body).decode('ascii')
+            out['bodyLength'] = len(body)
+        else:
+            out['bodyMasked'] = {'text': new_text, 'fields': list(req['bodyMasked']['fields'])}
 
     def _query_value(self, role, v):
         if '%' in v or '+' in v:
@@ -209,6 +268,13 @@ class Bank:
             if role == 'SCRAMBLE':
                 new = self.fakes.number(nd.value)
                 return None if new == nd.value else new
+            if role == 'ID':
+                # числовий ідентифікатор (ПУМБ: id, docId, accountId, orderedLastId): та сама заміна за ТЕКСТОМ числа, що й для рядкового
+                # значення (documentAccounts рекордера -- рядки), тож зв'язок запит <-> відповідь зберігається
+                if not re.fullmatch(r'[1-9]\d*', nd.value):
+                    raise schema.UnknownField('%s: числовий ідентифікатор не є натуральним цілим' % self.bank)
+                new = self.ident(nd.value)
+                return None if new == nd.value else new
             raise schema.UnknownField('%s: число в полі з роллю %s' % (self.bank, role))
         raise schema.UnknownField('%s: контейнер там, де очікується скаляр' % self.bank)
 
@@ -234,14 +300,15 @@ def prescan(bank, rec):
         for part in req['path'].split('/') + [v for _, _, v in query_pairs_raw(req['query'])]:
             if IBAN_RX.fullmatch(part):
                 ibans.add(part)
-        if not ex['response']:
-            continue
-        try:
-            root = jsonspan.parse(R.body_text(ex))
-        except jsonspan.JsonSpanError:
-            raise schema.UnknownField('%s: тіло не є JSON' % bank)
-        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
-            if nd.kind != 'str' or role == 'KEEP' or nd.value == '':
+        leaves = list(request_body(bank, ex)[1])             # тіло запиту (v2): ті самі ролі, ті самі заборонені значення
+        if ex['response']:
+            try:
+                root = jsonspan.parse(R.body_text(ex))
+            except jsonspan.JsonSpanError:
+                raise schema.UnknownField('%s: тіло не є JSON' % bank)
+            leaves += schema.leaves(bank, req['path'], ex['response']['status'], root)
+        for role, nd, where in leaves:
+            if (nd.kind != 'str' and not (nd.kind == 'num' and role == 'ID')) or role == 'KEEP' or nd.value == '':
                 continue
             v = nd.value.strip()
             if role == 'ID' and where and where[-1] == 'REF':
@@ -276,14 +343,15 @@ def prescan_values(bank, rec, cfg=None):
                 accs.add(v)
             elif bank == 'privat' and k == 'followId':
                 ids.add(v)
-        if not ex['response']:
-            continue
-        try:
-            root = jsonspan.parse(R.body_text(ex))
-        except jsonspan.JsonSpanError:
-            continue
-        for role, nd, where in schema.leaves(bank, req['path'], ex['response']['status'], root):
-            if nd.kind != 'str' or nd.value.strip() == '':
+        leaves = list(request_body(bank, ex)[1])
+        if ex['response']:
+            try:
+                root = jsonspan.parse(R.body_text(ex))
+                leaves += schema.leaves(bank, req['path'], ex['response']['status'], root)
+            except jsonspan.JsonSpanError:
+                pass
+        for role, nd, where in leaves:
+            if (nd.kind != 'str' and not (nd.kind == 'num' and role == 'ID')) or nd.value.strip() == '':
                 continue
             v = nd.value.strip()
             if role == 'ID':
@@ -299,8 +367,35 @@ def prescan_values(bank, rec, cfg=None):
     return ids, accs, codes, words
 
 
-def make_fakes(cfg, words, nums, map_path):
+def is_short_numeric_id(v):
+    """Сире значення ролі ID: лише ASCII-цифри, довжина <= `SHORT_ID_MAX`."""
+    v = v.strip()
+    return 0 < len(v) <= SHORT_ID_MAX and v.isascii() and v.isdigit()
+
+
+def doc_numbers(bank, rec):
+    """Сирі номери документів (поля `schema.DOC_NUMBER_FIELDS` з роллю KEEP чи ID): заміна жодного ID їм не дорівнює (`make_fakes`)."""
+    out = set()
+    fields = schema.DOC_NUMBER_FIELDS.get(bank)
+    if not fields:
+        return out
+    for ex in rec.exchanges:
+        if not ex['response']:
+            continue
+        try:
+            root = jsonspan.parse(R.body_text(ex))
+            leaves = schema.leaves(bank, ex['request']['path'], ex['response']['status'], root)
+        except jsonspan.JsonSpanError:
+            continue
+        for role, nd, where in leaves:
+            if role in ('KEEP', 'ID') and nd.kind in ('str', 'num') and where and where[-1] in fields and str(nd.value).strip():
+                out.add(str(nd.value).strip())
+    return out
+
+
+def make_fakes(cfg, words, nums, map_path, ids=(), numbers=()):
     fk = gen.Fakes(forbidden_words=words, forbidden_numbers=nums, allowed_words=cfg.get('allowed_words', []))
+    fk.forbidden_ids = {v.strip() for v in ids if is_short_numeric_id(v)} | {v.strip() for v in numbers}
     if map_path and os.path.exists(map_path):
         with open(map_path, encoding='utf-8') as f:
             fk.load(json.load(f))
@@ -316,7 +411,7 @@ def anonymize_bank(bank, raw_dir, out_dir, map_path, cfg=None):
         raise schema.UnknownField('%s: у маніфесті інший банк' % bank)
     refs, ibans, words, nums = prescan(bank, rec)
     ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
-    fk = make_fakes(cfg, words, nums, map_path)
+    fk = make_fakes(cfg, words, nums, map_path, ids, doc_numbers(bank, rec))
     b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     b.build_sweep()
     new = [b.exchange(ex) for ex in rec.exchanges]
@@ -335,6 +430,6 @@ def load_bank(bank, raw_dir, map_path, cfg=None):
     rec = R.Recording.from_dir(raw_dir)
     refs, ibans, words, nums = prescan(bank, rec)
     ids, accs, codes, name_words = prescan_values(bank, rec, cfg)
-    fk = make_fakes(cfg, words, nums, map_path)
+    fk = make_fakes(cfg, words, nums, map_path, ids, doc_numbers(bank, rec))
     b = Bank(bank, fk, refs, ibans, ids, accs, codes, name_words)
     return rec, b

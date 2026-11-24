@@ -26,7 +26,8 @@ from . import sets as sets_mod, anonymize as A, common as C, etalon, expected, l
 RC_VIOLATION = 1
 RC_CONTROL = 2
 RC_STOP = 4
-BANKS = ('privat', 'mono-corp', 'mono-fop')
+BANKS = ('privat', 'mono-corp', 'mono-fop', 'pumb')
+DEFAULT_BANKS = ('privat', 'mono-corp', 'mono-fop')      # pumb -- у типовий перелік лише коли є його сирий запис (див. `_banks`)
 
 
 def _write(path, text, binary=False):
@@ -36,14 +37,14 @@ def _write(path, text, binary=False):
 
 
 def cmd_list(a):
-    for s in synth.all_scenarios():
+    for s in synth.every_scenario():
         print('%-10s %-36s фокус %-8s %s' % (s.bank, s.name, ','.join(map(str, s.focus)), s.title))
     return 0
 
 
 def cmd_synth(a):
     n = 0
-    for s in synth.all_scenarios():
+    for s in synth.every_scenario():
         if a.only and a.only not in (s.sid, s.name):
             continue
         rec = s.recording()
@@ -115,7 +116,7 @@ def cmd_guard_files(a):
 
 def cmd_sets(a):
     """12 файлів наборів для макетів тестового розширення (R15): записи й еталони пакетами, синтетика і run1."""
-    for name, kind, n, size in sets_mod.build(a.anon_root, a.out, a.anon_root_run3):
+    for name, kind, n, size in sets_mod.build(a.anon_root, a.out, a.anon_root_run3, a.anon_root_pumb):
         print('%-40s %-10s записів %3d  байтів %8d' % (name, kind, n, size))
     for bank, ident, reason, kind in sets_mod.EXCLUDED:
         print('виключено з %s: %s %s -- %s' % (kind, bank, ident, reason))
@@ -134,7 +135,13 @@ def cmd_unpack(a):
 
 
 def _banks(a):
-    return list(a.bank or BANKS)
+    """`--bank` задано -- як є. Інакше три банки 5а, а ПУМБ -- лише коли його сирий запис існує (відсутній запис 5а лишається помилкою)."""
+    if a.bank:
+        return list(a.bank)
+    out = list(DEFAULT_BANKS)
+    if os.path.isdir(step2.raw_dir_of(a.raw_root, 'pumb', a.label)):
+        out.append('pumb')
+    return out
 
 
 def _paths(a, bank):
@@ -160,9 +167,11 @@ def _run_a(a):
         res = step2.check_a(bank, raw, anon)
         ctl = step2.check_a(bank, raw, anon, control=True)
         lines.append('a %s: обмінів %d; токенів %s; збігів: підрядки %d, числа %d, назви %d, короткі ID/ACC/NAME (з %d) %d, незмінені на місці %d '
-                     '(коротких без збігу: %d, без пари: %d)' % (
+                     '(коротких без збігу: %d, без пари: %d); короткі цифрові ID (з %d) цілим значенням: %d, незмінених на місці: %d' % (
                          bank, res['exchanges'], res['tokens'], res['hits_whole'], res['hits_nums'], res['hits_names'], res['short_tokens'], res['hits_short'],
-                         res['unchanged_long'], res['unchanged_short_info'], res['misaligned']))
+                         res['unchanged_long'], res['unchanged_short_info'], res['misaligned'], res['short_id_tokens'], res['hits_short_ids'], res['unchanged_short_id']))
+        if bank in step2.PERSON_FIELDS:
+            lines.append('a %s: поля-особи %s (токенів %d): збігів %d' % (bank, '/'.join(sorted(step2.PERSON_FIELDS[bank])), res['person_tokens'], res['hits_person']))
         lines.append('a %s: вузькі винятки за парою полів (у сирому записі): %s; значень поза дозволеними полями: %d' % (
             bank, res['pair_counts'] or '{}', res['pair_leaks']))
         lines.append('a %s КОНТРОЛЬ на сирому записі: збігів %d (мусить бути > 0)' % (bank, ctl['hits']))
@@ -278,7 +287,7 @@ def main(argv):
     p.add_argument('--account-obsolete', default='')
     p.add_argument('--account-currency', default=None)
     p.add_argument('--privat-id', default='ID', choices=['REF+REFN', 'TECHNICAL_TRANSACTION_ID', 'ID', 'none'])
-    p.add_argument('--disable', nargs='*', choices=sorted(expected.DEVIATIONS))
+    p.add_argument('--disable', nargs='*', choices=sorted(expected.DEVIATIONS) + sorted(expected.PUMB_DEVIATIONS))
     p.set_defaults(fn=cmd_oracle)
     p = sub.add_parser('guard-synth')
     p.add_argument('--raw', required=True)
@@ -291,6 +300,7 @@ def main(argv):
     p = sub.add_parser('sets')
     p.add_argument('--anon-root', required=True, help='знеособлений вихід run1 (etalons/, readings/)')
     p.add_argument('--anon-root-run3', help='знеособлений вихід run3 (etalons/, readings/); без нього макетів Run3 немає')
+    p.add_argument('--anon-root-pumb', nargs='+', help='знеособлений вихід ПУМБ (etalons/, readings/); кілька коренів (run3 run4) зливаються в один набір, ідентифікатори з суфіксом `_Run3`/`_Run4`; з ним додаються 4 макети ПУМБ (синтетика, Run1)')
     p.add_argument('--out', required=True)
     p.set_defaults(fn=cmd_sets)
     p = sub.add_parser('pack')

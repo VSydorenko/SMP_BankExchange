@@ -263,5 +263,20 @@ class Conservation(unittest.TestCase):
         self.assertLess(len(e.diags), len(E.run(s.recording(), s.params).diags))
 
 
+class PumbOldNotApplicable(unittest.TestCase):
+    """«Стара обробка» не застосовується до ПУМБ (рішення власника) -- ЯВНА відмова, а не «звичайний» результат; і ця позначка неможлива для банків 5а."""
+
+    def test_pumb_is_not_applicable_and_the_mark_cannot_spread_to_5a_banks(self):
+        from test_api_pumb_oracle import reading, MIXED
+        rec, p = reading(MIXED)
+        res = O.run(rec, p)
+        self.assertEqual((res.error['kind'], res.rows, res.used), ('not-applicable', [], {'PUMB-NOT-APPLICABLE'}))
+        for s in S.all_scenarios():
+            if s.bank == 'pumb':
+                continue
+            old = O.run(s.recording(), s.params)
+            self.assertNotEqual((old.error or {}).get('kind'), 'not-applicable', s.name)
+            self.assertNotIn('PUMB-NOT-APPLICABLE', old.used, s.name)
+
 if __name__ == '__main__':
     unittest.main()
