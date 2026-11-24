@@ -9,7 +9,9 @@
   "docs": {
     "specs": "docs/superpowers/specs",
     "plans": "docs/superpowers/plans",
-    "docs": "docs"
+    "docs": "docs",
+    "glossary": "docs/GLOSSARY.md",
+    "adr": "docs/adr"
   },
   "research": {
     "corpus": [
