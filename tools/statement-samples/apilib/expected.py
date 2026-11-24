@@ -289,13 +289,13 @@ def _retry_seconds(ex):
 PRIVAT_AUTH_SERVICE_PREFIX = 'CLIENT_AUTH'      # privat.txt: CLIENT_AUTH, _DENY, _BADSESSION, _P24_CHECK_ERR, _P24_NOT_VALID, _ERROR
 
 
-PUMB_CUT_MARK = '<вирізано>'
+PUMB_CUT_MARK = '***'                           # єдина мітка маскування секретів для всіх банків (ядро конекторів, СМП_КоннекторыБанковОбщее.УбратьУчетныеДанные)
 PUMB_RECORDER_FORM = 'перший запит searcher у формі рекордера (межі рівно по періоду, фільтри стану й типу), не конектора (межі цілими добами, без фільтрів)'   # run1b, run2
 
 
 def pumb_error_description(ex, secrets=()):
     """Опис помилки ПУМБ для діагностики (Р-е): `error_description` (Keycloak/OAuth2), далі `errorDescription`, `message`; немає -- порожньо. Текст береться ЛИШЕ через
-    вирізання значень облікових даних (`secrets`: логін тощо, без регістру; довші першими) -- замість кожного входження `<вирізано>`. Самих значень не повертає й не пише."""
+    вирізання значень облікових даних (`secrets`: логін тощо, без регістру; довші першими) -- замість кожного входження `***` (`PUMB_CUT_MARK`). Самих значень не повертає й не пише."""
     try:
         js = R.body_json(ex)
     except R.NotJson:
