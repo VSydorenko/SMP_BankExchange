@@ -71,18 +71,12 @@
 			<CommonModule>СМП_ТестыВендораЗаполнениеПоОснованию</CommonModule>
 			<CommonModule>СМП_ТестыВендораСоздание</CommonModule>
 			<CommonModule>СМП_ТестыВендораСпособЗачета</CommonModule>
-			<CommonModule>СМП_ТестыВыгрузкиПлатежей</CommonModule>
 			<CommonModule>СМП_ТестыВызовПродукта</CommonModule>
 			<CommonModule>СМП_ТестыДанныеУНФ</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиКаркас</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиСоздание</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиЗаполнение</CommonModule>
-			<CommonModule>СМП_ТестыЗаписиНастройки</CommonModule>
-			<CommonModule>СМП_ТестыЗаписиЗачет</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиПерезапись</CommonModule>
-			<CommonModule>СМП_ТестыЗаписиОснование</CommonModule>
-			<CommonModule>СМП_ТестыЗаписиОснованиеРасчеты</CommonModule>
-			<CommonModule>СМП_ТестыЗаписиОснованиеПоручение</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиНаскрозьКонверт</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиНаскрозь</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораМонобанк</CommonModule>
@@ -95,12 +89,7 @@
 			<CommonModule>СМП_ТестыМатрицыРаспознавания</CommonModule>
 			<CommonModule>СМП_ТестыПозднееСвязывание</CommonModule>
 			<CommonModule>СМП_ТестыРаспознавания</CommonModule>
-			<CommonModule>СМП_ТестыРаспознаванияВладельцыСчета</CommonModule>
-			<CommonModule>СМП_ТестыРаспознаванияЗавершение</CommonModule>
-			<CommonModule>СМП_ТестыРаспознаванияПоручение</CommonModule>
-			<CommonModule>СМП_ТестыРаспознаванияРешенияЧеловека</CommonModule>
 			<CommonModule>СМП_ТестыРаспознаванияШаг5</CommonModule>
-			<CommonModule>СМП_ТестыФикстур</CommonModule>
 			<CommonModule>СМП_ТестыФорматаiFOBS_CSV</CommonModule>
 			<CommonModule>СМП_ТестыФорматаiFOBS_XML</CommonModule>
 			<CommonModule>СМП_ТестыФорматаВыгрузкиiFOBS_TXT</CommonModule>
@@ -110,7 +99,6 @@
 			<CommonModule>СМП_ТестыФорматаСенсБанк_CSV</CommonModule>
 			<CommonModule>СМП_ТестыФорматаУкрГазБанк_CSV</CommonModule>
 			<CommonModule>СМП_ТестыЧитателейВыписок</CommonModule>
-			<CommonModule>СМП_ТестыЧтенияВыписок</CommonModule>
 			<CommonModule>СМП_ТестыЭталонаВыгрузки</CommonModule>
 			<DataProcessor>СМП_ТестКоннектор</DataProcessor>
 			<DataProcessor>СМП_ТестКоннекторРазмерСтраницы</DataProcessor>

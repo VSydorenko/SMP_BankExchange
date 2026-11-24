@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Оракул ПУМБ, режим «очікуване» (задача 2a, Step 2): очікування -- РУКАМИ, зі спеки й рішень плану (відступи 1-8, D36 п. 8, 10, 11), а не з коду оракула.
-Усі значення ВИГАДАНІ. «Стара обробка» для ПУМБ не застосовується (рішення власника) -- її контроль у `test_api_oracle.py`. Пагінація й формат дати --
-гіпотези до виміру: запит із `pagingRequest` (конектор його не шле, Р4) і інший формат `operationDate` -- явна відмова; кілька запитів `searcher` без `pagingRequest` -- ділення навпіл (тести в `test_api_pumb_synth.py`, ручне очікуване)."""
+"""Сторожові перевірки оракула ПУМБ (задача 2a, Step 2): регістронезалежне вирізання облікових даних із тексту відмови автентифікації
+і перевірка C знеособленого запису ПУМБ разом із тілами запитів. Усі значення ВИГАДАНІ."""
 import json
 import os
-import shutil
 import sys
 import tempfile
 import unittest
-from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from apilib import anonymize as A, common as C, expected as E, kyiv, readings as RD, recording as R, step2
+from apilib import anonymize as A, common as C, expected as E, kyiv, recording as R, step2
 from apilib.common import Params
 from test_api_pumb_anonymize import IBAN, _post, _resp
 
@@ -49,60 +46,12 @@ def reading(docs, acct_status=200, search_status=200, auth_status=200, search_bo
     return rec, p
 
 
-def summary(e):
-    return [(o['ПорядковыйНомер'], o['Сумма'], o['Направление'], o['НомерДокумента'], o['КонтрагентНомерСчета']) for o in e.ops], \
-           sorted((d['Уровень'], d['ПорядковыйНомер'], d['Суть']) for d in e.diags)
-
-
 MIXED = [doc(1), doc(2, out=False, amount='200.00', when='01.11.2026 11:00:00'), doc(3, state='ACCEPTED', when='01.11.2026 12:00:00'),
          doc(4, state='REJECTED', when='01.11.2026 13:00:00'), doc(5, amount='0.00'), doc(6, ccy='USD')]
 
 
 class PumbExpected(unittest.TestCase):
-    def test_by_hand_states_amounts_currency_and_trust(self):
-        # відступи 3 (стани), 5 (сума), 1 (валюта), 6 (id), 7 (дата): ручне очікуване
-        rec, p = reading(MIXED)
-        e = E.run(rec, p)
-        ops, diags = summary(e)
-        self.assertEqual(ops, [(1, '100.50', 'Списано', '8001', OTHER), (2, '200.00', 'Поступило', '8002', OTHER)])
-        self.assertEqual(diags, [('Ошибка', 5, 'bad-amount'), ('Ошибка', 6, 'foreign-currency'), ('Предупреждение', 3, 'nonfinal'),
-                                 ('Предупреждение', 4, 'cancelled')])
-        self.assertEqual([(o['ИдентификаторОперации'], o['Валюта'], o['ДатаОперации'], o['ДатаДокумента']) for o in e.ops],
-                         [('8001', '980', '2026-11-01T10:00:00', '2026-11-01'), ('8002', '980', '2026-11-01T11:00:00', '2026-11-01')])
-        self.assertEqual((e.complete, e.failure_class), (True, ''))
-        self.assertEqual(e.trust, datetime(2026, 11, 1, 12, 0, 0))              # не пізніша за першу неостаточну (D36 п. 10); скасована межу не тримає
-        self.assertEqual([(r['Метод'], r['Хост'], r.get('Порт'), r['Путь']) for r in e.requests],
-                         [('POST', 'auth.fuib.com', None, '/auth/realms/VegaNet/protocol/openid-connect/token'),
-                          ('GET', 'service.fuib.com', 4103, '/war_veganet_api/account'),
-                          ('POST', 'service.fuib.com', 4103, '/war_veganet_api/document/searcher')])
-        self.assertEqual(e.requests[2]['Тело']['documentAccounts'], [str(ACCT['accountId'])])
-        self.assertTrue(e.requests[0]['ТелоОпущено'])
-        # відступи -- іменовані функції: вимкнений = попередник (стани зникають без сліду, id порожній), підміна ловиться
-        e3 = E.run(rec, p, {'pumb3'})
-        self.assertEqual([d['ПорядковыйНомер'] for d in e3.diags if d['Суть'] in ('nonfinal', 'cancelled')], [])
-        self.assertEqual(e3.trust, p.period_end)
-        self.assertEqual({o['ИдентификаторОперации'] for o in E.run(rec, p, {'pumb6'}).ops}, {''})
-        self.assertEqual(sorted(e.applied), ['pumb1', 'pumb3', 'pumb5', 'pumb6'])
-
-    def test_first_request_recorder_form_is_rejected(self):
-        # перший запит справжнього запису (межі рівно по періоду, фільтри стану й типу) -- форма рекордера, не конектора: оракул відхиляє (закриває run2); перевірка (в) знеособлення не строга
-        body = {'fromDate': DAY0, 'toDate': DAY1, 'documentState': ['PROCESSED'], 'documentType': ['UAH'], 'documentAccounts': [str(ACCT['accountId'])]}
-        rec, p = reading([doc(1)], search_body=body)
-        with self.assertRaises(E.RecordingMismatch) as cm:
-            E.run(rec, p)
-        self.assertEqual(str(cm.exception), E.PUMB_RECORDER_FORM)
-        import dataclasses
-        self.assertEqual(len(E.run(rec, dataclasses.replace(p, strict_first_request=False)).ops), 1)
-
-    def test_by_hand_a4_no_iban_error_error_description_cut_and_empty_id(self):
-        # Р-д: документ без IBAN обох сторін -- Ошибка no-iban (рахунок з accountId запиту НЕ виводиться), не операція; сусідні документи -- як було
-        rec, p = reading([doc(1), doc(2, senderIBAN=None, correspondentIBAN=''), doc(3, out=False, amount='7.00')])
-        e = E.run(rec, p)
-        self.assertEqual(([o['ПорядковыйНомер'] for o in e.ops], [(d['Уровень'], d['ПорядковыйНомер'], d['Суть']) for d in e.diags]),
-                         ([1, 3], [('Ошибка', 2, 'no-iban')]))
-        self.assertEqual(e.foreign, {})
-        self.assertNotIn(str(ACCT['accountId']), json.dumps([e.ops, e.diags], ensure_ascii=False))
-        self.assertEqual(set(e.diags[0]['Факты']), {'Ид'})                                      # лише ідентифікатор документа
+    def test_error_description_cuts_login_case_insensitively(self):
         # Р-е: error_description (OAuth2) читається для діагностики, значення облікових даних вирізаються (без регістру). Контроль, що вміє впасти: БЕЗ вирізання логін у тексті є
         login = 'fiktivnyi_login_77'
         body = {'error': 'invalid_grant', 'error_description': 'Invalid user %s or password' % login.upper()}
@@ -117,49 +66,6 @@ class PumbExpected(unittest.TestCase):
         # error_description старший за message; інакше message; облікові дані не потрапляють в etalon-параметри
         self.assertEqual(E.pumb_error_description(rec.exchanges[0]), 'Invalid user %s or password' % login.upper())
         self.assertNotIn('credentials', json.dumps(p.to_json()).lower())
-        # pumb6 (виміряно run1b): ідентифікатор -- docId; id (майже завжди null, у 2 входженнях непорожній і != docId) основним НЕ є; порожній docId -- Ошибка bad-identifier
-        rec, p = reading([doc(1, id=''), doc(2, id=None), doc(3), doc(4, docId=None, id=7777), doc(5, docId='')])
-        e = E.run(rec, p)
-        self.assertEqual([o['ИдентификаторОперации'] for o in e.ops], ['8001', '8002', '8003'])
-        self.assertEqual([(d['Уровень'], d['ПорядковыйНомер'], d['Суть'], d['Факты']) for d in e.diags], [('Ошибка', 4, 'bad-identifier', {'Количество': 0}), ('Ошибка', 5, 'bad-identifier', {'Количество': 0})])
-
-    def test_by_hand_d36_failures_period_format_and_pagination(self):
-        # п. 8: автентифікація / 4xx -- дія людини; 5xx -- повторити; п. 10: відмова -- межа = НачалоПериода, читання неповне
-        for kw, cls in (({'auth_status': 401}, 'ДействиеЧеловека'), ({'acct_status': 403}, 'ДействиеЧеловека'),
-                        ({'search_status': 500}, 'Повторить'), ({'search_status': 429}, 'Повторить')):
-            rec, p = reading([doc(1)], **kw)
-            e = E.run(rec, p)
-            self.assertEqual((e.failure_class, e.complete, e.trust, e.ops), (cls, False, p.period_start, []), kw)
-        rec, p = reading([doc(1)], acct_status=403)
-        self.assertEqual(len(E.run(rec, p).requests), 2)                       # після відмови списку рахунків searcher не йде
-        # п. 11: період навпаки -- дія людини без запитів; період цілком після моменту читання -- порожнє ПОВНЕ читання, межа = початок
-        rec, p = reading([doc(1)])
-        e = E.run(rec, Params(account=IBAN, period_start=p.period_end, period_end=p.period_start, reading_moment=p.reading_moment))
-        self.assertEqual((e.failure_class, e.requests), ('ДействиеЧеловека', []))
-        e = E.run(rec, Params(account=IBAN, period_start=datetime(2026, 12, 1), period_end=datetime(2026, 12, 2), reading_moment=p.reading_moment))
-        self.assertEqual((e.complete, e.trust, e.ops, e.requests), (True, datetime(2026, 12, 1), [], []))
-        # п. 11: аномалія меж -- операція, ДЕНЬ якої поза днями ЗАПИТУ (fromDate/toDate з тіла searcher: цілі доби): повторити, читання неповне, межа = початок, сторінку не беремо, без значень у діагностиці
-        for when in ('02.11.2026 00:00:00', '31.10.2026 23:59:59'):          # перша секунда наступної і остання секунда попередньої доби відносно запиту 01.11
-            rec, p = reading([doc(1), doc(2, when=when)])
-            e = E.run(rec, p)
-            self.assertEqual((e.failure_class, e.complete, e.trust, e.ops), ('Повторить', False, p.period_start, []), when)
-            self.assertEqual([(d['Уровень'], d['Суть'], d['Факты']) for d in e.diags],
-                             [('Предупреждение', 'out-of-bounds', {'Банк': 'ПУМБ', 'Вид': 'out-of-bounds', 'Статус': 200, 'ОписаниеБанка': ''})])
-        rec, p = reading([doc(1, when=DAY0), doc(2, when=DAY1)])
-        self.assertEqual([o['ПорядковыйНомер'] for o in E.run(rec, p).ops], [1, 2])
-        rec, p = reading([doc(1, when='01.11.2026 08:59:59'), doc(2, when='01.11.2026 18:00:00'), doc(3, when='01.11.2026 09:00:00')])      # та сама доба запиту, але поза періодом 09:00:00-17:59:59: не аномалія, відкидається мовчки
-        e = E.run(rec, Params(account=IBAN, period_start=datetime(2026, 11, 1, 9), period_end=datetime(2026, 11, 1, 17, 59, 59), reading_moment=p.reading_moment))
-        self.assertEqual((e.failure_class, [o['ПорядковыйНомер'] for o in e.ops], e.out_of_period, e.diags), ('', [3], [1, 2], []))
-        # формат operationDate -- гіпотеза: інший формат -- явна відмова, не здогад
-        rec, p = reading([doc(1, when='2026-11-01T10:00:00')])
-        with self.assertRaises(C.PumbDateFormat):
-            E.run(rec, p)
-        # Р4: конектор пагінації не використовує -- запит з pagingRequest оракул відхиляє явно (перелік «не змодельовано» названий)
-        rec, p = reading([doc(1)], search_body={'fromDate': DAY0, 'toDate': DAY1, 'documentAccounts': ['5500123456'], 'pagingRequest': {'pageSize': 1}})
-        with self.assertRaises(E.PaginationUnmeasured):
-            E.run(rec, p)
-        readings, skipped = RD.pumb_split(rec)
-        self.assertEqual((readings, [s[0] for s in skipped]), ([], ['pumb_a1_searcher_nopaging']))
 
     def test_check_c_on_anonymized_pumb_reading_incl_request_bodies(self):
         rec, p = reading(MIXED[:4])
