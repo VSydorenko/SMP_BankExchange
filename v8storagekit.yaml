@@ -2,8 +2,6 @@
 # Структуру (шляхи, типи) не описує — вона у v8project.yaml кожного воркспейсу;
 # тут лише truth кожного джерела й те, чого Unica не знає.
 version: 1
-kitVersion: 1.6.0                  # до якої версії плагіна доведено структуру репозиторію
-                                    # (onboarding/references/upgrades.md)
 product: SMP_BankExchange
 
 workspaces:
@@ -18,6 +16,9 @@ workspaces:
         storage:
           path: 'R:\СховищаРозширень_1С\СМП_BankExchange_SMB'
           user: gitbot
+      # Тести YaXUnit: окреме розширення, у постачання не йде; пишуть агент і люди
+      SMP_BankExchange_SMB_Tests:
+        truth: git
 
   # BAS for accounting — українська бухгалтерія.
   # Тека сховища зветься _BP, розширення — _ACC: розбіжність історична й очікувана.

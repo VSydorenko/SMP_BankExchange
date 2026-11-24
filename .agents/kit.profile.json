@@ -1,0 +1,27 @@
+{
+  "pr": {
+    "base": "main",
+    "mergeMethod": "merge"
+  },
+  "workspace": {
+    "mode": "shared"
+  },
+  "docs": {
+    "specs": "docs/superpowers/specs",
+    "plans": "docs/superpowers/plans",
+    "docs": "docs"
+  },
+  "research": {
+    "corpus": [
+      "CLAUDE.md",
+      "README.md",
+      "docs/**/*.md"
+    ]
+  },
+  "review": {
+    "exclude": [
+      "**/ConfigDumpInfo.xml",
+      "**/DumpFilesIndex.txt"
+    ]
+  }
+}
