@@ -6,10 +6,10 @@ Designer platform XML, у підкаталозі `src/`.
 Вміст цієї теки навмисно виключено з git: це код вендора, а репозиторій публічний.
 Сам цей README в git лишається — правило в `.gitignore` стоїть на `cf/src/**`, не на `cf/**`.
 
-Вивантажити — скіл `v8storagekit:dump`, або вручну з кореня репозиторію:
+Вивантажити — скіл `v8storagekit:infobase-dump`, або вручну з кореня репозиторію:
 
 ```powershell
-pwsh -NoProfile -File "<корінь плагіна>/tools/kit.ps1" dump -RepoRoot . -Workspace SMP_BankExchange_SMBru -Source base -Apply
+kit dump -RepoRoot . -Workspace SMP_BankExchange_SMBru -Source base -Apply
 ```
 
 `-Workspace` тут обов'язковий: ключ `base` є в кожному з трьох продуктів, і без нього

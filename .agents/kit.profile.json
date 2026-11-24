@@ -1,0 +1,32 @@
+{
+  "v8storagekit": {
+    "version": "2.0.4"
+  },
+  "pr": {
+    "base": "main",
+    "mergeMethod": "merge"
+  },
+  "workspace": {
+    "mode": "shared"
+  },
+  "docs": {
+    "specs": "docs/superpowers/specs",
+    "plans": "docs/superpowers/plans",
+    "docs": "docs",
+    "glossary": "docs/GLOSSARY.md",
+    "adr": "docs/adr"
+  },
+  "research": {
+    "corpus": [
+      "CLAUDE.md",
+      "README.md",
+      "docs/**/*.md"
+    ]
+  },
+  "review": {
+    "exclude": [
+      "**/ConfigDumpInfo.xml",
+      "**/DumpFilesIndex.txt"
+    ]
+  }
+}

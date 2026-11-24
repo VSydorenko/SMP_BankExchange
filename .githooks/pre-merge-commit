@@ -1,7 +1,7 @@
 #!/bin/sh
-# v8storagekit — захист гілок storage/* від злиття (spec §3.3, шар 2).
+# v8storagekit — захист гілок storage/* від злиття.
 # storage/* зливають У main чи в гілку задачі, а не навпаки: merge-коміт на дзеркалі
-# ламає інваріант «один коміт = одна версія сховища» (§3.2), і check його зловить.
+# ламає інваріант «один коміт = одна версія сховища», і check його зловить.
 branch=$(git symbolic-ref -q HEAD) || exit 0
 case "$branch" in
   refs/heads/storage/*)
