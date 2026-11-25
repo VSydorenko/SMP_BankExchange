@@ -108,6 +108,10 @@
 					<CommandName>Form.Command.ПрочитатьВыписку</CommandName>
 					<ExtendedTooltip name="ПрочитатьВыпискуРасширеннаяПодсказка" id="26"/>
 				</Button>
+				<Button name="ПрочитатьОстаток" id="448">
+					<CommandName>Form.Command.ПрочитатьОстаток</CommandName>
+					<ExtendedTooltip name="ПрочитатьОстатокРасширеннаяПодсказка" id="449"/>
+				</Button>
 				<Button name="ОтменитьЧтение" id="27">
 					<Type>UsualButton</Type>
 					<CommandName>Form.Command.ОтменитьЧтение</CommandName>
@@ -1795,6 +1799,29 @@
 				</v8:item>
 			</ToolTip>
 			<Action>ЗаполнитьТиповыеПравилаКоманда</Action>
+		</Command>
+		<Command name="ПрочитатьОстаток" id="13">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Прочитать остаток</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Прочитати решту</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Прочитать из банка остаток периода, который не охватило неполное чтение: период подставляется в форму и читается заново.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Прочитати з банку решту періоду, яку не охопило неповне читання: період підставляється у форму і читається заново.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ПрочитатьОстаток</Action>
 		</Command>
 	</Commands>
 	<Parameters>
