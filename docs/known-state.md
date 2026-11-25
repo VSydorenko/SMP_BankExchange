@@ -69,10 +69,12 @@ operation=syntax, mode=designer-modules, extension=SMP_BankExchange_SMB, server+
      спершу `SMP_BankExchange_SMB`, потім `SMP_BankExchange_SMB_Tests`. Вивід `push` перевіряється на
      фактичне завантаження (кількість файлів, `ok`), а не лише на відсутність помилки. Стан бази
      Уніка вважає «неперевіреним» (`infobase_state_unverified`, `non_fast_forward`, `no_memory`) — тоді
-     той самий `push` із `force=true`, **лише** з `sourceSet`.
+     той самий `push` із `force=true`, **лише** з `sourceSet`. На `force` Уніка питає підтвердження
+     перезапису бази агента (форма в сесії; хук рівня користувача може відповісти сам). Відповідь
+     `cancelled` — зупинка, а не повтор.
   2. З теки воркспейсу `SMP_BankExchange_SMB`:
      `v8-runner --config v8project.yaml --json-message test --no-push yaxunit module <Модуль>`
-     (`v8-runner` лежить у теці плагіна Unica; накладка `v8project.local.yaml` діє, база серверна).
+     (`v8-runner` лежить у теці плагіна Unica, `bin/<платформа>/v8-runner-*`; накладка `v8project.local.yaml` діє, база серверна).
      `--no-push` обов'язковий: без нього раннер сам довантажував би вихідники в обхід кроку 1. Вивід
      пишуть у файл (JSON), результат читають з нього: `exit` 0, `failed` 0, `skipped` 0 і `total`,
      що збігається з очікуваним для модуля. Один прогін за раз.
