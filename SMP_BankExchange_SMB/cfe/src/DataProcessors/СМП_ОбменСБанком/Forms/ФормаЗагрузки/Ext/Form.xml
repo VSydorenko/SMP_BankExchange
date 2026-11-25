@@ -99,6 +99,9 @@
 					<DataPath>Период</DataPath>
 					<ContextMenu name="ПериодКонтекстноеМеню" id="446"/>
 					<ExtendedTooltip name="ПериодРасширеннаяПодсказка" id="447"/>
+					<Events>
+						<Event name="OnChange">ПериодПриИзменении</Event>
+					</Events>
 				</InputField>
 				<Button name="ПрочитатьВыписку" id="25">
 					<Type>UsualButton</Type>
