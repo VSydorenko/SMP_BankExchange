@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Синтетичні записи й еталони: форма, детермінованість, покриття Review Focus, спрацювання кожного відступу, сумісність
-ключа з попередником, контроль поломкою кожного відступу. Дані — вигадані генератором; валідатори кодів незалежні від
-генератора (`python-stdnum`)."""
+"""Сторож синтетичних записів: у записі немає заголовків запиту й токеноподібних значень. Решта перевірок синтезатора
+(форма, детермінованість, покриття, відступи оракула) прибрана як не ключова; інструмент дає записи для еталонів Т1."""
 import json
 import os
 import sys
@@ -10,12 +9,6 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from apilib import synth as S
-
-try:
-    from stdnum import iban as sn_iban
-    from stdnum.ua import edrpou as sn_edrpou, rntrc as sn_rntrc
-except ImportError:            # pragma: no cover
-    sn_iban = None
 
 ALL = S.all_scenarios()
 
