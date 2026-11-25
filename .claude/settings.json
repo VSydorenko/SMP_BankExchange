@@ -34,7 +34,8 @@
       "mcp__plugin_unica_unica__unica_docs",
       "mcp__plugin_unica_unica__unica_check",
       "mcp__plugin_unica_unica__unica_diff",
-      "mcp__plugin_unica_unica__unica_run"
+      "mcp__plugin_unica_unica__unica_run",
+      "mcp__plugin_unica_unica__unica_apply"
     ],
     "ask": [
       "Bash(git push --force:*)",
@@ -58,8 +59,7 @@
       "Bash(gh release:*)",
       "PowerShell(gh release:*)",
       "Bash(gh repo:*)",
-      "PowerShell(gh repo:*)",
-      "mcp__plugin_unica_unica__unica_apply"
+      "PowerShell(gh repo:*)"
     ],
     "deny": [
       "Bash(git checkout --:*)",
