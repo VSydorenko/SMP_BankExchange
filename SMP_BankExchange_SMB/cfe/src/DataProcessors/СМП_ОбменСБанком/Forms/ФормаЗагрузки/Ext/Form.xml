@@ -40,13 +40,11 @@
 						<Event name="OnChange">БанковскийСчетПриИзменении</Event>
 					</Events>
 				</InputField>
-				<InputField name="УчетнаяЗапись" id="10">
+				<InputField name="УчетнаяЗапись" id="442">
 					<DataPath>УчетнаяЗапись</DataPath>
-					<ContextMenu name="УчетнаяЗаписьКонтекстноеМеню" id="11"/>
-					<ExtendedTooltip name="УчетнаяЗаписьРасширеннаяПодсказка" id="12"/>
-					<Events>
-						<Event name="OnChange">УчетнаяЗаписьПриИзменении</Event>
-					</Events>
+					<ReadOnly>true</ReadOnly>
+					<ContextMenu name="УчетнаяЗаписьКонтекстноеМеню" id="443"/>
+					<ExtendedTooltip name="УчетнаяЗаписьРасширеннаяПодсказка" id="444"/>
 				</InputField>
 				<InputField name="ИдентификаторФормата" id="13">
 					<DataPath>ИдентификаторФормата</DataPath>
@@ -96,6 +94,11 @@
 					<Events>
 						<Event name="StartChoice">ИмяФайлаНачалоВыбора</Event>
 					</Events>
+				</InputField>
+				<InputField name="Период" id="445">
+					<DataPath>Период</DataPath>
+					<ContextMenu name="ПериодКонтекстноеМеню" id="446"/>
+					<ExtendedTooltip name="ПериодРасширеннаяПодсказка" id="447"/>
 				</InputField>
 				<Button name="ПрочитатьВыписку" id="25">
 					<Type>UsualButton</Type>
@@ -1508,6 +1511,30 @@
 				</dcsset:appearance>
 			</dcsset:item>
 		</ConditionalAppearance>
+		<Attribute name="Период" id="33">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Период</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Період</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:StandardPeriod</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="ИсточникЧтения" id="34">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>20</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
 	</Attributes>
 	<Commands>
 		<Command name="ПрочитатьВыписку" id="1">
