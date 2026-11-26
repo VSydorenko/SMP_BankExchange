@@ -150,6 +150,7 @@
 			<CommonModule>УправлениеНебольшойФирмойКлиент</CommonModule>
 			<XDTOPackage>NovaPay</XDTOPackage>
 			<ScheduledJob>СМП_ОбменСБанкамиAPI</ScheduledJob>
+			<ScheduledJob>СМП_РегламентОбменаСБанком</ScheduledJob>
 			<Catalog>Пользователи</Catalog>
 			<Catalog>СМП_УчетныеЗаписиБанков</Catalog>
 			<Catalog>Банки</Catalog>

@@ -572,6 +572,86 @@
 								</Button>
 							</ChildItems>
 						</UsualGroup>
+						<UsualGroup name="ГруппаОбменНовойПлатформой" id="164">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Обмен новой платформой</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>uk</v8:lang>
+									<v8:content>Обмін новою платформою</v8:content>
+								</v8:item>
+							</Title>
+							<Group>Vertical</Group>
+							<Representation>WeakSeparation</Representation>
+							<ExtendedTooltip name="ГруппаОбменНовойПлатформойРасширеннаяПодсказка" id="165"/>
+							<ChildItems>
+								<InputField name="СостояниеОбмена" id="166">
+									<DataPath>СостояниеОбмена</DataPath>
+									<ReadOnly>true</ReadOnly>
+									<TitleLocation>None</TitleLocation>
+									<MultiLine>true</MultiLine>
+									<Height>3</Height>
+									<ContextMenu name="СостояниеОбменаКонтекстноеМеню" id="167"/>
+									<ExtendedTooltip name="СостояниеОбменаРасширеннаяПодсказка" id="168"/>
+								</InputField>
+								<Button name="ОбменНовойПлатформойСейчас" id="169">
+									<CommandName>Form.Command.ОбменНовойПлатформойСейчас</CommandName>
+									<ExtendedTooltip name="ОбменНовойПлатформойСейчасРасширеннаяПодсказка" id="170"/>
+								</Button>
+								<Table name="НедочитанныеДни" id="171">
+									<Representation>List</Representation>
+									<DataPath>НедочитанныеДни</DataPath>
+									<ReadOnly>true</ReadOnly>
+									<CommandBarLocation>None</CommandBarLocation>
+									<RowFilter xsi:nil="true"/>
+									<ContextMenu name="НедочитанныеДниКонтекстноеМеню" id="172"/>
+									<AutoCommandBar name="НедочитанныеДниКоманднаяПанель" id="173"/>
+									<ExtendedTooltip name="НедочитанныеДниРасширеннаяПодсказка" id="174"/>
+									<SearchStringAddition name="НедочитанныеДниСтрокаПоиска" id="175">
+										<AdditionSource>
+											<Item>НедочитанныеДни</Item>
+											<Type>SearchStringRepresentation</Type>
+										</AdditionSource>
+										<ContextMenu name="НедочитанныеДниСтрокаПоискаКонтекстноеМеню" id="176"/>
+										<ExtendedTooltip name="НедочитанныеДниСтрокаПоискаРасширеннаяПодсказка" id="177"/>
+									</SearchStringAddition>
+									<ViewStatusAddition name="НедочитанныеДниСостояниеПросмотра" id="178">
+										<AdditionSource>
+											<Item>НедочитанныеДни</Item>
+											<Type>ViewStatusRepresentation</Type>
+										</AdditionSource>
+										<ContextMenu name="НедочитанныеДниСостояниеПросмотраКонтекстноеМеню" id="179"/>
+										<ExtendedTooltip name="НедочитанныеДниСостояниеПросмотраРасширеннаяПодсказка" id="180"/>
+									</ViewStatusAddition>
+									<SearchControlAddition name="НедочитанныеДниУправлениеПоиском" id="181">
+										<AdditionSource>
+											<Item>НедочитанныеДни</Item>
+											<Type>SearchControl</Type>
+										</AdditionSource>
+										<ContextMenu name="НедочитанныеДниУправлениеПоискомКонтекстноеМеню" id="182"/>
+										<ExtendedTooltip name="НедочитанныеДниУправлениеПоискомРасширеннаяПодсказка" id="183"/>
+									</SearchControlAddition>
+									<ChildItems>
+										<LabelField name="НедочитанныеДниДень" id="186">
+											<DataPath>НедочитанныеДни.День</DataPath>
+											<ContextMenu name="НедочитанныеДниДеньКонтекстноеМеню" id="187"/>
+											<ExtendedTooltip name="НедочитанныеДниДеньРасширеннаяПодсказка" id="188"/>
+										</LabelField>
+										<LabelField name="НедочитанныеДниТекст" id="189">
+											<DataPath>НедочитанныеДни.Текст</DataPath>
+											<ContextMenu name="НедочитанныеДниТекстКонтекстноеМеню" id="190"/>
+											<ExtendedTooltip name="НедочитанныеДниТекстРасширеннаяПодсказка" id="191"/>
+										</LabelField>
+									</ChildItems>
+								</Table>
+								<Button name="ДобаДовантажена" id="184">
+									<CommandName>Form.Command.ДобаДовантажена</CommandName>
+									<ExtendedTooltip name="ДобаДовантаженаРасширеннаяПодсказка" id="185"/>
+								</Button>
+							</ChildItems>
+						</UsualGroup>
 					</ChildItems>
 				</UsualGroup>
 				<UsualGroup name="ГруппаПраво" id="69">
@@ -724,6 +804,79 @@
 				</v8:StringQualifiers>
 			</Type>
 		</Attribute>
+		<Attribute name="СостояниеОбмена" id="8">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Состояние обмена новой платформой</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Стан обміну новою платформою</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="НедочитанныеДни" id="9">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Недочитанные сутки</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Недочитані доби</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="День" id="1">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сутки</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Доба</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:dateTime</v8:Type>
+						<v8:DateQualifiers>
+							<v8:DateFractions>Date</v8:DateFractions>
+						</v8:DateQualifiers>
+					</Type>
+				</Column>
+				<Column name="Текст" id="2">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Причина</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>uk</v8:lang>
+							<v8:content>Причина</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
 	</Attributes>
 	<Commands>
 		<Command name="НастроитьРасписание" id="1">
@@ -832,6 +985,57 @@
 				</v8:item>
 			</ToolTip>
 			<Action>СохранитьНовыйТокенИСертификат</Action>
+		</Command>
+		<Command name="ОбменНовойПлатформойСейчас" id="6">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обмен новой платформой сейчас</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Обмін новою платформою зараз</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выполнить обмен с банком новой платформой сейчас; документы создаются от имени текущего пользователя</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Виконати обмін з банком новою платформою зараз; документи створюються від імені поточного користувача</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>StdPicture.Refresh</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ОбменНовойПлатформойСейчас</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+		<Command name="ДобаДовантажена" id="7">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Сутки довантажены</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Доба довантажена</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Снять отметку с суток после загрузки выписки файлом или формой</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>uk</v8:lang>
+					<v8:content>Зняти позначку з доби після завантаження виписки файлом або формою</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ДобаДовантажена</Action>
 		</Command>
 	</Commands>
 </Form>
