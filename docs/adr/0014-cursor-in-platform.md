@@ -1,7 +1,7 @@
 # ADR-0014: Курсор і період регламенту — у платформі, не далі за межу довіри
 
 Status: accepted 2026-10-12; amended 2026-11-26 (два винятки, див. «Consequences»)
-Decided by: owner
+Decided by: owner; amended 2026-11-26, architect (Р-6, Р-7, Р-9)
 Spec: `docs/superpowers/specs/2026-10-12-smb-import-platform-design.md` §3 D18, D36; `docs/architecture/connectors.md`; `docs/architecture/schedule.md`
 
 ## Context
@@ -13,7 +13,7 @@ Spec: `docs/superpowers/specs/2026-10-12-smb-import-platform-design.md` §3 D18,
 рухається лише після успішного запису, лише якщо читання повне і не далі за межу довіри з конверта.
 Неостаточні операції (`hold`, `PENDING`, `PR_PR = p`) не вантажаться й ставлять межу довіри. Перший запуск
 без курсора — «сьогодні»; старі періоди людина вантажить вручну. Конектор перечитує кілька днів від
-курсора (перекриття).
+курсора (перекриття). Правило має два винятки, див. «Consequences».
 
 ## Why
 Курсор, що перестрибнув втрачену операцію, ніколи її не запитає. Межа довіри — гарантія банку, а не
