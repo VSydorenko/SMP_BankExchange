@@ -125,6 +125,7 @@
 			<CommonModule>СМП_КоннекторБанкаПриватБанк</CommonModule>
 			<CommonModule>СМП_КоннекторБанкаПУМБ</CommonModule>
 			<CommonModule>СМП_КоннекторыБанковОбщее</CommonModule>
+			<CommonModule>СМП_ОбменСБанкомКонвейер</CommonModule>
 			<CommonModule>СМП_РаспознаваниеОпераций</CommonModule>
 			<CommonModule>СМП_ТранспортHTTPСервер</CommonModule>
 			<CommonModule>СМП_ФорматВыгрузкиiFOBS_TXT</CommonModule>
@@ -172,6 +173,7 @@
 			<Document>ПоступлениеНаСчет</Document>
 			<Document>РасходСоСчета</Document>
 			<Enum>ДействияСКонтрагентомПриЗагрузкеИзКлиентБанка</Enum>
+			<Enum>СМП_РезультатыОбменаСБанком</Enum>
 			<Enum>СостоянияВерсийЭД</Enum>
 			<Enum>СМП_ПоддерживаемыеИнтеграцииСБанками</Enum>
 			<Enum>СпособыЗачетаИРаспределенияПлатежей</Enum>

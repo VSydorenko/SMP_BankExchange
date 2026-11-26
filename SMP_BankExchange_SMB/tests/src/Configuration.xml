@@ -79,6 +79,7 @@
 			<CommonModule>СМП_ТестыЗаписиПерезапись</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиНаскрозьКонверт</CommonModule>
 			<CommonModule>СМП_ТестыЗаписиНаскрозь</CommonModule>
+			<CommonModule>СМП_ТестыКонвейера</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораМонобанк</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораМонобанкЮр</CommonModule>
 			<CommonModule>СМП_ТестыКоннектораПриватБанк</CommonModule>
