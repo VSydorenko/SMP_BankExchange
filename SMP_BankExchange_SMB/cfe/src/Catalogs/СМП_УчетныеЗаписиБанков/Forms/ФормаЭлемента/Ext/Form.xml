@@ -502,6 +502,21 @@
 								</InputField>
 							</ChildItems>
 						</UsualGroup>
+						<InputField name="ИдентификаторСтрокиРеестра" id="155">
+							<DataPath>Объект.ИдентификаторСтрокиРеестра</DataPath>
+							<ContextMenu name="ИдентификаторСтрокиРеестраКонтекстноеМеню" id="156"/>
+							<ExtendedTooltip name="ИдентификаторСтрокиРеестраРасширеннаяПодсказка" id="157"/>
+						</InputField>
+						<InputField name="Ответственный" id="158">
+							<DataPath>Объект.Ответственный</DataPath>
+							<ContextMenu name="ОтветственныйКонтекстноеМеню" id="159"/>
+							<ExtendedTooltip name="ОтветственныйРасширеннаяПодсказка" id="160"/>
+						</InputField>
+						<InputField name="КонтрагентБанка" id="161">
+							<DataPath>Объект.КонтрагентБанка</DataPath>
+							<ContextMenu name="КонтрагентБанкаКонтекстноеМеню" id="162"/>
+							<ExtendedTooltip name="КонтрагентБанкаРасширеннаяПодсказка" id="163"/>
+						</InputField>
 						<UsualGroup name="ГруппаРегламентноеЗадание" id="30">
 							<Title>
 								<v8:item>
